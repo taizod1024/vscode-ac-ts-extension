@@ -53,7 +53,7 @@ class AcTsExtension {
         this.appname = "AtCoder TypeScript Extension";
         this.appid = "ac-ts-extension";
         this.loinurl = "https://atcoder.jp/login?continue=https%3A%2F%2Fatcoder.jp%2F&lang=ja";
-        this.configfile = `${process.env.USERPROFILE}\\${this.appid}.json`;
+        this.configfile = `${process.env.USERPROFILE}\\.${this.appid}.json`;
         this.taskregexp = /^(.*)_(.*)$/;
 
         // init context
