@@ -403,6 +403,13 @@ class AcTsExtension {
                             // read output
                             const out = fs.readFileSync(that.testoutfile).toString().trim().replace(/\n/g, "\r\n");
                             fs.unlinkSync(that.testoutfile);
+                            // chceck canceled
+                            if (out == "") {
+                                that.channel.appendLine(`---- CANCELED ----`);
+                                resolve();
+                                return;
+                            }
+                            // check output
                             if (out == io.out) {
                                 that.channel.appendLine(`[${that.timestamp()}] -> OK`);
                                 ok++;
