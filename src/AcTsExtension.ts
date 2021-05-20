@@ -82,7 +82,7 @@ class AcTsExtension {
             // check username, password
             const username = args.shift();
             const password = args.shift();
-            if (!this.username || !this.password) {
+            if (!username || !password) {
                 throw "ERROR: missing username or password";
             }
             // save config
@@ -539,6 +539,10 @@ class AcTsExtension {
             this.username = app.atcoder.username;
             this.password = Buffer.from(app.atcoder.encpassword, "base64").toString();
             this.task = app.atcoder.task;
+        } else {
+            this.username = "";
+            this.password = "";
+            this.task = "";
         }
     }
     protected saveConfig() {
