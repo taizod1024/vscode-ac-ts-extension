@@ -61,7 +61,7 @@ function main(input: string[]): number {
     // n = Number(input.shift());
     // [xn, yn] = [new Array(n), new Array(n)];
     // for (let nx = 0; nx < n; nx++) {
-    //     [xn[nx], yn[nx]] = input.shift().split(" ").map(x => Number(x));
+    //     [xn[nx], yn[nx]] = input[nx].split(" ").map(x => Number(x));
     // }
 
     // ＜例＞一次元文字列配列
