@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.7](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.6...v0.0.7) (2021-05-20)
+
+
+### Bug Fixes
+
+* 初回起動時に動作しない現象に対応 ([0c805f4](https://github.com/taizod1024/ac-ts-extension/commit/0c805f4e701495dc5860c81ae6b358dc42d339c7))
+
 ### [0.0.6](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.5...v0.0.6) (2021-05-20)
 
 
