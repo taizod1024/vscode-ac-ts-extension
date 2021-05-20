@@ -6,12 +6,12 @@ TypeScriptでの[AtCoder](https://atcoder.jp/?lang=ja)への参加をサポー�
 
 ## 機能
 
-- Visual Studio CodeからAtCoderへの参加をサポートします。
+- TypeScriptでのVisual Studio CodeからAtCoderへの参加をサポートします。
   - AtCoderへのログイン
-  - ソースコード(TypeScript)の生成、テストデータのダウンロード
+  - ソースコードの生成、テストデータのダウンロード
   - 解答のテスト実行、デバッグ実行
   - 解答の提出
-- Node.jsやTypeScriptに関する最小限の設定で始められます。
+- 最小限のNode.jsおよびTypeScriptの設定で始められます。
   - `package.json` 編集不要
   - `tsconfig.json` 不要
 

@@ -187,8 +187,6 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] password: ********`);
 
         // make dir
-        // if (!fs.existsSync(`${this.projectpath}\\src`)) fs.mkdirSync(`${this.projectpath}\\src`);
-        // if (!fs.existsSync(`${this.projectpath}\\src\\atcoder`)) fs.mkdirSync(`${this.projectpath}\\src\\atcoder`);
         if (!fs.existsSync(`${this.projectpath}\\src\\atcoder\\task`)) fs.mkdirSync(`${this.projectpath}\\src\\atcoder\\task`, { recursive: true });
         if (!fs.existsSync(`${this.projectpath}\\src\\atcoder\\test`)) fs.mkdirSync(`${this.projectpath}\\src\\atcoder\\test`, { recursive: true });
 
