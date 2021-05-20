@@ -153,7 +153,7 @@ Takahashi
 
 ### 不要なソースコードとテストデータを削除する
 
-`AtCoder TypeScript Extension: Delete Task` を実行すると、問題のソースコードとテストデータを対で削除します。
+`AtCoder TypeScript Extension: Remove Task` を実行すると、問題のソースコードとテストデータを対で削除します。
 
 ## 設定
 

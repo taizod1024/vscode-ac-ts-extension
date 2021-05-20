@@ -89,7 +89,7 @@ class AcTsExtension {
             this.username = username;
             this.password = password;
             this.saveConfig();
-        } else if (this.cmd == "init" || this.cmd == "test" || this.cmd == "submit" || this.cmd == "delete") {
+        } else if (this.cmd == "init" || this.cmd == "test" || this.cmd == "submit" || this.cmd == "remove") {
             let task = args.shift();
             // check task
             const match = task.match(this.taskregexp);
@@ -507,31 +507,31 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] submissionsurl: ${this.submissionsurl}`);
         this.channel.appendLine(`---- SUCCESS: ${this.task} submitted ----`);
     }
-    public async deleteTask(task: string) {
+    public async removeTask(task: string) {
 
-        this._initParam(["delete", task]);
+        this._initParam(["remove", task]);
 
         this.channel.appendLine(`[${this.timestamp()}] command: ${this.cmd}`);
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
         this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.taskurl}`);
 
-        // delete taskfile
+        // Remove Taskfile
         if (!fs.existsSync(this.taskfile)) {
             this.channel.appendLine(`[${this.timestamp()}] taskfile: "${this.taskfile}" missing`);
         } else {
             fs.unlinkSync(this.taskfile);
-            this.channel.appendLine(`[${this.timestamp()}] taskfile: "${this.taskfile}" deleted`);
+            this.channel.appendLine(`[${this.timestamp()}] taskfile: "${this.taskfile}" removed`);
         }
 
-        // delete testfile
+        // remove testfile
         if (!fs.existsSync(this.testfile)) {
             this.channel.appendLine(`[${this.timestamp()}] testfile: "${this.testfile}" missing`);
         } else {
             fs.unlinkSync(this.testfile);
-            this.channel.appendLine(`[${this.timestamp()}] testfile: "${this.testfile}" deleted`);
+            this.channel.appendLine(`[${this.timestamp()}] testfile: "${this.testfile}" removed`);
         }
 
-        this.channel.appendLine(`---- SUCCESS: ${this.task} deleted ----`);
+        this.channel.appendLine(`---- SUCCESS: ${this.task} removed ----`);
     }
 
     // config
