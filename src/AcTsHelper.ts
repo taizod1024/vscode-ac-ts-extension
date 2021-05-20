@@ -42,7 +42,7 @@ class AcTsHelper {
                 }
             }
         }
-        const msg = `WARN: missing task`;
+        const msg = `WARN: missing task, select task file`;
         actsextension.channel.appendLine(msg);
         vscode.window.showWarningMessage(msg);
         return false;
