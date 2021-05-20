@@ -18,7 +18,7 @@
     "onCommand:ac-ts-extension.testTask",
     "onCommand:ac-ts-extension.debugTask",
     "onCommand:ac-ts-extension.submitTask",
-    "onCommand:ac-ts-extension.deleteTask"
+    "onCommand:ac-ts-extension.removeTask"
   ],
   "contributes": {
     "commands": [
@@ -43,8 +43,8 @@
         "title": "AtCoder TypeScript Extension: Submit Task"
       },
       {
-        "command": "ac-ts-extension.deleteTask",
-        "title": "AtCoder TypeScript Extension: Delete Task"
+        "command": "ac-ts-extension.removeTask",
+        "title": "AtCoder TypeScript Extension: Remove Task"
       }
     ]
   },

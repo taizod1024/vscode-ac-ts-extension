@@ -119,7 +119,7 @@ export function activate(context: vscode.ExtensionContext) {
         }));
     })();
     (function () {
-        const cmdid = "deleteTask";
+        const cmdid = "removeTask";
         context.subscriptions.push(vscode.commands.registerCommand(`${actsextension.appid}.${cmdid}`, () => {
             actsextension.channel.show(true);
             actsextension.channel.appendLine("");
@@ -128,14 +128,14 @@ export function activate(context: vscode.ExtensionContext) {
             if (!actshelper.checkProjectPath()) return;
             if (!actshelper.checkTask()) return;
             // input param
-            vscode.window.showQuickPick(["DELETE"], {
+            vscode.window.showQuickPick(["REMOVE"], {
                 placeHolder: "press ESC to exit"
             }).then(confirm => {
-                if (confirm != "DELETE") return;
+                if (confirm != "REMOVE") return;
                 // exec command
                 actsextension.extensionpath = context.extensionPath;
                 actsextension.projectpath = actshelper.projectpath;
-                actsextension.deleteTask(actshelper.task)
+                actsextension.removeTask(actshelper.task)
                     .catch((ex) => {
                         actsextension.channel.appendLine("**** " + ex + " ****");
                     });
