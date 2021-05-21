@@ -4,7 +4,9 @@ function main(input: string[]): number {
     // param
     let ans: number;
 
-    // 入力処理サンプル
+    // TODO 問題への解答
+
+    // 入力処理
 
     // ＜例＞文字列
     //       S
@@ -28,7 +30,7 @@ function main(input: string[]): number {
     // let an: number[];
     // n = Number(input.shift());
     // an = input.shift().split(" ").map(x => Number(x));
- 
+
     // ＜例＞一次元数値配列（縦）
     //       N
     //       A1
@@ -93,7 +95,7 @@ function main(input: string[]): number {
 
     // solve
 
-    // 出力処理サンプル
+    // 出力処理
 
     // ＜例＞bigintの末尾の"n"を削除する。
     // ans = ans.toString().replace("n", "");
