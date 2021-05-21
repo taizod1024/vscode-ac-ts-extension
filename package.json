@@ -2,7 +2,7 @@
   "name": "ac-ts-extension",
   "displayName": "AtCoder TypeScript Extension",
   "description": "atcoder vscode extension for typescript",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "icon": "images/icon.png",
   "engines": {
     "vscode": "^1.55.0"
