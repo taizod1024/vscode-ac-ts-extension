@@ -4,7 +4,7 @@ function main(input: string[]): number {
     // param
     let ans: number;
 
-    // TODO resolve task
+    // TODO solve task
 
     // 入力処理
 
