@@ -103,7 +103,7 @@ function main(input: string[]) {
     // ＜例＞文字列配列を改行で結合して出力
     // ans = ans.join("\n");
 
-    // ＜例＞二次元数値配列を欠業して出力
+    // ＜例＞二次元数値配列を結合して出力
     // ans = anm.map(an => an.join(" ")).join("\n");
 
     // answer
