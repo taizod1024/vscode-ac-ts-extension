@@ -34,13 +34,15 @@ class AcTsExtension {
     public taskurl: string;
     public submiturl: string;
     public submissionsurl: string;
+    public taskpath: string;
     public taskfile: string;
     public taskbuildpath: string;
     public taskbuildfile: string;
-    public testfile: string;
     public testpath: string;
-    public testinfile: string;
-    public testoutfile: string;
+    public testfile: string;
+    public tmptestpath: string;
+    public tmptestinfile: string;
+    public tmptestoutfile: string;
     public packagejsonfile: string;
     public packagelockjsonfile: string;
     public separator: string;
@@ -121,13 +123,15 @@ class AcTsExtension {
         this.taskurl = `https://atcoder.jp/contests/${this.contest}/tasks/${this.task}`;
         this.submiturl = `https://atcoder.jp/contests/${this.contest}/submit`;
         this.submissionsurl = `https://atcoder.jp/contests/${this.contest}/submissions/me`;
-        this.taskfile = `${this.projectpath}\\src\\atcoder\\task\\${this.task}.ts`;
+        this.taskpath = `${this.projectpath}\\src\\atcoder\\${this.contest}\\task`;
+        this.taskfile = `${this.projectpath}\\src\\atcoder\\${this.contest}\\task\\${this.task}.ts`;
         this.taskbuildpath = `${process.env.TEMP}\\${this.appid}\\build\\atcoder\\task`;
         this.taskbuildfile = `${this.taskbuildpath}\\${this.task}.js`;
-        this.testfile = `${this.projectpath}\\src\\atcoder\\test\\${this.task}.txt`;
-        this.testpath = `${process.env.TEMP}\\${this.appid}`;
-        this.testinfile = `${process.env.TEMP}\\${this.appid}\\test_in.txt`;
-        this.testoutfile = `${process.env.TEMP}\\${this.appid}\\test_out.txt`;
+        this.testpath = `${this.projectpath}\\src\\atcoder\\${this.contest}\\test`;
+        this.testfile = `${this.projectpath}\\src\\atcoder\\${this.contest}\\test\\${this.task}.txt`;
+        this.tmptestpath = `${process.env.TEMP}\\${this.appid}`;
+        this.tmptestinfile = `${process.env.TEMP}\\${this.appid}\\test_in.txt`;
+        this.tmptestoutfile = `${process.env.TEMP}\\${this.appid}\\test_out.txt`;
         this.packagejsonfile = `${this.projectpath}\\package.json`;
         this.packagelockjsonfile = `${this.projectpath}\\package-lock.json`;
         this.separator = "\r\n--------\r\n";
@@ -187,8 +191,8 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] password: ********`);
 
         // make dir
-        if (!fs.existsSync(`${this.projectpath}\\src\\atcoder\\task`)) fs.mkdirSync(`${this.projectpath}\\src\\atcoder\\task`, { recursive: true });
-        if (!fs.existsSync(`${this.projectpath}\\src\\atcoder\\test`)) fs.mkdirSync(`${this.projectpath}\\src\\atcoder\\test`, { recursive: true });
+        if (!fs.existsSync(this.taskpath)) fs.mkdirSync(this.taskpath, { recursive: true });
+        if (!fs.existsSync(this.testpath)) fs.mkdirSync(this.testpath, { recursive: true });
 
         // get agent
         const agent = superagent.agent();
@@ -318,11 +322,11 @@ class AcTsExtension {
         if (!fs.existsSync(this.testfile)) {
             throw `ERROR: missing testfile="${this.testfile}", do init task`;
         }
-        if (fs.existsSync(this.testinfile)) {
-            fs.unlinkSync(this.testinfile);
+        if (fs.existsSync(this.tmptestinfile)) {
+            fs.unlinkSync(this.tmptestinfile);
         }
-        if (fs.existsSync(this.testoutfile)) {
-            fs.unlinkSync(this.testoutfile);
+        if (fs.existsSync(this.tmptestoutfile)) {
+            fs.unlinkSync(this.tmptestoutfile);
         }
 
         // check node
@@ -332,7 +336,7 @@ class AcTsExtension {
         }
 
         // make dir
-        if (!fs.existsSync(this.testpath)) fs.mkdirSync(this.testpath);
+        if (!fs.existsSync(this.tmptestpath)) fs.mkdirSync(this.tmptestpath);
 
         // read testfile
         const txt = fs.readFileSync(this.testfile).toString();
@@ -358,7 +362,7 @@ class AcTsExtension {
                 // create test input file
                 that.channel.appendLine(`[${that.timestamp()}] test-${iosx}:`);
                 const io = ios[iosx];
-                fs.writeFileSync(that.testinfile, io.in);
+                fs.writeFileSync(that.tmptestinfile, io.in);
                 // exec command
                 if (debug) {
                     const launchconfig = {
@@ -367,14 +371,14 @@ class AcTsExtension {
                         request: "launch",
                         runtimeArgs: ["--require", "ts-node/register"],
                         program: that.taskfile,
-                        args: ["<", that.testinfile, ">", that.testoutfile],
+                        args: ["<", that.tmptestinfile, ">", that.tmptestoutfile],
                         console: "integratedTerminal",
                         skipFiles: ["node_modules/**"],
                         env: { TS_NODE_TRANSPILE_ONLY: "1" }
                     };
                     vscode.debug.startDebugging(that.projectfolder, launchconfig);
                 } else {
-                    const command = `node --require ts-node/register ${that.taskfile} < ${that.testinfile} > ${that.testoutfile}`;
+                    const command = `node --require ts-node/register ${that.taskfile} < ${that.tmptestinfile} > ${that.tmptestoutfile}`;
                     const options = {
                         cwd: that.projectpath,
                         env: { TS_NODE_TRANSPILE_ONLY: "1" }
@@ -383,13 +387,13 @@ class AcTsExtension {
                 }
                 // wait output
                 (function waitoutput() {
-                    if (!fs.existsSync(that.testoutfile)) {
+                    if (!fs.existsSync(that.tmptestoutfile)) {
                         setTimeout(waitoutput, 500);
                         return;
                     }
                     // wait command complete
                     (function waitunlock() {
-                        try { fs.unlinkSync(that.testinfile); }
+                        try { fs.unlinkSync(that.tmptestinfile); }
                         catch (ex) {
                             if (!ex.message.match(/EBUSY/)) throw ex;
                             setTimeout(waitunlock, 500);
@@ -399,8 +403,8 @@ class AcTsExtension {
                         (function commanddone() {
                             that.channel.show(true);
                             // read output
-                            const out = fs.readFileSync(that.testoutfile).toString().trim().replace(/\n/g, "\r\n");
-                            fs.unlinkSync(that.testoutfile);
+                            const out = fs.readFileSync(that.tmptestoutfile).toString().trim().replace(/\n/g, "\r\n");
+                            fs.unlinkSync(that.tmptestoutfile);
                             // chceck canceled
                             if (out == "") {
                                 that.channel.appendLine(`---- CANCELED ----`);
