@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.11](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.10...v0.0.11) (2021-05-22)
+
+
+### Features
+
+* コンテストのシリーズ別にフォルダを作成 ※既存のファイルは手動で移動が必要 ([8a7f5d6](https://github.com/taizod1024/ac-ts-extension/commit/8a7f5d6a5d572bcca2bd29f9f0e143e555d46d23))
+
+
+### Bug Fixes
+
+* テンプレート修正 ([ea5cd91](https://github.com/taizod1024/ac-ts-extension/commit/ea5cd91be3b61348be5b87d5b4ec9c4a562ca1bd))
+
 ### [0.0.10](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.9...v0.0.10) (2021-05-22)
 
 
