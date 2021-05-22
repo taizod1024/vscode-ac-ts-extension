@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.14](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.13...v0.0.14) (2021-05-22)
+
+
+### Bug Fixes
+
+* テスト実行時入出力表示タイミング修正 ([2b9b5cd](https://github.com/taizod1024/ac-ts-extension/commit/2b9b5cda8a79c634ae5844bfca6e12e1a3fa5e4f))
+
 ### [0.0.13](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.12...v0.0.13) (2021-05-22)
 
 
