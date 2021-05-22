@@ -106,6 +106,9 @@ function main(input: string[]) {
     // ＜例＞二次元数値配列を結合して出力
     // ans = anm.map(an => an.join(" ")).join("\n");
 
+    // ＜例＞一次元配列をすべて出力
+    // console.log(...an);
+
     // answer
     console.log(ans);
     return;
