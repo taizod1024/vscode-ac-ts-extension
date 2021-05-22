@@ -55,7 +55,7 @@
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
     "test": "node ./build/test/runTest.js",
-    "ac-ts-extension:release": "git switch main && git merge --no-ff develop && npx standard-version && vsce publish && git push --follow-tags origin main && git push origin develop && git switch develop"
+    "release": "git switch main && git merge --no-ff develop && npx standard-version && vsce publish && git push --follow-tags origin main && git push origin develop && git switch develop"
   },
   "author": "yamamoto.taizo <taizod1024@gmail.com>",
   "license": "MIT",
