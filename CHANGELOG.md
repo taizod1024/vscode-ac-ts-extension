@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.13](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.12...v0.0.13) (2021-05-22)
+
+
+### Bug Fixes
+
+* テンプレートの出力例を追加 ([3d46cbf](https://github.com/taizod1024/ac-ts-extension/commit/3d46cbfe234a5d27a1dc597a7c093fd8db8eaa35))
+* テンプレート修正、標準出力への出力タイミングを修正 ([5c67e1a](https://github.com/taizod1024/ac-ts-extension/commit/5c67e1a9224b2a4e031b13f4352c047a33076516))
+* フォルダ構成変更、問題とテストを同一フォルダに変更 ([fd8b558](https://github.com/taizod1024/ac-ts-extension/commit/fd8b558acb53643d0e615de9433470976fbef80d))
+
 ### [0.0.12](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.11...v0.0.12) (2021-05-22)
 
 
