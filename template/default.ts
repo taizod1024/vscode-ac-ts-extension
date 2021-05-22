@@ -108,6 +108,7 @@ function main(input: string[]) {
 
     // answer
     console.log(ans);
+    return;
 }
 // entrypoint
 function entrypoint() {
