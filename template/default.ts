@@ -1,6 +1,6 @@
 export { };
 // main
-function main(input: string[]): number {
+function main(input: string[]) {
     // param
     let ans: number;
 
@@ -97,20 +97,23 @@ function main(input: string[]): number {
 
     // 出力処理
 
-    // ＜例＞bigintの末尾の"n"を削除する。
+    // ＜例＞bigintの末尾の"n"を削除して出力
     // ans = ans.toString().replace("n", "");
 
-    // ＜例＞文字列配列を改行で結合して出力する。
+    // ＜例＞文字列配列を改行で結合して出力
     // ans = ans.join("\n");
 
+    // ＜例＞二次元数値配列を欠業して出力
+    // ans = anm.map(an => an.join(" ")).join("\n");
+
     // answer
-    return ans;
+    console.log(ans);
 }
 // entrypoint
 function entrypoint() {
     const lines: string[] = [];
     const reader = require('readline').createInterface({ input: process.stdin, output: process.stdout });
     reader.on('line', function (line: string) { lines.push(line); });
-    reader.on('close', function () { let input = lines; console.log(main(input)); });
+    reader.on('close', function () { let input = lines; main(input); });
 }
 entrypoint();
