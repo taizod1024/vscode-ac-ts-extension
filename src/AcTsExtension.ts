@@ -123,12 +123,12 @@ class AcTsExtension {
         this.taskurl = `https://atcoder.jp/contests/${this.contest}/tasks/${this.task}`;
         this.submiturl = `https://atcoder.jp/contests/${this.contest}/submit`;
         this.submissionsurl = `https://atcoder.jp/contests/${this.contest}/submissions/me`;
-        this.taskpath = `${this.projectpath}\\src\\atcoder\\${this.contest}\\task`;
-        this.taskfile = `${this.projectpath}\\src\\atcoder\\${this.contest}\\task\\${this.task}.ts`;
-        this.taskbuildpath = `${process.env.TEMP}\\${this.appid}\\build\\atcoder\\task`;
+        this.taskpath = `${this.projectpath}\\src\\atcoder\\${this.contest}`;
+        this.taskfile = `${this.projectpath}\\src\\atcoder\\${this.contest}\\${this.task}.ts`;
+        this.taskbuildpath = `${process.env.TEMP}\\${this.appid}\\build\\atcoder`;
         this.taskbuildfile = `${this.taskbuildpath}\\${this.task}.js`;
-        this.testpath = `${this.projectpath}\\src\\atcoder\\${this.contest}\\test`;
-        this.testfile = `${this.projectpath}\\src\\atcoder\\${this.contest}\\test\\${this.task}.txt`;
+        this.testpath = `${this.projectpath}\\src\\atcoder\\${this.contest}`;
+        this.testfile = `${this.projectpath}\\src\\atcoder\\${this.contest}\\${this.task}.txt`;
         this.tmptestpath = `${process.env.TEMP}\\${this.appid}`;
         this.tmptestinfile = `${process.env.TEMP}\\${this.appid}\\test_in.txt`;
         this.tmptestoutfile = `${process.env.TEMP}\\${this.appid}\\test_out.txt`;

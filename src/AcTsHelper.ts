@@ -41,7 +41,7 @@ class AcTsHelper {
                 const match = this.filenamewithoutextension.match(actsextension.taskregexp);
                 if (match) {
                     this.contest = match[1];
-                    if (`${this.projectpath}\\src\\atcoder\\${this.contest}\\task` == basename) {
+                    if (`${this.projectpath}\\src\\atcoder\\${this.contest}` == basename) {
                         vscode.window.activeTextEditor.document.save();
                         this.task = this.filenamewithoutextension;
                         return true;
