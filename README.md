@@ -54,8 +54,8 @@ vscodeで `F1` を押下（もしくは [表示] > [コマンド パレット] �
 
 まずはじめに `AtCoder TypeScript Extension: Init Task` で問題名を入力して提出用のソースコードの生成と問題用のテストデータのダウンロードをします。
 - 問題名は `abc190_a` の形式で入力します。
-- ソースコードは `src/atcoder/task/abcXXX_X.ts` に生成されます。
-- テストデータは `src/atcoder/test/abcXXX_X.txt` にダウンロードされます。
+- ソースコードは `src/atcoder/abcXXX/abcXXX_X.ts` に生成されます。
+- テストデータは `src/atcoder/abcXXX/abcXXX_X.txt` にダウンロードされます。
 - フォルダは自動的に作成されます。
 - 既にソースコードやテストデータがある場合はスキップされます。
 
