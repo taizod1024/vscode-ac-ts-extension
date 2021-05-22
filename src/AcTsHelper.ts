@@ -7,6 +7,7 @@ class AcTsHelper {
     public filename: string;
     public filenamewithoutextension: string;
     public extension: string;
+    public contest: string;
     public task: string;
     constructor() {
         this.projectpath = null;
@@ -28,17 +29,23 @@ class AcTsHelper {
     }
     public checkTask(): boolean {
         if (this.projectpath) {
-            const tmp1 = vscode.window.activeTextEditor?.document?.fileName?.split("\\");
-            if (tmp1) {
-                this.filename = tmp1.pop();
-                const basename = tmp1.join("\\");
-                const tmp2 = this.filename.split(".");
-                this.filenamewithoutextension = tmp2[0];
-                this.extension = (2 <= tmp2.length) ? tmp2.slice(-1)[0] : "";
-                if (`${this.projectpath}\\src\\atcoder\\task` == basename) {
-                    vscode.window.activeTextEditor.document.save();
-                    this.task = this.filenamewithoutextension;
-                    return true;
+            const filenames = vscode.window.activeTextEditor?.document?.fileName?.split("\\");
+            if (filenames) {
+                // disassemble
+                this.filename = filenames.pop();
+                const basename = filenames.join("\\");
+                const basenames = this.filename.split(".");
+                this.filenamewithoutextension = basenames[0];
+                this.extension = (2 <= basenames.length) ? basenames.slice(-1)[0] : "";
+                // check 
+                const match = this.filenamewithoutextension.match(actsextension.taskregexp);
+                if (match) {
+                    this.contest = match[1];
+                    if (`${this.projectpath}\\src\\atcoder\\${this.contest}\\task` == basename) {
+                        vscode.window.activeTextEditor.document.save();
+                        this.task = this.filenamewithoutextension;
+                        return true;
+                    }
                 }
             }
         }
