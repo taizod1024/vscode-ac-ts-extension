@@ -97,11 +97,14 @@ function main(input: string[]): number {
 
     // 出力処理
 
-    // ＜例＞bigintの末尾の"n"を削除する。
+    // ＜例＞bigintの末尾の"n"を削除して出力
     // ans = ans.toString().replace("n", "");
 
-    // ＜例＞文字列配列を改行で結合して出力する。
+    // ＜例＞文字列配列を改行で結合して出力
     // ans = ans.join("\n");
+
+    // ＜例＞二次元数値配列を欠業して出力
+    // ans = anm.map(an => an.join(" ")).join("\n");
 
     // answer
     return ans;
