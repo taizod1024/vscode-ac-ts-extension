@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.15](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.14...v0.0.15) (2021-05-22)
+
+
+### Bug Fixes
+
+* テンプレート修正、デバッグ時に終了前にブレークポイントを設定できるようにreturnを追加 ([902876b](https://github.com/taizod1024/ac-ts-extension/commit/902876b873498de85a03234e21112349afced464))
+
 ### [0.0.14](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.13...v0.0.14) (2021-05-22)
 
 
