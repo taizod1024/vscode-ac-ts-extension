@@ -360,8 +360,10 @@ class AcTsExtension {
             (function runtest() {
                 that.channel.show(true);
                 // create test input file
-                that.channel.appendLine(`[${that.timestamp()}] test-${iosx}:`);
                 const io = ios[iosx];
+                that.channel.appendLine(`[${that.timestamp()}] test-${iosx}:`);
+                that.channel.appendLine(`[${that.timestamp()}] - input ="${io.in}"`);
+                that.channel.appendLine(`[${that.timestamp()}] - output="${io.out}"`);
                 fs.writeFileSync(that.tmptestinfile, io.in);
                 // exec command
                 if (debug) {
@@ -412,6 +414,7 @@ class AcTsExtension {
                                 return;
                             }
                             // check output
+                            that.channel.appendLine(`[${that.timestamp()}] - answer="${out}"`);
                             if (out == io.out) {
                                 that.channel.appendLine(`[${that.timestamp()}] -> OK`);
                                 ok++;
@@ -419,9 +422,6 @@ class AcTsExtension {
                                 that.channel.appendLine(`[${that.timestamp()}] -> NG`);
                                 ng++;
                             }
-                            that.channel.appendLine(`[${that.timestamp()}] - input ="${io.in}"`);
-                            that.channel.appendLine(`[${that.timestamp()}] - output="${io.out}"`);
-                            that.channel.appendLine(`[${that.timestamp()}] - answer="${out}"`);
                             // next test
                             iosx++;
                             if (iosx < ios.length) {
