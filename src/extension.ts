@@ -10,7 +10,7 @@ export function activate(context: vscode.ExtensionContext) {
         const cmdid = "loginSite";
         context.subscriptions.push(vscode.commands.registerCommand(`${actsextension.appid}.${cmdid}`, () => {
             actsextension.channel.show(true);
-            actsextension.channel.appendLine("");
+            actsextension.channel.clear();
             actsextension.channel.appendLine(`${actsextension.appid}.${cmdid}:`);
             // input param
             vscode.window.showInputBox({
@@ -42,7 +42,7 @@ export function activate(context: vscode.ExtensionContext) {
         const cmdid = "initTask";
         context.subscriptions.push(vscode.commands.registerCommand(`${actsextension.appid}.${cmdid}`, () => {
             actsextension.channel.show(true);
-            actsextension.channel.appendLine("");
+            actsextension.channel.clear();
             actsextension.channel.appendLine(`${actsextension.appid}.${cmdid}:`);
             // check folder
             if (!actshelper.checkProjectPath()) return;
@@ -68,7 +68,7 @@ export function activate(context: vscode.ExtensionContext) {
         const cmdid = "testTask";
         context.subscriptions.push(vscode.commands.registerCommand(`${actsextension.appid}.${cmdid}`, () => {
             actsextension.channel.show(true);
-            actsextension.channel.appendLine("");
+            actsextension.channel.clear();
             actsextension.channel.appendLine(`${actsextension.appid}.${cmdid}:`);
             // check param
             if (!actshelper.checkProjectPath()) return;
@@ -86,7 +86,7 @@ export function activate(context: vscode.ExtensionContext) {
         const cmdid = "debugTask";
         context.subscriptions.push(vscode.commands.registerCommand(`${actsextension.appid}.${cmdid}`, () => {
             actsextension.channel.show(true);
-            actsextension.channel.appendLine("");
+            actsextension.channel.clear();
             actsextension.channel.appendLine(`${actsextension.appid}.${cmdid}:`);
             // check param
             if (!actshelper.checkProjectPath()) return;
@@ -104,7 +104,7 @@ export function activate(context: vscode.ExtensionContext) {
         const cmdid = "submitTask";
         context.subscriptions.push(vscode.commands.registerCommand(`${actsextension.appid}.${cmdid}`, () => {
             actsextension.channel.show(true);
-            actsextension.channel.appendLine("");
+            actsextension.channel.clear();
             actsextension.channel.appendLine(`${actsextension.appid}.${cmdid}:`);
             // check param
             if (!actshelper.checkProjectPath()) return;
@@ -122,7 +122,7 @@ export function activate(context: vscode.ExtensionContext) {
         const cmdid = "removeTask";
         context.subscriptions.push(vscode.commands.registerCommand(`${actsextension.appid}.${cmdid}`, () => {
             actsextension.channel.show(true);
-            actsextension.channel.appendLine("");
+            actsextension.channel.clear();
             actsextension.channel.appendLine(`${actsextension.appid}.${cmdid}:`);
             // check param
             if (!actshelper.checkProjectPath()) return;
