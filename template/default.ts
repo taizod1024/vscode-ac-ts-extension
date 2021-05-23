@@ -123,6 +123,6 @@ function entrypoint() {
     const lines: string[] = [];
     const reader = require('readline').createInterface({ input: process.stdin, output: process.stdout });
     reader.on('line', function (line: string) { lines.push(line); });
-    reader.on('close', function () { let input = lines; main(input); });
+    reader.on('close', function () { main(lines); });
 }
 entrypoint();
