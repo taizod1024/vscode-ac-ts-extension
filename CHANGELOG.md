@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.18](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.17...v0.0.18) (2021-05-23)
+
+
+### Bug Fixes
+
+* コマンド実行時にチャネルをクリアするよう修正 ([f28f586](https://github.com/taizod1024/ac-ts-extension/commit/f28f58674c1496a95f48a00aa48ee78377ae401c))
+
 ### [0.0.17](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.16...v0.0.17) (2021-05-23)
 
 
