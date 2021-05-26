@@ -47,6 +47,7 @@ class AcTsExtension {
     public packagelockjsonfile: string;
     public separator: string;
     public proxy: any;
+    public timeout: number;
 
     // setup function
     constructor() {
@@ -136,6 +137,7 @@ class AcTsExtension {
         this.packagelockjsonfile = `${this.projectpath}\\package-lock.json`;
         this.separator = "\r\n--------\r\n";
         this.proxy = "";
+        this.timeout = 5000;
     }
     // public interface
     public async loginSite(username: string, password: string) {
@@ -366,6 +368,8 @@ class AcTsExtension {
                 that.channel.appendLine(`[${that.timestamp()}] - output="${io.out}"`);
                 fs.writeFileSync(that.tmptestinfile, io.in);
                 // exec command
+                let child;
+                let countup = 0;
                 if (debug) {
                     const launchconfig = {
                         name: that.appid,
@@ -385,69 +389,74 @@ class AcTsExtension {
                         cwd: that.projectpath,
                         env: { TS_NODE_TRANSPILE_ONLY: "1" }
                     };
-                    const child = child_process.exec(command, options);
-                    // TODO wip: waitout()とwaitunlock()を(child.exitCode !== null)で代替、同時に時間をカウントして強制終了する
-                    // setTimeout(() => {
-                    //     if (child.exitCode === null) {
-                    //         child_process.execSync(`taskkill /pid ${child.pid} /t /f`);
-                    //         reject("TIMEOUT");
-                    //         return;
-                    //     }
-                    // }, 3000);
+                    child = child_process.exec(command, options);
                 }
                 // wait output
-                (function waitoutput() {
-                    if (!fs.existsSync(that.tmptestoutfile)) {
-                        setTimeout(waitoutput, 500);
-                        return;
-                    }
-                    // wait command complete
-                    (function waitunlock() {
-                        try { fs.unlinkSync(that.tmptestinfile); }
-                        catch (ex) {
-                            if (!ex.message.match(/EBUSY/)) {
-                                reject(ex);
-                                return;
-                            }
-                            setTimeout(waitunlock, 500);
+                (function waitchild() {
+                    if (child?.exitCode === null) {
+                        countup += 500;
+                        if (that.timeout <= countup) {
+                            child_process.execSync(`taskkill /pid ${child.pid} /t /f`);
+                            reject(`ERROR: timeout over ${that.timeout} ms`);
                             return;
                         }
-                        // test done
-                        (function commanddone() {
-                            that.channel.show(true);
-                            // read output
-                            const out = fs.readFileSync(that.tmptestoutfile).toString().trim().replace(/\n/g, "\r\n");
-                            fs.unlinkSync(that.tmptestoutfile);
-                            // chceck canceled
-                            if (out == "") {
-                                that.channel.appendLine(`---- CANCELED ----`);
-                                resolve();
+                        setTimeout(waitchild, 500);
+                        return;
+                    }
+                    (function waitoutput() {
+                        if (!fs.existsSync(that.tmptestoutfile)) {
+                            setTimeout(waitoutput, 500);
+                            return;
+                        }
+                        // wait command complete
+                        (function waitunlock() {
+                            try { fs.unlinkSync(that.tmptestinfile); }
+                            catch (ex) {
+                                if (!ex.message.match(/EBUSY/)) {
+                                    reject(ex);
+                                    return;
+                                }
+                                setTimeout(waitunlock, 500);
                                 return;
                             }
-                            // check output
-                            that.channel.appendLine(`[${that.timestamp()}] - answer="${out}"`);
-                            if (out == io.out) {
-                                that.channel.appendLine(`[${that.timestamp()}] -> OK`);
-                                ok++;
-                            } else {
-                                that.channel.appendLine(`[${that.timestamp()}] -> NG`);
-                                ng++;
-                            }
-                            // next test
-                            iosx++;
-                            if (iosx < ios.length) {
-                                setTimeout(runtest, 500);
-                                return;
-                            }
-                            // test set done
-                            let msg = `${that.task} OK=${ok}, NG=${ng}`;
-                            if (ng == 0) {
-                                that.channel.appendLine(`---- SUCCESS: ${msg} ----`);
-                                resolve();
-                            } else {
-                                msg = "ERROR: " + msg;
-                                reject(msg);
-                            }
+                            // test done
+                            (function commanddone() {
+                                that.channel.show(true);
+                                // read output
+                                const out = fs.readFileSync(that.tmptestoutfile).toString().trim().replace(/\n/g, "\r\n");
+                                fs.unlinkSync(that.tmptestoutfile);
+                                // chceck canceled
+                                if (out == "") {
+                                    that.channel.appendLine(`---- CANCELED ----`);
+                                    resolve();
+                                    return;
+                                }
+                                // check output
+                                that.channel.appendLine(`[${that.timestamp()}] - answer="${out}"`);
+                                if (out == io.out) {
+                                    that.channel.appendLine(`[${that.timestamp()}] -> OK`);
+                                    ok++;
+                                } else {
+                                    that.channel.appendLine(`[${that.timestamp()}] -> NG`);
+                                    ng++;
+                                }
+                                // next test
+                                iosx++;
+                                if (iosx < ios.length) {
+                                    setTimeout(runtest, 500);
+                                    return;
+                                }
+                                // test set done
+                                let msg = `${that.task} OK=${ok}, NG=${ng}`;
+                                if (ng == 0) {
+                                    that.channel.appendLine(`---- SUCCESS: ${msg} ----`);
+                                    resolve();
+                                    return;
+                                } else {
+                                    reject("ERROR: " + msg);
+                                    return;
+                                }
+                            })();
                         })();
                     })();
                 })();
