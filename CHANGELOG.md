@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.20](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.19...v0.0.20) (2021-05-26)
+
+
+### Bug Fixes
+
+* [#38](https://github.com/taizod1024/ac-ts-extension/issues/38) タイムアウト処理追加 ([3279bb8](https://github.com/taizod1024/ac-ts-extension/commit/3279bb8ab74c1af59b09d23226e37daa55820e4c))
+* [#38](https://github.com/taizod1024/ac-ts-extension/issues/38) タイムアウト処理追加中 ([9680b65](https://github.com/taizod1024/ac-ts-extension/commit/9680b65e76ee75358a05130e9573430d9bedc687))
+
 ### [0.0.19](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.18...v0.0.19) (2021-05-23)
 
 
