@@ -385,7 +385,15 @@ class AcTsExtension {
                         cwd: that.projectpath,
                         env: { TS_NODE_TRANSPILE_ONLY: "1" }
                     };
-                    child_process.execSync(command, options);
+                    const child = child_process.exec(command, options);
+                    // TODO wip: waitout()とwaitunlock()を(child.exitCode !== null)で代替、同時に時間をカウントして強制終了する
+                    // setTimeout(() => {
+                    //     if (child.exitCode === null) {
+                    //         child_process.execSync(`taskkill /pid ${child.pid} /t /f`);
+                    //         reject("TIMEOUT");
+                    //         return;
+                    //     }
+                    // }, 3000);
                 }
                 // wait output
                 (function waitoutput() {
@@ -397,7 +405,10 @@ class AcTsExtension {
                     (function waitunlock() {
                         try { fs.unlinkSync(that.tmptestinfile); }
                         catch (ex) {
-                            if (!ex.message.match(/EBUSY/)) throw ex;
+                            if (!ex.message.match(/EBUSY/)) {
+                                reject(ex);
+                                return;
+                            }
                             setTimeout(waitunlock, 500);
                             return;
                         }
