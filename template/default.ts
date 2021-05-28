@@ -1,8 +1,6 @@
 export { };
 // main
 function main(input: string[]) {
-    // param
-    let ans: number;
 
     // TODO edit the code
 
@@ -10,34 +8,46 @@ function main(input: string[]) {
 
     // ＜例＞文字列
     //       S
+    // // param
     // let s: string;
+    // // init
     // s = input.shift();
 
     // ＜例＞数値
     //       N
+    // // param
     // let n: number;
+    // // init
     // n = Number(input.shift());
 
     // ＜例＞bitint
     //       N
+    // // param
     // let n: bigint;
+    // // init
     // n = BigInt(input.shift());
 
     // ＜例＞数値ペア
     //       N K
+    // // param
     // let n: number, k: number;
+    // // init
     // [n, k] = input.shift().split(" ").map(x => Number(x));
 
     // ＜例＞数値タプル
     //       N K
+    // // param
     // let n: number, k: number, l: number;
+    // // init
     // [n, k, l] = input.shift().split(" ").map(x => Number(x));
 
     // ＜例＞一次元数値配列（横）
     //       N
     //       A1 A2 ... An
+    // // param
     // let n: number;
     // let an: number[];
+    // // init
     // n = Number(input.shift());
     // an = input.shift().split(" ").map(x => Number(x));
 
@@ -47,8 +57,10 @@ function main(input: string[]) {
     //       A2
     //       :
     //       An
+    // // param
     // let n: number;
     // let an: number[];
+    // // init
     // n = Number(input.shift());
     // an = input.map(x => Number(x));
 
@@ -58,8 +70,10 @@ function main(input: string[]) {
     //       S2
     //       :
     //       Sn
+    // // param
     // let n: number;
     // let sn: string[];
+    // // init
     // n = Number(input.shift());
     // sn = input;
 
@@ -68,8 +82,10 @@ function main(input: string[]) {
     //       X1 Y1
     //       X2 Y2
     //       :  :
+    // // param
     // let n: number;
     // let xn: number[], yn: number[];
+    // // init
     // n = Number(input.shift());
     // [xn, yn] = [new Array(n), new Array(n)];
     // for (let nx = 0; nx < n; nx++) {
@@ -82,8 +98,10 @@ function main(input: string[]) {
     //       S2 T2
     //       :  :
     //       Sn Tn
+    // // param
     // let n: number;
     // let stn: { s: string, t: number }[];
+    // // init
     // n = Number(input.shift());
     // stn = input.map(x => { let st = x.split(" "); return { s: st[0], t: Number(st[1]) } });
 
@@ -93,12 +111,15 @@ function main(input: string[]) {
     //       A21 A22 ... A2m 
     //       :   :       :
     //       An1 An2 ... Anm 
+    // // param
     // let n: number, m:number;
     // let anm: number[][];
+    // // init
     // [n, m] = input.shift().split(" ").map(x => Number(x));
     // anm = input.map(x => x.split(" ").map(x => Number(x)));
 
     // solve
+    let ans;
 
     // 出力処理
 
