@@ -342,7 +342,7 @@ class AcTsExtension {
 
         // read testfile
         const txt = fs.readFileSync(this.testfile).toString();
-        const wrk = txt.split(this.separator).map(x => x.trim());
+        const wrk = txt.split(this.separator.trim()).map(x => x.trim());
         if (wrk[wrk.length - 1] == "")
             wrk.pop();
         const ios: any[] = [];
