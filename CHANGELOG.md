@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.22](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.21...v0.0.22) (2021-05-28)
+
+
+### Bug Fixes
+
+* テストデータの区切り文字列の最後に改行がなくても動作するように修正 ([434521c](https://github.com/taizod1024/ac-ts-extension/commit/434521cf6391b40faedcafc40f0d4ddd5286097f))
+
 ### [0.0.21](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.20...v0.0.21) (2021-05-28)
 
 ### [0.0.20](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.19...v0.0.20) (2021-05-26)
