@@ -11,6 +11,7 @@ TypeScriptでの[AtCoder](https://atcoder.jp/?lang=ja)への参加をサポー�
   - ソースコードの生成、テストデータのダウンロード
   - 解答のテスト実行、デバッグ実行
   - 解答の提出
+  - ブラウザでの問題ページの表示
 - 最小限のNode.jsおよびTypeScriptの設定で始められます。
   - `package.json` 編集不要
   - `tsconfig.json` 不要
@@ -156,6 +157,10 @@ Takahashi
 ### 不要なソースコードとテストデータを削除する
 
 `AtCoder TypeScript Extension: Remove Task` を実行すると、問題のソースコードとテストデータを対で削除します。
+
+### ブラウザで問題ページを開く
+
+`AtCoder TypeScript Extension: Browse Task` を実行すると、ブラウザで問題ページを開きます。
 
 ## 設定
 

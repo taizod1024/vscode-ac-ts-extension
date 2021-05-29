@@ -92,7 +92,7 @@ class AcTsExtension {
             this.username = username;
             this.password = password;
             this.saveConfig();
-        } else if (this.cmd == "init" || this.cmd == "test" || this.cmd == "submit" || this.cmd == "remove") {
+        } else if (this.cmd == "init" || this.cmd == "test" || this.cmd == "submit" || this.cmd == "remove" || this.cmd == "browse") {
             let task = args.shift();
             // check task
             const match = task.match(this.taskregexp);
@@ -554,6 +554,20 @@ class AcTsExtension {
         }
 
         this.channel.appendLine(`---- SUCCESS: ${this.task} removed ----`);
+    }
+
+    public async browseTask(task: string) {
+
+        this._initParam(["browse", task]);
+
+        this.channel.appendLine(`[${this.timestamp()}] command: ${this.cmd}`);
+        this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
+        this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.taskurl}`);
+
+        // open browser
+        vscode.env.openExternal(vscode.Uri.parse(this.taskurl));
+
+        this.channel.appendLine(`---- SUCCESS: browse ${this.task} ----`);
     }
 
     // config
