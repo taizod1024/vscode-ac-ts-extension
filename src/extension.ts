@@ -142,5 +142,23 @@ export function activate(context: vscode.ExtensionContext) {
             });
         }));
     })();
+    (function () {
+        const cmdid = "browseTask";
+        context.subscriptions.push(vscode.commands.registerCommand(`${actsextension.appid}.${cmdid}`, () => {
+            actsextension.channel.show(true);
+            actsextension.channel.clear();
+            actsextension.channel.appendLine(`${actsextension.appid}.${cmdid}:`);
+            // check param
+            if (!actshelper.checkProjectPath()) return;
+            if (!actshelper.checkTask()) return;
+            // exec command
+            actsextension.extensionpath = context.extensionPath;
+            actsextension.projectpath = actshelper.projectpath;
+            actsextension.browseTask(actshelper.task)
+                .catch((ex) => {
+                    actsextension.channel.appendLine("**** " + ex + " ****");
+                });
+        }));
+    })();
 }
 export function deactivate() { }
