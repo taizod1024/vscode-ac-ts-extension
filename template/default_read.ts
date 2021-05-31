@@ -4,7 +4,7 @@ async function main() {
     // input
     const readline = require('readline').createInterface({ input: process.stdin });
     const readiter = readline[Symbol.asyncIterator]();
-    let read = async () => (await readiter.next()).value;
+    async function read() { return (await readiter.next()).value; }
     // param
     let n: number;
     let anm: number[][];
