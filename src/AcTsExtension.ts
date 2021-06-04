@@ -369,7 +369,8 @@ class AcTsExtension {
                 fs.writeFileSync(that.tmptestinfile, io.in);
                 // exec command
                 let child;
-                let countup = 0;
+                let timecount = 0;
+                let istimeout = false;
                 if (debug) {
                     const launchconfig = {
                         name: that.appid,
@@ -391,18 +392,18 @@ class AcTsExtension {
                     };
                     child = child_process.exec(command, options);
                 }
-                // wait output
+                // wait child process
                 (function waitchild() {
                     if (child?.exitCode === null) {
-                        countup += 500;
-                        if (that.timeout <= countup) {
-                            child_process.execSync(`taskkill /pid ${child.pid} /t /f`);
-                            reject(`ERROR: timeout over ${that.timeout} ms`);
+                        timecount += 500;
+                        if (timecount < that.timeout) {
+                            setTimeout(waitchild, 500);
                             return;
                         }
-                        setTimeout(waitchild, 500);
-                        return;
+                        child_process.execSync(`taskkill /pid ${child.pid} /t /f`);
+                        istimeout = true;
                     }
+                    // wait output
                     (function waitoutput() {
                         if (!fs.existsSync(that.tmptestoutfile)) {
                             setTimeout(waitoutput, 500);
@@ -425,6 +426,11 @@ class AcTsExtension {
                                 // read output
                                 const out = fs.readFileSync(that.tmptestoutfile).toString().trim().replace(/\n/g, "\r\n");
                                 fs.unlinkSync(that.tmptestoutfile);
+                                // check timeout
+                                if (istimeout) {
+                                    reject(`ERROR: timeout over ${that.timeout} ms`);
+                                    return;
+                                }
                                 // chceck canceled
                                 if (out == "") {
                                     that.channel.appendLine(`---- CANCELED ----`);
