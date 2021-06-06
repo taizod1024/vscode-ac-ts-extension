@@ -433,7 +433,7 @@ class AcTsExtension {
                                 }
                                 // chceck canceled
                                 if (out == "") {
-                                    that.channel.appendLine(`---- CANCELED ----`);
+                                    that.channel.appendLine(`---- CANCELED OR NO OUTPUT ----`);
                                     resolve();
                                     return;
                                 }
