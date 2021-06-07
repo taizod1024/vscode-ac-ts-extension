@@ -428,13 +428,11 @@ class AcTsExtension {
                                 // read output
                                 const out = fs.readFileSync(that.tmptestoutfile).toString().trim().replace(/\n/g, "\r\n");
                                 fs.unlinkSync(that.tmptestoutfile);
-                                if (out) {
-                                    that.channel.appendLine(out);
-                                }
                                 // check error
                                 const err = fs.readFileSync(that.tmptesterrfile).toString().trim().replace(/\n/g, "\r\n");
                                 fs.unlinkSync(that.tmptesterrfile);
                                 if (err) {
+                                    that.channel.appendLine(out);
                                     that.channel.appendLine(err);
                                     reject(`ERROR: error occurred`);
                                     return;
