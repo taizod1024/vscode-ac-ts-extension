@@ -1,6 +1,6 @@
 export { };
 // main
-async function main() {
+(async () => {
     // util for input
     const readline = require('readline').createInterface({ input: process.stdin });
     const readlineiter = readline[Symbol.asyncIterator]();
@@ -177,5 +177,4 @@ async function main() {
     // answer
     console.log(ans);
     return;
-}
-main();
+})();
