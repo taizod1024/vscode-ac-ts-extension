@@ -43,6 +43,7 @@ class AcTsExtension {
     public tmptestpath: string;
     public tmptestinfile: string;
     public tmptestoutfile: string;
+    public tmptesterrfile: string;
     public packagejsonfile: string;
     public packagelockjsonfile: string;
     public separator: string;
@@ -133,6 +134,7 @@ class AcTsExtension {
         this.tmptestpath = `${process.env.TEMP}\\${this.appid}`;
         this.tmptestinfile = `${process.env.TEMP}\\${this.appid}\\test_in.txt`;
         this.tmptestoutfile = `${process.env.TEMP}\\${this.appid}\\test_out.txt`;
+        this.tmptesterrfile = `${process.env.TEMP}\\${this.appid}\\test_err.txt`;
         this.packagejsonfile = `${this.projectpath}\\package.json`;
         this.packagelockjsonfile = `${this.projectpath}\\package-lock.json`;
         this.separator = "\r\n--------\r\n";
@@ -378,14 +380,14 @@ class AcTsExtension {
                         request: "launch",
                         runtimeArgs: ["--require", "ts-node/register"],
                         program: that.taskfile,
-                        args: ["<", that.tmptestinfile, ">", that.tmptestoutfile],
+                        args: ["<", that.tmptestinfile, ">", that.tmptestoutfile, "2>", that.tmptesterrfile],
                         console: "integratedTerminal",
                         skipFiles: ["node_modules/**"],
                         env: { TS_NODE_TRANSPILE_ONLY: "1" }
                     };
                     vscode.debug.startDebugging(that.projectfolder, launchconfig);
                 } else {
-                    const command = `node --require ts-node/register ${that.taskfile} < ${that.tmptestinfile} > ${that.tmptestoutfile}`;
+                    const command = `node --require ts-node/register ${that.taskfile} < ${that.tmptestinfile} > ${that.tmptestoutfile} 2> ${that.tmptesterrfile}`;
                     const options = {
                         cwd: that.projectpath,
                         env: { TS_NODE_TRANSPILE_ONLY: "1" }
@@ -426,6 +428,15 @@ class AcTsExtension {
                                 // read output
                                 const out = fs.readFileSync(that.tmptestoutfile).toString().trim().replace(/\n/g, "\r\n");
                                 fs.unlinkSync(that.tmptestoutfile);
+                                // read error
+                                const err = fs.readFileSync(that.tmptesterrfile).toString().trim().replace(/\n/g, "\r\n");
+                                fs.unlinkSync(that.tmptesterrfile);
+                                // check error
+                                if (err) {
+                                    that.channel.appendLine(err);
+                                    reject(`ERROR: error occurred`);
+                                    return;
+                                }
                                 // check timeout
                                 if (istimeout) {
                                     reject(`ERROR: timeout over ${that.timeout} ms`);
