@@ -1,6 +1,13 @@
-export { };
 // main
-function main(input: string[]) {
+(async () => {
+    // util for input
+    const readline = require('readline').createInterface({ input: process.stdin });
+    const lineiter = readline[Symbol.asyncIterator]();
+    const readiter = (async function* () { for await (const line of lineiter) for (const word of line.split(" ")) yield await word; })();
+    const read = async () => (await readiter.next()).value;
+    // util for es6
+    const fromto = function* (from: number, to: number, step = 1) { for (let x = from; x <= to; x += step) yield x; };
+    const startlen = function* (start: number, len: number, step = 1) { for (let x = start; x < start + len; x += step) yield x; }
 
     // TODO edit the code
 
@@ -11,45 +18,50 @@ function main(input: string[]) {
     // // param
     // let s: string;
     // // init
-    // s = input.shift();
+    // s = await read();
 
     // ＜例＞数値
     //       N
     // // param
     // let n: number;
     // // init
-    // n = Number(input.shift());
+    // n = Number(await read());
 
     // ＜例＞bitint
     //       N
     // // param
     // let n: bigint;
     // // init
-    // n = BigInt(input.shift());
+    // n = BigInt(await read());
 
     // ＜例＞数値ペア
     //       N K
-    // // param
+    // param
     // let n: number, k: number;
-    // // init
-    // [n, k] = input.shift().split(" ").map(x => Number(x));
+    // init
+    // n = Number(await read());
+    // k = Number(await read());
 
     // ＜例＞数値タプル
-    //       N K
-    // // param
+    //       N K L
+    // param
     // let n: number, k: number, l: number;
-    // // init
-    // [n, k, l] = input.shift().split(" ").map(x => Number(x));
+    // init
+    // n = Number(await read());
+    // k = Number(await read());
+    // l = Number(await read());
 
     // ＜例＞一次元数値配列（横）
     //       N
     //       A1 A2 ... An
     // // param
     // let n: number;
-    // let an: number[];
+    // let an: number[] = [];
     // // init
-    // n = Number(input.shift());
-    // an = input.shift().split(" ").map(x => Number(x));
+    // n = Number(await read());
+    // for (let nx = 0; nx < n; nx++) {
+    //     an.push(Number(await read()))
+    // }
 
     // ＜例＞一次元数値配列（縦）
     //       N
@@ -59,10 +71,12 @@ function main(input: string[]) {
     //       An
     // // param
     // let n: number;
-    // let an: number[];
+    // let an: number[] = [];
     // // init
-    // n = Number(input.shift());
-    // an = input.map(x => Number(x));
+    // n = Number(await read());
+    // for (let nx = 0; nx < n; nx++) {
+    //     an.push(Number(await read()))
+    // }
 
     // ＜例＞一次元文字列配列（縦）
     //       N
@@ -72,10 +86,12 @@ function main(input: string[]) {
     //       Sn
     // // param
     // let n: number;
-    // let sn: string[];
+    // let an: number[] = [];
     // // init
-    // n = Number(input.shift());
-    // sn = input;
+    // n = Number(await read());
+    // for (let nx = 0; nx < n; nx++) {
+    //     an.push(await read())
+    // }
 
     // ＜例＞一次元数値配列ペア（縦）
     //       N
@@ -84,12 +100,12 @@ function main(input: string[]) {
     //       :  :
     // // param
     // let n: number;
-    // let xn: number[], yn: number[];
+    // let xn: number[] = [], yn: number[] = [];
     // // init
-    // n = Number(input.shift());
-    // [xn, yn] = [new Array(n), new Array(n)];
+    // n = Number(await read());
     // for (let nx = 0; nx < n; nx++) {
-    //     [xn[nx], yn[nx]] = input[nx].split(" ").map(x => Number(x));
+    //     xn.push(await read());
+    //     yn.push(await read());
     // }
 
     // ＜例＞一次元オブジェクト配列（縦）
@@ -100,10 +116,12 @@ function main(input: string[]) {
     //       Sn Tn
     // // param
     // let n: number;
-    // let stn: { s: string, t: number }[];
+    // let stn: { s: string, t: number }[] = [];
     // // init
-    // n = Number(input.shift());
-    // stn = input.map(x => { let st = x.split(" "); return { s: st[0], t: Number(st[1]) } });
+    // n = Number(await read());
+    // for (let nx = 0; nx < n; nx++) {
+    //     stn.push({ s: await read(), t: Number(await read()) });
+    // }
 
     // ＜例＞二次元数値配列
     //       N M
@@ -112,11 +130,33 @@ function main(input: string[]) {
     //       :   :       :
     //       An1 An2 ... Anm 
     // // param
-    // let n: number, m:number;
-    // let anm: number[][];
+    // let n: number, m: number;
+    // let anm: number[][] = [];
     // // init
-    // [n, m] = input.shift().split(" ").map(x => Number(x));
-    // anm = input.map(x => x.split(" ").map(x => Number(x)));
+    // n = Number(await read());
+    // m = Number(await read());
+    // for (let nx = 0; nx < n; nx++) {
+    //     anm.push([]);
+    //     for (let mx = 0; mx < m; mx++) {
+    //         anm.slice(-1)[0].push(Number(await read()));
+    //     }
+    // }
+
+    // ＜例＞文字グリッド
+    //       H W
+    //       S11 S12 ... S1w
+    //       S21 S22 ... S2w 
+    //       :   :       :
+    //       Sh1 Sh2 ... Shw 
+    // // param
+    // let h: number, w: number;
+    // let shw: string[][] = [];
+    // // init
+    // h = Number((await read()));
+    // w = Number((await read()));
+    // for (let hx = 0; hx < h; hx++) {
+    //     shw.push((await read()).split(""));
+    // }
 
     // solve
     let ans;
@@ -132,18 +172,7 @@ function main(input: string[]) {
     // ＜例＞二次元数値配列を結合して出力
     // ans = anm.map(an => an.join(" ")).join("\n");
 
-    // ＜例＞一次元配列をすべて出力
-    // console.log(...an);
-
     // answer
     console.log(ans);
     return;
-}
-// entrypoint
-function entrypoint() {
-    const lines: string[] = [];
-    const reader = require('readline').createInterface({ input: process.stdin, output: process.stdout });
-    reader.on('line', function (line: string) { lines.push(line); });
-    reader.on('close', function () { main(lines); });
-}
-entrypoint();
+})();
