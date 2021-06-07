@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.31](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.30...v0.0.31) (2021-06-07)
+
+
+### Bug Fixes
+
+* テスト成功時に標準エラー出力が二重出力されるのを修正 ([2baa517](https://github.com/taizod1024/ac-ts-extension/commit/2baa517432c2b378f109bcdcf0d014a5ddb910b6))
+
 ### [0.0.30](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.29...v0.0.30) (2021-06-07)
 
 
