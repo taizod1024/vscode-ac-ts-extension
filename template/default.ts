@@ -36,17 +36,17 @@
 
     // ＜例＞数値ペア
     //       N K
-    // param
+    // // param
     // let n: number, k: number;
-    // init
+    // // init
     // n = Number(await read());
     // k = Number(await read());
 
     // ＜例＞数値タプル
     //       N K L
-    // param
+    // // param
     // let n: number, k: number, l: number;
-    // init
+    // // init
     // n = Number(await read());
     // k = Number(await read());
     // l = Number(await read());
@@ -104,8 +104,8 @@
     // // init
     // n = Number(await read());
     // for (let nx = 0; nx < n; nx++) {
-    //     xn.push(await read());
-    //     yn.push(await read());
+    //     xn.push(Number(await read()));
+    //     yn.push(Number(await read()));
     // }
 
     // ＜例＞一次元オブジェクト配列（縦）
