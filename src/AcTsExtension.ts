@@ -11,7 +11,7 @@ class AcTsExtension {
     // constant
     public appname: string;
     public appid: string;
-    public loinurl: string;
+    public loginurl: string;
     public configfile: string;
     public taskregexp: RegExp;
 
@@ -56,7 +56,7 @@ class AcTsExtension {
         // init constant
         this.appname = "AtCoder TypeScript Extension";
         this.appid = "ac-ts-extension";
-        this.loinurl = "https://atcoder.jp/login?continue=https%3A%2F%2Fatcoder.jp%2F&lang=ja";
+        this.loginurl = "https://atcoder.jp/login?continue=https%3A%2F%2Fatcoder.jp%2F&lang=ja";
         this.configfile = `${process.env.USERPROFILE}\\.${this.appid}.json`;
         this.taskregexp = /^(.*)_(.*)$/;
 
@@ -147,7 +147,7 @@ class AcTsExtension {
         this._initParam(["login", username, password]);
 
         this.channel.appendLine(`[${this.timestamp()}] command: ${this.cmd}`);
-        this.channel.appendLine(`[${this.timestamp()}] loginurl: ${this.loinurl}`);
+        this.channel.appendLine(`[${this.timestamp()}] loginurl: ${this.loginurl}`);
         this.channel.appendLine(`[${this.timestamp()}] username: ${this.username}`);
         this.channel.appendLine(`[${this.timestamp()}] password: ********`);
 
@@ -156,7 +156,7 @@ class AcTsExtension {
 
         // login get
         this.channel.appendLine(`[${this.timestamp()}] login_get:`);
-        const res1 = await agent.get(this.loinurl).proxy(this.proxy).catch(res => {
+        const res1 = await agent.get(this.loginurl).proxy(this.proxy).catch(res => {
             throw `ERROR: ${res.status} ${res.message}`;
         });
         this.channel.appendLine(`[${this.timestamp()}] -> ${res1.status}`);
@@ -165,7 +165,7 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] login_post:`);
         const jsdom = new JSDOM(res1.text);
         const csrf_token = jsdom.window.document.querySelectorAll("input")[0].value;
-        const res2 = await agent.post(this.loinurl)
+        const res2 = await agent.post(this.loginurl)
             .proxy(this.proxy)
             .set("Content-Type", "application/x-www-form-urlencoded")
             .send({
@@ -203,7 +203,7 @@ class AcTsExtension {
 
         // login get
         this.channel.appendLine(`[${this.timestamp()}] login_get:`);
-        const res1 = await agent.get(this.loinurl).proxy(this.proxy).catch(res => {
+        const res1 = await agent.get(this.loginurl).proxy(this.proxy).catch(res => {
             throw `ERROR: ${res.status} ${res.message}`;
         });
         this.channel.appendLine(`[${this.timestamp()}] -> ${res1.status}`);
@@ -212,7 +212,7 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] login_post:`);
         const jsdom = new JSDOM(res1.text);
         const csrf_token = jsdom.window.document.querySelectorAll("input")[0].value;
-        const res2 = await agent.post(this.loinurl)
+        const res2 = await agent.post(this.loginurl)
             .proxy(this.proxy)
             .set("Content-Type", "application/x-www-form-urlencoded")
             .send({
@@ -502,7 +502,7 @@ class AcTsExtension {
 
         // login get
         this.channel.appendLine(`[${this.timestamp()}] login_get:`);
-        const res1 = await agent.get(this.loinurl).proxy(this.proxy).catch(res => {
+        const res1 = await agent.get(this.loginurl).proxy(this.proxy).catch(res => {
             throw `ERROR: ${res.status} ${res.message}`;
         });
         this.channel.appendLine(`[${this.timestamp()}] -> ${res1.status}`);
@@ -511,7 +511,7 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] login_post:`);
         const jsdom = new JSDOM(res1.text);
         const csrf_token = jsdom.window.document.querySelectorAll("input")[0].value;
-        const res2 = await agent.post(this.loinurl)
+        const res2 = await agent.post(this.loginurl)
             .proxy(this.proxy)
             .set("Content-Type", "application/x-www-form-urlencoded")
             .send({
