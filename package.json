@@ -85,7 +85,7 @@
     "eslint": "^7.19.0",
     "generator-code": "^1.4.13",
     "glob": "^7.1.6",
-    "husky": "^6.0.0",
+    "husky": "^4.3.8",
     "mocha": "^8.3.2",
     "standard-version": "^9.2.0",
     "ts-node": "^9.1.1",
@@ -96,5 +96,11 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/taizod1024/ac-ts-extension.git"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "./bin/check_no_main_branch.sh",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
   }
 }
