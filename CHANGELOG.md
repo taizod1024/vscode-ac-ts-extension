@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.34](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.33...v0.0.34) (2021-06-21)
+
 ### [0.0.33](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.32...v0.0.33) (2021-06-13)
 
 
