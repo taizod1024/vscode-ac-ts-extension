@@ -3,7 +3,6 @@
   "displayName": "AtCoder TypeScript Extension",
   "description": "atcoder vscode extension for typescript",
   "version": "0.0.33",
-  "icon": "images/icon.png",
   "engines": {
     "vscode": "^1.55.0"
   },
