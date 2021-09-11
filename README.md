@@ -1,7 +1,5 @@
 # AtCoder TypeScript Extension
 
-![Status-WIP](https://img.shields.io/badge/Status-WIP-orange)
-
 TypeScriptでの[AtCoder](https://atcoder.jp/?lang=ja)への参加をサポートするVisual Studio Codeの拡張機能です。
 
 ## 機能
@@ -54,6 +52,7 @@ vscodeで `F1` を押下（もしくは [表示] > [コマンド パレット] �
 ### 問題をはじめる
 
 まずはじめに `AtCoder TypeScript Extension: Init Task` で問題名を入力して提出用のソースコードの生成と問題用のテストデータのダウンロードをします。
+
 - 問題名は `abc190_a` の形式で入力します。
 - ソースコードは `src/atcoder/abcXXX/abcXXX_X.ts` に生成されます。
 - テストデータは `src/atcoder/abcXXX/abcXXX_X.txt` にダウンロードされます。
@@ -65,6 +64,7 @@ vscodeで `F1` を押下（もしくは [表示] > [コマンド パレット] �
 ### 問題に解答する
 
 生成されたソースコードのmain()を修正します。
+
 - ソースコードのひな型にカスタマイズしたい場合は、後述の[設定](#設定)を参照してください。
 
 ```TypeScript
@@ -117,6 +117,7 @@ entrypoint();
 ### 問題の解答をテストする
 
 問題の解答を作成したら、ソースコードを開いてから `AtCoder TypeScript Extension: Test Task` でテスト実行します。
+
 - 処理が5秒以上続くと自動的に中断します。
 - 誤差が許容される問題の多くはNGになります。目視で判断してください。
 - bigintでの出力が必要な問題は文字列化して末尾の `n` を除去して出力してください。
@@ -143,6 +144,7 @@ Takahashi
 ### 問題の解答をデバッグする
 
 問題の解答をデバッグするには、ソースコードを開いてから `AtCoder TypeScript Extension: Debug Task` でデバッグ実行します。
+
 - テストデータの個数だけデバッグ実行が繰り返されます。
 
 ![debugtask](https://github.com/taizod1024/ac-ts-extension/blob/main/images/debugtask.gif?raw=true)
@@ -150,6 +152,7 @@ Takahashi
 ### 問題の解答を提出する
 
 解答の作成が完了したら、ソースコードを開いてから `AtCoder TypeScript Extension: Submit Task` で解答を提出します。
+
 - 構文エラーがあっても提出されます。テスト実行が失敗していても提出されます。注意してください。
 
 ![submittask](https://github.com/taizod1024/ac-ts-extension/blob/main/images/submittask.gif?raw=true)
