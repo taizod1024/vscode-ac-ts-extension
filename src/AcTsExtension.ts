@@ -415,9 +415,11 @@ class AcTsExtension {
                         (function waitunlock() {
                             try { fs.unlinkSync(that.tmptestinfile); }
                             catch (ex) {
-                                if (!ex.message.match(/EBUSY/)) {
-                                    reject(ex);
-                                    return;
+                                if (ex instanceof Error) {
+                                    if (!ex.message.match(/EBUSY/)) {
+                                        reject(ex);
+                                        return;
+                                    }
                                 }
                                 setTimeout(waitunlock, 500);
                                 return;
