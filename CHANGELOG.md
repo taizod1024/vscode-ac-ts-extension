@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.37](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.36...v0.0.37) (2021-09-14)
+
+
+### Bug Fixes
+
+* テンプレートのread()が文字列を返却するよう修正 ([349702d](https://github.com/taizod1024/ac-ts-extension/commit/349702df7418d6bbcb9411f33e352ed80ce7fc9d))
+
 ### [0.0.36](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.35...v0.0.36) (2021-09-14)
 
 ### [0.0.35](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.34...v0.0.35) (2021-09-11)
