@@ -1,10 +1,13 @@
 // main
 (async () => {
     // util for input
-    const readline = require('readline').createInterface({ input: process.stdin });
-    const lineiter = readline[Symbol.asyncIterator]();
+    const rl = require('readline').createInterface({ input: process.stdin });
+    const lineiter = rl[Symbol.asyncIterator]();
     const readiter = (async function* () { for await (const line of lineiter) for (const word of line.split(" ")) yield await word; })();
+    const chariter = (async function* () { for await (const line of lineiter) for (const word of line.split(" ")) for (const char of word.split("")) yield await char; })();
     const read = async () => String((await readiter.next()).value);
+    const readchar = async () => String((await chariter.next()).value);
+
     // util for es6
     const fromto = function* (from: number, to: number, step = 1) { for (let x = from; x <= to; x += step) yield x; };
     const startlen = function* (start: number, len: number, step = 1) { for (let x = start; x < start + len; x += step) yield x; }
@@ -15,37 +18,47 @@
 
     // ＜例＞文字列
     //       S
+    //
     // // param
     // let s: string;
+    //
     // // init
     // s = await read();
-
+    
     // ＜例＞数値
     //       N
+    //
     // // param
     // let n: number;
+    //
     // // init
     // n = Number(await read());
 
     // ＜例＞bitint
     //       N
+    //
     // // param
     // let n: bigint;
+    //
     // // init
     // n = BigInt(await read());
 
     // ＜例＞数値ペア
     //       N K
+    //
     // // param
     // let n: number, k: number;
+    //
     // // init
     // n = Number(await read());
     // k = Number(await read());
 
     // ＜例＞数値タプル
     //       N K L
+    //
     // // param
     // let n: number, k: number, l: number;
+    //
     // // init
     // n = Number(await read());
     // k = Number(await read());
@@ -54,9 +67,11 @@
     // ＜例＞一次元数値配列（横）
     //       N
     //       A1 A2 ... An
+    //
     // // param
     // let n: number;
     // let an: number[] = [];
+    //
     // // init
     // n = Number(await read());
     // for (let nx = 0; nx < n; nx++) {
@@ -69,9 +84,11 @@
     //       A2
     //       :
     //       An
+    //
     // // param
     // let n: number;
     // let an: number[] = [];
+    //
     // // init
     // n = Number(await read());
     // for (let nx = 0; nx < n; nx++) {
@@ -84,9 +101,11 @@
     //       S2
     //       :
     //       Sn
+    //
     // // param
     // let n: number;
     // let an: number[] = [];
+    //
     // // init
     // n = Number(await read());
     // for (let nx = 0; nx < n; nx++) {
@@ -98,9 +117,11 @@
     //       X1 Y1
     //       X2 Y2
     //       :  :
+    //
     // // param
     // let n: number;
     // let xn: number[] = [], yn: number[] = [];
+    //
     // // init
     // n = Number(await read());
     // for (let nx = 0; nx < n; nx++) {
@@ -114,9 +135,11 @@
     //       S2 T2
     //       :  :
     //       Sn Tn
+    //
     // // param
     // let n: number;
     // let stn: { s: string, t: number }[] = [];
+    //
     // // init
     // n = Number(await read());
     // for (let nx = 0; nx < n; nx++) {
@@ -129,9 +152,11 @@
     //       A21 A22 ... A2m 
     //       :   :       :
     //       An1 An2 ... Anm 
+    //
     // // param
     // let n: number, m: number;
     // let anm: number[][] = [];
+    //
     // // init
     // n = Number(await read());
     // m = Number(await read());
@@ -148,14 +173,39 @@
     //       S21 S22 ... S2w 
     //       :   :       :
     //       Sh1 Sh2 ... Shw 
+    //
     // // param
     // let h: number, w: number;
     // let shw: string[][] = [];
+    //
     // // init
-    // h = Number((await read()));
-    // w = Number((await read()));
+    // h = Number(await read());
+    // w = Number(await read());
     // for (let hx = 0; hx < h; hx++) {
     //     shw.push((await read()).split(""));
+    // }
+
+    // ＜例＞文字座標
+    //       H W
+    //       S11 S12 ... S1w
+    //       S21 S22 ... S2w 
+    //       :   :       :
+    //       Sh1 Sh2 ... Shw 
+    //
+    // // param
+    // let h: number, w: number;
+    // let sm: number[][];
+    //
+    // // init
+    // h = Number(await read());
+    // w = Number(await read());
+    // sm = [];
+    // for (let hx = 0; hx < h; hx++) {
+    //     for (let wx = 0; wx < w; wx++) {
+    //         if ((await readchar()) == "#") {
+    //             sm.push([hx, wx]);
+    //         }
+    //     }
     // }
 
     // solve
