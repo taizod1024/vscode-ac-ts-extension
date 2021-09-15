@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.38](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.37...v0.0.38) (2021-09-15)
+
+
+### Bug Fixes
+
+* readchar()追加、文字座標の例の追加 ([73c38dd](https://github.com/taizod1024/ac-ts-extension/commit/73c38ddc1640f3b2512f650468711e656b22c9d9))
+
 ### [0.0.37](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.36...v0.0.37) (2021-09-14)
 
 
