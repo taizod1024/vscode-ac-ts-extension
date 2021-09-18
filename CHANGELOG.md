@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.41](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.40...v0.0.41) (2021-09-18)
+
+
+### Bug Fixes
+
+* テンプレート修正 ([4ed010e](https://github.com/taizod1024/ac-ts-extension/commit/4ed010eac9f5750a3ee3532b8a170b4569472c96))
+
 ### [0.0.40](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.39...v0.0.40) (2021-09-16)
 
 
