@@ -141,6 +141,7 @@ class AcTsExtension {
         this.proxy = "";
         this.timeout = 5000;
     }
+
     // public interface
     public async loginSite(username: string, password: string) {
 
@@ -184,6 +185,7 @@ class AcTsExtension {
 
         this.channel.appendLine(`---- SUCCESS: ${this.username} logged in ----`);
     }
+
     public async initTask(task: string) {
 
         this._initParam(["init", task]);
@@ -306,6 +308,7 @@ class AcTsExtension {
             });
         this.channel.appendLine(`---- SUCCESS: ${task} initialized ----`);
     }
+
     public async testTask(task: string, debug: boolean): Promise<void> {
 
         this._initParam(["test", task]);
@@ -482,6 +485,7 @@ class AcTsExtension {
             })();
         });
     }
+    
     public async submitTask(task: string) {
 
         this._initParam(["submit", task]);
@@ -548,6 +552,7 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] submissionsurl: ${this.submissionsurl}`);
         this.channel.appendLine(`---- SUCCESS: ${this.task} submitted ----`);
     }
+
     public async removeTask(task: string) {
 
         this._initParam(["remove", task]);
