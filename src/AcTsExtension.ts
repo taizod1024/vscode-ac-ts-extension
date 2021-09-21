@@ -238,33 +238,6 @@ class AcTsExtension {
         });
         this.channel.appendLine(`[${this.timestamp()}] -> ${response.status}`);
 
-        // show input
-        const imatch = response.text.match(new RegExp("<h3>入力</h3>[\r\n]*<p>入力は以下の形式で標準入力から与えられ(る|ます)。[ ]*</p>\r\n<pre>((.*|\r\n)*)", "m"));
-        let itext = "";
-        if (imatch == null) {
-            // warning
-            this.channel.appendLine(`[${this.timestamp()}] WARN: missing input`);
-        } else {
-            // html to text
-            itext = imatch[2].substring(0, imatch[2].indexOf("</pre>"));
-            itext = itext
-                .replace(/<\/?code>/g, "'") // code tag to quote
-                .replace(/<[^>]*>/g, "") // remove tag
-                .replace(/\\[cvcdl]?dots/g, "") // remove ...
-                .replace(/\.\.\./g, "") // remove ...
-                .replace(/\\\S+/g, "") // remove escape sequence
-                .replace(/ +/g, " ") // remove spaces
-                .replace(/( ?\r\n)+/g, "\r\n") // remove newlines
-                .replace(/, +/g, ",") // remove space with comma
-                .replace(/[{,}]/g, "") // remove index separator
-                .replace(/_([0-9][a-z]|[a-z][0-9]|[0-9][0-9])/g, "_11") // to index normalized
-                .replace(/^\r\n/g, "") // remove blank lines
-                .toLowerCase() // to lower case
-                .trim(); // trim space
-            this.channel.appendLine(`[${this.timestamp()}] input:`);
-            this.channel.appendLine(itext);
-        }
-
         // create taskfile
         if (fs.existsSync(this.taskfile)) {
             this.channel.appendLine(`[${this.timestamp()}] taskfile: "${this.taskfile}" exist`);
@@ -485,7 +458,7 @@ class AcTsExtension {
             })();
         });
     }
-    
+
     public async submitTask(task: string) {
 
         this._initParam(["submit", task]);
