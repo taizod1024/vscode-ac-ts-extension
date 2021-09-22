@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.45](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.44...v0.0.45) (2021-09-22)
+
+
+### Bug Fixes
+
+* await read()とawait readchar()導入によるテンプレートの簡素化 ([169eebf](https://github.com/taizod1024/ac-ts-extension/commit/169eebfa9bca29e706fd46b796888d899f75b48c))
+
 ### [0.0.44](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.43...v0.0.44) (2021-09-21)
 
 
