@@ -3,12 +3,14 @@ import { actsextension } from './AcTsExtension';
 
 // extension helper
 class AcTsHelper {
+
     public projectpath: string;
     public filename: string;
     public filenamewithoutextension: string;
     public extension: string;
     public contest: string;
     public task: string;
+
     constructor() {
         this.projectpath = null;
         this.filename = null;
@@ -16,6 +18,7 @@ class AcTsHelper {
         this.extension = null;
         this.task = null;
     }
+
     public checkProjectPath(): boolean {
         if (vscode.workspace.workspaceFolders?.length == 1) {
             this.projectpath = vscode.workspace.workspaceFolders[0].uri.fsPath;
@@ -27,6 +30,7 @@ class AcTsHelper {
             return false;
         }
     }
+
     public checkTask(): boolean {
         if (this.projectpath) {
             const filenames = vscode.window.activeTextEditor?.document?.fileName?.split("\\");
