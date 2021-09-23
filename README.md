@@ -16,6 +16,10 @@ TypeScriptでの[AtCoder](https://atcoder.jp/?lang=ja)への参加をサポー�
 
 ![testtask](https://github.com/taizod1024/ac-ts-extension/blob/main/images/testtask.gif?raw=true)
 
+## 制限
+
+- マルチルートワークスペースには対応していません。
+
 ## 環境
 
 - Windows 10 (20H2で動作確認)
@@ -40,8 +44,6 @@ TypeScriptでの[AtCoder](https://atcoder.jp/?lang=ja)への参加をサポー�
 ## 使い方
 
 vscodeで `F1` を押下（もしくは [表示] > [コマンド パレット] を選択、`Ctrl+Shift+P` を押下）して [コマンド パレット] から機能を選択します。
-
-- マルチルートワークスペースには対応していません。
 
 ### AtCoderへログインする
 
@@ -68,50 +70,36 @@ vscodeで `F1` を押下（もしくは [表示] > [コマンド パレット] �
 - ソースコードのひな型にカスタマイズしたい場合は、後述の[設定](#設定)を参照してください。
 
 ```TypeScript
-export { };
+import * as rl from "readline";
+
+// util for input
+const lineit = rl.createInterface({ input: process.stdin });
+const wordit = (async function* () { for await (const line of lineit) for (const word of line.split(" ")) yield await word; })();
+const charit = (async function* () { for await (const line of lineit) for (const word of line.split(" ")) for (const char of word.split("")) yield await char; })();
+const read = async () => String((await wordit.next()).value);
+const readchar = async () => String((await charit.next()).value);
+
 // main
-function main(input: string[]) {
+const main = async function () {
+
+    // TODO edit the code
+
     // param
-    let ans: any;
-
-    // // 入力処理サンプル
-
-    // // <例> S
-    // // let s;
-    // // s = input.shift();
-
-    // // <例> N
-    // // let n;
-    // // n = Number(input.shift());
-
-    // // <例> N K
-    // // let n, k;
-    // // [n, k] = input.shift().split(" ").map(x => Number(x));
-
-    // ... 以下略 ...
+    let n: number;
+    
+    // init
+    n = Number(await read());
 
     // solve
-
-    // // 出力処理サンプル
-
-    // // bigintの末尾の"n"を削除する場合
-    // // ans = ans.toString().replace("n", "");
-
-    // // 配列を結合して出力する場合
-    // // ans = ans.join("\n");
-
+    let ans;
+    
     // answer
     console.log(ans);
+
     return;
-}
-// entrypoint
-function entrypoint() {
-    const lines: string[] = [];
-    const reader = require('readline').createInterface({ input: process.stdin, output: process.stdout });
-    reader.on('line', function (line: string) { lines.push(line); });
-    reader.on('close', function () { let input = lines; main(input); });
-}
-entrypoint();
+
+};
+main();
 ```
 
 ### 問題の解答をテストする
