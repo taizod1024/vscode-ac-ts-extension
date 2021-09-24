@@ -1,14 +1,15 @@
-import * as rl from "readline";
+import * as fs from "fs";
 
 // util for input
-const lineit = rl.createInterface({ input: process.stdin });
-const wordit = (async function* () { for await (const line of lineit) for (const word of line.split(" ")) yield await word; })();
-const charit = (async function* () { for await (const line of lineit) for (const word of line.split(" ")) for (const char of word.split("")) yield await char; })();
-const read = async () => String((await wordit.next()).value);
-const readchar = async () => String((await charit.next()).value);
+const lineit = (function* () { for (const line of fs.readFileSync(0, "utf8").split("\n")) yield line; })();
+const wordit = (function* () { while (true) { let line = lineit.next(); if (line.done) break; for (const word of String(line.value).split(" ")) yield word; } })();
+const charit = (function* () { while (true) { let word = wordit.next(); if (word.done) break; for (const char of String(word.value).split("")) yield char; } })();
+const readline = () => String((lineit.next()).value);
+const read = () => String((wordit.next()).value);
+const readchar = () => String((charit.next()).value);
 
 // main
-const main = async function () {
+const main = function () {
 
     // TODO edit the code
 
@@ -16,7 +17,7 @@ const main = async function () {
     let n: number;
     
     // init
-    n = Number(await read());
+    n = Number(read());
 
     // solve
     let ans;
