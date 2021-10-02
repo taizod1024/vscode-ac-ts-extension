@@ -268,6 +268,8 @@ class AcTsExtension {
                 idx++;
             }
             idx--;
+            txt = txt.replace("&lt;", "<");
+            txt = txt.replace("&gt;", ">");
             fs.writeFileSync(this.testfile, txt);
             this.channel.appendLine(`[${this.timestamp()}] testfile: "${this.testfile}" created`);
         }
