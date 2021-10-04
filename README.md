@@ -5,6 +5,7 @@ Python/TypeScriptでの[AtCoder](https://atcoder.jp/?lang=ja)への参加をサ�
 ## 機能
 
 Python/TypeScriptでのVisual Studio CodeからAtCoderへの参加をサポートします。
+
 - AtCoderへのログイン
 - ソースコードの生成、テストデータのダウンロード
 - 解答のテスト実行、デバッグ実行
