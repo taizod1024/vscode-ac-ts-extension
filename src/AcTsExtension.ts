@@ -194,10 +194,10 @@ class AcTsExtension {
 
         this.channel.appendLine(`[${this.timestamp()}] command: ${this.cmd}`);
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
+        this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
         this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.taskurl}`);
         this.channel.appendLine(`[${this.timestamp()}] username: ${this.username}`);
         this.channel.appendLine(`[${this.timestamp()}] password: ********`);
-        this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
 
         // make dir
         if (!fs.existsSync(this.taskpath)) fs.mkdirSync(this.taskpath, { recursive: true });
@@ -299,9 +299,9 @@ class AcTsExtension {
 
         this.channel.appendLine(`[${this.timestamp()}] command: ${this.cmd}`);
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
+        this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
         this.channel.appendLine(`[${this.timestamp()}] debug: ${debug}`);
         this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.taskurl}`);
-        this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
 
         // check taskfile
         this.channel.appendLine(`[${this.timestamp()}] taskfile: "${this.taskfile}"`);
@@ -344,6 +344,12 @@ class AcTsExtension {
                 out: wrk.shift()
             });
         }
+
+        // check test set
+        if (ios.length == 0) {
+            throw `WARN: there is no test set`;
+        }
+
         // run test set
         let ok = 0;
         let ng = 0;
@@ -508,10 +514,10 @@ class AcTsExtension {
 
         this.channel.appendLine(`[${this.timestamp()}] command: ${this.cmd}`);
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
+        this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
         this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.taskurl}`);
         this.channel.appendLine(`[${this.timestamp()}] username: ${this.username}`);
         this.channel.appendLine(`[${this.timestamp()}] password: ********`);
-        this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
         this.channel.appendLine(`[${this.timestamp()}] submiturl: ${this.submiturl}`);
 
         // check taskfile
