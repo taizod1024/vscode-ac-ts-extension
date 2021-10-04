@@ -40,7 +40,7 @@ class AcTsHelper {
                 const basename = filenames.join("\\");
                 const basenames = this.filename.split(".");
                 this.filenamewithoutextension = basenames[0];
-                this.extension = (2 <= basenames.length) ? basenames.slice(-1)[0] : "";
+                this.extension = (2 <= basenames.length) ? ("." + basenames.slice(-1)[0]) : "";
                 // check 
                 const match = this.filenamewithoutextension.match(actsextension.taskregexp);
                 if (match) {

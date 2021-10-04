@@ -29,7 +29,7 @@ export function activate(context: vscode.ExtensionContext) {
                 }).then((password) => {
                     if (!password) return;
                     // exec command
-                    actsextension.extensionpath = context.extensionPath;
+                    actsextension.vscodeextensionpath = context.extensionPath;
                     actsextension.loginSite(username, password)
                         .catch((ex) => {
                             actsextension.channel.appendLine("**** " + ex + " ****");
@@ -54,13 +54,24 @@ export function activate(context: vscode.ExtensionContext) {
                 validateInput: param => { return actsextension.taskregexp.test(param) ? '' : 'input task [e.g.: abc190_a]'; }
             }).then((task) => {
                 if (task === undefined) return;
-                // exec command
-                actsextension.extensionpath = context.extensionPath;
-                actsextension.projectpath = actshelper.projectpath;
-                actsextension.initTask(task)
-                    .catch((ex) => {
-                        actsextension.channel.appendLine("**** " + ex + " ****");
-                    });
+                let idx = actsextension.extensions.indexOf(actsextension.extension);
+                if (1 <= idx) {
+                    actsextension.extensions.splice(idx, 1);
+                    actsextension.extensions.unshift(actsextension.extension);
+                }
+                vscode.window.showQuickPick(actsextension.extensions, {
+                    placeHolder: "select extension",
+                }).then(extension => {
+                    if (extension == null) return;
+                    // exec command
+                    actsextension.vscodeextensionpath = context.extensionPath;
+                    actsextension.projectpath = actshelper.projectpath;
+                    actsextension.extension = extension;
+                    actsextension.initTask(task)
+                        .catch((ex) => {
+                            actsextension.channel.appendLine("**** " + ex + " ****");
+                        });
+                });
             });
         }));
     })();
@@ -74,8 +85,9 @@ export function activate(context: vscode.ExtensionContext) {
             if (!actshelper.checkProjectPath()) return;
             if (!actshelper.checkTask()) return;
             // exec command
-            actsextension.extensionpath = context.extensionPath;
+            actsextension.vscodeextensionpath = context.extensionPath;
             actsextension.projectpath = actshelper.projectpath;
+            actsextension.extension = actshelper.extension;
             actsextension.testTask(actshelper.task, false)
                 .catch((ex) => {
                     actsextension.channel.appendLine("**** " + ex + " ****");
@@ -92,8 +104,9 @@ export function activate(context: vscode.ExtensionContext) {
             if (!actshelper.checkProjectPath()) return;
             if (!actshelper.checkTask()) return;
             // exec command
-            actsextension.extensionpath = context.extensionPath;
+            actsextension.vscodeextensionpath = context.extensionPath;
             actsextension.projectpath = actshelper.projectpath;
+            actsextension.extension = actshelper.extension;
             actsextension.testTask(actshelper.task, true)
                 .catch((ex) => {
                     actsextension.channel.appendLine("**** " + ex + " ****");
@@ -110,8 +123,9 @@ export function activate(context: vscode.ExtensionContext) {
             if (!actshelper.checkProjectPath()) return;
             if (!actshelper.checkTask()) return;
             // exec command
-            actsextension.extensionpath = context.extensionPath;
+            actsextension.vscodeextensionpath = context.extensionPath;
             actsextension.projectpath = actshelper.projectpath;
+            actsextension.extension = actshelper.extension;
             actsextension.submitTask(actshelper.task)
                 .catch((ex) => {
                     actsextension.channel.appendLine("**** " + ex + " ****");
@@ -133,8 +147,9 @@ export function activate(context: vscode.ExtensionContext) {
             }).then(confirm => {
                 if (confirm != "REMOVE") return;
                 // exec command
-                actsextension.extensionpath = context.extensionPath;
+                actsextension.vscodeextensionpath = context.extensionPath;
                 actsextension.projectpath = actshelper.projectpath;
+                actsextension.extension = actshelper.extension;
                 actsextension.removeTask(actshelper.task)
                     .catch((ex) => {
                         actsextension.channel.appendLine("**** " + ex + " ****");
@@ -152,8 +167,9 @@ export function activate(context: vscode.ExtensionContext) {
             if (!actshelper.checkProjectPath()) return;
             if (!actshelper.checkTask()) return;
             // exec command
-            actsextension.extensionpath = context.extensionPath;
+            actsextension.vscodeextensionpath = context.extensionPath;
             actsextension.projectpath = actshelper.projectpath;
+            actsextension.extension = actshelper.extension;
             actsextension.browseTask(actshelper.task)
                 .catch((ex) => {
                     actsextension.channel.appendLine("**** " + ex + " ****");

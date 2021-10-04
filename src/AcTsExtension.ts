@@ -14,9 +14,10 @@ class AcTsExtension {
     public loginurl: string;
     public configfile: string;
     public taskregexp: RegExp;
+    public extensions: string[] = [".ts", ".py"];
 
     // context
-    public extensionpath: string;
+    public vscodeextensionpath: string;
     public projectfolder: vscode.WorkspaceFolder;
     public projectpath: string;
     public channel: vscode.OutputChannel;
@@ -26,6 +27,7 @@ class AcTsExtension {
     public task: string;
     public username: string;
     public password: string;
+    public extension: string;
 
     // prop
     public contest: string;
@@ -120,13 +122,13 @@ class AcTsExtension {
         }
 
         // init prop
-        this.tasktmplfile = `${this.extensionpath}\\template\\default.ts`;
-        this.usertasktmplfile = `${this.projectpath}\\template\\default.ts`;
+        this.tasktmplfile = `${this.vscodeextensionpath}\\template\\default${this.extension}`;
+        this.usertasktmplfile = `${this.projectpath}\\template\\default${this.extension}`;
         this.taskurl = `https://atcoder.jp/contests/${this.contest}/tasks/${this.task}`;
         this.submiturl = `https://atcoder.jp/contests/${this.contest}/submit`;
         this.submissionsurl = `https://atcoder.jp/contests/${this.contest}/submissions/me`;
         this.taskpath = `${this.projectpath}\\src\\atcoder\\${this.contest}`;
-        this.taskfile = `${this.projectpath}\\src\\atcoder\\${this.contest}\\${this.task}.ts`;
+        this.taskfile = `${this.projectpath}\\src\\atcoder\\${this.contest}\\${this.task}${this.extension}`;
         this.taskbuildpath = `${process.env.TEMP}\\${this.appid}\\build\\atcoder`;
         this.taskbuildfile = `${this.taskbuildpath}\\${this.task}.js`;
         this.testpath = `${this.projectpath}\\src\\atcoder\\${this.contest}`;
@@ -195,6 +197,7 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.taskurl}`);
         this.channel.appendLine(`[${this.timestamp()}] username: ${this.username}`);
         this.channel.appendLine(`[${this.timestamp()}] password: ********`);
+        this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
 
         // make dir
         if (!fs.existsSync(this.taskpath)) fs.mkdirSync(this.taskpath, { recursive: true });
@@ -227,6 +230,8 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] -> ${res2.status}`);
 
         // check login
+        console.log("***", res2.text);
+        console.log("***", res2.text.indexOf(`ようこそ、${this.username} さん。`));
         if (res2.text.indexOf(`ようこそ、${this.username} さん。`) < 0) {
             throw `ERROR: atcoder login failed, userame="${this.username}", password="********", csrf_token="${csrf_token}"`;
         }
@@ -237,6 +242,7 @@ class AcTsExtension {
             throw `ERROR: ${res.status} ${res.message}`;
         });
         this.channel.appendLine(`[${this.timestamp()}] -> ${response.status}`);
+        console.log("***", response.text);
 
         // create taskfile
         if (fs.existsSync(this.taskfile)) {
@@ -272,6 +278,9 @@ class AcTsExtension {
             txt = txt.replace("&gt;", ">");
             fs.writeFileSync(this.testfile, txt);
             this.channel.appendLine(`[${this.timestamp()}] testfile: "${this.testfile}" created`);
+            if (txt == "") {
+                this.channel.appendLine(`[${this.timestamp()}] WARN: there is no test set`);
+            }
         }
 
         // open file
@@ -292,6 +301,7 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
         this.channel.appendLine(`[${this.timestamp()}] debug: ${debug}`);
         this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.taskurl}`);
+        this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
 
         // check taskfile
         this.channel.appendLine(`[${this.timestamp()}] taskfile: "${this.taskfile}"`);
@@ -311,10 +321,12 @@ class AcTsExtension {
             fs.unlinkSync(this.tmptestoutfile);
         }
 
-        // check node
-        const nodemsg = ``
-        if (!fs.existsSync(this.packagejsonfile) || !fs.existsSync(this.packagelockjsonfile)) {
-            throw `ERROR: missing package.json or package-lock.json, install node.js, run "npm init && npm install --save-dev typescript ts-node @types/node"`;
+        // check node if typescripts
+        if (this.extension == ".ts") {
+            const nodemsg = ``
+            if (!fs.existsSync(this.packagejsonfile) || !fs.existsSync(this.packagelockjsonfile)) {
+                throw `ERROR: missing package.json or package-lock.json, install node.js, run "npm init && npm install --save-dev typescript ts-node @types/node"`;
+            }
         }
 
         // make dir
@@ -351,27 +363,56 @@ class AcTsExtension {
                 let child;
                 let timecount = 0;
                 let istimeout = false;
-                if (debug) {
-                    const launchconfig = {
-                        name: that.appid,
-                        type: "pwa-node",
-                        request: "launch",
-                        runtimeArgs: ["--require", "ts-node/register"],
-                        program: that.taskfile,
-                        args: ["<", that.tmptestinfile, ">", that.tmptestoutfile, "2>", that.tmptesterrfile],
-                        console: "integratedTerminal",
-                        skipFiles: ["node_modules/**"],
-                        env: { TS_NODE_TRANSPILE_ONLY: "1" }
-                    };
-                    vscode.debug.startDebugging(that.projectfolder, launchconfig);
-                } else {
-                    const command = `node --require ts-node/register ${that.taskfile} < ${that.tmptestinfile} > ${that.tmptestoutfile} 2> ${that.tmptesterrfile}`;
-                    const options = {
-                        cwd: that.projectpath,
-                        env: { TS_NODE_TRANSPILE_ONLY: "1" }
-                    };
-                    child = child_process.exec(command, options);
+                // test if typescript
+                if (that.extension == ".ts") {
+                    if (debug) {
+                        const launchconfig = {
+                            name: that.appid,
+                            type: "pwa-node",
+                            request: "launch",
+                            runtimeArgs: ["--require", "ts-node/register"],
+                            program: that.taskfile,
+                            args: ["<", that.tmptestinfile, ">", that.tmptestoutfile, "2>", that.tmptesterrfile],
+                            console: "integratedTerminal",
+                            skipFiles: ["node_modules/**"],
+                            env: { TS_NODE_TRANSPILE_ONLY: "1" }
+                        };
+                        vscode.debug.startDebugging(that.projectfolder, launchconfig);
+                    } else {
+                        const command = `node --require ts-node/register ${that.taskfile} < ${that.tmptestinfile} > ${that.tmptestoutfile} 2> ${that.tmptesterrfile}`;
+                        const options = {
+                            cwd: that.projectpath,
+                            env: { TS_NODE_TRANSPILE_ONLY: "1" }
+                        };
+                        child = child_process.exec(command, options);
+                    }
                 }
+                // test if python
+                else if (that.extension == ".py") {
+                    if (debug) {
+                        const launchconfig = {
+                            name: that.appid,
+                            type: "python",
+                            request: "launch",
+                            program: that.taskfile,
+                            args: ["<", that.tmptestinfile, ">", that.tmptestoutfile, "2>", that.tmptesterrfile],
+                            console: "integratedTerminal"
+                        };
+                        vscode.debug.startDebugging(that.projectfolder, launchconfig);
+                    } else {
+                        const command = `python -u ${that.taskfile} < ${that.tmptestinfile} > ${that.tmptestoutfile} 2> ${that.tmptesterrfile}`;
+                        const options = {
+                            cwd: that.projectpath
+                        };
+                        child = child_process.exec(command, options);
+                    }
+                }
+                // others
+                else {
+                    reject(`ERROR: ${that.extension} is not supported`);
+                    return;
+                }
+
                 // wait child process
                 (function waitchild() {
                     if (child?.exitCode === null) {
@@ -470,6 +511,7 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.taskurl}`);
         this.channel.appendLine(`[${this.timestamp()}] username: ${this.username}`);
         this.channel.appendLine(`[${this.timestamp()}] password: ********`);
+        this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
         this.channel.appendLine(`[${this.timestamp()}] submiturl: ${this.submiturl}`);
 
         // check taskfile
@@ -517,7 +559,7 @@ class AcTsExtension {
             .set("Content-Type", "application/x-www-form-urlencoded")
             .send({
                 "data.TaskScreenName": this.task,
-                "data.LanguageId": 4057,
+                "data.LanguageId": this.extension == ".ts" ? 4057 : this.extension == ".py" ? 4006 : 0,
                 csrf_token: csrf_token,
                 sourceCode: code
             }).catch(res => {
@@ -576,10 +618,12 @@ class AcTsExtension {
             this.username = app.atcoder.username;
             this.password = Buffer.from(app.atcoder.encpassword, "base64").toString();
             this.task = app.atcoder.task;
+            this.extension = app.atcoder.extension;
         } else {
             this.username = "";
             this.password = "";
             this.task = "";
+            this.extension = "";
         }
     }
     protected saveConfig() {
@@ -587,7 +631,8 @@ class AcTsExtension {
             atcoder: {
                 username: this.username,
                 encpassword: Buffer.from(this.password).toString("base64"),
-                task: this.task
+                task: this.task,
+                extension: this.extension
             }
         };
         fs.writeFileSync(this.configfile, JSON.stringify(app));

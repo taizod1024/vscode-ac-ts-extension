@@ -1,7 +1,7 @@
 {
   "name": "ac-ts-extension",
-  "displayName": "AtCoder TypeScript Extension",
-  "description": "atcoder vscode extension for typescript",
+  "displayName": "AtCoder Extension",
+  "description": "atcoder vscode extension for python/typescript",
   "version": "0.0.51",
   "engines": {
     "vscode": "^1.60.0"
@@ -24,31 +24,31 @@
     "commands": [
       {
         "command": "ac-ts-extension.loginSite",
-        "title": "AtCoder TypeScript Extension: Login Site"
+        "title": "AtCoder Extension: Login Site"
       },
       {
         "command": "ac-ts-extension.initTask",
-        "title": "AtCoder TypeScript Extension: Init Task"
+        "title": "AtCoder Extension: Init Task"
       },
       {
         "command": "ac-ts-extension.testTask",
-        "title": "AtCoder TypeScript Extension: Test Task"
+        "title": "AtCoder Extension: Test Task"
       },
       {
         "command": "ac-ts-extension.debugTask",
-        "title": "AtCoder TypeScript Extension: Debug Task"
+        "title": "AtCoder Extension: Debug Task"
       },
       {
         "command": "ac-ts-extension.submitTask",
-        "title": "AtCoder TypeScript Extension: Submit Task"
+        "title": "AtCoder Extension: Submit Task"
       },
       {
         "command": "ac-ts-extension.removeTask",
-        "title": "AtCoder TypeScript Extension: Remove Task"
+        "title": "AtCoder Extension: Remove Task"
       },
       {
         "command": "ac-ts-extension.browseTask",
-        "title": "AtCoder TypeScript Extension: Browse Task"
+        "title": "AtCoder Extension: Browse Task"
       }
     ]
   },
