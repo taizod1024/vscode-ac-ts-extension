@@ -103,6 +103,10 @@ class AcTsExtension {
                 throw `ERROR: invalid task, task="${task}"`;
             }
             this.contest = match[1];
+            // check extension
+            if (!this.extensions.includes(this.extension)) {
+                throw `ERROR: invalid extension, extension="${this.extension}"`;
+            }
             // check username, password
             if (this.cmd == "init" || this.cmd == "submit") {
                 if (!this.username || !this.password) {
