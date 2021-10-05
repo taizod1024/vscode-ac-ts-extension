@@ -76,6 +76,36 @@ export function activate(context: vscode.ExtensionContext) {
         }));
     })();
     (function () {
+        const cmdid = "reinitTask";
+        context.subscriptions.push(vscode.commands.registerCommand(`${actsextension.appid}.${cmdid}`, () => {
+            actsextension.channel.show(true);
+            actsextension.channel.clear();
+            actsextension.channel.appendLine(`${actsextension.appid}.${cmdid}:`);
+            // check param
+            if (!actshelper.checkProjectPath()) return;
+            if (!actshelper.checkTask()) return;
+            // input param
+            let idx = actsextension.extensions.indexOf(actshelper.extension);
+            if (1 <= idx) {
+                actsextension.extensions.splice(idx, 1);
+                actsextension.extensions.unshift(actshelper.extension);
+            }
+            vscode.window.showQuickPick(actsextension.extensions, {
+                placeHolder: "select extension",
+            }).then(extension => {
+                if (extension == null) return;
+                // exec command
+                actsextension.vscodeextensionpath = context.extensionPath;
+                actsextension.projectpath = actshelper.projectpath;
+                actsextension.extension = extension;
+                actsextension.initTask(actshelper.task)
+                    .catch((ex) => {
+                        actsextension.channel.appendLine("**** " + ex + " ****");
+                    });
+            });
+        }));
+    })();
+    (function () {
         const cmdid = "testTask";
         context.subscriptions.push(vscode.commands.registerCommand(`${actsextension.appid}.${cmdid}`, () => {
             actsextension.channel.show(true);
