@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.55](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.54...v0.0.55) (2021-10-05)
+
+
+### Features
+
+* reinit task追加、別の言語で解答する場合に使用 ([af972f4](https://github.com/taizod1024/ac-ts-extension/commit/af972f4119c17e7ee49a0429ef6967427d1182ae))
+
 ### [0.0.54](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.53...v0.0.54) (2021-10-04)
 
 ### [0.0.53](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.52...v0.0.53) (2021-10-04)
