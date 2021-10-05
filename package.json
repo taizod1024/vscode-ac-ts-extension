@@ -14,6 +14,7 @@
   "activationEvents": [
     "onCommand:ac-ts-extension.loginSite",
     "onCommand:ac-ts-extension.initTask",
+    "onCommand:ac-ts-extension.reinitTask",
     "onCommand:ac-ts-extension.testTask",
     "onCommand:ac-ts-extension.debugTask",
     "onCommand:ac-ts-extension.submitTask",
@@ -29,6 +30,10 @@
       {
         "command": "ac-ts-extension.initTask",
         "title": "AtCoder Extension: Init Task"
+      },
+      {
+        "command": "ac-ts-extension.reinitTask",
+        "title": "AtCoder Extension: ReInit Task"
       },
       {
         "command": "ac-ts-extension.testTask",
