@@ -33,7 +33,7 @@
       },
       {
         "command": "ac-ts-extension.reinitTask",
-        "title": "AtCoder Extension: ReInit Task"
+        "title": "AtCoder Extension: Reinit Task"
       },
       {
         "command": "ac-ts-extension.testTask",
