@@ -117,12 +117,12 @@ class AcTsExtension {
             this.task = task;
             this.saveConfig();
         } else {
-            throw `ERROR: unknown command, command="${this.cmd}"`;
+            throw `ERROR: invalid command, command="${this.cmd}"`;
         }
 
         // check no more param
         if (args.length != 0) {
-            throw "ERROR: unknown parameter";
+            throw `ERROR: invalid parameter, args="${args}"`;
         }
 
         // init prop
@@ -360,67 +360,69 @@ class AcTsExtension {
         const that = this;
         let iosx = 0;
         return new Promise((resolve, reject) => {
+
             // run test
             (function runtest() {
+
                 that.channel.show(true);
+
                 // create test input file
                 const io = ios[iosx];
                 that.channel.appendLine(`[${that.timestamp()}] test-${iosx}:`);
                 that.channel.appendLine(`[${that.timestamp()}] - input ="${io.in}"`);
                 that.channel.appendLine(`[${that.timestamp()}] - output="${io.out}"`);
                 fs.writeFileSync(that.tmptestinfile, io.in);
+
                 // exec command
                 let child;
                 let timecount = 0;
                 let istimeout = false;
-                // test if typescript
-                if (that.extension == ".ts") {
-                    if (debug) {
-                        const launchconfig = {
-                            name: that.appid,
-                            type: "pwa-node",
-                            request: "launch",
-                            runtimeArgs: ["--require", "ts-node/register"],
-                            program: that.taskfile,
-                            args: ["<", that.tmptestinfile, ">", that.tmptestoutfile, "2>", that.tmptesterrfile],
-                            console: "integratedTerminal",
-                            skipFiles: ["node_modules/**"],
-                            env: { TS_NODE_TRANSPILE_ONLY: "1" }
-                        };
-                        vscode.debug.startDebugging(that.projectfolder, launchconfig);
-                    } else {
-                        const command = `node --require ts-node/register ${that.taskfile} < ${that.tmptestinfile} > ${that.tmptestoutfile} 2> ${that.tmptesterrfile}`;
-                        const options = {
-                            cwd: that.projectpath,
-                            env: { TS_NODE_TRANSPILE_ONLY: "1" }
-                        };
-                        child = child_process.exec(command, options);
-                    }
-                }
-                // test if python
-                else if (that.extension == ".py") {
-                    if (debug) {
-                        const launchconfig = {
-                            name: that.appid,
-                            type: "python",
-                            request: "launch",
-                            program: that.taskfile,
-                            args: ["<", that.tmptestinfile, ">", that.tmptestoutfile, "2>", that.tmptesterrfile],
-                            console: "integratedTerminal"
-                        };
-                        vscode.debug.startDebugging(that.projectfolder, launchconfig);
-                    } else {
-                        const command = `python -u ${that.taskfile} < ${that.tmptestinfile} > ${that.tmptestoutfile} 2> ${that.tmptesterrfile}`;
-                        const options = {
-                            cwd: that.projectpath
-                        };
-                        child = child_process.exec(command, options);
-                    }
-                }
-                // others
-                else {
-                    reject(`ERROR: ${that.extension} is not supported`);
-                    return;
+                switch (that.extension) {
+                    case ".ts":
+                        if (debug) {
+                            const launchconfig = {
+                                name: that.appid,
+                                type: "pwa-node",
+                                request: "launch",
+                                runtimeArgs: ["--require", "ts-node/register"],
+                                program: that.taskfile,
+                                args: ["<", that.tmptestinfile, ">", that.tmptestoutfile, "2>", that.tmptesterrfile],
+                                console: "integratedTerminal",
+                                skipFiles: ["node_modules/**"],
+                                env: { TS_NODE_TRANSPILE_ONLY: "1" }
+                            };
+                            vscode.debug.startDebugging(that.projectfolder, launchconfig);
+                        } else {
+                            const command = `node --require ts-node/register ${that.taskfile} < ${that.tmptestinfile} > ${that.tmptestoutfile} 2> ${that.tmptesterrfile}`;
+                            const options = {
+                                cwd: that.projectpath,
+                                env: { TS_NODE_TRANSPILE_ONLY: "1" }
+                            };
+                            child = child_process.exec(command, options);
+                        }
+                        break;
+                    case ".py":
+                        if (debug) {
+                            const launchconfig = {
+                                name: that.appid,
+                                type: "python",
+                                request: "launch",
+                                program: that.taskfile,
+                                args: ["<", that.tmptestinfile, ">", that.tmptestoutfile, "2>", that.tmptesterrfile],
+                                console: "integratedTerminal"
+                            };
+                            vscode.debug.startDebugging(that.projectfolder, launchconfig);
+                        } else {
+                            const command = `python -u ${that.taskfile} < ${that.tmptestinfile} > ${that.tmptestoutfile} 2> ${that.tmptesterrfile}`;
+                            const options = {
+                                cwd: that.projectpath
+                            };
+                            child = child_process.exec(command, options);
+                        }
+                        break;
+                    default:
+                        reject(`ERROR: invalid extension, extension="${that.extension}"`);
+                        return;
                 }
 
                 // wait child process
