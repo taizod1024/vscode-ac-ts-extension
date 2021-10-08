@@ -234,8 +234,6 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] -> ${res2.status}`);
 
         // check login
-        console.log("***", res2.text);
-        console.log("***", res2.text.indexOf(`ようこそ、${this.username} さん。`));
         if (res2.text.indexOf(`ようこそ、${this.username} さん。`) < 0) {
             throw `ERROR: atcoder login failed, userame="${this.username}", password="********", csrf_token="${csrf_token}"`;
         }
@@ -246,7 +244,6 @@ class AcTsExtension {
             throw `ERROR: ${res.status} ${res.message}`;
         });
         this.channel.appendLine(`[${this.timestamp()}] -> ${response.status}`);
-        console.log("***", response.text);
 
         // create taskfile
         if (fs.existsSync(this.taskfile)) {
