@@ -11,10 +11,10 @@ class AcTsExtension {
     // constant
     public appname: string;
     public appid: string;
-    public loginurl: string;
     public configfile: string;
     public taskregexp: RegExp;
     public extensions: string[] = [".ts", ".py"];
+
 
     // context
     public vscodeextensionpath: string;
@@ -23,6 +23,7 @@ class AcTsExtension {
     public channel: vscode.OutputChannel;
 
     // param
+    public contest: string;
     public cmd: string;
     public task: string;
     public username: string;
@@ -30,12 +31,8 @@ class AcTsExtension {
     public extension: string;
 
     // prop
-    public contest: string;
     public tasktmplfile: string;
     public usertasktmplfile: string;
-    public taskurl: string;
-    public submiturl: string;
-    public submissionsurl: string;
     public taskpath: string;
     public taskfile: string;
     public taskbuildpath: string;
@@ -52,13 +49,19 @@ class AcTsExtension {
     public proxy: any;
     public timeout: number;
 
+    // atcoder
+    public atcoderloginurl: string;
+    public atcodertaskurl: string;
+    public atcodersubmiturl: string;
+    public atcodersubmissionsurl: string;
+
     // setup function
     constructor() {
 
         // init constant
-        this.appname = "AtCoder TypeScript Extension";
+        this.appname = "AtCoder Extension";
         this.appid = "ac-ts-extension";
-        this.loginurl = "https://atcoder.jp/login?continue=https%3A%2F%2Fatcoder.jp%2F&lang=ja";
+        this.atcoderloginurl = "https://atcoder.jp/login?continue=https%3A%2F%2Fatcoder.jp%2F&lang=ja";
         this.configfile = `${process.env.USERPROFILE}\\.${this.appid}.json`;
         this.taskregexp = /^(.*)_(.*)$/;
 
@@ -128,9 +131,6 @@ class AcTsExtension {
         // init prop
         this.tasktmplfile = `${this.vscodeextensionpath}\\template\\default${this.extension}`;
         this.usertasktmplfile = `${this.projectpath}\\template\\default${this.extension}`;
-        this.taskurl = `https://atcoder.jp/contests/${this.contest}/tasks/${this.task}`;
-        this.submiturl = `https://atcoder.jp/contests/${this.contest}/submit`;
-        this.submissionsurl = `https://atcoder.jp/contests/${this.contest}/submissions/me`;
         this.taskpath = `${this.projectpath}\\src\\atcoder\\${this.contest}`;
         this.taskfile = `${this.projectpath}\\src\\atcoder\\${this.contest}\\${this.task}${this.extension}`;
         this.taskbuildpath = `${process.env.TEMP}\\${this.appid}\\build\\atcoder`;
@@ -146,15 +146,20 @@ class AcTsExtension {
         this.separator = "\r\n--------\r\n";
         this.proxy = "";
         this.timeout = 5000;
+
+        // init atcoder
+        this.atcodertaskurl = `https://atcoder.jp/contests/${this.contest}/tasks/${this.task}`;
+        this.atcodersubmiturl = `https://atcoder.jp/contests/${this.contest}/submit`;
+        this.atcodersubmissionsurl = `https://atcoder.jp/contests/${this.contest}/submissions/me`;
     }
 
     // public interface
-    public async loginSite(username: string, password: string) {
+    public async loginAtCoder(username: string, password: string) {
 
         this._initParam(["login", username, password]);
 
         this.channel.appendLine(`[${this.timestamp()}] command: ${this.cmd}`);
-        this.channel.appendLine(`[${this.timestamp()}] loginurl: ${this.loginurl}`);
+        this.channel.appendLine(`[${this.timestamp()}] loginurl: ${this.atcoderloginurl}`);
         this.channel.appendLine(`[${this.timestamp()}] username: ${this.username}`);
         this.channel.appendLine(`[${this.timestamp()}] password: ********`);
 
@@ -163,7 +168,7 @@ class AcTsExtension {
 
         // login get
         this.channel.appendLine(`[${this.timestamp()}] login_get:`);
-        const res1 = await agent.get(this.loginurl).proxy(this.proxy).catch(res => {
+        const res1 = await agent.get(this.atcoderloginurl).proxy(this.proxy).catch(res => {
             throw `ERROR: ${res.status} ${res.message}`;
         });
         this.channel.appendLine(`[${this.timestamp()}] -> ${res1.status}`);
@@ -172,7 +177,7 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] login_post:`);
         const jsdom = new JSDOM(res1.text);
         const csrf_token = jsdom.window.document.querySelectorAll("input")[0].value;
-        const res2 = await agent.post(this.loginurl)
+        const res2 = await agent.post(this.atcoderloginurl)
             .proxy(this.proxy)
             .set("Content-Type", "application/x-www-form-urlencoded")
             .send({
@@ -199,7 +204,7 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] command: ${this.cmd}`);
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
         this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
-        this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.taskurl}`);
+        this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.atcodertaskurl}`);
         this.channel.appendLine(`[${this.timestamp()}] username: ${this.username}`);
         this.channel.appendLine(`[${this.timestamp()}] password: ********`);
 
@@ -212,7 +217,7 @@ class AcTsExtension {
 
         // login get
         this.channel.appendLine(`[${this.timestamp()}] login_get:`);
-        const res1 = await agent.get(this.loginurl).proxy(this.proxy).catch(res => {
+        const res1 = await agent.get(this.atcoderloginurl).proxy(this.proxy).catch(res => {
             throw `ERROR: ${res.status} ${res.message}`;
         });
         this.channel.appendLine(`[${this.timestamp()}] -> ${res1.status}`);
@@ -221,7 +226,7 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] login_post:`);
         const jsdom = new JSDOM(res1.text);
         const csrf_token = jsdom.window.document.querySelectorAll("input")[0].value;
-        const res2 = await agent.post(this.loginurl)
+        const res2 = await agent.post(this.atcoderloginurl)
             .proxy(this.proxy)
             .set("Content-Type", "application/x-www-form-urlencoded")
             .send({
@@ -240,7 +245,7 @@ class AcTsExtension {
 
         // get task
         this.channel.appendLine(`[${this.timestamp()}] get_task:`);
-        const response = await agent.get(this.taskurl).proxy(this.proxy).catch(res => {
+        const response = await agent.get(this.atcodertaskurl).proxy(this.proxy).catch(res => {
             throw `ERROR: ${res.status} ${res.message}`;
         });
         this.channel.appendLine(`[${this.timestamp()}] -> ${response.status}`);
@@ -302,7 +307,7 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
         this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
         this.channel.appendLine(`[${this.timestamp()}] debug: ${debug}`);
-        this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.taskurl}`);
+        this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.atcodertaskurl}`);
 
         // check taskfile
         this.channel.appendLine(`[${this.timestamp()}] taskfile: "${this.taskfile}"`);
@@ -518,10 +523,10 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] command: ${this.cmd}`);
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
         this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
-        this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.taskurl}`);
+        this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.atcodertaskurl}`);
         this.channel.appendLine(`[${this.timestamp()}] username: ${this.username}`);
         this.channel.appendLine(`[${this.timestamp()}] password: ********`);
-        this.channel.appendLine(`[${this.timestamp()}] submiturl: ${this.submiturl}`);
+        this.channel.appendLine(`[${this.timestamp()}] submiturl: ${this.atcodersubmiturl}`);
 
         // check taskfile
         this.channel.appendLine(`[${this.timestamp()}] taskfile: "${this.taskfile}"`);
@@ -534,7 +539,7 @@ class AcTsExtension {
 
         // login get
         this.channel.appendLine(`[${this.timestamp()}] login_get:`);
-        const res1 = await agent.get(this.loginurl).proxy(this.proxy).catch(res => {
+        const res1 = await agent.get(this.atcoderloginurl).proxy(this.proxy).catch(res => {
             throw `ERROR: ${res.status} ${res.message}`;
         });
         this.channel.appendLine(`[${this.timestamp()}] -> ${res1.status}`);
@@ -543,7 +548,7 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] login_post:`);
         const jsdom = new JSDOM(res1.text);
         const csrf_token = jsdom.window.document.querySelectorAll("input")[0].value;
-        const res2 = await agent.post(this.loginurl)
+        const res2 = await agent.post(this.atcoderloginurl)
             .proxy(this.proxy)
             .set("Content-Type", "application/x-www-form-urlencoded")
             .send({
@@ -563,7 +568,7 @@ class AcTsExtension {
         // submit task
         this.channel.appendLine(`[${this.timestamp()}] submit_task:`);
         const code = fs.readFileSync(this.taskfile).toString();
-        const res3 = await agent.post(this.submiturl)
+        const res3 = await agent.post(this.atcodersubmiturl)
             .proxy(this.proxy)
             .set("Content-Type", "application/x-www-form-urlencoded")
             .send({
@@ -575,7 +580,7 @@ class AcTsExtension {
                 throw `ERROR: ${res.status} ${res.message}`;
             });
         this.channel.appendLine(`[${this.timestamp()}] -> ${res3.status}`);
-        this.channel.appendLine(`[${this.timestamp()}] submissionsurl: ${this.submissionsurl}`);
+        this.channel.appendLine(`[${this.timestamp()}] submissionsurl: ${this.atcodersubmissionsurl}`);
         this.channel.appendLine(`---- SUCCESS: ${this.task} submitted ----`);
     }
 
@@ -585,7 +590,7 @@ class AcTsExtension {
 
         this.channel.appendLine(`[${this.timestamp()}] command: ${this.cmd}`);
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
-        this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.taskurl}`);
+        this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.atcodertaskurl}`);
 
         // Remove Taskfile
         if (!fs.existsSync(this.taskfile)) {
@@ -612,10 +617,10 @@ class AcTsExtension {
 
         this.channel.appendLine(`[${this.timestamp()}] command: ${this.cmd}`);
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
-        this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.taskurl}`);
+        this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.atcodertaskurl}`);
 
         // open browser
-        vscode.env.openExternal(vscode.Uri.parse(this.taskurl));
+        vscode.env.openExternal(vscode.Uri.parse(this.atcodertaskurl));
 
         this.channel.appendLine(`---- SUCCESS: browse ${this.task} ----`);
     }

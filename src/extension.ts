@@ -7,7 +7,7 @@ import { actsextension } from './AcTsExtension';
 // extension entrypoint
 export function activate(context: vscode.ExtensionContext) {
     (function () {
-        const cmdid = "loginSite";
+        const cmdid = "loginAtCoder";
         context.subscriptions.push(vscode.commands.registerCommand(`${actsextension.appid}.${cmdid}`, () => {
             actsextension.channel.show(true);
             actsextension.channel.clear();
@@ -30,7 +30,7 @@ export function activate(context: vscode.ExtensionContext) {
                     if (!password) return;
                     // exec command
                     actsextension.vscodeextensionpath = context.extensionPath;
-                    actsextension.loginSite(username, password)
+                    actsextension.loginAtCoder(username, password)
                         .catch((ex) => {
                             actsextension.channel.appendLine("**** " + ex + " ****");
                         });
