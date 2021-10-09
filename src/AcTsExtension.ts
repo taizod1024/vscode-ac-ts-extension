@@ -12,8 +12,6 @@ class AcTsExtension {
     public appname: string;
     public appid: string;
     public configfile: string;
-    public contestregexp: RegExp;
-    public taskregexp: RegExp;
     public sites: string[];
     public extensions: string[];
 
@@ -38,10 +36,25 @@ class AcTsExtension {
         password?: string;
 
         // prop
+        contestregexp?: RegExp;
+        contestmessage?: string;
+        taskregexp?: RegExp;
+        taskmessage?: string;
+
         loginurl?: string;
         taskurl?: string;
         submiturl?: string;
         submissionsurl?: string;
+    };
+
+    // atcoder
+    public yukicoder: {
+
+        // prop
+        contestregexp?: RegExp;
+        contestmessage?: string;
+        taskregexp?: RegExp;
+        taskmessage?: string;
     };
 
     // prop
@@ -71,9 +84,7 @@ class AcTsExtension {
         this.appname = "AtCoder Extension";
         this.appid = "ac-ts-extension";
         this.configfile = `${process.env.USERPROFILE}\\.${this.appid}.json`;
-        this.contestregexp = /^(.*)$/;
-        this.taskregexp = /^(.*)_(.*)$/;
-        this.sites = ["atcoder"];
+        this.sites = ["atcoder", "yukicoder"];
         this.extensions = [".ts", ".py"];
 
         // init context
@@ -83,7 +94,18 @@ class AcTsExtension {
 
         // init atcoder
         this.atcoder = {};
+        this.atcoder.contestregexp = /^(.+)$/;
+        this.atcoder.contestmessage = "input contest [e.g.: abc190, abc191]";
+        this.atcoder.taskregexp = /^(.+)_(.+)$/;
+        this.atcoder.taskmessage = "input task [e.g.: abc190_a, abc190_b]";
         this.atcoder.loginurl = "https://atcoder.jp/login?continue=https%3A%2F%2Fatcoder.jp%2F&lang=ja";
+
+        // init yukicoder
+        this.yukicoder = {};
+        this.yukicoder.contestregexp = /^[0-9]+$/;
+        this.yukicoder.contestmessage = "input contest [e.g.: 314, 315]";
+        this.yukicoder.taskregexp = /^[0-9]+$/;
+        this.yukicoder.taskmessage = "input task [e.g.: 1680, 1681]";
 
         // load config
         this.loadConfig();
@@ -125,18 +147,12 @@ class AcTsExtension {
     }
 
     // public interface
-    public async loginAtCoder(username: string, password: string) {
+    public async loginAtCoder() {
 
-        // check username, password
-        this.checkLogin();
-
-        // save config
-        this.atcoder.username = username;
-        this.atcoder.password = password;
+        // init command
         this.saveConfig();
 
         // show channel
-        this.channel.appendLine(`[${this.timestamp()}] command: ${this.cmd}`);
         this.channel.appendLine(`[${this.timestamp()}] loginurl: ${this.atcoder.loginurl}`);
         this.channel.appendLine(`[${this.timestamp()}] username: ${this.atcoder.username}`);
         this.channel.appendLine(`[${this.timestamp()}] password: ********`);
@@ -177,9 +193,11 @@ class AcTsExtension {
 
     public async initTask() {
 
+        // init command
+        this.checkLogin();
         this.initProp();
+        this.saveConfig();
 
-        this.channel.appendLine(`[${this.timestamp()}] command: ${this.cmd}`);
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
         this.channel.appendLine(`[${this.timestamp()}] contest: ${this.contest}`);
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
@@ -281,9 +299,12 @@ class AcTsExtension {
 
     public async testTask(debug: boolean): Promise<void> {
 
+        // init command
+        this.checkLogin();
         this.initProp();
+        this.saveConfig();
 
-        this.channel.appendLine(`[${this.timestamp()}] command: ${this.cmd}`);
+        // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
         this.channel.appendLine(`[${this.timestamp()}] contest: ${this.contest}`);
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
@@ -500,9 +521,12 @@ class AcTsExtension {
 
     public async submitTask() {
 
+        // init command
+        this.checkLogin();
         this.initProp();
+        this.saveConfig();
 
-        this.channel.appendLine(`[${this.timestamp()}] command: ${this.cmd}`);
+        // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
         this.channel.appendLine(`[${this.timestamp()}] contest: ${this.contest}`);
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
@@ -570,9 +594,12 @@ class AcTsExtension {
 
     public async removeTask() {
 
+        // init command
+        this.checkLogin();
         this.initProp();
+        this.saveConfig();
 
-        this.channel.appendLine(`[${this.timestamp()}] command: ${this.cmd}`);
+        // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
         this.channel.appendLine(`[${this.timestamp()}] contest: ${this.contest}`);
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
@@ -599,9 +626,12 @@ class AcTsExtension {
 
     public async browseTask() {
 
+        // init command
+        this.checkLogin();
         this.initProp();
+        this.saveConfig();
 
-        this.channel.appendLine(`[${this.timestamp()}] command: ${this.cmd}`);
+        // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
         this.channel.appendLine(`[${this.timestamp()}] contest: ${this.contest}`);
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);

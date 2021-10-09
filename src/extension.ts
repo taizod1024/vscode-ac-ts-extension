@@ -31,7 +31,9 @@ export function activate(context: vscode.ExtensionContext) {
                 }).then((password) => {
                     if (!password) return;
                     // exec command
-                    actsextension.loginAtCoder(username, password)
+                    actsextension.atcoder.username = username;
+                    actsextension.atcoder.password = password;
+                    actsextension.loginAtCoder()
                         .catch((ex) => {
                             actsextension.channel.appendLine("**** " + ex + " ****");
                         });
@@ -58,20 +60,37 @@ export function activate(context: vscode.ExtensionContext) {
                 placeHolder: "SELECT SITE",
             }).then((site) => {
                 if (site === undefined) return;
+                // 本来はsiteをインデックスでアクセスしたいが"string cannot be used to index"のエラーあり
+                let contestregexp: RegExp;
+                let contestmessage: string;
+                let taskregexp: RegExp;
+                let taskmessage: string;
+                if (site == "atcoder") {
+                    contestregexp = actsextension.atcoder.contestregexp;
+                    contestmessage = actsextension.atcoder.contestmessage;
+                    taskregexp = actsextension.atcoder.taskregexp;
+                    taskmessage = actsextension.atcoder.taskmessage;
+                }
+                if (site == "yukicoder") {
+                    contestregexp = actsextension.yukicoder.contestregexp;
+                    contestmessage = actsextension.yukicoder.contestmessage;
+                    taskregexp = actsextension.yukicoder.taskregexp;
+                    taskmessage = actsextension.yukicoder.taskmessage;
+                }
                 // input contest
                 vscode.window.showInputBox({
-                    prompt: 'input contest [e.g.: abc190]',
+                    prompt: contestmessage,
                     ignoreFocusOut: true,
                     value: actsextension.contest,
-                    validateInput: param => { return actsextension.contestregexp.test(param) ? '' : 'input contest [e.g.: abc190]'; }
+                    validateInput: param => { return contestregexp.test(param) ? '' : contestmessage; }
                 }).then((contest) => {
                     if (contest === undefined) return;
                     // input task
                     vscode.window.showInputBox({
-                        prompt: 'input task [e.g.: abc190_a]',
+                        prompt: taskmessage,
                         ignoreFocusOut: true,
                         value: actsextension.task,
-                        validateInput: param => { return actsextension.taskregexp.test(param) ? '' : 'input task [e.g.: abc190_a]'; }
+                        validateInput: param => { return taskregexp.test(param) ? '' : taskmessage; }
                     }).then((task) => {
                         if (task === undefined) return;
                         // select extension
