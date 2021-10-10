@@ -113,11 +113,19 @@ class AcTsExtension {
 
     // inner function
     protected checkLogin() {
-        if (this.site == "atcoder") {
+
+        // check atcoder
+        if (this.isAtcoder()) {
             if (!this.atcoder.username || !this.atcoder.password) {
-                throw "ERROR: do login command";
+                throw "ERROR: do login atcoder";
             }
         }
+
+        // check yukicoder
+        if (this.isYukicoder()) {
+            throw "ERROR: not implemented";
+        }
+
     }
     protected initProp() {
 
@@ -141,9 +149,16 @@ class AcTsExtension {
         this.timeout = 5000;
 
         // init atcoder
-        this.atcoder.taskurl = `https://atcoder.jp/contests/${this.contest}/tasks/${this.task}`;
-        this.atcoder.submiturl = `https://atcoder.jp/contests/${this.contest}/submit`;
-        this.atcoder.submissionsurl = `https://atcoder.jp/contests/${this.contest}/submissions/me`;
+        if (this.isAtcoder()) {
+            this.atcoder.taskurl = `https://atcoder.jp/contests/${this.contest}/tasks/${this.task}`;
+            this.atcoder.submiturl = `https://atcoder.jp/contests/${this.contest}/submit`;
+            this.atcoder.submissionsurl = `https://atcoder.jp/contests/${this.contest}/submissions/me`;
+        }
+
+        // init yukicoder
+        if (this.isYukicoder()) {
+            throw "ERROR: not implemented";
+        }
     }
 
     // public interface
@@ -198,17 +213,80 @@ class AcTsExtension {
         this.initProp();
         this.saveConfig();
 
+        // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
         this.channel.appendLine(`[${this.timestamp()}] contest: ${this.contest}`);
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
         this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
-        this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.atcoder.taskurl}`);
-        this.channel.appendLine(`[${this.timestamp()}] username: ${this.atcoder.username}`);
-        this.channel.appendLine(`[${this.timestamp()}] password: ********`);
 
-        // make dir
+        let text;
+
+        // init atcoder 
+        if (this.isAtcoder()) {
+            text = await this.initTaskAtCoder(text);
+        }
+
+        // init yukicoder
+        if (this.isYukicoder()) {
+            throw "ERROR: not implemented";
+        }
+
+        // create taskfile
         if (!fs.existsSync(this.taskpath)) fs.mkdirSync(this.taskpath, { recursive: true });
+        if (fs.existsSync(this.taskfile)) {
+            this.channel.appendLine(`[${this.timestamp()}] taskfile: "${this.taskfile}" exist`);
+        } else {
+            if (fs.existsSync(this.usertasktmplfile)) {
+                fs.copyFileSync(this.usertasktmplfile, this.taskfile);
+                this.channel.appendLine(`[${this.timestamp()}] taskfile: "${this.taskfile}" created from user template`);
+            } else {
+                fs.copyFileSync(this.tasktmplfile, this.taskfile);
+                this.channel.appendLine(`[${this.timestamp()}] taskfile: "${this.taskfile}" created from system template`);
+            }
+        }
+
+        // create testfile
         if (!fs.existsSync(this.testpath)) fs.mkdirSync(this.testpath, { recursive: true });
+        if (fs.existsSync(this.testfile)) {
+            this.channel.appendLine(`[${this.timestamp()}] testfile: "${this.testfile}" exist`);
+        } else {
+            let txt = "";
+            let idx = 1;
+            while (true) {
+                let m1 = text.match(new RegExp(`<h3>入力例 ${idx}<\/h3><pre>([^<]*)<\/pre>`));
+                if (m1 == null)
+                    break;
+                let m2 = text.match(new RegExp(`<h3>出力例 ${idx}<\/h3><pre>([^<]*)<\/pre>`));
+                if (m2 == null)
+                    break;
+                txt += m1[1].trim() + this.separator + m2[1].trim() + this.separator;
+                idx++;
+            }
+            idx--;
+            txt = txt.replace("&lt;", "<");
+            txt = txt.replace("&gt;", ">");
+            fs.writeFileSync(this.testfile, txt);
+            this.channel.appendLine(`[${this.timestamp()}] testfile: "${this.testfile}" created`);
+            if (txt == "") {
+                this.channel.appendLine(`[${this.timestamp()}] WARN: there is no test set`);
+            }
+        }
+
+        // open file
+        vscode.workspace.openTextDocument(actsextension.taskfile)
+            .then((a: vscode.TextDocument) => {
+                vscode.window.showTextDocument(a, 1, false);
+            }, (err: any) => {
+                throw err;
+            });
+        this.channel.appendLine(`---- SUCCESS: ${this.task} initialized ----`);
+    }
+
+    private async initTaskAtCoder(text: any) {
+
+        this.channel.appendLine(`[${this.timestamp()}] atcoder.taskurl: ${this.atcoder.taskurl}`);
+        this.channel.appendLine(`[${this.timestamp()}] atcoder.username: ${this.atcoder.username}`);
+        this.channel.appendLine(`[${this.timestamp()}] atcoder.password: ********`);
 
         // get agent
         const agent = superagent.agent();
@@ -247,54 +325,8 @@ class AcTsExtension {
             throw `ERROR: ${res.status} ${res.message}`;
         });
         this.channel.appendLine(`[${this.timestamp()}] -> ${response.status}`);
-
-        // create taskfile
-        if (fs.existsSync(this.taskfile)) {
-            this.channel.appendLine(`[${this.timestamp()}] taskfile: "${this.taskfile}" exist`);
-        } else {
-            if (fs.existsSync(this.usertasktmplfile)) {
-                fs.copyFileSync(this.usertasktmplfile, this.taskfile);
-                this.channel.appendLine(`[${this.timestamp()}] taskfile: "${this.taskfile}" created from user template`);
-            } else {
-                fs.copyFileSync(this.tasktmplfile, this.taskfile);
-                this.channel.appendLine(`[${this.timestamp()}] taskfile: "${this.taskfile}" created from system template`);
-            }
-        }
-
-        // create testfile
-        if (fs.existsSync(this.testfile)) {
-            this.channel.appendLine(`[${this.timestamp()}] testfile: "${this.testfile}" exist`);
-        } else {
-            let txt = "";
-            let idx = 1;
-            while (true) {
-                let m1 = response.text.match(new RegExp(`<h3>入力例 ${idx}<\/h3><pre>([^<]*)<\/pre>`));
-                if (m1 == null)
-                    break;
-                let m2 = response.text.match(new RegExp(`<h3>出力例 ${idx}<\/h3><pre>([^<]*)<\/pre>`));
-                if (m2 == null)
-                    break;
-                txt += m1[1].trim() + this.separator + m2[1].trim() + this.separator;
-                idx++;
-            }
-            idx--;
-            txt = txt.replace("&lt;", "<");
-            txt = txt.replace("&gt;", ">");
-            fs.writeFileSync(this.testfile, txt);
-            this.channel.appendLine(`[${this.timestamp()}] testfile: "${this.testfile}" created`);
-            if (txt == "") {
-                this.channel.appendLine(`[${this.timestamp()}] WARN: there is no test set`);
-            }
-        }
-
-        // open file
-        vscode.workspace.openTextDocument(actsextension.taskfile)
-            .then((a: vscode.TextDocument) => {
-                vscode.window.showTextDocument(a, 1, false);
-            }, (err: any) => {
-                throw err;
-            });
-        this.channel.appendLine(`---- SUCCESS: ${this.task} initialized ----`);
+        text = response.text;
+        return text;
     }
 
     public async testTask(debug: boolean): Promise<void> {
@@ -310,7 +342,6 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
         this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
         this.channel.appendLine(`[${this.timestamp()}] debug: ${debug}`);
-        this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.atcoder.taskurl}`);
 
         // check taskfile
         this.channel.appendLine(`[${this.timestamp()}] taskfile: "${this.taskfile}"`);
@@ -521,7 +552,7 @@ class AcTsExtension {
 
     public async submitTask() {
 
-        // init command
+        //  init command
         this.checkLogin();
         this.initProp();
         this.saveConfig();
@@ -531,16 +562,30 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] contest: ${this.contest}`);
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
         this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
-        this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.atcoder.taskurl}`);
-        this.channel.appendLine(`[${this.timestamp()}] username: ${this.atcoder.username}`);
-        this.channel.appendLine(`[${this.timestamp()}] password: ********`);
-        this.channel.appendLine(`[${this.timestamp()}] submiturl: ${this.atcoder.submiturl}`);
 
         // check taskfile
         this.channel.appendLine(`[${this.timestamp()}] taskfile: "${this.taskfile}"`);
         if (!fs.existsSync(this.taskfile)) {
             throw `ERROR: missing taskfile="${this.taskfile}", do init task`;
         }
+
+        // submit atcoder
+        if (this.isAtcoder()) {
+            await this.submitTaskAtCoder();
+        }
+
+        // submit yukicoder
+        if (this.isYukicoder()) {
+            throw "ERROR: not implemented";            
+        }
+    }
+
+    private async submitTaskAtCoder() {
+
+        this.channel.appendLine(`[${this.timestamp()}] atcoder.taskurl: ${this.atcoder.taskurl}`);
+        this.channel.appendLine(`[${this.timestamp()}] atcoder.username: ${this.atcoder.username}`);
+        this.channel.appendLine(`[${this.timestamp()}] atcoder.password: ********`);
+        this.channel.appendLine(`[${this.timestamp()}] atcoder.submiturl: ${this.atcoder.submiturl}`);
 
         // get agent
         const agent = superagent.agent();
@@ -603,7 +648,7 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
         this.channel.appendLine(`[${this.timestamp()}] contest: ${this.contest}`);
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
-        this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.atcoder.taskurl}`);
+        this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
 
         // Remove Taskfile
         if (!fs.existsSync(this.taskfile)) {
@@ -635,16 +680,24 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
         this.channel.appendLine(`[${this.timestamp()}] contest: ${this.contest}`);
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
-        this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.atcoder.taskurl}`);
+        this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
 
-        // open browser
-        vscode.env.openExternal(vscode.Uri.parse(this.atcoder.taskurl));
+        // open atcoder
+        if (this.isAtcoder()) {
+            this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.atcoder.taskurl}`);
+            vscode.env.openExternal(vscode.Uri.parse(this.atcoder.taskurl));
+        }
+
+        // open yukicoder
+        if (this.isYukicoder()) {
+            throw "ERROR: not implemented";
+        }
 
         this.channel.appendLine(`---- SUCCESS: browse ${this.task} ----`);
     }
 
     // config
-    protected loadConfig() {
+    private loadConfig() {
         if (fs.existsSync(this.configfile)) {
             const app = JSON.parse(fs.readFileSync(this.configfile).toString());
             this.site = app.site;
@@ -660,12 +713,14 @@ class AcTsExtension {
             this.extension = "";
         }
     }
-    protected saveConfig() {
+    private saveConfig() {
         const app = {
             site: this.site,
             atcoder: {
                 username: this.atcoder.username,
                 encpassword: Buffer.from(this.atcoder.password).toString("base64"),
+            },
+            yukicoder: {
             },
             contest: this.contest,
             task: this.task,
@@ -675,7 +730,13 @@ class AcTsExtension {
     }
 
     // utility
-    protected timestamp(): string {
+    private isAtcoder(): boolean {
+        return this.site == "atcoder";
+    }
+    private isYukicoder(): boolean {
+        return this.site == "yukicoder";
+    }
+    private timestamp(): string {
         return new Date().toLocaleString("ja-JP").split(" ")[1];
     }
 };
