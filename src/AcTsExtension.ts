@@ -50,6 +50,9 @@ class AcTsExtension {
     // atcoder
     public yukicoder: {
 
+        // param
+        apikey?: string;
+
         // prop
         contestregexp?: RegExp;
         contestmessage?: string;
@@ -114,20 +117,24 @@ class AcTsExtension {
     // inner function
     protected checkLogin() {
 
-        // check atcoder
+        // check login if atcoder
         if (this.isAtcoder()) {
             if (!this.atcoder.username || !this.atcoder.password) {
-                throw "ERROR: do login atcoder";
+                throw "ERROR: do login site";
             }
         }
 
-        // check yukicoder
+        // check login if yukicoder
         if (this.isYukicoder()) {
+            // TODO check login if yukicoder
             throw "ERROR: not implemented";
         }
 
     }
     protected initProp() {
+
+        // TODO check node if typescript
+        // TODO check python if python
 
         // init prop
         this.tasktmplfile = `${this.vscodeextensionpath}\\template\\default${this.extension}`;
@@ -148,29 +155,47 @@ class AcTsExtension {
         this.proxy = "";
         this.timeout = 5000;
 
-        // init atcoder
+        // init prop if atcoder
         if (this.isAtcoder()) {
             this.atcoder.taskurl = `https://atcoder.jp/contests/${this.contest}/tasks/${this.task}`;
             this.atcoder.submiturl = `https://atcoder.jp/contests/${this.contest}/submit`;
             this.atcoder.submissionsurl = `https://atcoder.jp/contests/${this.contest}/submissions/me`;
         }
 
-        // init yukicoder
+        // init prop if yukicoder
         if (this.isYukicoder()) {
+            // TODO init prop if yukicoder
             throw "ERROR: not implemented";
         }
     }
 
     // public interface
-    public async loginAtCoder() {
+    public async loginSite() {
 
         // init command
         this.saveConfig();
 
         // show channel
-        this.channel.appendLine(`[${this.timestamp()}] loginurl: ${this.atcoder.loginurl}`);
-        this.channel.appendLine(`[${this.timestamp()}] username: ${this.atcoder.username}`);
-        this.channel.appendLine(`[${this.timestamp()}] password: ********`);
+        this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
+
+        // login site if atcoder
+        if (this.isAtcoder()) {
+            await this.loginSiteAtCoder();
+        }
+
+        // login site if yukicoder
+        if (this.isYukicoder()) {
+            // TODO login site if yukicoder
+            throw "ERROR: not implemented";
+        }
+    }
+
+    protected async loginSiteAtCoder() {
+
+        // show channel
+        this.channel.appendLine(`[${this.timestamp()}] atcoder.loginurl: ${this.atcoder.loginurl}`);
+        this.channel.appendLine(`[${this.timestamp()}] atcoder.username: ${this.atcoder.username}`);
+        this.channel.appendLine(`[${this.timestamp()}] atcoder.password: ********`);
 
         // get agent
         const agent = superagent.agent();
@@ -221,13 +246,14 @@ class AcTsExtension {
 
         let text;
 
-        // init atcoder 
+        // init task if atcoder 
         if (this.isAtcoder()) {
             text = await this.initTaskAtCoder(text);
         }
 
-        // init yukicoder
+        // init task if yukicoder
         if (this.isYukicoder()) {
+            // TODO init task if yukicoder
             throw "ERROR: not implemented";
         }
 
@@ -282,8 +308,9 @@ class AcTsExtension {
         this.channel.appendLine(`---- SUCCESS: ${this.task} initialized ----`);
     }
 
-    private async initTaskAtCoder(text: any) {
+    protected async initTaskAtCoder(text: any) {
 
+        // show channel
         this.channel.appendLine(`[${this.timestamp()}] atcoder.taskurl: ${this.atcoder.taskurl}`);
         this.channel.appendLine(`[${this.timestamp()}] atcoder.username: ${this.atcoder.username}`);
         this.channel.appendLine(`[${this.timestamp()}] atcoder.password: ********`);
@@ -362,7 +389,7 @@ class AcTsExtension {
         }
 
         // check node if typescripts
-        if (this.extension == ".ts") {
+        if (this.isTypeScript()) {
             const nodemsg = ``
             if (!fs.existsSync(this.packagejsonfile) || !fs.existsSync(this.packagelockjsonfile)) {
                 throw `ERROR: missing package.json or package-lock.json, install node.js, run "npm init && npm install --save-dev typescript ts-node @types/node"`;
@@ -413,52 +440,51 @@ class AcTsExtension {
                 let child;
                 let timecount = 0;
                 let istimeout = false;
-                switch (that.extension) {
-                    case ".ts":
-                        if (debug) {
-                            const launchconfig = {
-                                name: that.appid,
-                                type: "pwa-node",
-                                request: "launch",
-                                runtimeArgs: ["--require", "ts-node/register"],
-                                program: that.taskfile,
-                                args: ["<", that.tmptestinfile, ">", that.tmptestoutfile, "2>", that.tmptesterrfile],
-                                console: "integratedTerminal",
-                                skipFiles: ["node_modules/**"],
-                                env: { TS_NODE_TRANSPILE_ONLY: "1" }
-                            };
-                            vscode.debug.startDebugging(that.projectfolder, launchconfig);
-                        } else {
-                            const command = `node --require ts-node/register ${that.taskfile} < ${that.tmptestinfile} > ${that.tmptestoutfile} 2> ${that.tmptesterrfile}`;
-                            const options = {
-                                cwd: that.projectpath,
-                                env: { TS_NODE_TRANSPILE_ONLY: "1" }
-                            };
-                            child = child_process.exec(command, options);
-                        }
-                        break;
-                    case ".py":
-                        if (debug) {
-                            const launchconfig = {
-                                name: that.appid,
-                                type: "python",
-                                request: "launch",
-                                program: that.taskfile,
-                                args: ["<", that.tmptestinfile, ">", that.tmptestoutfile, "2>", that.tmptesterrfile],
-                                console: "integratedTerminal"
-                            };
-                            vscode.debug.startDebugging(that.projectfolder, launchconfig);
-                        } else {
-                            const command = `python -u ${that.taskfile} < ${that.tmptestinfile} > ${that.tmptestoutfile} 2> ${that.tmptesterrfile}`;
-                            const options = {
-                                cwd: that.projectpath
-                            };
-                            child = child_process.exec(command, options);
-                        }
-                        break;
-                    default:
-                        reject(`ERROR: invalid extension, extension="${that.extension}"`);
-                        return;
+
+                // exec command if typescript
+                if (that.isTypeScript()) {
+                    if (debug) {
+                        const launchconfig = {
+                            name: that.appid,
+                            type: "pwa-node",
+                            request: "launch",
+                            runtimeArgs: ["--require", "ts-node/register"],
+                            program: that.taskfile,
+                            args: ["<", that.tmptestinfile, ">", that.tmptestoutfile, "2>", that.tmptesterrfile],
+                            console: "integratedTerminal",
+                            skipFiles: ["node_modules/**"],
+                            env: { TS_NODE_TRANSPILE_ONLY: "1" }
+                        };
+                        vscode.debug.startDebugging(that.projectfolder, launchconfig);
+                    } else {
+                        const command = `node --require ts-node/register ${that.taskfile} < ${that.tmptestinfile} > ${that.tmptestoutfile} 2> ${that.tmptesterrfile}`;
+                        const options = {
+                            cwd: that.projectpath,
+                            env: { TS_NODE_TRANSPILE_ONLY: "1" }
+                        };
+                        child = child_process.exec(command, options);
+                    }
+                }
+
+                // exec command if python
+                if (that.isPython()) {
+                    if (debug) {
+                        const launchconfig = {
+                            name: that.appid,
+                            type: "python",
+                            request: "launch",
+                            program: that.taskfile,
+                            args: ["<", that.tmptestinfile, ">", that.tmptestoutfile, "2>", that.tmptesterrfile],
+                            console: "integratedTerminal"
+                        };
+                        vscode.debug.startDebugging(that.projectfolder, launchconfig);
+                    } else {
+                        const command = `python -u ${that.taskfile} < ${that.tmptestinfile} > ${that.tmptestoutfile} 2> ${that.tmptesterrfile}`;
+                        const options = {
+                            cwd: that.projectpath
+                        };
+                        child = child_process.exec(command, options);
+                    }
                 }
 
                 // wait child process
@@ -569,18 +595,19 @@ class AcTsExtension {
             throw `ERROR: missing taskfile="${this.taskfile}", do init task`;
         }
 
-        // submit atcoder
+        // submit task if atcoder
         if (this.isAtcoder()) {
             await this.submitTaskAtCoder();
         }
 
-        // submit yukicoder
+        // submit task if yukicoder
         if (this.isYukicoder()) {
-            throw "ERROR: not implemented";            
+            // TODO submit task if yukicoder
+            throw "ERROR: not implemented";
         }
     }
 
-    private async submitTaskAtCoder() {
+    protected async submitTaskAtCoder() {
 
         this.channel.appendLine(`[${this.timestamp()}] atcoder.taskurl: ${this.atcoder.taskurl}`);
         this.channel.appendLine(`[${this.timestamp()}] atcoder.username: ${this.atcoder.username}`);
@@ -682,14 +709,15 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
         this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
 
-        // open atcoder
+        // open task if atcoder
         if (this.isAtcoder()) {
             this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.atcoder.taskurl}`);
             vscode.env.openExternal(vscode.Uri.parse(this.atcoder.taskurl));
         }
 
-        // open yukicoder
+        // open task if yukicoder
         if (this.isYukicoder()) {
+            // TODO open task if yukicoder
             throw "ERROR: not implemented";
         }
 
@@ -697,23 +725,27 @@ class AcTsExtension {
     }
 
     // config
-    private loadConfig() {
+    protected loadConfig() {
         if (fs.existsSync(this.configfile)) {
             const app = JSON.parse(fs.readFileSync(this.configfile).toString());
             this.site = app.site;
             this.atcoder.username = app.atcoder.username;
             this.atcoder.password = Buffer.from(app.atcoder.encpassword, "base64").toString();
+            this.yukicoder.apikey = app.yukicoder.apikey;
             this.contest = app.contest;
             this.task = app.task;
             this.extension = app.extension;
         } else {
+            this.site = "";
             this.atcoder.username = "";
             this.atcoder.password = "";
+            this.yukicoder.apikey = "";
+            this.contest = "";
             this.task = "";
             this.extension = "";
         }
     }
-    private saveConfig() {
+    protected saveConfig() {
         const app = {
             site: this.site,
             atcoder: {
@@ -721,6 +753,7 @@ class AcTsExtension {
                 encpassword: Buffer.from(this.atcoder.password).toString("base64"),
             },
             yukicoder: {
+                apikey: this.yukicoder.apikey
             },
             contest: this.contest,
             task: this.task,
@@ -730,13 +763,19 @@ class AcTsExtension {
     }
 
     // utility
-    private isAtcoder(): boolean {
+    protected isAtcoder(): boolean {
         return this.site == "atcoder";
     }
-    private isYukicoder(): boolean {
+    protected isYukicoder(): boolean {
         return this.site == "yukicoder";
     }
-    private timestamp(): string {
+    protected isTypeScript(): boolean {
+        return this.extension == ".ts";
+    }
+    protected isPython(): boolean {
+        return this.extension == ".py";
+    }
+    protected timestamp(): string {
         return new Date().toLocaleString("ja-JP").split(" ")[1];
     }
 };
