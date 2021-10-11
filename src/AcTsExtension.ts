@@ -58,6 +58,9 @@ class AcTsExtension {
         contestmessage?: string;
         taskregexp?: RegExp;
         taskmessage?: string;
+
+        apikeytesturl?: string;
+        taskurl?: string;
     };
 
     // prop
@@ -165,7 +168,8 @@ class AcTsExtension {
         // init prop if yukicoder
         if (this.isYukicoder()) {
             // TODO init prop if yukicoder
-            throw "ERROR: not implemented";
+            this.yukicoder.apikeytesturl = `https://yukicoder.me/api/v1/problems/6993`;
+            this.yukicoder.taskurl = `https://yukicoder.me/problems/no/${this.task}`;
         }
     }
 
@@ -173,6 +177,7 @@ class AcTsExtension {
     public async loginSite() {
 
         // init command
+        this.initProp();
         this.saveConfig();
 
         // show channel
@@ -185,8 +190,7 @@ class AcTsExtension {
 
         // login site if yukicoder
         if (this.isYukicoder()) {
-            // TODO login site if yukicoder
-            throw "ERROR: not implemented";
+            await this.loginSiteYukicoder();
         }
     }
 
@@ -228,6 +232,30 @@ class AcTsExtension {
             throw `ERROR: atcoder login failed, userame="${this.atcoder.username}", password="********"`;
         }
 
+        this.channel.appendLine(`---- SUCCESS: ${this.atcoder.username} logged in ----`);
+    }
+
+    protected async loginSiteYukicoder() {
+
+        // show channel
+        this.channel.appendLine(`[${this.timestamp()}] yukicoder.apikey: ********`);
+
+        // get agent
+        const agent = superagent.agent();
+
+        // login get
+        // TODO apikeyがなくともエラーにならない、どう判定したらよいか
+        this.channel.appendLine(`[${this.timestamp()}] testurl_get:`);
+        const res1 = await agent.get(this.yukicoder.apikeytesturl)
+            .proxy(this.proxy)
+            .set("accept", "application/json")
+            .set("Authorization", `Bearer: ${this.yukicoder.apikey}aaa`)
+            .catch(res => {
+                throw `ERROR: ${res.status} ${res.message}`;
+            });
+        this.channel.appendLine(`[${this.timestamp()}] -> ${res1.status}`);
+
+        this.channel.appendLine(res1.text);
         this.channel.appendLine(`---- SUCCESS: ${this.atcoder.username} logged in ----`);
     }
 
@@ -717,8 +745,8 @@ class AcTsExtension {
 
         // open task if yukicoder
         if (this.isYukicoder()) {
-            // TODO open task if yukicoder
-            throw "ERROR: not implemented";
+            this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.yukicoder.taskurl}`);
+            vscode.env.openExternal(vscode.Uri.parse(this.yukicoder.taskurl));
         }
 
         this.channel.appendLine(`---- SUCCESS: browse ${this.task} ----`);
@@ -727,14 +755,14 @@ class AcTsExtension {
     // config
     protected loadConfig() {
         if (fs.existsSync(this.configfile)) {
-            const app = JSON.parse(fs.readFileSync(this.configfile).toString());
-            this.site = app.site;
-            this.atcoder.username = app.atcoder.username;
-            this.atcoder.password = Buffer.from(app.atcoder.encpassword, "base64").toString();
-            this.yukicoder.apikey = app.yukicoder.apikey;
-            this.contest = app.contest;
-            this.task = app.task;
-            this.extension = app.extension;
+            const json = JSON.parse(fs.readFileSync(this.configfile).toString());
+            this.site = json.site;
+            this.atcoder.username = json.atcoder.username;
+            this.atcoder.password = json.atcoder.encpassword ? Buffer.from(json.atcoder.encpassword, "base64").toString() : "";
+            this.yukicoder.apikey = json.yukicoder.encapikey ? Buffer.from(json.yukicoder.encapikey, "base64").toString() : "";
+            this.contest = json.contest;
+            this.task = json.task;
+            this.extension = json.extension;
         } else {
             this.site = "";
             this.atcoder.username = "";
@@ -753,7 +781,7 @@ class AcTsExtension {
                 encpassword: Buffer.from(this.atcoder.password).toString("base64"),
             },
             yukicoder: {
-                apikey: this.yukicoder.apikey
+                encapikey: Buffer.from(this.yukicoder.apikey).toString("base64"),
             },
             contest: this.contest,
             task: this.task,
