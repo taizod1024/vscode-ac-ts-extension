@@ -62,9 +62,9 @@ class AcTsExtension {
 
         problemnourl?: string;
         api_problemnourl?: string;
-        // api_contesturl?: string;
         api_problemidurl?: string;
         api_submiturl?: string;
+        submissionsurl?: string;
     };
 
     // prop
@@ -140,9 +140,7 @@ class AcTsExtension {
 
     protected async initProp() {
 
-        // TODO refactor message
         // TODO abstract atcoder and yukicoder with interface site
-        // TODO check message
         // TODO settings
         // TODO check node in initProp() if typescript 
         // TODO check python in initProp() if python
@@ -177,20 +175,20 @@ class AcTsExtension {
         if (this.isYukicoder()) {
             this.yukicoder.problemnourl = `https://yukicoder.me/problems/no/${this.task}`;
             this.yukicoder.api_problemnourl = `https://yukicoder.me/api/v1/problems/no/${this.task}`;
-            // this.yukicoder.api_contesturl = `https://yukicoder.me/api/v1/contest/id/${this.contest}`;
 
             // problemno to problemid
             this.yukicoder.problemid = await (async () => {
                 const agent = superagent.agent()
                     .set("accept", "application/json")
                     .set("Authorization", `Bearer ${this.yukicoder.apikey}`)
-                const resno = await agent.get(this.yukicoder.api_problemnourl)
+                const res = await agent.get(this.yukicoder.api_problemnourl)
                     .proxy(this.proxy)
                     .catch(res => { throw `ERROR: ${this.responseToMessage(res)}`; });
-                return JSON.parse(resno.text).ProblemId;
+                return JSON.parse(res.text).ProblemId;
             })();
             this.yukicoder.api_problemidurl = `https://yukicoder.me/api/v1/problems/${this.yukicoder.problemid}`;
             this.yukicoder.api_submiturl = `https://yukicoder.me/api/v1/problems/${this.yukicoder.problemid}/submit`;
+            this.yukicoder.submissionsurl = `https://yukicoder.me/problems/no/${this.task}/submissions?status=&lang_id=&my_submission=enabled`;
         }
     }
 
@@ -227,9 +225,9 @@ class AcTsExtension {
 
         // login get
         this.channel.appendLine(`[${this.timestamp()}] login_get:`);
-        const res1 = await agent.get(this.atcoder.loginurl).proxy(this.proxy).catch(res => {
-            throw `ERROR: ${this.responseToMessage(res)}`;
-        });
+        const res1 = await agent.get(this.atcoder.loginurl)
+            .proxy(this.proxy)
+            .catch(res => { throw `ERROR: ${this.responseToMessage(res)}`; });
         this.channel.appendLine(`[${this.timestamp()}] -> ${res1.status}`);
 
         // login post
@@ -244,9 +242,7 @@ class AcTsExtension {
                 password: this.atcoder.password,
                 csrf_token: csrf_token
             })
-            .catch(res => {
-                throw `ERROR: ${this.responseToMessage(res)}`;
-            });
+            .catch(res => { throw `ERROR: ${this.responseToMessage(res)}`; });
         this.channel.appendLine(`[${this.timestamp()}] -> ${res2.status}`);
 
         // check login
@@ -396,23 +392,13 @@ class AcTsExtension {
     protected async getTestYukicoder() {
 
         // show channel
+        this.channel.appendLine(`[${this.timestamp()}] yukicoder.problemnourll: ${this.yukicoder.problemnourl}`);
         this.channel.appendLine(`[${this.timestamp()}] yukicoder.apikey: ********`);
 
         // get agent
         const agent = superagent.agent()
             .set("accept", "application/json")
             .set("Authorization", `Bearer ${this.yukicoder.apikey}`)
-
-        // check contest and problemid
-        // this.channel.appendLine(`[${this.timestamp()}] yukicoder.contesturl: ${this.yukicoder.api_contesturl}`);
-        // const rescon = await agent.get(this.yukicoder.api_contesturl)
-        //     .proxy(this.proxy)
-        //        .catch(res => { throw `ERROR: ${this.responseToMessage(res)}`; });
-        // this.channel.appendLine(`[${this.timestamp()}] -> ${rescon.status}`);
-        // let problemids: string[] = JSON.parse(rescon.text).ProblemIdList;
-        // if (!problemids.includes(this.yukicoder.problemid)) {
-        //     throw `ERROR: contestid ${this.contest} not include problemno ${this.task} (problemid ${this.yukicoder.problemid})`;
-        // }
 
         // get file list
         let fileiurl = `${this.yukicoder.api_problemidurl}/file/in`;
@@ -760,6 +746,7 @@ class AcTsExtension {
     protected async submitTaskYukicoder() {
 
         // show channel
+        this.channel.appendLine(`[${this.timestamp()}] yukicoder.problemnourll: ${this.yukicoder.problemnourl}`);
         this.channel.appendLine(`[${this.timestamp()}] yukicoder.apikey: ********`);
 
         // get agent
@@ -777,6 +764,7 @@ class AcTsExtension {
             .field("source", code)
             .catch(res => { throw `ERROR: ${this.responseToMessage(res)}`; });
         this.channel.appendLine(`[${this.timestamp()}] -> ${res3.status}`);
+        this.channel.appendLine(`[${this.timestamp()}] submissionsurl: ${this.yukicoder.submissionsurl}`);
         this.channel.appendLine(`---- SUCCESS: ${this.task} submitted ----`);
     }
 
