@@ -140,8 +140,12 @@ class AcTsExtension {
 
     protected async initProp() {
 
-        // TODO check node if typescript
-        // TODO check python if python
+        // TODO refactor message
+        // TODO abstract atcoder and yukicoder with interface site
+        // TODO check message
+        // TODO settings
+        // TODO check node in initProp() if typescript 
+        // TODO check python in initProp() if python
 
         // init prop
         this.tasktmplfile = `${this.vscodeextensionpath}\\template\\default${this.extension}`;
@@ -182,7 +186,7 @@ class AcTsExtension {
                     .set("Authorization", `Bearer ${this.yukicoder.apikey}`)
                 const resno = await agent.get(this.yukicoder.api_problemnourl)
                     .proxy(this.proxy)
-                    .catch(res => { throw `ERROR: ${res.status} ${res.message} ${res.response?.body?.Message || ""}`; });
+                    .catch(res => { throw `ERROR: ${this.responseToMessage(res)}`; });
                 return JSON.parse(resno.text).ProblemId;
             })();
             this.yukicoder.api_problemidurl = `https://yukicoder.me/api/v1/problems/${this.yukicoder.problemid}`;
@@ -224,7 +228,7 @@ class AcTsExtension {
         // login get
         this.channel.appendLine(`[${this.timestamp()}] login_get:`);
         const res1 = await agent.get(this.atcoder.loginurl).proxy(this.proxy).catch(res => {
-            throw `ERROR: ${res.status} ${res.message}`;
+            throw `ERROR: ${this.responseToMessage(res)}`;
         });
         this.channel.appendLine(`[${this.timestamp()}] -> ${res1.status}`);
 
@@ -239,8 +243,9 @@ class AcTsExtension {
                 username: this.atcoder.username,
                 password: this.atcoder.password,
                 csrf_token: csrf_token
-            }).catch(res => {
-                throw `ERROR: ${res.status} ${res.message}`;
+            })
+            .catch(res => {
+                throw `ERROR: ${this.responseToMessage(res)}`;
             });
         this.channel.appendLine(`[${this.timestamp()}] -> ${res2.status}`);
 
@@ -336,9 +341,9 @@ class AcTsExtension {
 
         // login get
         this.channel.appendLine(`[${this.timestamp()}] atcoder.login_get:`);
-        const res1 = await agent.get(this.atcoder.loginurl).proxy(this.proxy).catch(res => {
-            throw `ERROR: ${res.status} ${res.message}`;
-        });
+        const res1 = await agent.get(this.atcoder.loginurl)
+            .proxy(this.proxy)
+            .catch(res => { throw `ERROR: ${this.responseToMessage(res)}`; });
         this.channel.appendLine(`[${this.timestamp()}] -> ${res1.status}`);
 
         // login post
@@ -352,9 +357,8 @@ class AcTsExtension {
                 username: this.atcoder.username,
                 password: this.atcoder.password,
                 csrf_token: csrf_token
-            }).catch(res => {
-                throw `ERROR: ${res.status} ${res.message}`;
-            });
+            })
+            .catch(res => { throw `ERROR: ${this.responseToMessage(res)}`; });
         this.channel.appendLine(`[${this.timestamp()}] -> ${res2.status}`);
 
         // check login
@@ -364,9 +368,9 @@ class AcTsExtension {
 
         // get task
         this.channel.appendLine(`[${this.timestamp()}] atcoder.get_task:`);
-        const response = await agent.get(this.atcoder.taskurl).proxy(this.proxy).catch(res => {
-            throw `ERROR: ${res.status} ${res.message}`;
-        });
+        const response = await agent.get(this.atcoder.taskurl)
+            .proxy(this.proxy)
+            .catch(res => { throw `ERROR: ${this.responseToMessage(res)}`; });
         this.channel.appendLine(`[${this.timestamp()}] -> ${response.status}`);
 
         // response to test text
@@ -403,7 +407,7 @@ class AcTsExtension {
         // this.channel.appendLine(`[${this.timestamp()}] yukicoder.contesturl: ${this.yukicoder.api_contesturl}`);
         // const rescon = await agent.get(this.yukicoder.api_contesturl)
         //     .proxy(this.proxy)
-        //     .catch(res => { throw `ERROR: ${res.status} ${res.message} ${res.response?.body?.Message || ""}`; });
+        //        .catch(res => { throw `ERROR: ${this.responseToMessage(res)}`; });
         // this.channel.appendLine(`[${this.timestamp()}] -> ${rescon.status}`);
         // let problemids: string[] = JSON.parse(rescon.text).ProblemIdList;
         // if (!problemids.includes(this.yukicoder.problemid)) {
@@ -415,7 +419,7 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] yukicoder.fileinurl: ${fileiurl}`);
         const resfilei = await agent.get(fileiurl)
             .proxy(this.proxy)
-            .catch(res => { throw `ERROR: ${res.status} ${res.message} ${res.response?.body?.Message || ""}`; });
+            .catch(res => { throw `ERROR: ${this.responseToMessage(res)}`; });
         this.channel.appendLine(`[${this.timestamp()}] -> ${resfilei.status}`);
 
         // get file
@@ -431,13 +435,13 @@ class AcTsExtension {
             this.channel.appendLine(`[${this.timestamp()}] yukicoder.fileiurl-${nx}: ${fileixurl}`);
             const resfileix = await agent.get(fileixurl)
                 .proxy(this.proxy)
-                .catch(res => { throw `ERROR: ${res.status} ${res.message} ${res.response?.body?.Message || ""}`; });
+                .catch(res => { throw `ERROR: ${this.responseToMessage(res)}`; });
 
             let fileoxurl = `${this.yukicoder.api_problemidurl}/file/out/${fileix}`;
             this.channel.appendLine(`[${this.timestamp()}] yukicoder.fileourl-${nx}: ${fileoxurl}`);
             const resfileox = await agent.get(fileoxurl)
                 .proxy(this.proxy)
-                .catch(res => { throw `ERROR: ${res.status} ${res.message} ${res.response?.body?.Message || ""}`; });
+                .catch(res => { throw `ERROR: ${this.responseToMessage(res)}`; });
 
             // response to test text
             text += resfileix.text.trim() + this.separator;
@@ -710,9 +714,9 @@ class AcTsExtension {
 
         // login get
         this.channel.appendLine(`[${this.timestamp()}] login_get:`);
-        const res1 = await agent.get(this.atcoder.loginurl).proxy(this.proxy).catch(res => {
-            throw `ERROR: ${res.status} ${res.message}`;
-        });
+        const res1 = await agent.get(this.atcoder.loginurl)
+            .proxy(this.proxy)
+            .catch(res => { throw `ERROR: ${this.responseToMessage(res)}`; });
         this.channel.appendLine(`[${this.timestamp()}] -> ${res1.status}`);
 
         // login post
@@ -726,9 +730,8 @@ class AcTsExtension {
                 username: this.atcoder.username,
                 password: this.atcoder.password,
                 csrf_token: csrf_token
-            }).catch(res => {
-                throw `ERROR: ${res.status} ${res.message}`;
-            });
+            })
+            .catch(res => { throw `ERROR: ${this.responseToMessage(res)}`; });
         this.channel.appendLine(`[${this.timestamp()}] -> ${res2.status}`);
 
         // check login
@@ -747,9 +750,8 @@ class AcTsExtension {
                 "data.LanguageId": this.extension == ".ts" ? 4057 : this.extension == ".py" ? 4006 : 0,
                 csrf_token: csrf_token,
                 sourceCode: code
-            }).catch(res => {
-                throw `ERROR: ${res.status} ${res.message}`;
-            });
+            })
+            .catch(res => { throw `ERROR: ${this.responseToMessage(res)}`; });
         this.channel.appendLine(`[${this.timestamp()}] -> ${res3.status}`);
         this.channel.appendLine(`[${this.timestamp()}] submissionsurl: ${this.atcoder.submissionsurl}`);
         this.channel.appendLine(`---- SUCCESS: ${this.task} submitted ----`);
@@ -773,7 +775,7 @@ class AcTsExtension {
             .set("Content-Type", "multipart/form-data")
             .field('lang', 'typescript')
             .field("source", code)
-            .catch(res => { throw `ERROR: ${res.status} ${res.message} ${res.response?.body?.Message || res.response?.text || ""}`; });
+            .catch(res => { throw `ERROR: ${this.responseToMessage(res)}`; });
         this.channel.appendLine(`[${this.timestamp()}] -> ${res3.status}`);
         this.channel.appendLine(`---- SUCCESS: ${this.task} submitted ----`);
     }
@@ -888,6 +890,14 @@ class AcTsExtension {
     }
     protected isPython(): boolean {
         return this.extension == ".py";
+    }
+    protected responseToMessage(ex: any): string {
+        let texts = [];
+        if (ex.status) texts.push(ex.status);
+        if (ex.message) texts.push(ex.message);
+        if (ex.response?.text) texts.push(ex.response.text);
+        let message = texts.join(" ");
+        return message;
     }
     protected timestamp(): string {
         return new Date().toLocaleString("ja-JP").split(" ")[1];
