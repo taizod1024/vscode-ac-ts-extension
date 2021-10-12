@@ -142,8 +142,6 @@ class AcTsExtension {
 
         // TODO abstract atcoder and yukicoder with interface site
         // TODO settings
-        // TODO check node in initProp() if typescript 
-        // TODO check python in initProp() if python
 
         // init prop
         this.tasktmplfile = `${this.vscodeextensionpath}\\template\\default${this.extension}`;
@@ -169,6 +167,7 @@ class AcTsExtension {
             this.atcoder.taskurl = `https://atcoder.jp/contests/${this.contest}/tasks/${this.task}`;
             this.atcoder.submiturl = `https://atcoder.jp/contests/${this.contest}/submit`;
             this.atcoder.submissionsurl = `https://atcoder.jp/contests/${this.contest}/submissions/me`;
+
         }
 
         // init prop if yukicoder
@@ -190,6 +189,15 @@ class AcTsExtension {
             this.yukicoder.api_submiturl = `https://yukicoder.me/api/v1/problems/${this.yukicoder.problemid}/submit`;
             this.yukicoder.submissionsurl = `https://yukicoder.me/problems/no/${this.task}/submissions?status=&lang_id=&my_submission=enabled`;
         }
+
+        // check node if typescript
+        if (this.isTypeScript()) {
+            if (!fs.existsSync(this.packagejsonfile) || !fs.existsSync(this.packagelockjsonfile)) {
+                throw `ERROR: missing package.json or package-lock.json, install node.js, run "npm init && npm install --save-dev typescript ts-node @types/node"`;
+            }
+        }
+
+        // TODO check python in initProp() if python
     }
 
     // public interface
@@ -467,14 +475,6 @@ class AcTsExtension {
         }
         if (fs.existsSync(this.tmptestoutfile)) {
             fs.unlinkSync(this.tmptestoutfile);
-        }
-
-        // check node if typescripts
-        if (this.isTypeScript()) {
-            const nodemsg = ``
-            if (!fs.existsSync(this.packagejsonfile) || !fs.existsSync(this.packagelockjsonfile)) {
-                throw `ERROR: missing package.json or package-lock.json, install node.js, run "npm init && npm install --save-dev typescript ts-node @types/node"`;
-            }
         }
 
         // make dir
