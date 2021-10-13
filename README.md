@@ -51,7 +51,7 @@ Python/TypeScriptでのVisual Studio CodeからAtCoder/Yukicoderへの参加を�
 
 vscodeで `F1` を押下（もしくは [表示] > [コマンド パレット] を選択、`Ctrl+Shift+P` を押下）して [コマンド パレット] から機能を選択します。
 
-### AtCoderへログインする
+### AtCoder/Yukicoderへログインする
 
 はじめに `AtCoder Extension: Login Site` でユーザ名とパスワードを入力してAtCoderにログインします。
 Yukicoderの場合はプロフィール画面のAPIキーを入力します。
@@ -194,10 +194,12 @@ Takahashi
 ### TypeScript設定
 
 TypeScriptのテスト実行にはts-nodeを使用しています。
+
 - 起動時間の短縮のためにトランスパイルのみしています(環境変数`TS_NODE_TRANSPILE_ONLY=1`)。そのため、ts-node起動時の型チェックは行いません。
 - `tsconfig.json` があればそれに従います。
 
 TypeScriptのデバッグ実行にはvscodeのデバッグ機能からts-nodeを呼び出しています。
+
 - `tsconfig.json` があればそれに従います。
 
 ### プロキシ設定
