@@ -25,7 +25,7 @@
     "commands": [
       {
         "command": "ac-ts-extension.loginSite",
-        "title": "AtCoder Extension: Login Site"
+        "title": "AtCoder Extension: login Site"
       },
       {
         "command": "ac-ts-extension.initTask",
@@ -33,7 +33,7 @@
       },
       {
         "command": "ac-ts-extension.reinitTask",
-        "title": "AtCoder Extension: ReInit Task"
+        "title": "AtCoder Extension: Reinit Task"
       },
       {
         "command": "ac-ts-extension.testTask",
