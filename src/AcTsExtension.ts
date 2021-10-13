@@ -139,6 +139,7 @@ class AcTsExtension {
         // check lang
         this.lang.checkLang();
 
+        // save config
         this.saveConfig();
     }
 
