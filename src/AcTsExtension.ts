@@ -4,6 +4,36 @@ import superagent from "superagent";
 import child_process, { ExecFileSyncOptions } from "child_process";
 import { JSDOM } from "jsdom";
 import { Buffer } from 'buffer';
+import { atcoder } from './AtCoder';
+import { yukicoder } from './Yukicoder';
+import { typescript } from './TypeScript';
+import { python } from './Python';
+
+// atcoder / yukicoder 
+export interface Coder {
+
+    // prop
+    contestregexp: RegExp;
+    contestmessage: string;
+    taskregexp: RegExp;
+    taskmessage?: string;
+
+    // method
+    checkLogin(): void;
+    initProp(): void;
+    loginSite(): void;
+    getTest(): any;
+    submitTask(): void;
+    browseTask(): void;
+};
+
+// python / typescript
+export interface Lang {
+
+    // method
+    checkLang(): void;
+    testLang(debug: boolean): any;
+};
 
 // extension core
 class AcTsExtension {
@@ -12,9 +42,8 @@ class AcTsExtension {
     public appname: string;
     public appid: string;
     public configfile: string;
-    public taskregexp: RegExp;
-    public extensions: string[] = [".ts", ".py"];
-
+    public sites: string[];
+    public extensions: string[];
 
     // context
     public vscodeextensionpath: string;
@@ -23,14 +52,14 @@ class AcTsExtension {
     public channel: vscode.OutputChannel;
 
     // param
+    public site: string;
     public contest: string;
-    public cmd: string;
     public task: string;
-    public username: string;
-    public password: string;
     public extension: string;
 
     // prop
+    public coder: Coder;
+    public lang: Lang;
     public tasktmplfile: string;
     public usertasktmplfile: string;
     public taskpath: string;
@@ -49,21 +78,19 @@ class AcTsExtension {
     public proxy: any;
     public timeout: number;
 
-    // atcoder
-    public atcoderloginurl: string;
-    public atcodertaskurl: string;
-    public atcodersubmiturl: string;
-    public atcodersubmissionsurl: string;
-
     // setup function
     constructor() {
 
         // init constant
         this.appname = "AtCoder Extension";
         this.appid = "ac-ts-extension";
-        this.atcoderloginurl = "https://atcoder.jp/login?continue=https%3A%2F%2Fatcoder.jp%2F&lang=ja";
         this.configfile = `${process.env.USERPROFILE}\\.${this.appid}.json`;
-        this.taskregexp = /^(.*)_(.*)$/;
+
+        // site specific
+        this.sites = ["atcoder", "yukicoder"];
+
+        // lang specific
+        this.extensions = [".ts", ".py"];
 
         // init context
         this.channel = vscode.window.createOutputChannel(this.appname);
@@ -74,69 +101,19 @@ class AcTsExtension {
         this.loadConfig();
     }
 
-    // inner function
-    protected _initParam(args: string[]) {
+    public async initProp() {
 
-        // usage
-        if (args.length == 0) {
-            throw `ERROR: invalid args, args=${args}`;
-        }
-
-        // check command
-        this.cmd = args.shift();
-        if (this.cmd == null) {
-            throw "ERROR: missing command";
-        }
-        if (this.cmd == "login") {
-            // check username, password
-            const username = args.shift();
-            const password = args.shift();
-            if (!username || !password) {
-                throw "ERROR: missing username or password";
-            }
-            // save config
-            this.username = username;
-            this.password = password;
-            this.saveConfig();
-        } else if (this.cmd == "init" || this.cmd == "test" || this.cmd == "submit" || this.cmd == "remove" || this.cmd == "browse") {
-            let task = args.shift();
-            // check task
-            const match = task.match(this.taskregexp);
-            if (match == null) {
-                throw `ERROR: invalid task, task="${task}"`;
-            }
-            this.contest = match[1];
-            // check extension
-            if (!this.extensions.includes(this.extension)) {
-                throw `ERROR: invalid extension, extension="${this.extension}"`;
-            }
-            // check username, password
-            if (this.cmd == "init" || this.cmd == "submit") {
-                if (!this.username || !this.password) {
-                    throw "ERROR: do login command";
-                }
-            }
-            // save config
-            this.task = task;
-            this.saveConfig();
-        } else {
-            throw `ERROR: invalid command, command="${this.cmd}"`;
-        }
-
-        // check no more param
-        if (args.length != 0) {
-            throw `ERROR: invalid parameter, args="${args}"`;
-        }
+        // TODO settings
 
         // init prop
         this.tasktmplfile = `${this.vscodeextensionpath}\\template\\default${this.extension}`;
         this.usertasktmplfile = `${this.projectpath}\\template\\default${this.extension}`;
-        this.taskpath = `${this.projectpath}\\src\\atcoder\\${this.contest}`;
-        this.taskfile = `${this.projectpath}\\src\\atcoder\\${this.contest}\\${this.task}${this.extension}`;
-        this.taskbuildpath = `${process.env.TEMP}\\${this.appid}\\build\\atcoder`;
+        this.taskpath = `${this.projectpath}\\src\\${this.site}\\${this.contest}`;
+        this.taskfile = `${this.projectpath}\\src\\${this.site}\\${this.contest}\\${this.task}${this.extension}`;
+        this.taskbuildpath = `${process.env.TEMP}\\${this.appid}\\build\\${this.site}`;
         this.taskbuildfile = `${this.taskbuildpath}\\${this.task}.js`;
-        this.testpath = `${this.projectpath}\\src\\atcoder\\${this.contest}`;
-        this.testfile = `${this.projectpath}\\src\\atcoder\\${this.contest}\\${this.task}.txt`;
+        this.testpath = `${this.projectpath}\\src\\${this.site}\\${this.contest}`;
+        this.testfile = `${this.projectpath}\\src\\${this.site}\\${this.contest}\\${this.task}.txt`;
         this.tmptestpath = `${process.env.TEMP}\\${this.appid}`;
         this.tmptestinfile = `${process.env.TEMP}\\${this.appid}\\test_in.txt`;
         this.tmptestoutfile = `${process.env.TEMP}\\${this.appid}\\test_out.txt`;
@@ -147,110 +124,59 @@ class AcTsExtension {
         this.proxy = "";
         this.timeout = 5000;
 
-        // init atcoder
-        this.atcodertaskurl = `https://atcoder.jp/contests/${this.contest}/tasks/${this.task}`;
-        this.atcodersubmiturl = `https://atcoder.jp/contests/${this.contest}/submit`;
-        this.atcodersubmissionsurl = `https://atcoder.jp/contests/${this.contest}/submissions/me`;
+        // site specific
+        if (this.isAtcoder()) this.coder = atcoder;
+        if (this.isYukicoder()) this.coder = yukicoder;
+
+        // lang specific
+        if (this.isTypeScript()) this.lang = typescript;
+        if (this.isPython()) this.lang = python;
+
+        // check and init coder
+        this.coder.checkLogin();
+        await this.coder.initProp();
+
+        // check lang
+        this.lang.checkLang();
+
+        // save config
+        this.saveConfig();
     }
 
-    // public interface
-    public async loginAtCoder(username: string, password: string) {
+    public async loginSite() {
 
-        this._initParam(["login", username, password]);
+        // init command
+        await this.initProp();
+        this.saveConfig();
 
-        this.channel.appendLine(`[${this.timestamp()}] command: ${this.cmd}`);
-        this.channel.appendLine(`[${this.timestamp()}] loginurl: ${this.atcoderloginurl}`);
-        this.channel.appendLine(`[${this.timestamp()}] username: ${this.username}`);
-        this.channel.appendLine(`[${this.timestamp()}] password: ********`);
+        // show channel
+        this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
 
-        // get agent
-        const agent = superagent.agent();
-
-        // login get
-        this.channel.appendLine(`[${this.timestamp()}] login_get:`);
-        const res1 = await agent.get(this.atcoderloginurl).proxy(this.proxy).catch(res => {
-            throw `ERROR: ${res.status} ${res.message}`;
-        });
-        this.channel.appendLine(`[${this.timestamp()}] -> ${res1.status}`);
-
-        // login post
-        this.channel.appendLine(`[${this.timestamp()}] login_post:`);
-        const jsdom = new JSDOM(res1.text);
-        const csrf_token = jsdom.window.document.querySelectorAll("input")[0].value;
-        const res2 = await agent.post(this.atcoderloginurl)
-            .proxy(this.proxy)
-            .set("Content-Type", "application/x-www-form-urlencoded")
-            .send({
-                username: this.username,
-                password: this.password,
-                csrf_token: csrf_token
-            }).catch(res => {
-                throw `ERROR: ${res.status} ${res.message}`;
-            });
-        this.channel.appendLine(`[${this.timestamp()}] -> ${res2.status}`);
-
-        // check login
-        if (res2.text.indexOf(`ようこそ、${this.username} さん。`) < 0) {
-            throw `ERROR: atcoder login failed, userame="${this.username}", password="********"`;
-        }
-
-        this.channel.appendLine(`---- SUCCESS: ${this.username} logged in ----`);
+        // login site
+        this.coder.loginSite();
     }
 
-    public async initTask(task: string) {
+    public async initTask() {
 
-        this._initParam(["init", task]);
+        // init command
+        await this.initProp();
 
-        this.channel.appendLine(`[${this.timestamp()}] command: ${this.cmd}`);
+        // show channel
+        this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
+        this.channel.appendLine(`[${this.timestamp()}] contest: ${this.contest}`);
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
         this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
-        this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.atcodertaskurl}`);
-        this.channel.appendLine(`[${this.timestamp()}] username: ${this.username}`);
-        this.channel.appendLine(`[${this.timestamp()}] password: ********`);
 
-        // make dir
-        if (!fs.existsSync(this.taskpath)) fs.mkdirSync(this.taskpath, { recursive: true });
-        if (!fs.existsSync(this.testpath)) fs.mkdirSync(this.testpath, { recursive: true });
+        // check testfile not exits
+        let text;
+        if (!fs.existsSync(this.testfile)) {
 
-        // get agent
-        const agent = superagent.agent();
-
-        // login get
-        this.channel.appendLine(`[${this.timestamp()}] login_get:`);
-        const res1 = await agent.get(this.atcoderloginurl).proxy(this.proxy).catch(res => {
-            throw `ERROR: ${res.status} ${res.message}`;
-        });
-        this.channel.appendLine(`[${this.timestamp()}] -> ${res1.status}`);
-
-        // login post
-        this.channel.appendLine(`[${this.timestamp()}] login_post:`);
-        const jsdom = new JSDOM(res1.text);
-        const csrf_token = jsdom.window.document.querySelectorAll("input")[0].value;
-        const res2 = await agent.post(this.atcoderloginurl)
-            .proxy(this.proxy)
-            .set("Content-Type", "application/x-www-form-urlencoded")
-            .send({
-                username: this.username,
-                password: this.password,
-                csrf_token: csrf_token
-            }).catch(res => {
-                throw `ERROR: ${res.status} ${res.message}`;
-            });
-        this.channel.appendLine(`[${this.timestamp()}] -> ${res2.status}`);
-
-        // check login
-        if (res2.text.indexOf(`ようこそ、${this.username} さん。`) < 0) {
-            throw `ERROR: atcoder login failed, userame="${this.username}", password="********", csrf_token="${csrf_token}"`;
+            // get testtext
+            text = await this.coder.getTest();
         }
 
-        // get task
-        this.channel.appendLine(`[${this.timestamp()}] get_task:`);
-        const response = await agent.get(this.atcodertaskurl).proxy(this.proxy).catch(res => {
-            throw `ERROR: ${res.status} ${res.message}`;
-        });
-        this.channel.appendLine(`[${this.timestamp()}] -> ${response.status}`);
-
         // create taskfile
+        if (!fs.existsSync(this.taskpath)) fs.mkdirSync(this.taskpath, { recursive: true });
         if (fs.existsSync(this.taskfile)) {
             this.channel.appendLine(`[${this.timestamp()}] taskfile: "${this.taskfile}" exist`);
         } else {
@@ -264,50 +190,38 @@ class AcTsExtension {
         }
 
         // create testfile
+        if (!fs.existsSync(this.testpath)) fs.mkdirSync(this.testpath, { recursive: true });
         if (fs.existsSync(this.testfile)) {
             this.channel.appendLine(`[${this.timestamp()}] testfile: "${this.testfile}" exist`);
         } else {
-            let txt = "";
-            let idx = 1;
-            while (true) {
-                let m1 = response.text.match(new RegExp(`<h3>入力例 ${idx}<\/h3><pre>([^<]*)<\/pre>`));
-                if (m1 == null)
-                    break;
-                let m2 = response.text.match(new RegExp(`<h3>出力例 ${idx}<\/h3><pre>([^<]*)<\/pre>`));
-                if (m2 == null)
-                    break;
-                txt += m1[1].trim() + this.separator + m2[1].trim() + this.separator;
-                idx++;
-            }
-            idx--;
-            txt = txt.replace("&lt;", "<");
-            txt = txt.replace("&gt;", ">");
-            fs.writeFileSync(this.testfile, txt);
+            fs.writeFileSync(this.testfile, text);
             this.channel.appendLine(`[${this.timestamp()}] testfile: "${this.testfile}" created`);
-            if (txt == "") {
+            if (text == "") {
                 this.channel.appendLine(`[${this.timestamp()}] WARN: there is no test set`);
             }
         }
 
         // open file
-        vscode.workspace.openTextDocument(actsextension.taskfile)
+        vscode.workspace.openTextDocument(this.taskfile)
             .then((a: vscode.TextDocument) => {
                 vscode.window.showTextDocument(a, 1, false);
             }, (err: any) => {
                 throw err;
             });
-        this.channel.appendLine(`---- SUCCESS: ${task} initialized ----`);
+        this.channel.appendLine(`---- SUCCESS: ${this.task} initialized ----`);
     }
 
-    public async testTask(task: string, debug: boolean): Promise<void> {
+    public async testTask(debug: boolean): Promise<void> {
 
-        this._initParam(["test", task]);
+        // init command
+        await this.initProp();
 
-        this.channel.appendLine(`[${this.timestamp()}] command: ${this.cmd}`);
+        // show channel
+        this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
+        this.channel.appendLine(`[${this.timestamp()}] contest: ${this.contest}`);
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
         this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
         this.channel.appendLine(`[${this.timestamp()}] debug: ${debug}`);
-        this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.atcodertaskurl}`);
 
         // check taskfile
         this.channel.appendLine(`[${this.timestamp()}] taskfile: "${this.taskfile}"`);
@@ -325,14 +239,6 @@ class AcTsExtension {
         }
         if (fs.existsSync(this.tmptestoutfile)) {
             fs.unlinkSync(this.tmptestoutfile);
-        }
-
-        // check node if typescripts
-        if (this.extension == ".ts") {
-            const nodemsg = ``
-            if (!fs.existsSync(this.packagejsonfile) || !fs.existsSync(this.packagelockjsonfile)) {
-                throw `ERROR: missing package.json or package-lock.json, install node.js, run "npm init && npm install --save-dev typescript ts-node @types/node"`;
-            }
         }
 
         // make dir
@@ -379,53 +285,9 @@ class AcTsExtension {
                 let child;
                 let timecount = 0;
                 let istimeout = false;
-                switch (that.extension) {
-                    case ".ts":
-                        if (debug) {
-                            const launchconfig = {
-                                name: that.appid,
-                                type: "pwa-node",
-                                request: "launch",
-                                runtimeArgs: ["--require", "ts-node/register"],
-                                program: that.taskfile,
-                                args: ["<", that.tmptestinfile, ">", that.tmptestoutfile, "2>", that.tmptesterrfile],
-                                console: "integratedTerminal",
-                                skipFiles: ["node_modules/**"],
-                                env: { TS_NODE_TRANSPILE_ONLY: "1" }
-                            };
-                            vscode.debug.startDebugging(that.projectfolder, launchconfig);
-                        } else {
-                            const command = `node --require ts-node/register ${that.taskfile} < ${that.tmptestinfile} > ${that.tmptestoutfile} 2> ${that.tmptesterrfile}`;
-                            const options = {
-                                cwd: that.projectpath,
-                                env: { TS_NODE_TRANSPILE_ONLY: "1" }
-                            };
-                            child = child_process.exec(command, options);
-                        }
-                        break;
-                    case ".py":
-                        if (debug) {
-                            const launchconfig = {
-                                name: that.appid,
-                                type: "python",
-                                request: "launch",
-                                program: that.taskfile,
-                                args: ["<", that.tmptestinfile, ">", that.tmptestoutfile, "2>", that.tmptesterrfile],
-                                console: "integratedTerminal"
-                            };
-                            vscode.debug.startDebugging(that.projectfolder, launchconfig);
-                        } else {
-                            const command = `python -u ${that.taskfile} < ${that.tmptestinfile} > ${that.tmptestoutfile} 2> ${that.tmptesterrfile}`;
-                            const options = {
-                                cwd: that.projectpath
-                            };
-                            child = child_process.exec(command, options);
-                        }
-                        break;
-                    default:
-                        reject(`ERROR: invalid extension, extension="${that.extension}"`);
-                        return;
-                }
+
+                // exec command if typescript
+                child = that.lang.testLang(debug);
 
                 // wait child process
                 (function waitchild() {
@@ -516,17 +378,16 @@ class AcTsExtension {
         });
     }
 
-    public async submitTask(task: string) {
+    public async submitTask() {
 
-        this._initParam(["submit", task]);
+        //  init command
+        await this.initProp();
 
-        this.channel.appendLine(`[${this.timestamp()}] command: ${this.cmd}`);
+        // show channel
+        this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
+        this.channel.appendLine(`[${this.timestamp()}] contest: ${this.contest}`);
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
         this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
-        this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.atcodertaskurl}`);
-        this.channel.appendLine(`[${this.timestamp()}] username: ${this.username}`);
-        this.channel.appendLine(`[${this.timestamp()}] password: ********`);
-        this.channel.appendLine(`[${this.timestamp()}] submiturl: ${this.atcodersubmiturl}`);
 
         // check taskfile
         this.channel.appendLine(`[${this.timestamp()}] taskfile: "${this.taskfile}"`);
@@ -534,63 +395,20 @@ class AcTsExtension {
             throw `ERROR: missing taskfile="${this.taskfile}", do init task`;
         }
 
-        // get agent
-        const agent = superagent.agent();
-
-        // login get
-        this.channel.appendLine(`[${this.timestamp()}] login_get:`);
-        const res1 = await agent.get(this.atcoderloginurl).proxy(this.proxy).catch(res => {
-            throw `ERROR: ${res.status} ${res.message}`;
-        });
-        this.channel.appendLine(`[${this.timestamp()}] -> ${res1.status}`);
-
-        // login post
-        this.channel.appendLine(`[${this.timestamp()}] login_post:`);
-        const jsdom = new JSDOM(res1.text);
-        const csrf_token = jsdom.window.document.querySelectorAll("input")[0].value;
-        const res2 = await agent.post(this.atcoderloginurl)
-            .proxy(this.proxy)
-            .set("Content-Type", "application/x-www-form-urlencoded")
-            .send({
-                username: this.username,
-                password: this.password,
-                csrf_token: csrf_token
-            }).catch(res => {
-                throw `ERROR: ${res.status} ${res.message}`;
-            });
-        this.channel.appendLine(`[${this.timestamp()}] -> ${res2.status}`);
-
-        // check login
-        if (res2.text.indexOf(`ようこそ、${this.username} さん。`) < 0) {
-            throw `ERROR: atcoder login failed, userame="${this.username}", password="${this.password}", csrf_token="${csrf_token}"`;
-        }
-
         // submit task
-        this.channel.appendLine(`[${this.timestamp()}] submit_task:`);
-        const code = fs.readFileSync(this.taskfile).toString();
-        const res3 = await agent.post(this.atcodersubmiturl)
-            .proxy(this.proxy)
-            .set("Content-Type", "application/x-www-form-urlencoded")
-            .send({
-                "data.TaskScreenName": this.task,
-                "data.LanguageId": this.extension == ".ts" ? 4057 : this.extension == ".py" ? 4006 : 0,
-                csrf_token: csrf_token,
-                sourceCode: code
-            }).catch(res => {
-                throw `ERROR: ${res.status} ${res.message}`;
-            });
-        this.channel.appendLine(`[${this.timestamp()}] -> ${res3.status}`);
-        this.channel.appendLine(`[${this.timestamp()}] submissionsurl: ${this.atcodersubmissionsurl}`);
-        this.channel.appendLine(`---- SUCCESS: ${this.task} submitted ----`);
+        await this.coder.submitTask();
     }
 
-    public async removeTask(task: string) {
+    public async removeTask() {
 
-        this._initParam(["remove", task]);
+        // init command
+        await this.initProp();
 
-        this.channel.appendLine(`[${this.timestamp()}] command: ${this.cmd}`);
+        // show channel
+        this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
+        this.channel.appendLine(`[${this.timestamp()}] contest: ${this.contest}`);
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
-        this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.atcodertaskurl}`);
+        this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
 
         // Remove Taskfile
         if (!fs.existsSync(this.taskfile)) {
@@ -611,49 +429,87 @@ class AcTsExtension {
         this.channel.appendLine(`---- SUCCESS: ${this.task} removed ----`);
     }
 
-    public async browseTask(task: string) {
+    public async browseTask() {
 
-        this._initParam(["browse", task]);
+        // init command
+        await this.initProp();
 
-        this.channel.appendLine(`[${this.timestamp()}] command: ${this.cmd}`);
+        // show channel
+        this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
+        this.channel.appendLine(`[${this.timestamp()}] contest: ${this.contest}`);
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
-        this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.atcodertaskurl}`);
+        this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
 
-        // open browser
-        vscode.env.openExternal(vscode.Uri.parse(this.atcodertaskurl));
+        // open task
+        this.coder.browseTask();
 
         this.channel.appendLine(`---- SUCCESS: browse ${this.task} ----`);
     }
 
     // config
-    protected loadConfig() {
+    public loadConfig() {
         if (fs.existsSync(this.configfile)) {
-            const app = JSON.parse(fs.readFileSync(this.configfile).toString());
-            this.username = app.atcoder.username;
-            this.password = Buffer.from(app.atcoder.encpassword, "base64").toString();
-            this.task = app.atcoder.task;
-            this.extension = app.atcoder.extension;
+            const json = JSON.parse(fs.readFileSync(this.configfile).toString());
+            this.site = json.site;
+            this.contest = json.contest;
+            this.task = json.task;
+            this.extension = json.extension;
+            atcoder.username = json.atcoder.username;
+            atcoder.password = json.atcoder.encpassword ? Buffer.from(json.atcoder.encpassword, "base64").toString() : "";
+            yukicoder.apikey = json.yukicoder.encapikey ? Buffer.from(json.yukicoder.encapikey, "base64").toString() : "";
         } else {
-            this.username = "";
-            this.password = "";
+            this.site = "";
+            this.contest = "";
             this.task = "";
             this.extension = "";
+            atcoder.username = "";
+            atcoder.password = "";
+            yukicoder.apikey = "";
         }
     }
-    protected saveConfig() {
+    public saveConfig() {
         const app = {
+            site: this.site,
+            contest: this.contest,
+            task: this.task,
+            extension: this.extension,
             atcoder: {
-                username: this.username,
-                encpassword: Buffer.from(this.password).toString("base64"),
-                task: this.task,
-                extension: this.extension
+                username: atcoder.username,
+                encpassword: Buffer.from(atcoder.password).toString("base64"),
+            },
+            yukicoder: {
+                encapikey: Buffer.from(yukicoder.apikey).toString("base64"),
             }
         };
         fs.writeFileSync(this.configfile, JSON.stringify(app));
     }
 
-    // utility
-    protected timestamp(): string {
+    // site specific
+    public isAtcoder(): boolean {
+        return this.site == "atcoder";
+    }
+    public isYukicoder(): boolean {
+        return this.site == "yukicoder";
+    }
+
+    // lang specific
+    public isTypeScript(): boolean {
+        return this.extension == ".ts";
+    }
+    public isPython(): boolean {
+        return this.extension == ".py";
+    }
+    
+    // message
+    public responseToMessage(ex: any): string {
+        let texts = [];
+        if (ex.status) texts.push(ex.status);
+        if (ex.message) texts.push(ex.message);
+        if (ex.response?.text) texts.push(ex.response.text);
+        let message = texts.join(" ");
+        return message;
+    }
+    public timestamp(): string {
         return new Date().toLocaleString("ja-JP").split(" ")[1];
     }
 };

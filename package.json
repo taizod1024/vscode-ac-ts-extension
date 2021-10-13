@@ -12,7 +12,7 @@
   "publisher": "taizod1024",
   "main": "./build/extension.js",
   "activationEvents": [
-    "onCommand:ac-ts-extension.loginAtCoder",
+    "onCommand:ac-ts-extension.loginSite",
     "onCommand:ac-ts-extension.initTask",
     "onCommand:ac-ts-extension.reinitTask",
     "onCommand:ac-ts-extension.testTask",
@@ -24,8 +24,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "ac-ts-extension.loginAtCoder",
-        "title": "AtCoder Extension: Login AtCoder"
+        "command": "ac-ts-extension.loginSite",
+        "title": "AtCoder Extension: login Site"
       },
       {
         "command": "ac-ts-extension.initTask",
