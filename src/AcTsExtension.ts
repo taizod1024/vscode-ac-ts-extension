@@ -4,6 +4,26 @@ import superagent from "superagent";
 import child_process, { ExecFileSyncOptions } from "child_process";
 import { JSDOM } from "jsdom";
 import { Buffer } from 'buffer';
+import { atcoder } from './AtCoder';
+import { yukicoder } from './Yukicoder';
+
+// depends coder site
+export interface Coder {
+
+    // prop
+    contestregexp: RegExp;
+    contestmessage: string;
+    taskregexp: RegExp;
+    taskmessage?: string;
+
+    // method
+    checkLogin(): void;
+    initProp(): void;
+    loginSite(): void;
+    getTest(): any;
+    submitTask(): void;
+    browseTask(): void;
+};
 
 // extension core
 class AcTsExtension {
@@ -24,50 +44,11 @@ class AcTsExtension {
     // param
     public site: string;
     public contest: string;
-    public cmd: string;
     public task: string;
     public extension: string;
 
-    // atcoder
-    public atcoder: {
-
-        // param
-        username?: string;
-        password?: string;
-
-        // prop
-        contestregexp?: RegExp;
-        contestmessage?: string;
-        taskregexp?: RegExp;
-        taskmessage?: string;
-
-        loginurl?: string;
-        taskurl?: string;
-        submiturl?: string;
-        submissionsurl?: string;
-    };
-
-    // atcoder
-    public yukicoder: {
-
-        // param
-        apikey?: string;
-        problemid?: string;
-
-        // prop
-        contestregexp?: RegExp;
-        contestmessage?: string;
-        taskregexp?: RegExp;
-        taskmessage?: string;
-
-        problemnourl?: string;
-        api_problemnourl?: string;
-        api_problemidurl?: string;
-        api_submiturl?: string;
-        submissionsurl?: string;
-    };
-
     // prop
+    public coder: Coder;
     public tasktmplfile: string;
     public usertasktmplfile: string;
     public taskpath: string;
@@ -101,46 +82,12 @@ class AcTsExtension {
         this.channel.show(true);
         this.channel.appendLine(`[${this.timestamp()}] ${this.appname}`);
 
-        // init atcoder
-        this.atcoder = {};
-        this.atcoder.contestregexp = /^(.+)$/;
-        this.atcoder.contestmessage = "input contest [e.g.: abc190, abc191]";
-        this.atcoder.taskregexp = /^(.+)_(.+)$/;
-        this.atcoder.taskmessage = "input task [e.g.: abc190_a, abc190_b]";
-        this.atcoder.loginurl = "https://atcoder.jp/login?continue=https%3A%2F%2Fatcoder.jp%2F&lang=ja";
-
-        // init yukicoder
-        this.yukicoder = {};
-        this.yukicoder.contestregexp = /^[0-9]+$/;
-        this.yukicoder.contestmessage = "input contestid from url [e.g.: 314, 315]";
-        this.yukicoder.taskregexp = /^[0-9]+$/;
-        this.yukicoder.taskmessage = "input problemno from url [e.g.: 1680, 1681]";
-
         // load config
         this.loadConfig();
     }
 
-    // inner function
-    protected checkLogin() {
+    public async initProp() {
 
-        // check login if atcoder
-        if (this.isAtcoder()) {
-            if (!this.atcoder.username || !this.atcoder.password) {
-                throw "ERROR: do login site";
-            }
-        }
-
-        // check login if yukicoder
-        if (this.isYukicoder()) {
-            if (!this.yukicoder.apikey) {
-                throw "ERROR: do login site";
-            }
-        }
-    }
-
-    protected async initProp() {
-
-        // TODO abstract atcoder and yukicoder with interface site
         // TODO settings
 
         // init prop
@@ -162,45 +109,27 @@ class AcTsExtension {
         this.proxy = "";
         this.timeout = 5000;
 
-        // init prop if atcoder
-        if (this.isAtcoder()) {
-            this.atcoder.taskurl = `https://atcoder.jp/contests/${this.contest}/tasks/${this.task}`;
-            this.atcoder.submiturl = `https://atcoder.jp/contests/${this.contest}/submit`;
-            this.atcoder.submissionsurl = `https://atcoder.jp/contests/${this.contest}/submissions/me`;
+        // select coder
+        if (this.isAtcoder()) this.coder = atcoder;
+        if (this.isYukicoder()) this.coder = yukicoder;
 
-        }
+        // init prop
+        this.coder.checkLogin();
+        await this.coder.initProp();
 
-        // init prop if yukicoder
-        if (this.isYukicoder()) {
-            this.yukicoder.problemnourl = `https://yukicoder.me/problems/no/${this.task}`;
-            this.yukicoder.api_problemnourl = `https://yukicoder.me/api/v1/problems/no/${this.task}`;
-
-            // problemno to problemid
-            this.yukicoder.problemid = await (async () => {
-                const agent = superagent.agent()
-                    .set("accept", "application/json")
-                    .set("Authorization", `Bearer ${this.yukicoder.apikey}`)
-                const res = await agent.get(this.yukicoder.api_problemnourl)
-                    .proxy(this.proxy)
-                    .catch(res => { throw `ERROR: ${this.responseToMessage(res)}`; });
-                return JSON.parse(res.text).ProblemId;
-            })();
-            this.yukicoder.api_problemidurl = `https://yukicoder.me/api/v1/problems/${this.yukicoder.problemid}`;
-            this.yukicoder.api_submiturl = `https://yukicoder.me/api/v1/problems/${this.yukicoder.problemid}/submit`;
-            this.yukicoder.submissionsurl = `https://yukicoder.me/problems/no/${this.task}/submissions?status=&lang_id=&my_submission=enabled`;
-        }
-
-        // check node if typescript
-        if (this.isTypeScript()) {
-            if (!fs.existsSync(this.packagejsonfile) || !fs.existsSync(this.packagelockjsonfile)) {
-                throw `ERROR: missing package.json or package-lock.json, install node.js, run "npm init && npm install --save-dev typescript ts-node @types/node"`;
-            }
-        }
+        // // check node if typescript
+        // if (this.isTypeScript()) {
+        //     if (!fs.existsSync(this.packagejsonfile) || !fs.existsSync(this.packagelockjsonfile)) {
+        //         throw `ERROR: missing package.json or package-lock.json, install node.js, run "npm init && npm install --save-dev typescript ts-node @types/node"`;
+        //     }
+        // }
 
         // TODO check python in initProp() if python
+
+        // 
+        this.saveConfig();
     }
 
-    // public interface
     public async loginSite() {
 
         // init command
@@ -210,70 +139,14 @@ class AcTsExtension {
         // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
 
-        // login site if atcoder
-        if (this.isAtcoder()) {
-            await this.loginSiteAtCoder();
-        }
-
-        // login site if yukicoder
-        if (this.isYukicoder()) {
-            await this.loginSiteYukicoder();
-        }
-    }
-
-    protected async loginSiteAtCoder() {
-
-        // show channel
-        this.channel.appendLine(`[${this.timestamp()}] atcoder.loginurl: ${this.atcoder.loginurl}`);
-        this.channel.appendLine(`[${this.timestamp()}] atcoder.username: ${this.atcoder.username}`);
-        this.channel.appendLine(`[${this.timestamp()}] atcoder.password: ********`);
-
-        // get agent
-        const agent = superagent.agent();
-
-        // login get
-        this.channel.appendLine(`[${this.timestamp()}] login_get:`);
-        const res1 = await agent.get(this.atcoder.loginurl)
-            .proxy(this.proxy)
-            .catch(res => { throw `ERROR: ${this.responseToMessage(res)}`; });
-        this.channel.appendLine(`[${this.timestamp()}] -> ${res1.status}`);
-
-        // login post
-        this.channel.appendLine(`[${this.timestamp()}] login_post:`);
-        const jsdom = new JSDOM(res1.text);
-        const csrf_token = jsdom.window.document.querySelectorAll("input")[0].value;
-        const res2 = await agent.post(this.atcoder.loginurl)
-            .proxy(this.proxy)
-            .set("Content-Type", "application/x-www-form-urlencoded")
-            .send({
-                username: this.atcoder.username,
-                password: this.atcoder.password,
-                csrf_token: csrf_token
-            })
-            .catch(res => { throw `ERROR: ${this.responseToMessage(res)}`; });
-        this.channel.appendLine(`[${this.timestamp()}] -> ${res2.status}`);
-
-        // check login
-        if (res2.text.indexOf(`ようこそ、${this.atcoder.username} さん。`) < 0) {
-            throw `ERROR: atcoder login failed, userame="${this.atcoder.username}", password="********"`;
-        }
-
-        this.channel.appendLine(`---- SUCCESS: ${this.atcoder.username} logged in ----`);
-    }
-
-    protected async loginSiteYukicoder() {
-
-        // show channel
-        this.channel.appendLine(`[${this.timestamp()}] yukicoder.apikey: ********`);
-        this.channel.appendLine(`---- SUCCESS: ${this.atcoder.username} apikey set ----`);
+        // login site
+        this.coder.loginSite();
     }
 
     public async initTask() {
 
         // init command
-        this.checkLogin();
         await this.initProp();
-        this.saveConfig();
 
         // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
@@ -281,20 +154,12 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
         this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
 
-        let text;
-
         // check testfile not exits
+        let text;
         if (!fs.existsSync(this.testfile)) {
 
-            // get testtext if atcoder 
-            if (this.isAtcoder()) {
-                text = await this.getTestAtCoder();
-            }
-
-            // get testtext if yukicoder
-            if (this.isYukicoder()) {
-                text = await this.getTestYukicoder();
-            }
+            // get testtext
+            text = await this.coder.getTest();
         }
 
         // create taskfile
@@ -324,7 +189,7 @@ class AcTsExtension {
         }
 
         // open file
-        vscode.workspace.openTextDocument(actsextension.taskfile)
+        vscode.workspace.openTextDocument(this.taskfile)
             .then((a: vscode.TextDocument) => {
                 vscode.window.showTextDocument(a, 1, false);
             }, (err: any) => {
@@ -333,124 +198,10 @@ class AcTsExtension {
         this.channel.appendLine(`---- SUCCESS: ${this.task} initialized ----`);
     }
 
-    protected async getTestAtCoder() {
-
-        // show channel
-        this.channel.appendLine(`[${this.timestamp()}] atcoder.taskurl: ${this.atcoder.taskurl}`);
-        this.channel.appendLine(`[${this.timestamp()}] atcoder.username: ${this.atcoder.username}`);
-        this.channel.appendLine(`[${this.timestamp()}] atcoder.password: ********`);
-
-        // get agent
-        const agent = superagent.agent();
-
-        // login get
-        this.channel.appendLine(`[${this.timestamp()}] atcoder.login_get:`);
-        const res1 = await agent.get(this.atcoder.loginurl)
-            .proxy(this.proxy)
-            .catch(res => { throw `ERROR: ${this.responseToMessage(res)}`; });
-        this.channel.appendLine(`[${this.timestamp()}] -> ${res1.status}`);
-
-        // login post
-        this.channel.appendLine(`[${this.timestamp()}] atcoder.login_post:`);
-        const jsdom = new JSDOM(res1.text);
-        const csrf_token = jsdom.window.document.querySelectorAll("input")[0].value;
-        const res2 = await agent.post(this.atcoder.loginurl)
-            .proxy(this.proxy)
-            .set("Content-Type", "application/x-www-form-urlencoded")
-            .send({
-                username: this.atcoder.username,
-                password: this.atcoder.password,
-                csrf_token: csrf_token
-            })
-            .catch(res => { throw `ERROR: ${this.responseToMessage(res)}`; });
-        this.channel.appendLine(`[${this.timestamp()}] -> ${res2.status}`);
-
-        // check login
-        if (res2.text.indexOf(`ようこそ、${this.atcoder.username} さん。`) < 0) {
-            throw `ERROR: atcoder login failed, userame="${this.atcoder.username}", password="********", csrf_token="${csrf_token}"`;
-        }
-
-        // get task
-        this.channel.appendLine(`[${this.timestamp()}] atcoder.get_task:`);
-        const response = await agent.get(this.atcoder.taskurl)
-            .proxy(this.proxy)
-            .catch(res => { throw `ERROR: ${this.responseToMessage(res)}`; });
-        this.channel.appendLine(`[${this.timestamp()}] -> ${response.status}`);
-
-        // response to test text
-        let text = "";
-        let idx = 1;
-        while (true) {
-            let m1 = response.text.match(new RegExp(`<h3>入力例 ${idx}<\/h3><pre>([^<]*)<\/pre>`));
-            if (m1 == null)
-                break;
-            let m2 = response.text.match(new RegExp(`<h3>出力例 ${idx}<\/h3><pre>([^<]*)<\/pre>`));
-            if (m2 == null)
-                break;
-            text += m1[1].trim() + this.separator + m2[1].trim() + this.separator;
-            idx++;
-        }
-        idx--;
-        text = text.replace("&lt;", "<");
-        text = text.replace("&gt;", ">");
-
-        return text;
-    }
-
-    protected async getTestYukicoder() {
-
-        // show channel
-        this.channel.appendLine(`[${this.timestamp()}] yukicoder.problemnourll: ${this.yukicoder.problemnourl}`);
-        this.channel.appendLine(`[${this.timestamp()}] yukicoder.apikey: ********`);
-
-        // get agent
-        const agent = superagent.agent()
-            .set("accept", "application/json")
-            .set("Authorization", `Bearer ${this.yukicoder.apikey}`)
-
-        // get file list
-        let fileiurl = `${this.yukicoder.api_problemidurl}/file/in`;
-        this.channel.appendLine(`[${this.timestamp()}] yukicoder.fileinurl: ${fileiurl}`);
-        const resfilei = await agent.get(fileiurl)
-            .proxy(this.proxy)
-            .catch(res => { throw `ERROR: ${this.responseToMessage(res)}`; });
-        this.channel.appendLine(`[${this.timestamp()}] -> ${resfilei.status}`);
-
-        // get file
-        let text = "";
-        let filei = JSON.parse(resfilei.text);
-        for (let nx = 0; nx < filei.length; nx++) {
-
-            // filename
-            let fileix = filei[nx];
-
-            // get response
-            let fileixurl = `${this.yukicoder.api_problemidurl}/file/in/${fileix}`;
-            this.channel.appendLine(`[${this.timestamp()}] yukicoder.fileiurl-${nx}: ${fileixurl}`);
-            const resfileix = await agent.get(fileixurl)
-                .proxy(this.proxy)
-                .catch(res => { throw `ERROR: ${this.responseToMessage(res)}`; });
-
-            let fileoxurl = `${this.yukicoder.api_problemidurl}/file/out/${fileix}`;
-            this.channel.appendLine(`[${this.timestamp()}] yukicoder.fileourl-${nx}: ${fileoxurl}`);
-            const resfileox = await agent.get(fileoxurl)
-                .proxy(this.proxy)
-                .catch(res => { throw `ERROR: ${this.responseToMessage(res)}`; });
-
-            // response to test text
-            text += resfileix.text.trim() + this.separator;
-            text += resfileox.text.trim() + this.separator;
-        }
-
-        return text;
-    }
-
     public async testTask(debug: boolean): Promise<void> {
 
         // init command
-        this.checkLogin();
         await this.initProp();
-        this.saveConfig();
 
         // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
@@ -660,9 +411,7 @@ class AcTsExtension {
     public async submitTask() {
 
         //  init command
-        this.checkLogin();
         await this.initProp();
-        this.saveConfig();
 
         // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
@@ -676,104 +425,14 @@ class AcTsExtension {
             throw `ERROR: missing taskfile="${this.taskfile}", do init task`;
         }
 
-        // submit task if atcoder
-        if (this.isAtcoder()) {
-            await this.submitTaskAtCoder();
-        }
-
-        // submit task if yukicoder
-        if (this.isYukicoder()) {
-            await this.submitTaskYukicoder();
-        }
-    }
-
-    protected async submitTaskAtCoder() {
-
-        // show channel
-        this.channel.appendLine(`[${this.timestamp()}] atcoder.taskurl: ${this.atcoder.taskurl}`);
-        this.channel.appendLine(`[${this.timestamp()}] atcoder.username: ${this.atcoder.username}`);
-        this.channel.appendLine(`[${this.timestamp()}] atcoder.password: ********`);
-        this.channel.appendLine(`[${this.timestamp()}] atcoder.submiturl: ${this.atcoder.submiturl}`);
-
-        // get agent
-        const agent = superagent.agent();
-
-        // login get
-        this.channel.appendLine(`[${this.timestamp()}] login_get:`);
-        const res1 = await agent.get(this.atcoder.loginurl)
-            .proxy(this.proxy)
-            .catch(res => { throw `ERROR: ${this.responseToMessage(res)}`; });
-        this.channel.appendLine(`[${this.timestamp()}] -> ${res1.status}`);
-
-        // login post
-        this.channel.appendLine(`[${this.timestamp()}] login_post:`);
-        const jsdom = new JSDOM(res1.text);
-        const csrf_token = jsdom.window.document.querySelectorAll("input")[0].value;
-        const res2 = await agent.post(this.atcoder.loginurl)
-            .proxy(this.proxy)
-            .set("Content-Type", "application/x-www-form-urlencoded")
-            .send({
-                username: this.atcoder.username,
-                password: this.atcoder.password,
-                csrf_token: csrf_token
-            })
-            .catch(res => { throw `ERROR: ${this.responseToMessage(res)}`; });
-        this.channel.appendLine(`[${this.timestamp()}] -> ${res2.status}`);
-
-        // check login
-        if (res2.text.indexOf(`ようこそ、${this.atcoder.username} さん。`) < 0) {
-            throw `ERROR: atcoder login failed, userame="${this.atcoder.username}", password="${this.atcoder.password}", csrf_token="${csrf_token}"`;
-        }
-
         // submit task
-        this.channel.appendLine(`[${this.timestamp()}] submit_task:`);
-        const code = fs.readFileSync(this.taskfile).toString();
-        const res3 = await agent.post(this.atcoder.submiturl)
-            .proxy(this.proxy)
-            .set("Content-Type", "application/x-www-form-urlencoded")
-            .send({
-                "data.TaskScreenName": this.task,
-                "data.LanguageId": this.extension == ".ts" ? 4057 : this.extension == ".py" ? 4006 : 0,
-                csrf_token: csrf_token,
-                sourceCode: code
-            })
-            .catch(res => { throw `ERROR: ${this.responseToMessage(res)}`; });
-        this.channel.appendLine(`[${this.timestamp()}] -> ${res3.status}`);
-        this.channel.appendLine(`[${this.timestamp()}] submissionsurl: ${this.atcoder.submissionsurl}`);
-        this.channel.appendLine(`---- SUCCESS: ${this.task} submitted ----`);
-    }
-
-    protected async submitTaskYukicoder() {
-
-        // show channel
-        this.channel.appendLine(`[${this.timestamp()}] yukicoder.problemnourll: ${this.yukicoder.problemnourl}`);
-        this.channel.appendLine(`[${this.timestamp()}] yukicoder.apikey: ********`);
-
-        // get agent
-        const agent = superagent.agent()
-            .set("accept", "application/json")
-            .set("Authorization", `Bearer ${this.yukicoder.apikey}`)
-
-        // submit task
-        this.channel.appendLine(`[${this.timestamp()}] yukicoder.api_submiturl: ${this.yukicoder.api_submiturl}`);
-        const code = fs.readFileSync(this.taskfile).toString();
-        const res3 = await agent.post(this.yukicoder.api_submiturl)
-            .proxy(this.proxy)
-            .set("Content-Type", "multipart/form-data")
-            .field('lang', 'typescript')
-            .field("source", code)
-            .catch(res => { throw `ERROR: ${this.responseToMessage(res)}`; });
-        this.channel.appendLine(`[${this.timestamp()}] -> ${res3.status}`);
-        this.channel.appendLine(`[${this.timestamp()}] submissionsurl: ${this.yukicoder.submissionsurl}`);
-        this.channel.appendLine(`---- SUCCESS: ${this.task} submitted ----`);
+        await this.coder.submitTask();
     }
 
     public async removeTask() {
 
         // init command
-        this.checkLogin();
         await this.initProp();
-        this.saveConfig();
 
         // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
@@ -803,9 +462,7 @@ class AcTsExtension {
     public async browseTask() {
 
         // init command
-        this.checkLogin();
         await this.initProp();
-        this.saveConfig();
 
         // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
@@ -813,73 +470,64 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
         this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
 
-        // open task if atcoder
-        if (this.isAtcoder()) {
-            this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.atcoder.taskurl}`);
-            vscode.env.openExternal(vscode.Uri.parse(this.atcoder.taskurl));
-        }
-
-        // open task if yukicoder
-        if (this.isYukicoder()) {
-            this.channel.appendLine(`[${this.timestamp()}] taskurl: ${this.yukicoder.api_problemidurl}`);
-            vscode.env.openExternal(vscode.Uri.parse(this.yukicoder.problemnourl));
-        }
+        // open task
+        this.coder.browseTask();
 
         this.channel.appendLine(`---- SUCCESS: browse ${this.task} ----`);
     }
 
     // config
-    protected loadConfig() {
+    public loadConfig() {
         if (fs.existsSync(this.configfile)) {
             const json = JSON.parse(fs.readFileSync(this.configfile).toString());
             this.site = json.site;
-            this.atcoder.username = json.atcoder.username;
-            this.atcoder.password = json.atcoder.encpassword ? Buffer.from(json.atcoder.encpassword, "base64").toString() : "";
-            this.yukicoder.apikey = json.yukicoder.encapikey ? Buffer.from(json.yukicoder.encapikey, "base64").toString() : "";
             this.contest = json.contest;
             this.task = json.task;
             this.extension = json.extension;
+            atcoder.username = json.atcoder.username;
+            atcoder.password = json.atcoder.encpassword ? Buffer.from(json.atcoder.encpassword, "base64").toString() : "";
+            yukicoder.apikey = json.yukicoder.encapikey ? Buffer.from(json.yukicoder.encapikey, "base64").toString() : "";
         } else {
             this.site = "";
-            this.atcoder.username = "";
-            this.atcoder.password = "";
-            this.yukicoder.apikey = "";
             this.contest = "";
             this.task = "";
             this.extension = "";
+            atcoder.username = "";
+            atcoder.password = "";
+            yukicoder.apikey = "";
         }
     }
-    protected saveConfig() {
+    public saveConfig() {
         const app = {
             site: this.site,
-            atcoder: {
-                username: this.atcoder.username,
-                encpassword: Buffer.from(this.atcoder.password).toString("base64"),
-            },
-            yukicoder: {
-                encapikey: Buffer.from(this.yukicoder.apikey).toString("base64"),
-            },
             contest: this.contest,
             task: this.task,
-            extension: this.extension
+            extension: this.extension,
+            atcoder: {
+                username: atcoder.username,
+                encpassword: Buffer.from(atcoder.password).toString("base64"),
+            },
+            yukicoder: {
+                encapikey: Buffer.from(yukicoder.apikey).toString("base64"),
+            }
         };
         fs.writeFileSync(this.configfile, JSON.stringify(app));
     }
 
     // utility
-    protected isAtcoder(): boolean {
+    public isAtcoder(): boolean {
         return this.site == "atcoder";
     }
-    protected isYukicoder(): boolean {
+    public isYukicoder(): boolean {
         return this.site == "yukicoder";
     }
-    protected isTypeScript(): boolean {
+    public isTypeScript(): boolean {
         return this.extension == ".ts";
     }
-    protected isPython(): boolean {
+    public isPython(): boolean {
         return this.extension == ".py";
     }
-    protected responseToMessage(ex: any): string {
+    public responseToMessage(ex: any): string {
         let texts = [];
         if (ex.status) texts.push(ex.status);
         if (ex.message) texts.push(ex.message);
@@ -887,7 +535,7 @@ class AcTsExtension {
         let message = texts.join(" ");
         return message;
     }
-    protected timestamp(): string {
+    public timestamp(): string {
         return new Date().toLocaleString("ja-JP").split(" ")[1];
     }
 };

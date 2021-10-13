@@ -3,6 +3,8 @@ import superagent from "superagent";
 require('superagent-proxy')(superagent);
 import { actshelper } from './AcTsHelper';
 import { actsextension } from './AcTsExtension';
+import { atcoder } from './AtCoder';
+import { yukicoder } from './Yukicoder';
 
 // extension entrypoint
 export function activate(context: vscode.ExtensionContext) {
@@ -28,7 +30,7 @@ export function activate(context: vscode.ExtensionContext) {
                     // input username
                     vscode.window.showInputBox({
                         prompt: 'input username',
-                        value: actsextension.atcoder.username,
+                        value: atcoder.username,
                         ignoreFocusOut: true,
                         placeHolder: "ATCODER USERNAME"
                     }).then((username) => {
@@ -36,7 +38,7 @@ export function activate(context: vscode.ExtensionContext) {
                         // input password
                         vscode.window.showInputBox({
                             prompt: 'input password',
-                            value: actsextension.atcoder.password,
+                            value: atcoder.password,
                             ignoreFocusOut: true,
                             placeHolder: "ATCODER PASSWORD",
                             password: true
@@ -44,8 +46,8 @@ export function activate(context: vscode.ExtensionContext) {
                             if (!password) return;
                             // exec command
                             actsextension.site = site;
-                            actsextension.atcoder.username = username;
-                            actsextension.atcoder.password = password;
+                            atcoder.username = username;
+                            atcoder.password = password;
                             actsextension.loginSite()
                                 .catch((ex) => {
                                     actsextension.channel.appendLine("**** " + ex + " ****");
@@ -57,7 +59,7 @@ export function activate(context: vscode.ExtensionContext) {
                     // input apikey
                     vscode.window.showInputBox({
                         prompt: 'input apikey',
-                        value: actsextension.yukicoder.apikey,
+                        value: yukicoder.apikey,
                         ignoreFocusOut: true,
                         placeHolder: "YUKICODER APIKEY",
                         password: true
@@ -65,7 +67,7 @@ export function activate(context: vscode.ExtensionContext) {
                         if (!apikey) return;
                         // exec command
                         actsextension.site = site;
-                        actsextension.yukicoder.apikey = apikey;
+                        yukicoder.apikey = apikey;
                         actsextension.loginSite()
                             .catch((ex) => {
                                 actsextension.channel.appendLine("**** " + ex + " ****");
@@ -101,16 +103,16 @@ export function activate(context: vscode.ExtensionContext) {
                 let taskregexp: RegExp;
                 let taskmessage: string;
                 if (site == "atcoder") {
-                    contestregexp = actsextension.atcoder.contestregexp;
-                    contestmessage = actsextension.atcoder.contestmessage;
-                    taskregexp = actsextension.atcoder.taskregexp;
-                    taskmessage = actsextension.atcoder.taskmessage;
+                    contestregexp = atcoder.contestregexp;
+                    contestmessage = atcoder.contestmessage;
+                    taskregexp = atcoder.taskregexp;
+                    taskmessage = atcoder.taskmessage;
                 }
                 if (site == "yukicoder") {
-                    contestregexp = actsextension.yukicoder.contestregexp;
-                    contestmessage = actsextension.yukicoder.contestmessage;
-                    taskregexp = actsextension.yukicoder.taskregexp;
-                    taskmessage = actsextension.yukicoder.taskmessage;
+                    contestregexp = yukicoder.contestregexp;
+                    contestmessage = yukicoder.contestmessage;
+                    taskregexp = yukicoder.taskregexp;
+                    taskmessage = yukicoder.taskmessage;
                 }
                 // input contest
                 vscode.window.showInputBox({
