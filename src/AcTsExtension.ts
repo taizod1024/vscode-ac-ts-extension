@@ -450,13 +450,13 @@ class AcTsExtension {
     public loadConfig() {
         if (fs.existsSync(this.configfile)) {
             const json = JSON.parse(fs.readFileSync(this.configfile).toString());
-            this.site = json.site;
-            this.contest = json.contest;
-            this.task = json.task;
+            this.site = json.site || "";
+            this.contest = json.contest || "";
+            this.task = json.task || "";
             this.extension = json.extension;
-            atcoder.username = json.atcoder.username;
-            atcoder.password = json.atcoder.encpassword ? Buffer.from(json.atcoder.encpassword, "base64").toString() : "";
-            yukicoder.apikey = json.yukicoder.encapikey ? Buffer.from(json.yukicoder.encapikey, "base64").toString() : "";
+            atcoder.username = json.atcoder?.username || "";
+            atcoder.password = json.atcoder?.encpassword ? Buffer.from(json.atcoder?.encpassword, "base64").toString() : "";
+            yukicoder.apikey = json.yukicoder?.encapikey ? Buffer.from(json.yukicoder?.encapikey, "base64").toString() : "";
         } else {
             this.site = "";
             this.contest = "";
