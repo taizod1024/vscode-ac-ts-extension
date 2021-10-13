@@ -1,10 +1,10 @@
-# AtCoder Extension
+# AtCoder/Yukicoder Extension
 
-Python/TypeScriptでの[AtCoder](https://atcoder.jp/?lang=ja)への参加をサポートするVisual Studio Codeの拡張機能です。
+Python/TypeScriptでの[AtCoder](https://atcoder.jp/?lang=ja)/[Yukicoder](https://yukicoder.me/)への参加をサポートするVisual Studio Codeの拡張機能です。
 
 ## 機能
 
-Python/TypeScriptでのVisual Studio CodeからAtCoderへの参加をサポートします。
+Python/TypeScriptでのVisual Studio CodeからAtCoder/Yukicoderへの参加をサポートします。
 
 - AtCoderへのログイン
 - ソースコードの生成、テストデータのダウンロード
@@ -27,7 +27,7 @@ Python/TypeScriptでのVisual Studio CodeからAtCoderへの参加をサポー�
 
 ## 準備
 
-[AtCoder](https://atcoder.jp/?lang=ja) でユーザ登録します。
+[AtCoder](https://atcoder.jp/?lang=ja) および [Yukicoder](https://yukicoder.me/) でユーザ登録します。Yukicoderの場合はプロフィール画面のAPIキーを確認しておいてください。
 
 ### Python
 
@@ -54,14 +54,18 @@ vscodeで `F1` を押下（もしくは [表示] > [コマンド パレット] �
 ### AtCoderへログインする
 
 はじめに `AtCoder Extension: Login Site` でユーザ名とパスワードを入力してAtCoderにログインします。
+Yukicoderの場合はプロフィール画面のAPIキーを入力します。
 
 ![loginsite](https://github.com/taizod1024/ac-ts-extension/blob/main/images/loginsite.gif?raw=true)
+
 
 ### 問題をはじめる
 
 まずはじめに `AtCoder Extension: Init Task` で問題名を入力して提出用のソースコードの生成と問題用のテストデータのダウンロードをします。
 
-- 問題名は `abc190_a` の形式で入力します。
+- 最初にサイトを`atcoder`,`yukicoder`から選択します。
+- コンテスト名はAtCoderの場合は `abc190`の形式、Yukicoderの場合は`351`の形式で入力します。いずれもURLから確認してください。
+- 問題名はAtCoderの場合は `abc190_a` の形式、Yukicoderの場合は`1692`の形式で入力します。いずれもURLから確認してください。
 - 解答する言語は`.py`,`.ts`から選択します。
 - ソースコードは `src/atcoder/abcXXX/abcXXX_X.py`, `abcXXX_X.ts` に生成されます。
 - テストデータは `src/atcoder/abcXXX/abcXXX_X.txt` にダウンロードされます。
