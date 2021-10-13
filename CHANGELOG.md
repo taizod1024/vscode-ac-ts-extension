@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.57](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.56...v0.0.57) (2021-10-13)
+
+
+### Bug Fixes
+
+* atcoder固有部切り出し ([a91354e](https://github.com/taizod1024/ac-ts-extension/commit/a91354eef65f63f942e1f6928caeecfd6ea9f723))
+* yukicoder対応、設定ファイル読込修正 ([d4e8014](https://github.com/taizod1024/ac-ts-extension/commit/d4e80141c2852f223d058d4b0ac4c2a3c02ea764))
+* 不要なデバッグ出力を削除 ([896a618](https://github.com/taizod1024/ac-ts-extension/commit/896a618125de20ba90740ee9b307346fddf62d10))
+
 ### [0.0.56](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.55...v0.0.56) (2021-10-05)
 
 
