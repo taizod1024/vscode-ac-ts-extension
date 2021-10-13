@@ -7,7 +7,7 @@ import { Buffer } from 'buffer';
 import { atcoder } from './AtCoder';
 import { yukicoder } from './Yukicoder';
 
-// depends coder site
+// atcoder / yukicoder 
 export interface Coder {
 
     // prop

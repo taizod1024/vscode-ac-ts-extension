@@ -24,6 +24,7 @@ class AtCoder implements Coder {
 
     // constructor
     constructor() {
+
         this.contestregexp = /^(.+)$/;
         this.contestmessage = "input contest [e.g.: abc190, abc191]";
         this.taskregexp = /^(.+)_(.+)$/;
@@ -193,7 +194,7 @@ class AtCoder implements Coder {
             .set("Content-Type", "application/x-www-form-urlencoded")
             .send({
                 "data.TaskScreenName": actsextension.task,
-                "data.LanguageId": actsextension.extension == ".ts" ? 4057 : actsextension.extension == ".py" ? 4006 : 0,
+                "data.LanguageId": this.getLanguageId(),
                 csrf_token: csrf_token,
                 sourceCode: code
             })
@@ -207,6 +208,12 @@ class AtCoder implements Coder {
     browseTask() {
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] taskurl: ${this.taskurl}`);
         vscode.env.openExternal(vscode.Uri.parse(this.taskurl));
+    }
+
+    getLanguageId(): number {
+        if(actsextension.extension == ".ts") return 4057;
+        if(actsextension.extension == ".py") return 4006;
+        return 0;
     }
 };
 export const atcoder = new AtCoder();

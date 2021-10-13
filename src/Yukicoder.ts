@@ -127,7 +127,7 @@ class Yukicoder implements Coder {
         const res3 = await agent.post(this.api_submiturl)
             .proxy(actsextension.proxy)
             .set("Content-Type", "multipart/form-data")
-            .field('lang', 'typescript')
+            .field('lang', this.getLanguage())
             .field("source", code)
             .catch(res => { throw `ERROR: ${actsextension.responseToMessage(res)}`; });
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] -> ${res3.status}`);
@@ -139,5 +139,11 @@ class Yukicoder implements Coder {
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] taskurl: ${this.api_problemidurl}`);
         vscode.env.openExternal(vscode.Uri.parse(this.problemnourl));
    }
+
+    getLanguage(): string {
+        if(actsextension.extension == ".ts") return "typescript";
+        if(actsextension.extension == ".py") return "python3";
+        return "";
+    }
 };
 export const yukicoder = new Yukicoder();
