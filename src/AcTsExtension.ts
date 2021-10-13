@@ -6,6 +6,8 @@ import { JSDOM } from "jsdom";
 import { Buffer } from 'buffer';
 import { atcoder } from './AtCoder';
 import { yukicoder } from './Yukicoder';
+import { typescript } from './TypeScript';
+import { python } from './Python';
 
 // atcoder / yukicoder 
 export interface Coder {
@@ -23,6 +25,14 @@ export interface Coder {
     getTest(): any;
     submitTask(): void;
     browseTask(): void;
+};
+
+// python / typescript
+export interface Lang {
+
+    // method
+    checkLang(): void;
+    testLang(debug: boolean): any;
 };
 
 // extension core
@@ -49,6 +59,7 @@ class AcTsExtension {
 
     // prop
     public coder: Coder;
+    public lang: Lang;
     public tasktmplfile: string;
     public usertasktmplfile: string;
     public taskpath: string;
@@ -74,7 +85,11 @@ class AcTsExtension {
         this.appname = "AtCoder Extension";
         this.appid = "ac-ts-extension";
         this.configfile = `${process.env.USERPROFILE}\\.${this.appid}.json`;
+
+        // site specific
         this.sites = ["atcoder", "yukicoder"];
+
+        // lang specific
         this.extensions = [".ts", ".py"];
 
         // init context
@@ -109,24 +124,21 @@ class AcTsExtension {
         this.proxy = "";
         this.timeout = 5000;
 
-        // select coder
+        // site specific
         if (this.isAtcoder()) this.coder = atcoder;
         if (this.isYukicoder()) this.coder = yukicoder;
 
-        // init prop
+        // lang specific
+        if (this.isTypeScript()) this.lang = typescript;
+        if (this.isPython()) this.lang = python;
+
+        // check and init coder
         this.coder.checkLogin();
         await this.coder.initProp();
 
-        // // check node if typescript
-        // if (this.isTypeScript()) {
-        //     if (!fs.existsSync(this.packagejsonfile) || !fs.existsSync(this.packagelockjsonfile)) {
-        //         throw `ERROR: missing package.json or package-lock.json, install node.js, run "npm init && npm install --save-dev typescript ts-node @types/node"`;
-        //     }
-        // }
+        // check lang
+        this.lang.checkLang();
 
-        // TODO check python in initProp() if python
-
-        // 
         this.saveConfig();
     }
 
@@ -274,50 +286,7 @@ class AcTsExtension {
                 let istimeout = false;
 
                 // exec command if typescript
-                if (that.isTypeScript()) {
-                    if (debug) {
-                        const launchconfig = {
-                            name: that.appid,
-                            type: "pwa-node",
-                            request: "launch",
-                            runtimeArgs: ["--require", "ts-node/register"],
-                            program: that.taskfile,
-                            args: ["<", that.tmptestinfile, ">", that.tmptestoutfile, "2>", that.tmptesterrfile],
-                            console: "integratedTerminal",
-                            skipFiles: ["node_modules/**"],
-                            env: { TS_NODE_TRANSPILE_ONLY: "1" }
-                        };
-                        vscode.debug.startDebugging(that.projectfolder, launchconfig);
-                    } else {
-                        const command = `node --require ts-node/register ${that.taskfile} < ${that.tmptestinfile} > ${that.tmptestoutfile} 2> ${that.tmptesterrfile}`;
-                        const options = {
-                            cwd: that.projectpath,
-                            env: { TS_NODE_TRANSPILE_ONLY: "1" }
-                        };
-                        child = child_process.exec(command, options);
-                    }
-                }
-
-                // exec command if python
-                if (that.isPython()) {
-                    if (debug) {
-                        const launchconfig = {
-                            name: that.appid,
-                            type: "python",
-                            request: "launch",
-                            program: that.taskfile,
-                            args: ["<", that.tmptestinfile, ">", that.tmptestoutfile, "2>", that.tmptesterrfile],
-                            console: "integratedTerminal"
-                        };
-                        vscode.debug.startDebugging(that.projectfolder, launchconfig);
-                    } else {
-                        const command = `python -u ${that.taskfile} < ${that.tmptestinfile} > ${that.tmptestoutfile} 2> ${that.tmptesterrfile}`;
-                        const options = {
-                            cwd: that.projectpath
-                        };
-                        child = child_process.exec(command, options);
-                    }
-                }
+                child = that.lang.testLang(debug);
 
                 // wait child process
                 (function waitchild() {
@@ -514,19 +483,23 @@ class AcTsExtension {
         fs.writeFileSync(this.configfile, JSON.stringify(app));
     }
 
-    // utility
+    // site specific
     public isAtcoder(): boolean {
         return this.site == "atcoder";
     }
     public isYukicoder(): boolean {
         return this.site == "yukicoder";
     }
+
+    // lang specific
     public isTypeScript(): boolean {
         return this.extension == ".ts";
     }
     public isPython(): boolean {
         return this.extension == ".py";
     }
+    
+    // message
     public responseToMessage(ex: any): string {
         let texts = [];
         if (ex.status) texts.push(ex.status);

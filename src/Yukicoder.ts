@@ -5,12 +5,6 @@ import { actsextension, Coder } from './AcTsExtension';
 
 class Yukicoder implements Coder {
 
-    // implements
-    contestregexp: RegExp;
-    contestmessage: string;
-    taskregexp: RegExp;
-    taskmessage?: string;
-
     // param
     apikey: string;
     problemid: string;
@@ -22,7 +16,12 @@ class Yukicoder implements Coder {
     api_submiturl: string;
     submissionsurl: string;
 
-    // constructor
+    // implements
+    contestregexp: RegExp;
+    contestmessage: string;
+    taskregexp: RegExp;
+    taskmessage?: string;
+
     constructor() {
         this.contestregexp = /^[0-9]+$/;
         this.contestmessage = "input contestid from url [e.g.: 314, 315]";
@@ -141,8 +140,8 @@ class Yukicoder implements Coder {
    }
 
     getLanguage(): string {
-        if(actsextension.extension == ".ts") return "typescript";
-        if(actsextension.extension == ".py") return "python3";
+        if(actsextension.isTypeScript()) return "typescript";
+        if(actsextension.isPython()) return "python3";
         return "";
     }
 };

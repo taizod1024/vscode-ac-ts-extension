@@ -6,12 +6,6 @@ import { actsextension, Coder } from './AcTsExtension';
 
 class AtCoder implements Coder {
 
-    // implements
-    contestregexp: RegExp;
-    contestmessage: string;
-    taskregexp: RegExp;
-    taskmessage?: string;
-
     // param
     username: string;
     password: string;
@@ -22,7 +16,12 @@ class AtCoder implements Coder {
     submiturl: string;
     submissionsurl: string;
 
-    // constructor
+    // implements
+    contestregexp: RegExp;
+    contestmessage: string;
+    taskregexp: RegExp;
+    taskmessage?: string;
+
     constructor() {
 
         this.contestregexp = /^(.+)$/;
@@ -33,12 +32,14 @@ class AtCoder implements Coder {
     }
 
     initProp() {
+
         this.taskurl = `https://atcoder.jp/contests/${actsextension.contest}/tasks/${actsextension.task}`;
         this.submiturl = `https://atcoder.jp/contests/${actsextension.contest}/submit`;
         this.submissionsurl = `https://atcoder.jp/contests/${actsextension.contest}/submissions/me`;
     }
 
     checkLogin() {
+
         if (!this.username || !this.password) {
             throw "ERROR: do login site";
         }
@@ -211,8 +212,8 @@ class AtCoder implements Coder {
     }
 
     getLanguageId(): number {
-        if(actsextension.extension == ".ts") return 4057;
-        if(actsextension.extension == ".py") return 4006;
+        if(actsextension.isTypeScript()) return 4057;
+        if(actsextension.isPython()) return 4006;
         return 0;
     }
 };
