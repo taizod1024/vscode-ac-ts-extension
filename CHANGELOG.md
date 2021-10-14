@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.68](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.67...v0.0.68) (2021-10-14)
+
+
+### Bug Fixes
+
+* loginSiteでエラーが出る件を再修正 ([da7af9b](https://github.com/taizod1024/ac-ts-extension/commit/da7af9b1a8f02ffb348eb2cfa3fda1abb51f1098))
+
 ### [0.0.67](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.66...v0.0.67) (2021-10-14)
 
 
