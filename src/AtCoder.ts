@@ -65,7 +65,7 @@ class AtCoder implements Coder {
         // login post
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] login_post:`);
         const $ = cheerio.load(res1.text);
-        const csrf_token = $("input").text;
+        const csrf_token = $("input").val();
         const res2 = await agent.post(this.loginurl)
             .proxy(actsextension.proxy)
             .set("Content-Type", "application/x-www-form-urlencoded")
@@ -105,7 +105,7 @@ class AtCoder implements Coder {
         // login post
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] atcoder.login_post:`);
         const $ = cheerio.load(res1.text);
-        const csrf_token = $("input").text;
+        const csrf_token = $("input").val();
         const res2 = await agent.post(this.loginurl)
             .proxy(actsextension.proxy)
             .set("Content-Type", "application/x-www-form-urlencoded")
@@ -170,7 +170,7 @@ class AtCoder implements Coder {
         // login post
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] login_post:`);
         const $ = cheerio.load(res1.text);
-        const csrf_token = $("input").text;
+        const csrf_token = $("input").val();
         const res2 = await agent.post(this.loginurl)
             .proxy(actsextension.proxy)
             .set("Content-Type", "application/x-www-form-urlencoded")
