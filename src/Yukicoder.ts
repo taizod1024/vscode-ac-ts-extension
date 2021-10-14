@@ -34,10 +34,10 @@ class Yukicoder implements Coder {
         this.api_problemnourl = `https://yukicoder.me/api/v1/problems/no/${actsextension.task}`;
 
         // problemno to problemid
-        this.problemid = await(async () => {
+        this.problemid = await (async () => {
             const agent = superagent.agent()
                 .set("accept", "application/json")
-                .set("Authorization", `Bearer ${this.apikey}`)
+                .set("Authorization", `Bearer ${this.apikey}`);
             const res = await agent.get(this.api_problemnourl)
                 .proxy(actsextension.proxy)
                 .catch(res => { throw `ERROR: ${actsextension.responseToMessage(res)}`; });
@@ -70,7 +70,7 @@ class Yukicoder implements Coder {
         // get agent
         const agent = superagent.agent()
             .set("accept", "application/json")
-            .set("Authorization", `Bearer ${this.apikey}`)
+            .set("Authorization", `Bearer ${this.apikey}`);
 
         // get file list
         let fileiurl = `${this.api_problemidurl}/file/in`;
@@ -118,7 +118,7 @@ class Yukicoder implements Coder {
         // get agent
         const agent = superagent.agent()
             .set("accept", "application/json")
-            .set("Authorization", `Bearer ${this.apikey}`)
+            .set("Authorization", `Bearer ${this.apikey}`);
 
         // submit task
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] yukicoder.api_submiturl: ${this.api_submiturl}`);
@@ -137,11 +137,11 @@ class Yukicoder implements Coder {
     browseTask() {
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] taskurl: ${this.api_problemidurl}`);
         vscode.env.openExternal(vscode.Uri.parse(this.problemnourl));
-   }
+    }
 
     getLanguage(): string {
-        if(actsextension.isTypeScript()) return "typescript";
-        if(actsextension.isPython()) return "python3";
+        if (actsextension.isTypeScript()) { return "typescript"; }
+        if (actsextension.isPython()) { return "python3"; }
         return "";
     }
 };

@@ -135,10 +135,10 @@ class AtCoder implements Coder {
         while (true) {
             let m1 = response.text.match(new RegExp(`<h3>入力例 ${idx}<\/h3><pre>([^<]*)<\/pre>`));
             if (m1 == null)
-                break;
+                {break;}
             let m2 = response.text.match(new RegExp(`<h3>出力例 ${idx}<\/h3><pre>([^<]*)<\/pre>`));
             if (m2 == null)
-                break;
+                {break;}
             text += m1[1].trim() + actsextension.separator + m2[1].trim() + actsextension.separator;
             idx++;
         }
@@ -212,8 +212,8 @@ class AtCoder implements Coder {
     }
 
     getLanguageId(): number {
-        if(actsextension.isTypeScript()) return 4057;
-        if(actsextension.isPython()) return 4006;
+        if(actsextension.isTypeScript()) {return 4057;}
+        if(actsextension.isPython()) {return 4006;}
         return 0;
     }
 };
