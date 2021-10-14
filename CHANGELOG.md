@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.61](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.60...v0.0.61) (2021-10-14)
+
+
+### Bug Fixes
+
+* esbuild対応 ([7dd6567](https://github.com/taizod1024/ac-ts-extension/commit/7dd65679d7566db36d1f53205b2a43868df9c47a))
+
 ### [0.0.60](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.59...v0.0.60) (2021-10-14)
 
 ### [0.0.59](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.58...v0.0.59) (2021-10-13)
