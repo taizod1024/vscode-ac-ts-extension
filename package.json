@@ -69,7 +69,7 @@
   "author": "yamamoto.taizo <taizod1024@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "jsdom": "^17.0.0",
+    "cheerio": "^1.0.0-rc.10",
     "superagent": "^6.1.0",
     "superagent-proxy": "^3.0.0"
   },
