@@ -1,18 +1,7 @@
-### setting: no package
-.husky/**
-.vscode/**
-.gitignore
-**/tsconfig.json
-**/.eslintrc.json
-### test: no package
-build/test/**
-### build: no package
-src/**
-**/*.map
-**/*.ts
-### root: no package
-*.vsix
-*.zip
-*.js
-### template: package
+### exclude
+**/**
+### include
+!build/**
+!images/**
+!README.md
 !template/**
