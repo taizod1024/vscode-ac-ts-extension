@@ -5,7 +5,7 @@ import { actsextension } from './AcTsExtension';
 class AcTsHelper {
 
     public checkProjectPath(): boolean {
-        if (vscode.workspace.workspaceFolders?.length == 1) {
+        if (vscode.workspace.workspaceFolders?.length === 1) {
             actsextension.projectpath = vscode.workspace.workspaceFolders[0].uri.fsPath;
             return true;
         }
@@ -29,7 +29,7 @@ class AcTsHelper {
                 let contest = filenames.pop();
                 let site = filenames.pop();
                 // check path
-                if (`${actsextension.projectpath}\\src\\${site}\\${contest}` == basename) {
+                if (`${actsextension.projectpath}\\src\\${site}\\${contest}` === basename) {
                     vscode.window.activeTextEditor.document.save();
                     actsextension.site = site;
                     actsextension.contest = contest;

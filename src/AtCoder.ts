@@ -65,7 +65,7 @@ class AtCoder implements Coder {
         // login post
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] login_post:`);
         const $ = cheerio.load(res1.text);
-        const csrf_token = $("input").text;
+        const csrf_token = $("input").val();
         const res2 = await agent.post(this.loginurl)
             .proxy(actsextension.proxy)
             .set("Content-Type", "application/x-www-form-urlencoded")
@@ -105,7 +105,7 @@ class AtCoder implements Coder {
         // login post
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] atcoder.login_post:`);
         const $ = cheerio.load(res1.text);
-        const csrf_token = $("input").text;
+        const csrf_token = $("input").val();
         const res2 = await agent.post(this.loginurl)
             .proxy(actsextension.proxy)
             .set("Content-Type", "application/x-www-form-urlencoded")
@@ -134,10 +134,10 @@ class AtCoder implements Coder {
         let idx = 1;
         while (true) {
             let m1 = response.text.match(new RegExp(`<h3>入力例 ${idx}<\/h3><pre>([^<]*)<\/pre>`));
-            if (m1 == null)
+            if (m1 === null)
                 {break;}
             let m2 = response.text.match(new RegExp(`<h3>出力例 ${idx}<\/h3><pre>([^<]*)<\/pre>`));
-            if (m2 == null)
+            if (m2 === null)
                 {break;}
             text += m1[1].trim() + actsextension.separator + m2[1].trim() + actsextension.separator;
             idx++;
@@ -170,7 +170,7 @@ class AtCoder implements Coder {
         // login post
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] login_post:`);
         const $ = cheerio.load(res1.text);
-        const csrf_token = $("input").text;
+        const csrf_token = $("input").val();
         const res2 = await agent.post(this.loginurl)
             .proxy(actsextension.proxy)
             .set("Content-Type", "application/x-www-form-urlencoded")

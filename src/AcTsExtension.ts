@@ -256,7 +256,7 @@ class AcTsExtension {
         }
 
         // check test set
-        if (ios.length == 0) {
+        if (ios.length === 0) {
             throw `WARN: there is no test set`;
         }
 
@@ -338,7 +338,7 @@ class AcTsExtension {
                                     return;
                                 }
                                 // chceck canceled
-                                if (out == "") {
+                                if (out === "") {
                                     that.channel.appendLine(`---- CANCELED OR NO OUTPUT ----`);
                                     resolve();
                                     return;
@@ -360,7 +360,7 @@ class AcTsExtension {
                                 }
                                 // test set done
                                 let msg = `${that.task} OK=${ok}, NG=${ng}`;
-                                if (ng == 0) {
+                                if (ng === 0) {
                                     that.channel.appendLine(`---- SUCCESS: ${msg} ----`);
                                     resolve();
                                     return;
@@ -484,18 +484,18 @@ class AcTsExtension {
 
     // site specific
     public isAtcoder(): boolean {
-        return this.site == "atcoder";
+        return this.site === "atcoder";
     }
     public isYukicoder(): boolean {
-        return this.site == "yukicoder";
+        return this.site === "yukicoder";
     }
 
     // lang specific
     public isTypeScript(): boolean {
-        return this.extension == ".ts";
+        return this.extension === ".ts";
     }
     public isPython(): boolean {
-        return this.extension == ".py";
+        return this.extension === ".py";
     }
 
     // message
