@@ -16,6 +16,8 @@ export function activate(context: vscode.ExtensionContext) {
             actsextension.channel.clear();
             actsextension.channel.appendLine(`${actsextension.appid}.${cmdid}:`);
             actsextension.vscodeextensionpath = context.extensionPath;
+            // check condition
+            if (!actshelper.checkProjectPath()) { return; }
             // select site
             let idx = actsextension.sites.indexOf(actsextension.site);
             if (1 <= idx) {
