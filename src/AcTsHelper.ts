@@ -9,9 +9,8 @@ class AcTsHelper {
             actsextension.projectpath = vscode.workspace.workspaceFolders[0].uri.fsPath;
             return true;
         }
-        const msg = `WARN: no root or multi root is not supported`;
+        const msg = `*** WARN: no root or multi root is not supported ***`;
         actsextension.channel.appendLine(msg);
-        vscode.window.showWarningMessage(msg);
         return false;
     }
 
@@ -30,18 +29,20 @@ class AcTsHelper {
                 let site = filenames.pop();
                 // check path
                 if (`${actsextension.projectpath}\\src\\${site}\\${contest}` === basename) {
-                    vscode.window.activeTextEditor.document.save();
-                    actsextension.site = site;
-                    actsextension.contest = contest;
-                    actsextension.task = task;
-                    actsextension.extension = extension;
-                    return true;
+                    // check extension
+                    if (actsextension.extensions.includes(extension)) {
+                        vscode.window.activeTextEditor.document.save();
+                        actsextension.site = site;
+                        actsextension.contest = contest;
+                        actsextension.task = task;
+                        actsextension.extension = extension;
+                        return true;
+                    }
                 }
             }
         }
-        const msg = `WARN: missing task, select task file`;
+        const msg = `*** WARN: missing task, select task file ***`;
         actsextension.channel.appendLine(msg);
-        vscode.window.showWarningMessage(msg);
         return false;
     }
 };
