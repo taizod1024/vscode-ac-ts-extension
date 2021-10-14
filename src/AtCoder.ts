@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as fs from "fs";
 import superagent from "superagent";
-import { JSDOM } from "jsdom";
+import * as cheerio from "cheerio";
 import { actsextension, Coder } from './AcTsExtension';
 
 class AtCoder implements Coder {
@@ -64,8 +64,8 @@ class AtCoder implements Coder {
 
         // login post
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] login_post:`);
-        const jsdom = new JSDOM(res1.text);
-        const csrf_token = jsdom.window.document.querySelectorAll("input")[0].value;
+        const $ = cheerio.load(res1.text);
+        const csrf_token = $("input").text;
         const res2 = await agent.post(this.loginurl)
             .proxy(actsextension.proxy)
             .set("Content-Type", "application/x-www-form-urlencoded")
@@ -104,8 +104,8 @@ class AtCoder implements Coder {
 
         // login post
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] atcoder.login_post:`);
-        const jsdom = new JSDOM(res1.text);
-        const csrf_token = jsdom.window.document.querySelectorAll("input")[0].value;
+        const $ = cheerio.load(res1.text);
+        const csrf_token = $("input").text;
         const res2 = await agent.post(this.loginurl)
             .proxy(actsextension.proxy)
             .set("Content-Type", "application/x-www-form-urlencoded")
@@ -169,8 +169,8 @@ class AtCoder implements Coder {
 
         // login post
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] login_post:`);
-        const jsdom = new JSDOM(res1.text);
-        const csrf_token = jsdom.window.document.querySelectorAll("input")[0].value;
+        const $ = cheerio.load(res1.text);
+        const csrf_token = $("input").text;
         const res2 = await agent.post(this.loginurl)
             .proxy(actsextension.proxy)
             .set("Content-Type", "application/x-www-form-urlencoded")
