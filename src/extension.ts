@@ -26,7 +26,7 @@ export function activate(context: vscode.ExtensionContext) {
                 placeHolder: "SELECT SITE",
             }).then((site) => {
                 if (site === undefined) { return; }
-                if (site == "atcoder") {
+                if (site === "atcoder") {
                     // input username
                     vscode.window.showInputBox({
                         prompt: 'input username',
@@ -55,7 +55,7 @@ export function activate(context: vscode.ExtensionContext) {
                         });
                     });
                 }
-                if (site == "yukicoder") {
+                if (site === "yukicoder") {
                     // input apikey
                     vscode.window.showInputBox({
                         prompt: 'input apikey',
@@ -102,13 +102,13 @@ export function activate(context: vscode.ExtensionContext) {
                 let contestmessage: string;
                 let taskregexp: RegExp;
                 let taskmessage: string;
-                if (site == "atcoder") {
+                if (site === "atcoder") {
                     contestregexp = atcoder.contestregexp;
                     contestmessage = atcoder.contestmessage;
                     taskregexp = atcoder.taskregexp;
                     taskmessage = atcoder.taskmessage;
                 }
-                if (site == "yukicoder") {
+                if (site === "yukicoder") {
                     contestregexp = yukicoder.contestregexp;
                     contestmessage = yukicoder.contestmessage;
                     taskregexp = yukicoder.taskregexp;
@@ -139,7 +139,7 @@ export function activate(context: vscode.ExtensionContext) {
                         vscode.window.showQuickPick(actsextension.extensions, {
                             placeHolder: "SELECT EXTENSION",
                         }).then(extension => {
-                            if (extension == null) { return; }
+                            if (extension === null) { return; }
                             // exec command
                             actsextension.site = site;
                             actsextension.contest = contest;
@@ -175,7 +175,7 @@ export function activate(context: vscode.ExtensionContext) {
             vscode.window.showQuickPick(actsextension.extensions, {
                 placeHolder: "SELECT EXTENSION",
             }).then(extension => {
-                if (extension == null) { return; }
+                if (extension === null) { return; }
                 // exec command
                 actsextension.extension = extension;
                 actsextension.initTask()
@@ -254,7 +254,7 @@ export function activate(context: vscode.ExtensionContext) {
             vscode.window.showQuickPick(["REMOVE"], {
                 placeHolder: "PRESS ESC TO EXIT"
             }).then(confirm => {
-                if (confirm != "REMOVE") { return; }
+                if (confirm !== "REMOVE") { return; }
                 // exec command
                 actsextension.removeTask()
                     .catch((ex) => {
