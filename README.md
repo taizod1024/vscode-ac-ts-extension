@@ -6,8 +6,8 @@ Python/TypeScriptでの[AtCoder](https://atcoder.jp/?lang=ja)/[Yukicoder](https:
 
 Python/TypeScriptでのVisual Studio CodeからAtCoder/Yukicoderへの参加をサポートします。
 
-- AtCoderへのログイン
-- ソースコードの生成、テストデータのダウンロード
+- AtCoder/Yukicoderへのログイン
+- Python/TypeScriptのソースコードの生成、テストデータのダウンロード
 - 解答のテスト実行、デバッグ実行
 - 解答の提出
 - ブラウザでの問題ページの表示
@@ -29,17 +29,20 @@ Python/TypeScriptでのVisual Studio CodeからAtCoder/Yukicoderへの参加を�
 
 [AtCoder](https://atcoder.jp/?lang=ja) および [Yukicoder](https://yukicoder.me/) でユーザ登録します。Yukicoderの場合はプロフィール画面のAPIキーを確認しておいてください。
 
+### vscode
+
+vscodeの [拡張機能] から `AtCoder Extension` を検索してインストールします。
+
 ### Python
 
 [Python](https://www.python.org/) をインストールします。
 
 ### TypeScript
 
-1. [Node.js](https://nodejs.org/ja/) をインストールします。
-2. vscodeを実行します。
-   1. [拡張機能] から `AtCoder Extension` を検索してインストールします。
-   2. [ファイル] > [フォルダを開く] からフォルダを選択します。
-   3. [ターミナル] > [新しいターミナル] から以下のコマンドを実行します。入力を求められたらすべてEnterキーを押して進めてください。
+[Node.js](https://nodejs.org/ja/) をインストールしてからTypeScriptの初期設定をします。
+
+1. vscodeの [ファイル] > [フォルダを開く] からフォルダを選択します。
+2. [ターミナル] > [新しいターミナル] から以下のコマンドを実行します。入力を求められたらすべてEnterキーを押して進めてください。
      ```shell
      npm init
      npm install --save-dev typescript ts-node @types/node
@@ -63,7 +66,7 @@ Yukicoderの場合はプロフィール画面のAPIキーを入力します。
 
 まずはじめに `AtCoder Extension: Init Task` で問題名を入力して提出用のソースコードの生成と問題用のテストデータのダウンロードをします。
 
-- 最初にサイトを`atcoder`,`yukicoder`から選択します。
+- サイトを`atcoder`,`yukicoder`から選択します。
 - コンテスト名はAtCoderの場合は `abc190`の形式、Yukicoderの場合は`351`の形式で入力します。いずれもURLから確認してください。
 - 問題名はAtCoderの場合は `abc190_a` の形式、Yukicoderの場合は`1692`の形式で入力します。いずれもURLから確認してください。
 - 解答する言語は`.py`,`.ts`から選択します。
