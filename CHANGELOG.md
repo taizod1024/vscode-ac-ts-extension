@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.67](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.66...v0.0.67) (2021-10-14)
+
+
+### Bug Fixes
+
+* cheerio対応時のDOMアクセスのミスを修正 ([447de82](https://github.com/taizod1024/ac-ts-extension/commit/447de82d671571c98bade7437669539ac3a9bdbb))
+* loginSite()が失敗するのを修正 ([112c798](https://github.com/taizod1024/ac-ts-extension/commit/112c798e99c4beb5656aa82b70b10695d809f133))
+
 ### [0.0.66](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.65...v0.0.66) (2021-10-14)
 
 
