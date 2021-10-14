@@ -23,29 +23,34 @@ class Yukicoder implements Coder {
     taskmessage?: string;
 
     constructor() {
+
         this.contestregexp = /^[0-9]+$/;
         this.contestmessage = "input contestid from url [e.g.: 314, 315]";
         this.taskregexp = /^[0-9]+$/;
         this.taskmessage = "input problemno from url [e.g.: 1680, 1681]";
     }
 
-    async initProp() {
-        this.problemnourl = `https://yukicoder.me/problems/no/${actsextension.task}`;
-        this.api_problemnourl = `https://yukicoder.me/api/v1/problems/no/${actsextension.task}`;
+    async initProp(withtask: boolean) {
 
-        // problemno to problemid
-        this.problemid = await (async () => {
-            const agent = superagent.agent()
-                .set("accept", "application/json")
-                .set("Authorization", `Bearer ${this.apikey}`);
-            const res = await agent.get(this.api_problemnourl)
-                .proxy(actsextension.proxy)
-                .catch(res => { throw `ERROR: ${actsextension.responseToMessage(res)}`; });
-            return JSON.parse(res.text).ProblemId;
-        })();
-        this.api_problemidurl = `https://yukicoder.me/api/v1/problems/${this.problemid}`;
-        this.api_submiturl = `https://yukicoder.me/api/v1/problems/${this.problemid}/submit`;
-        this.submissionsurl = `https://yukicoder.me/problems/no/${actsextension.task}/submissions?status=&lang_id=&my_submission=enabled`;
+        if (withtask) {
+
+            this.problemnourl = `https://yukicoder.me/problems/no/${actsextension.task}`;
+            this.api_problemnourl = `https://yukicoder.me/api/v1/problems/no/${actsextension.task}`;
+
+            // problemno to problemid
+            this.problemid = await (async () => {
+                const agent = superagent.agent()
+                    .set("accept", "application/json")
+                    .set("Authorization", `Bearer ${this.apikey}`);
+                const res = await agent.get(this.api_problemnourl)
+                    .proxy(actsextension.proxy)
+                    .catch(res => { throw `ERROR: ${actsextension.responseToMessage(res)}`; });
+                return JSON.parse(res.text).ProblemId;
+            })();
+            this.api_problemidurl = `https://yukicoder.me/api/v1/problems/${this.problemid}`;
+            this.api_submiturl = `https://yukicoder.me/api/v1/problems/${this.problemid}/submit`;
+            this.submissionsurl = `https://yukicoder.me/problems/no/${actsextension.task}/submissions?status=&lang_id=&my_submission=enabled`;
+        }
     }
 
     checkLogin() {

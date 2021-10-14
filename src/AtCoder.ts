@@ -29,13 +29,17 @@ class AtCoder implements Coder {
         this.taskregexp = /^(.+)_(.+)$/;
         this.taskmessage = "input task [e.g.: abc190_a, abc190_b]";
         this.loginurl = "https://atcoder.jp/login?continue=https%3A%2F%2Fatcoder.jp%2F&lang=ja";
+
     }
 
-    initProp() {
+    initProp(withtask: boolean) {
 
-        this.taskurl = `https://atcoder.jp/contests/${actsextension.contest}/tasks/${actsextension.task}`;
-        this.submiturl = `https://atcoder.jp/contests/${actsextension.contest}/submit`;
-        this.submissionsurl = `https://atcoder.jp/contests/${actsextension.contest}/submissions/me`;
+        if (withtask) {
+            this.taskurl = `https://atcoder.jp/contests/${actsextension.contest}/tasks/${actsextension.task}`;
+            this.submiturl = `https://atcoder.jp/contests/${actsextension.contest}/submit`;
+            this.submissionsurl = `https://atcoder.jp/contests/${actsextension.contest}/submissions/me`;
+        }
+
     }
 
     checkLogin() {
@@ -43,6 +47,7 @@ class AtCoder implements Coder {
         if (!this.username || !this.password) {
             throw "ERROR: do login site";
         }
+
     }
 
     async loginSite() {
@@ -134,11 +139,9 @@ class AtCoder implements Coder {
         let idx = 1;
         while (true) {
             let m1 = response.text.match(new RegExp(`<h3>入力例 ${idx}<\/h3><pre>([^<]*)<\/pre>`));
-            if (m1 === null)
-                {break;}
+            if (m1 === null) { break; }
             let m2 = response.text.match(new RegExp(`<h3>出力例 ${idx}<\/h3><pre>([^<]*)<\/pre>`));
-            if (m2 === null)
-                {break;}
+            if (m2 === null) { break; }
             text += m1[1].trim() + actsextension.separator + m2[1].trim() + actsextension.separator;
             idx++;
         }
@@ -212,8 +215,8 @@ class AtCoder implements Coder {
     }
 
     getLanguageId(): number {
-        if(actsextension.isTypeScript()) {return 4057;}
-        if(actsextension.isPython()) {return 4006;}
+        if (actsextension.isTypeScript()) { return 4057; }
+        if (actsextension.isPython()) { return 4006; }
         return 0;
     }
 };
