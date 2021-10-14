@@ -10,7 +10,7 @@
     "Other"
   ],
   "publisher": "taizod1024",
-  "main": "./build/extension.js",
+  "main": "./build/main.js",
   "activationEvents": [
     "onCommand:ac-ts-extension.loginSite",
     "onCommand:ac-ts-extension.initTask",
@@ -58,31 +58,29 @@
     ]
   },
   "scripts": {
-    "[OLD]vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src --ext ts",
-    "test": "node ./build/test/runTest.js",
-    "release": "git switch main && git merge --no-ff develop && npx standard-version && vsce publish && git push --follow-tags origin main && git push origin develop && git switch develop",
     "vscode:prepublish": "npm run esbuild-base -- --minify",
-    "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=build/main.js --external:vscode --format=cjs --platform=node",
+    "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=build/main.js --format=cjs --platform=node --external:vscode --external:vm2",
     "esbuild": "npm run esbuild-base -- --sourcemap",
     "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
-    "test-compile": "tsc -p ./"
+    "test": "node ./build/test/runTest.js",
+    "release": "npm run release-step1 && npm run release-step2 && npm run release-step3",
+    "release-step1": "npm run clean && git switch main && git merge --no-ff develop",
+    "release-step2": "npx standard-version && vsce publish",
+    "release-step3": "git push --follow-tags origin main && git push origin develop && git switch develop",
+    "clean": "rmdir /q /s .\\build"
   },
   "author": "yamamoto.taizo <taizod1024@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "cheerio": "^1.0.0-rc.10",
     "superagent": "^6.1.0",
-    "superagent-proxy": "^3.0.0"
+    "superagent-proxy": "^3.0.0",
+    "vm2": "^3.9.4"
   },
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
     "@commitlint/config-conventional": "^13.1.0",
     "@types/glob": "^7.1.4",
-    "@types/jsdom": "^16.2.13",
     "@types/mocha": "^9.0.0",
     "@types/node": "^16.9.6",
     "@types/superagent": "^4.1.13",

@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 import * as fs from "fs";
 import superagent from "superagent";
 import child_process, { ExecFileSyncOptions } from "child_process";
-import { JSDOM } from "jsdom";
 import { Buffer } from 'buffer';
 import { atcoder } from './AtCoder';
 import { yukicoder } from './Yukicoder';
@@ -125,12 +124,12 @@ class AcTsExtension {
         this.timeout = 5000;
 
         // site specific
-        if (this.isAtcoder()) this.coder = atcoder;
-        if (this.isYukicoder()) this.coder = yukicoder;
+        if (this.isAtcoder()) { this.coder = atcoder; }
+        if (this.isYukicoder()) { this.coder = yukicoder; }
 
         // lang specific
-        if (this.isTypeScript()) this.lang = typescript;
-        if (this.isPython()) this.lang = python;
+        if (this.isTypeScript()) { this.lang = typescript; }
+        if (this.isPython()) { this.lang = python; }
 
         // check and init coder
         this.coder.checkLogin();
@@ -176,7 +175,7 @@ class AcTsExtension {
         }
 
         // create taskfile
-        if (!fs.existsSync(this.taskpath)) fs.mkdirSync(this.taskpath, { recursive: true });
+        if (!fs.existsSync(this.taskpath)) { fs.mkdirSync(this.taskpath, { recursive: true }); }
         if (fs.existsSync(this.taskfile)) {
             this.channel.appendLine(`[${this.timestamp()}] taskfile: "${this.taskfile}" exist`);
         } else {
@@ -190,13 +189,13 @@ class AcTsExtension {
         }
 
         // create testfile
-        if (!fs.existsSync(this.testpath)) fs.mkdirSync(this.testpath, { recursive: true });
+        if (!fs.existsSync(this.testpath)) { fs.mkdirSync(this.testpath, { recursive: true }); }
         if (fs.existsSync(this.testfile)) {
             this.channel.appendLine(`[${this.timestamp()}] testfile: "${this.testfile}" exist`);
         } else {
             fs.writeFileSync(this.testfile, text);
             this.channel.appendLine(`[${this.timestamp()}] testfile: "${this.testfile}" created`);
-            if (text == "") {
+            if (text === "") {
                 this.channel.appendLine(`[${this.timestamp()}] WARN: there is no test set`);
             }
         }
@@ -242,13 +241,12 @@ class AcTsExtension {
         }
 
         // make dir
-        if (!fs.existsSync(this.tmptestpath)) fs.mkdirSync(this.tmptestpath);
+        if (!fs.existsSync(this.tmptestpath)) { fs.mkdirSync(this.tmptestpath); }
 
         // read testfile
         const txt = fs.readFileSync(this.testfile).toString();
         const wrk = txt.split(this.separator.trim()).map(x => x.trim());
-        if (wrk[wrk.length - 1] == "")
-            wrk.pop();
+        if (wrk[wrk.length - 1] == "") { wrk.pop(); }
         const ios: any[] = [];
         while (0 < wrk.length) {
             ios.push({
@@ -499,13 +497,13 @@ class AcTsExtension {
     public isPython(): boolean {
         return this.extension == ".py";
     }
-    
+
     // message
     public responseToMessage(ex: any): string {
         let texts = [];
-        if (ex.status) texts.push(ex.status);
-        if (ex.message) texts.push(ex.message);
-        if (ex.response?.text) texts.push(ex.response.text);
+        if (ex.status) { texts.push(ex.status); }
+        if (ex.message) { texts.push(ex.message); }
+        if (ex.response?.text) { texts.push(ex.response.text); }
         let message = texts.join(" ");
         return message;
     }
