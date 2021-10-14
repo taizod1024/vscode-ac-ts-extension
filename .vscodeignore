@@ -3,5 +3,8 @@
 ### include
 !build/**
 !images/**
-!README.md
+!node_modules/**
 !template/**
+!CHANGELOG.md
+!LICENSE
+!README.md
