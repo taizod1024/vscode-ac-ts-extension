@@ -19,7 +19,7 @@ export interface Coder {
 
     // method
     checkLogin(): void;
-    initProp(): void;
+    initProp(withtask: boolean): void;
     loginSite(): void;
     getTest(): any;
     submitTask(): void;
@@ -100,7 +100,7 @@ class AcTsExtension {
         this.loadConfig();
     }
 
-    public async initProp() {
+    public async initProp(withtask: boolean) {
 
         // TODO settings
 
@@ -133,7 +133,7 @@ class AcTsExtension {
 
         // check and init coder
         this.coder.checkLogin();
-        await this.coder.initProp();
+        await this.coder.initProp(withtask);
 
         // check lang
         this.lang.checkLang();
@@ -144,12 +144,11 @@ class AcTsExtension {
 
     public async loginSite() {
 
-        // init command
-        await this.initProp();
-        this.saveConfig();
-
         // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
+
+        // init command
+        await this.initProp(false);
 
         // login site
         this.coder.loginSite();
@@ -157,14 +156,14 @@ class AcTsExtension {
 
     public async initTask() {
 
-        // init command
-        await this.initProp();
-
         // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
         this.channel.appendLine(`[${this.timestamp()}] contest: ${this.contest}`);
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
         this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
+
+        // init command
+        await this.initProp(true);
 
         // check testfile not exits
         let text;
@@ -212,15 +211,15 @@ class AcTsExtension {
 
     public async testTask(debug: boolean): Promise<void> {
 
-        // init command
-        await this.initProp();
-
         // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
         this.channel.appendLine(`[${this.timestamp()}] contest: ${this.contest}`);
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
         this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
         this.channel.appendLine(`[${this.timestamp()}] debug: ${debug}`);
+
+        // init command
+        await this.initProp(true);
 
         // check taskfile
         this.channel.appendLine(`[${this.timestamp()}] taskfile: "${this.taskfile}"`);
@@ -378,14 +377,14 @@ class AcTsExtension {
 
     public async submitTask() {
 
-        //  init command
-        await this.initProp();
-
         // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
         this.channel.appendLine(`[${this.timestamp()}] contest: ${this.contest}`);
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
         this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
+
+        //  init command
+        await this.initProp(true);
 
         // check taskfile
         this.channel.appendLine(`[${this.timestamp()}] taskfile: "${this.taskfile}"`);
@@ -399,14 +398,14 @@ class AcTsExtension {
 
     public async removeTask() {
 
-        // init command
-        await this.initProp();
-
         // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
         this.channel.appendLine(`[${this.timestamp()}] contest: ${this.contest}`);
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
         this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
+
+        // init command
+        await this.initProp(true);
 
         // Remove Taskfile
         if (!fs.existsSync(this.taskfile)) {
@@ -429,14 +428,14 @@ class AcTsExtension {
 
     public async browseTask() {
 
-        // init command
-        await this.initProp();
-
         // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
         this.channel.appendLine(`[${this.timestamp()}] contest: ${this.contest}`);
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
         this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
+
+        // init command
+        await this.initProp(true);
 
         // open task
         this.coder.browseTask();
