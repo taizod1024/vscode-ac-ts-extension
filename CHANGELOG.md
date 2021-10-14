@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.63](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.62...v0.0.63) (2021-10-14)
+
+
+### Bug Fixes
+
+* jsdomからcheerioに変更 ([ca89446](https://github.com/taizod1024/ac-ts-extension/commit/ca894463e8ec7e451da4dd0ee52b567bdc692407))
+
 ### [0.0.62](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.61...v0.0.62) (2021-10-14)
 
 
