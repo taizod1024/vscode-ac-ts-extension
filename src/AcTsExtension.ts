@@ -247,7 +247,7 @@ class AcTsExtension {
         // read testfile
         const txt = fs.readFileSync(this.testfile).toString();
         const wrk = txt.split(this.separator.trim()).map(x => x.trim());
-        if (wrk[wrk.length - 1] == "") { wrk.pop(); }
+        if (wrk[wrk.length - 1] === "") { wrk.pop(); }
         const ios: any[] = [];
         while (0 < wrk.length) {
             ios.push({
@@ -346,7 +346,7 @@ class AcTsExtension {
                                 }
                                 // check output
                                 that.channel.appendLine(`[${that.timestamp()}] - answer="${out}"`);
-                                if (out == io.out) {
+                                if (out === io.out) {
                                     that.channel.appendLine(`[${that.timestamp()}] -> OK`);
                                     ok++;
                                 } else {
