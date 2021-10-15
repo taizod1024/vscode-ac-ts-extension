@@ -63,7 +63,6 @@ class Yukicoder implements Coder {
 
         // show channel
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] yukicoder.apikey: ********`);
-        actsextension.channel.appendLine(`---- SUCCESS: apikey set ----`);
     }
 
     async getTest() {
@@ -136,7 +135,6 @@ class Yukicoder implements Coder {
             .catch(res => { throw `ERROR: ${actsextension.responseToMessage(res)}`; });
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] -> ${res3.status}`);
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] submissionsurl: ${this.submissionsurl}`);
-        actsextension.channel.appendLine(`---- SUCCESS: ${actsextension.task} submitted ----`);
     }
 
     browseTask() {

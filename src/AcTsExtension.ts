@@ -152,6 +152,8 @@ class AcTsExtension {
 
         // login site
         this.coder.loginSite();
+
+        actsextension.channel.appendLine(`---- SUCCESS: ${this.site} done ----`);
     }
 
     public async initTask() {
@@ -394,6 +396,8 @@ class AcTsExtension {
 
         // submit task
         await this.coder.submitTask();
+
+        actsextension.channel.appendLine(`---- SUCCESS: ${actsextension.task} submitted ----`);
     }
 
     public async removeTask() {

@@ -86,8 +86,6 @@ class AtCoder implements Coder {
         if (res2.text.indexOf(`ようこそ、${this.username} さん。`) < 0) {
             throw `ERROR: atcoder login failed, userame="${this.username}", password="********"`;
         }
-
-        actsextension.channel.appendLine(`---- SUCCESS: ${this.username} logged in ----`);
     }
 
     async getTest() {
@@ -205,8 +203,6 @@ class AtCoder implements Coder {
             .catch(res => { throw `ERROR: ${actsextension.responseToMessage(res)}`; });
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] -> ${res3.status}`);
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] submissionsurl: ${this.submissionsurl}`);
-        actsextension.channel.appendLine(`---- SUCCESS: ${actsextension.task} submitted ----`);
-
     }
 
     browseTask() {
