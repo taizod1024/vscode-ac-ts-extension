@@ -215,5 +215,16 @@ class AtCoder implements Coder {
         if (actsextension.isPython()) { return 4006; }
         return 0;
     }
+
+    loadConfig(json: any) {
+        atcoder.username = json.atcoder?.username || "";
+        atcoder.password = json.atcoder?.encpassword ? Buffer.from(json.atcoder?.encpassword, "base64").toString() : "";
+    }
+
+    saveConfig(json: any) {
+        json.atcoder = {};
+        json.atcoder.username = atcoder.username;
+        json.atcoder.encpassword = Buffer.from(atcoder.password).toString("base64");
+    }
 };
 export const atcoder = new AtCoder();

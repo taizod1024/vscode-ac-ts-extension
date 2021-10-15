@@ -68,7 +68,7 @@ class Yukicoder implements Coder {
     async getTest() {
 
         // show channel
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] yukicoder.problemnourll: ${this.problemnourl}`);
+        actsextension.channel.appendLine(`[${actsextension.timestamp()}] yukicoder.problemnourl: ${this.problemnourl}`);
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] yukicoder.apikey: ********`);
 
         // get agent
@@ -116,7 +116,7 @@ class Yukicoder implements Coder {
     async submitTask() {
 
         // show channel
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] yukicoder.problemnourll: ${this.problemnourl}`);
+        actsextension.channel.appendLine(`[${actsextension.timestamp()}] yukicoder.problemnourl: ${this.problemnourl}`);
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] yukicoder.apikey: ********`);
 
         // get agent
@@ -146,6 +146,15 @@ class Yukicoder implements Coder {
         if (actsextension.isTypeScript()) { return "typescript"; }
         if (actsextension.isPython()) { return "python3"; }
         return "";
+    }
+
+    loadConfig(json: any) {
+        yukicoder.apikey = json.yukicoder?.encapikey ? Buffer.from(json.yukicoder?.encapikey, "base64").toString() : "";
+    }
+
+    saveConfig(json: any) {
+        json.yukicoder = {};
+        json.yukicoder.encapikey = Buffer.from(yukicoder.apikey).toString("base64");
     }
 };
 export const yukicoder = new Yukicoder();

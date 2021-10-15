@@ -24,6 +24,8 @@ export interface Coder {
     getTest(): any;
     submitTask(): void;
     browseTask(): void;
+    loadConfig(json: any): void;
+    saveConfig(json: any): void;
 };
 
 // python / typescript
@@ -449,39 +451,30 @@ class AcTsExtension {
 
     // config
     public loadConfig() {
-        if (fs.existsSync(this.configfile)) {
-            const json = JSON.parse(fs.readFileSync(this.configfile).toString());
-            this.site = json.site || "";
-            this.contest = json.contest || "";
-            this.task = json.task || "";
-            this.extension = json.extension;
-            atcoder.username = json.atcoder?.username || "";
-            atcoder.password = json.atcoder?.encpassword ? Buffer.from(json.atcoder?.encpassword, "base64").toString() : "";
-            yukicoder.apikey = json.yukicoder?.encapikey ? Buffer.from(json.yukicoder?.encapikey, "base64").toString() : "";
-        } else {
-            this.site = "";
-            this.contest = "";
-            this.task = "";
-            this.extension = "";
-            atcoder.username = "";
-            atcoder.password = "";
-            yukicoder.apikey = "";
-        }
+        const json = (fs.existsSync(this.configfile))
+            ? JSON.parse(fs.readFileSync(this.configfile).toString())
+            : {
+                site: "",
+                contest: "",
+                task: "",
+                extension: ""
+            };
+        this.site = json.site || "";
+        this.contest = json.contest || "";
+        this.task = json.task || "";
+        this.extension = json.extension;
+        atcoder.loadConfig(json);
+        yukicoder.loadConfig(json);
     }
     public saveConfig() {
         const app = {
             site: this.site,
             contest: this.contest,
             task: this.task,
-            extension: this.extension,
-            atcoder: {
-                username: atcoder.username,
-                encpassword: Buffer.from(atcoder.password).toString("base64"),
-            },
-            yukicoder: {
-                encapikey: Buffer.from(yukicoder.apikey).toString("base64"),
-            }
+            extension: this.extension
         };
+        atcoder.saveConfig(app);
+        yukicoder.saveConfig(app);
         fs.writeFileSync(this.configfile, JSON.stringify(app));
     }
 
