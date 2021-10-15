@@ -4,7 +4,7 @@ import superagent from "superagent";
 import * as cheerio from "cheerio";
 import { actsextension, Coder } from './AcTsExtension';
 import { typescript } from './TypeScript';
-import { python } from './python';
+import { python } from './Python';
 
 class AtCoder implements Coder {
 

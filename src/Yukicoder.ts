@@ -3,7 +3,7 @@ import * as fs from "fs";
 import superagent from "superagent";
 import { actsextension, Coder } from './AcTsExtension';
 import { typescript } from './TypeScript';
-import { python } from './python';
+import { python } from './Python';
 
 class Yukicoder implements Coder {
 
