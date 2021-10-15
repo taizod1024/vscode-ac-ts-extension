@@ -6,6 +6,12 @@ import { actsextension, Lang } from './AcTsExtension';
 class Python implements Lang {
 
     // implements
+
+    // prop
+    name = "python";
+    extension = ".py";
+
+    // method
     checkLang(): void {
 
         // throw if non-zero returned
@@ -17,6 +23,10 @@ class Python implements Lang {
         catch (ex) {
             throw `ERROR: cannot run "${command}"`;
         }
+    }
+
+    isLang():boolean {
+        return actsextension.extension === ".py";
     }
 
     testLang(debug: boolean): any {

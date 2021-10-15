@@ -3,6 +3,8 @@ import * as fs from "fs";
 import superagent from "superagent";
 import * as cheerio from "cheerio";
 import { actsextension, Coder } from './AcTsExtension';
+import { typescript } from './TypeScript';
+import { python } from './python';
 
 class AtCoder implements Coder {
 
@@ -17,11 +19,15 @@ class AtCoder implements Coder {
     submissionsurl: string;
 
     // implements
+
+    // prop
+    name = "atcoder";
     contestregexp: RegExp;
     contestmessage: string;
     taskregexp: RegExp;
     taskmessage?: string;
 
+    // method
     constructor() {
 
         this.contestregexp = /^(.+)$/;
@@ -40,6 +46,10 @@ class AtCoder implements Coder {
             this.submissionsurl = `https://atcoder.jp/contests/${actsextension.contest}/submissions/me`;
         }
 
+    }
+
+    isCoder():boolean {
+        return actsextension.site === "atcoder";
     }
 
     checkLogin() {
@@ -211,8 +221,8 @@ class AtCoder implements Coder {
     }
 
     getLanguageId(): number {
-        if (actsextension.isTypeScript()) { return 4057; }
-        if (actsextension.isPython()) { return 4006; }
+        if (typescript.isLang()) { return 4057; }
+        if (python.isLang()) { return 4006; }
         return 0;
     }
 
