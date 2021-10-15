@@ -12,24 +12,33 @@ import { python } from './Python';
 export interface Coder {
 
     // prop
+    name: string;
     contestregexp: RegExp;
     contestmessage: string;
     taskregexp: RegExp;
     taskmessage?: string;
 
     // method
+    isCoder(): boolean;
     checkLogin(): void;
     initProp(withtask: boolean): void;
     loginSite(): void;
     getTest(): any;
     submitTask(): void;
     browseTask(): void;
+    loadConfig(json: any): void;
+    saveConfig(json: any): void;
 };
 
 // python / typescript
 export interface Lang {
 
+    // prop
+    name: string;
+    extension: string;
+
     // method
+    isLang(): boolean;
     checkLang(): void;
     testLang(debug: boolean): any;
 };
@@ -41,8 +50,6 @@ class AcTsExtension {
     public appname: string;
     public appid: string;
     public configfile: string;
-    public sites: string[];
-    public extensions: string[];
 
     // context
     public vscodeextensionpath: string;
@@ -57,8 +64,12 @@ class AcTsExtension {
     public extension: string;
 
     // prop
+    public coders: Coder[];
     public coder: Coder;
+    public langs: Lang[];
     public lang: Lang;
+    public sites: string[];
+    public extensions: string[];
     public tasktmplfile: string;
     public usertasktmplfile: string;
     public taskpath: string;
@@ -85,11 +96,13 @@ class AcTsExtension {
         this.appid = "ac-ts-extension";
         this.configfile = `${process.env.USERPROFILE}\\.${this.appid}.json`;
 
-        // site specific
-        this.sites = ["atcoder", "yukicoder"];
+        // coders and sites
+        this.coders = [atcoder, yukicoder];
+        this.sites = this.coders.map(val => val.name);;
 
-        // lang specific
-        this.extensions = [".ts", ".py"];
+        // langs and extensions
+        this.langs = [typescript, python];
+        this.extensions = this.langs.map(val => val.extension);
 
         // init context
         this.channel = vscode.window.createOutputChannel(this.appname);
@@ -124,12 +137,8 @@ class AcTsExtension {
         this.timeout = 5000;
 
         // site specific
-        if (this.isAtcoder()) { this.coder = atcoder; }
-        if (this.isYukicoder()) { this.coder = yukicoder; }
-
-        // lang specific
-        if (this.isTypeScript()) { this.lang = typescript; }
-        if (this.isPython()) { this.lang = python; }
+        this.coder = this.coders.find(val => val.isCoder());
+        this.lang = this.langs.find(val => val.isLang());
 
         // check and init coder
         this.coder.checkLogin();
@@ -151,7 +160,9 @@ class AcTsExtension {
         await this.initProp(false);
 
         // login site
-        this.coder.loginSite();
+        await this.coder.loginSite();
+
+        actsextension.channel.appendLine(`---- SUCCESS: ${this.site} done ----`);
     }
 
     public async initTask() {
@@ -245,7 +256,7 @@ class AcTsExtension {
         // read testfile
         const txt = fs.readFileSync(this.testfile).toString();
         const wrk = txt.split(this.separator.trim()).map(x => x.trim());
-        if (wrk[wrk.length - 1] == "") { wrk.pop(); }
+        if (wrk[wrk.length - 1] === "") { wrk.pop(); }
         const ios: any[] = [];
         while (0 < wrk.length) {
             ios.push({
@@ -344,7 +355,7 @@ class AcTsExtension {
                                 }
                                 // check output
                                 that.channel.appendLine(`[${that.timestamp()}] - answer="${out}"`);
-                                if (out == io.out) {
+                                if (out === io.out) {
                                     that.channel.appendLine(`[${that.timestamp()}] -> OK`);
                                     ok++;
                                 } else {
@@ -394,6 +405,8 @@ class AcTsExtension {
 
         // submit task
         await this.coder.submitTask();
+
+        actsextension.channel.appendLine(`---- SUCCESS: ${actsextension.task} submitted ----`);
     }
 
     public async removeTask() {
@@ -445,56 +458,29 @@ class AcTsExtension {
 
     // config
     public loadConfig() {
-        if (fs.existsSync(this.configfile)) {
-            const json = JSON.parse(fs.readFileSync(this.configfile).toString());
-            this.site = json.site || "";
-            this.contest = json.contest || "";
-            this.task = json.task || "";
-            this.extension = json.extension;
-            atcoder.username = json.atcoder?.username || "";
-            atcoder.password = json.atcoder?.encpassword ? Buffer.from(json.atcoder?.encpassword, "base64").toString() : "";
-            yukicoder.apikey = json.yukicoder?.encapikey ? Buffer.from(json.yukicoder?.encapikey, "base64").toString() : "";
-        } else {
-            this.site = "";
-            this.contest = "";
-            this.task = "";
-            this.extension = "";
-            atcoder.username = "";
-            atcoder.password = "";
-            yukicoder.apikey = "";
-        }
+        const json = (fs.existsSync(this.configfile))
+            ? JSON.parse(fs.readFileSync(this.configfile).toString())
+            : {
+                site: "",
+                contest: "",
+                task: "",
+                extension: ""
+            };
+        this.site = json.site || "";
+        this.contest = json.contest || "";
+        this.task = json.task || "";
+        this.extension = json.extension;
+        this.coders.forEach(val => val.loadConfig(json));
     }
     public saveConfig() {
-        const app = {
+        const json = {
             site: this.site,
             contest: this.contest,
             task: this.task,
-            extension: this.extension,
-            atcoder: {
-                username: atcoder.username,
-                encpassword: Buffer.from(atcoder.password).toString("base64"),
-            },
-            yukicoder: {
-                encapikey: Buffer.from(yukicoder.apikey).toString("base64"),
-            }
+            extension: this.extension
         };
-        fs.writeFileSync(this.configfile, JSON.stringify(app));
-    }
-
-    // site specific
-    public isAtcoder(): boolean {
-        return this.site === "atcoder";
-    }
-    public isYukicoder(): boolean {
-        return this.site === "yukicoder";
-    }
-
-    // lang specific
-    public isTypeScript(): boolean {
-        return this.extension === ".ts";
-    }
-    public isPython(): boolean {
-        return this.extension === ".py";
+        this.coders.forEach(val => val.saveConfig(json));
+        fs.writeFileSync(this.configfile, JSON.stringify(json));
     }
 
     // message

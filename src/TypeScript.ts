@@ -5,10 +5,21 @@ import { actsextension, Lang } from './AcTsExtension';
 
 class TypeScript implements Lang {
 
+    // implemente
+
+    // prop
+    name = "typescript";
+    extension = ".ts";
+    
+    // method
     checkLang(): void {
         if (!fs.existsSync(actsextension.packagejsonfile) || !fs.existsSync(actsextension.packagelockjsonfile)) {
             throw `ERROR: missing package.json or package-lock.json, install node.js, run "npm init && npm install --save-dev typescript ts-node @types/node"`;
         }
+    }
+
+    isLang():boolean {
+        return actsextension.extension === ".ts";
     }
 
     testLang(debug: boolean): any {

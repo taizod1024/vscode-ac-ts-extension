@@ -2,6 +2,8 @@ import * as vscode from 'vscode';
 import * as fs from "fs";
 import superagent from "superagent";
 import { actsextension, Coder } from './AcTsExtension';
+import { typescript } from './TypeScript';
+import { python } from './python';
 
 class Yukicoder implements Coder {
 
@@ -17,17 +19,25 @@ class Yukicoder implements Coder {
     submissionsurl: string;
 
     // implements
+
+    // prop
+    name = "yukicoder";
     contestregexp: RegExp;
     contestmessage: string;
     taskregexp: RegExp;
     taskmessage?: string;
 
+    // method
     constructor() {
 
         this.contestregexp = /^[0-9]+$/;
         this.contestmessage = "input contestid from url [e.g.: 314, 315]";
         this.taskregexp = /^[0-9]+$/;
         this.taskmessage = "input problemno from url [e.g.: 1680, 1681]";
+    }
+
+    isCoder():boolean {
+        return actsextension.site === "yukicoder";
     }
 
     async initProp(withtask: boolean) {
@@ -63,13 +73,12 @@ class Yukicoder implements Coder {
 
         // show channel
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] yukicoder.apikey: ********`);
-        actsextension.channel.appendLine(`---- SUCCESS: apikey set ----`);
     }
 
     async getTest() {
 
         // show channel
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] yukicoder.problemnourll: ${this.problemnourl}`);
+        actsextension.channel.appendLine(`[${actsextension.timestamp()}] yukicoder.problemnourl: ${this.problemnourl}`);
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] yukicoder.apikey: ********`);
 
         // get agent
@@ -117,7 +126,7 @@ class Yukicoder implements Coder {
     async submitTask() {
 
         // show channel
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] yukicoder.problemnourll: ${this.problemnourl}`);
+        actsextension.channel.appendLine(`[${actsextension.timestamp()}] yukicoder.problemnourl: ${this.problemnourl}`);
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] yukicoder.apikey: ********`);
 
         // get agent
@@ -136,7 +145,6 @@ class Yukicoder implements Coder {
             .catch(res => { throw `ERROR: ${actsextension.responseToMessage(res)}`; });
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] -> ${res3.status}`);
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] submissionsurl: ${this.submissionsurl}`);
-        actsextension.channel.appendLine(`---- SUCCESS: ${actsextension.task} submitted ----`);
     }
 
     browseTask() {
@@ -145,9 +153,18 @@ class Yukicoder implements Coder {
     }
 
     getLanguage(): string {
-        if (actsextension.isTypeScript()) { return "typescript"; }
-        if (actsextension.isPython()) { return "python3"; }
+        if (typescript.isLang()) { return "typescript"; }
+        if (python.isLang()) { return "python3"; }
         return "";
+    }
+
+    loadConfig(json: any) {
+        yukicoder.apikey = json.yukicoder?.encapikey ? Buffer.from(json.yukicoder?.encapikey, "base64").toString() : "";
+    }
+
+    saveConfig(json: any) {
+        json.yukicoder = {};
+        json.yukicoder.encapikey = Buffer.from(yukicoder.apikey).toString("base64");
     }
 };
 export const yukicoder = new Yukicoder();

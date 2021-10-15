@@ -3,6 +3,8 @@ import * as fs from "fs";
 import superagent from "superagent";
 import * as cheerio from "cheerio";
 import { actsextension, Coder } from './AcTsExtension';
+import { typescript } from './TypeScript';
+import { python } from './python';
 
 class AtCoder implements Coder {
 
@@ -17,11 +19,15 @@ class AtCoder implements Coder {
     submissionsurl: string;
 
     // implements
+
+    // prop
+    name = "atcoder";
     contestregexp: RegExp;
     contestmessage: string;
     taskregexp: RegExp;
     taskmessage?: string;
 
+    // method
     constructor() {
 
         this.contestregexp = /^(.+)$/;
@@ -40,6 +46,10 @@ class AtCoder implements Coder {
             this.submissionsurl = `https://atcoder.jp/contests/${actsextension.contest}/submissions/me`;
         }
 
+    }
+
+    isCoder():boolean {
+        return actsextension.site === "atcoder";
     }
 
     checkLogin() {
@@ -86,8 +96,6 @@ class AtCoder implements Coder {
         if (res2.text.indexOf(`ようこそ、${this.username} さん。`) < 0) {
             throw `ERROR: atcoder login failed, userame="${this.username}", password="********"`;
         }
-
-        actsextension.channel.appendLine(`---- SUCCESS: ${this.username} logged in ----`);
     }
 
     async getTest() {
@@ -205,8 +213,6 @@ class AtCoder implements Coder {
             .catch(res => { throw `ERROR: ${actsextension.responseToMessage(res)}`; });
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] -> ${res3.status}`);
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] submissionsurl: ${this.submissionsurl}`);
-        actsextension.channel.appendLine(`---- SUCCESS: ${actsextension.task} submitted ----`);
-
     }
 
     browseTask() {
@@ -215,9 +221,20 @@ class AtCoder implements Coder {
     }
 
     getLanguageId(): number {
-        if (actsextension.isTypeScript()) { return 4057; }
-        if (actsextension.isPython()) { return 4006; }
+        if (typescript.isLang()) { return 4057; }
+        if (python.isLang()) { return 4006; }
         return 0;
+    }
+
+    loadConfig(json: any) {
+        atcoder.username = json.atcoder?.username || "";
+        atcoder.password = json.atcoder?.encpassword ? Buffer.from(json.atcoder?.encpassword, "base64").toString() : "";
+    }
+
+    saveConfig(json: any) {
+        json.atcoder = {};
+        json.atcoder.username = atcoder.username;
+        json.atcoder.encpassword = Buffer.from(atcoder.password).toString("base64");
     }
 };
 export const atcoder = new AtCoder();
