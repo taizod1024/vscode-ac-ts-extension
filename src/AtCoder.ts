@@ -38,7 +38,7 @@ class AtCoder implements Coder {
 
     }
 
-    initProp(withtask: boolean) {
+    initPropAsync(withtask: boolean) {
 
         if (withtask) {
             this.taskurl = `https://atcoder.jp/contests/${actsextension.contest}/tasks/${actsextension.task}`;
@@ -48,7 +48,7 @@ class AtCoder implements Coder {
 
     }
 
-    isCoder():boolean {
+    isSelected():boolean {
         return actsextension.site === "atcoder";
     }
 
@@ -60,7 +60,7 @@ class AtCoder implements Coder {
 
     }
 
-    async loginSite() {
+    async loginSiteAsync() {
 
         // show channel
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] atcoder.loginurl: ${this.loginurl}`);
@@ -98,7 +98,7 @@ class AtCoder implements Coder {
         }
     }
 
-    async getTest() {
+    async getTestAsync() {
 
         // show channel
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] atcoder.taskurl: ${this.taskurl}`);
@@ -160,7 +160,7 @@ class AtCoder implements Coder {
         return text;
     }
 
-    async submitTask() {
+    async submitTaskAsync() {
 
         // show channel
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] atcoder.taskurl: ${this.taskurl}`);
@@ -221,8 +221,8 @@ class AtCoder implements Coder {
     }
 
     getLanguageId(): number {
-        if (typescript.isLang()) { return 4057; }
-        if (python.isLang()) { return 4006; }
+        if (typescript.isSelected()) { return 4057; }
+        if (python.isSelected()) { return 4006; }
         return 0;
     }
 
