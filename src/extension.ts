@@ -50,7 +50,7 @@ export function activate(context: vscode.ExtensionContext) {
                             actsextension.site = site;
                             atcoder.username = username;
                             atcoder.password = password;
-                            actsextension.loginSite()
+                            actsextension.loginSiteAsync()
                                 .catch((ex) => {
                                     actsextension.channel.appendLine("**** " + ex + " ****");
                                 });
@@ -70,7 +70,7 @@ export function activate(context: vscode.ExtensionContext) {
                         // exec command
                         actsextension.site = site;
                         yukicoder.apikey = apikey;
-                        actsextension.loginSite()
+                        actsextension.loginSiteAsync()
                             .catch((ex) => {
                                 actsextension.channel.appendLine("**** " + ex + " ****");
                             });
@@ -147,7 +147,7 @@ export function activate(context: vscode.ExtensionContext) {
                             actsextension.contest = contest;
                             actsextension.task = task;
                             actsextension.extension = extension;
-                            actsextension.initTask()
+                            actsextension.initTaskAsync()
                                 .catch((ex) => {
                                     actsextension.channel.appendLine("**** " + ex + " ****");
                                 });
@@ -180,7 +180,7 @@ export function activate(context: vscode.ExtensionContext) {
                 if (extension === null) { return; }
                 // exec command
                 actsextension.extension = extension;
-                actsextension.initTask()
+                actsextension.initTaskAsync()
                     .catch((ex) => {
                         actsextension.channel.appendLine("**** " + ex + " ****");
                     });
@@ -199,7 +199,7 @@ export function activate(context: vscode.ExtensionContext) {
             if (!actshelper.checkProjectPath()) { return; }
             if (!actshelper.checkActiveFile()) { return; }
             // exec command
-            actsextension.testTask(false)
+            actsextension.testTaskAsync(false)
                 .catch((ex) => {
                     actsextension.channel.appendLine("**** " + ex + " ****");
                 });
@@ -217,7 +217,7 @@ export function activate(context: vscode.ExtensionContext) {
             if (!actshelper.checkProjectPath()) { return; }
             if (!actshelper.checkActiveFile()) { return; }
             // exec command
-            actsextension.testTask(true)
+            actsextension.testTaskAsync(true)
                 .catch((ex) => {
                     actsextension.channel.appendLine("**** " + ex + " ****");
                 });
@@ -235,7 +235,7 @@ export function activate(context: vscode.ExtensionContext) {
             if (!actshelper.checkProjectPath()) { return; }
             if (!actshelper.checkActiveFile()) { return; }
             // exec command
-            actsextension.submitTask()
+            actsextension.submitTaskAsync()
                 .catch((ex) => {
                     actsextension.channel.appendLine("**** " + ex + " ****");
                 });
@@ -258,7 +258,7 @@ export function activate(context: vscode.ExtensionContext) {
             }).then(confirm => {
                 if (confirm !== "REMOVE") { return; }
                 // exec command
-                actsextension.removeTask()
+                actsextension.removeTaskAsync()
                     .catch((ex) => {
                         actsextension.channel.appendLine("**** " + ex + " ****");
                     });
@@ -277,7 +277,7 @@ export function activate(context: vscode.ExtensionContext) {
             if (!actshelper.checkProjectPath()) { return; }
             if (!actshelper.checkActiveFile()) { return; }
             // exec command
-            actsextension.browseTask()
+            actsextension.browseTaskAsync()
                 .catch((ex) => {
                     actsextension.channel.appendLine("**** " + ex + " ****");
                 });

@@ -18,7 +18,7 @@ class TypeScript implements Lang {
         }
     }
 
-    isLang():boolean {
+    isSelected():boolean {
         return actsextension.extension === ".ts";
     }
 

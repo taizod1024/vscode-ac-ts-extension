@@ -3,7 +3,7 @@ import * as fs from "fs";
 import superagent from "superagent";
 import { actsextension, Coder } from './AcTsExtension';
 import { typescript } from './TypeScript';
-import { python } from './python';
+import { python } from './Python';
 
 class Yukicoder implements Coder {
 
@@ -36,11 +36,11 @@ class Yukicoder implements Coder {
         this.taskmessage = "input problemno from url [e.g.: 1680, 1681]";
     }
 
-    isCoder():boolean {
+    isSelected():boolean {
         return actsextension.site === "yukicoder";
     }
 
-    async initProp(withtask: boolean) {
+    async initPropAsync(withtask: boolean) {
 
         if (withtask) {
 
@@ -69,13 +69,13 @@ class Yukicoder implements Coder {
         }
     }
 
-    async loginSite() {
+    async loginSiteAsync() {
 
         // show channel
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] yukicoder.apikey: ********`);
     }
 
-    async getTest() {
+    async getTestAsync() {
 
         // show channel
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] yukicoder.problemnourl: ${this.problemnourl}`);
@@ -123,7 +123,7 @@ class Yukicoder implements Coder {
         return text;
     }
 
-    async submitTask() {
+    async submitTaskAsync() {
 
         // show channel
         actsextension.channel.appendLine(`[${actsextension.timestamp()}] yukicoder.problemnourl: ${this.problemnourl}`);
@@ -153,8 +153,8 @@ class Yukicoder implements Coder {
     }
 
     getLanguage(): string {
-        if (typescript.isLang()) { return "typescript"; }
-        if (python.isLang()) { return "python3"; }
+        if (typescript.isSelected()) { return "typescript"; }
+        if (python.isSelected()) { return "python3"; }
         return "";
     }
 

@@ -19,12 +19,12 @@ export interface Coder {
     taskmessage?: string;
 
     // method
-    isCoder(): boolean;
+    isSelected(): boolean;
     checkLogin(): void;
-    initProp(withtask: boolean): void;
-    loginSite(): void;
-    getTest(): any;
-    submitTask(): void;
+    initPropAsync(withtask: boolean): void;
+    loginSiteAsync(): void;
+    getTestAsync(): any;
+    submitTaskAsync(): void;
     browseTask(): void;
     loadConfig(json: any): void;
     saveConfig(json: any): void;
@@ -38,7 +38,7 @@ export interface Lang {
     extension: string;
 
     // method
-    isLang(): boolean;
+    isSelected(): boolean;
     checkLang(): void;
     testLang(debug: boolean): any;
 };
@@ -96,12 +96,12 @@ class AcTsExtension {
         this.appid = "ac-ts-extension";
         this.configfile = `${process.env.USERPROFILE}\\.${this.appid}.json`;
 
-        // coders and sites
+        // coders and langs
         this.coders = [atcoder, yukicoder];
-        this.sites = this.coders.map(val => val.name);;
-
-        // langs and extensions
         this.langs = [typescript, python];
+        
+        // sites and extensions
+        this.sites = this.coders.map(val => val.name);
         this.extensions = this.langs.map(val => val.extension);
 
         // init context
@@ -113,7 +113,7 @@ class AcTsExtension {
         this.loadConfig();
     }
 
-    public async initProp(withtask: boolean) {
+    public async initPropAsync(withtask: boolean) {
 
         // TODO settings
 
@@ -137,12 +137,12 @@ class AcTsExtension {
         this.timeout = 5000;
 
         // site specific
-        this.coder = this.coders.find(val => val.isCoder());
-        this.lang = this.langs.find(val => val.isLang());
+        this.coder = this.coders.find(val => val.isSelected());
+        this.lang = this.langs.find(val => val.isSelected());
 
         // check and init coder
         this.coder.checkLogin();
-        await this.coder.initProp(withtask);
+        await this.coder.initPropAsync(withtask);
 
         // check lang
         this.lang.checkLang();
@@ -151,21 +151,21 @@ class AcTsExtension {
         this.saveConfig();
     }
 
-    public async loginSite() {
+    public async loginSiteAsync() {
 
         // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
 
         // init command
-        await this.initProp(false);
+        await this.initPropAsync(false);
 
         // login site
-        await this.coder.loginSite();
+        await this.coder.loginSiteAsync();
 
         actsextension.channel.appendLine(`---- SUCCESS: ${this.site} done ----`);
     }
 
-    public async initTask() {
+    public async initTaskAsync() {
 
         // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
@@ -174,14 +174,14 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
 
         // init command
-        await this.initProp(true);
+        await this.initPropAsync(true);
 
         // check testfile not exits
         let text;
         if (!fs.existsSync(this.testfile)) {
 
             // get testtext
-            text = await this.coder.getTest();
+            text = await this.coder.getTestAsync();
         }
 
         // create taskfile
@@ -220,7 +220,7 @@ class AcTsExtension {
         this.channel.appendLine(`---- SUCCESS: ${this.task} initialized ----`);
     }
 
-    public async testTask(debug: boolean): Promise<void> {
+    public async testTaskAsync(debug: boolean): Promise<void> {
 
         // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
@@ -230,7 +230,7 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] debug: ${debug}`);
 
         // init command
-        await this.initProp(true);
+        await this.initPropAsync(true);
 
         // check taskfile
         this.channel.appendLine(`[${this.timestamp()}] taskfile: "${this.taskfile}"`);
@@ -386,7 +386,7 @@ class AcTsExtension {
         });
     }
 
-    public async submitTask() {
+    public async submitTaskAsync() {
 
         // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
@@ -395,7 +395,7 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
 
         //  init command
-        await this.initProp(true);
+        await this.initPropAsync(true);
 
         // check taskfile
         this.channel.appendLine(`[${this.timestamp()}] taskfile: "${this.taskfile}"`);
@@ -404,12 +404,12 @@ class AcTsExtension {
         }
 
         // submit task
-        await this.coder.submitTask();
+        await this.coder.submitTaskAsync();
 
         actsextension.channel.appendLine(`---- SUCCESS: ${actsextension.task} submitted ----`);
     }
 
-    public async removeTask() {
+    public async removeTaskAsync() {
 
         // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
@@ -418,7 +418,7 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
 
         // init command
-        await this.initProp(true);
+        await this.initPropAsync(true);
 
         // Remove Taskfile
         if (!fs.existsSync(this.taskfile)) {
@@ -439,7 +439,7 @@ class AcTsExtension {
         this.channel.appendLine(`---- SUCCESS: ${this.task} removed ----`);
     }
 
-    public async browseTask() {
+    public async browseTaskAsync() {
 
         // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
@@ -448,7 +448,7 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
 
         // init command
-        await this.initProp(true);
+        await this.initPropAsync(true);
 
         // open task
         this.coder.browseTask();
