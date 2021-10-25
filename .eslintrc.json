@@ -9,12 +9,12 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "@typescript-eslint/naming-convention": "off",
-        "@typescript-eslint/semi": "off",
+        "@typescript-eslint/naming-convention": "warn",
+        "@typescript-eslint/semi": "warn",
         "curly": "off",
         "eqeqeq": "warn",
         "no-throw-literal": "off",
-        "semi": "off"
+        "semi": "warn"
     },
     "ignorePatterns": [
         "**/*.d.ts"

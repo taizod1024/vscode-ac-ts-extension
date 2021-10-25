@@ -1,8 +1,6 @@
 import * as vscode from 'vscode';
 import * as fs from "fs";
-import superagent from "superagent";
 import child_process, { ExecFileSyncOptions } from "child_process";
-import { Buffer } from 'buffer';
 import { atcoder } from './AtCoder';
 import { yukicoder } from './Yukicoder';
 import { typescript } from './TypeScript';
