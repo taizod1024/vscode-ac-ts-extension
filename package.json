@@ -65,7 +65,7 @@
     "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
     "test": "node ./build/test/runTest.js",
     "release": "npm run release-step1 && npm run release-step2",
-    "release-step1": "npm run clean && git switch main && git merge --no-ff develop",
+    "release-step1": "git switch main && git merge --no-ff develop",
     "release-step2": "npx standard-version && vsce publish && git push --follow-tags origin main && git push origin develop && git switch develop",
     "package": "vsce package",
     "clean": "rmdir /q /s .\\build || exit /b 0"
