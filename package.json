@@ -11,6 +11,7 @@
   ],
   "publisher": "taizod1024",
   "main": "./build/main.js",
+  "browser": "./build/main.js",
   "activationEvents": [
     "onCommand:ac-ts-extension.loginSite",
     "onCommand:ac-ts-extension.initTask",
@@ -67,7 +68,7 @@
     "release-step1": "npm run clean && git switch main && git merge --no-ff develop",
     "release-step2": "npx standard-version && vsce publish && git push --follow-tags origin main && git push origin develop && git switch develop",
     "package": "vsce package",
-    "clean": "rmdir /q /s .\\build"
+    "clean": "rmdir /q /s .\\build || exit /b 0"
   },
   "author": "yamamoto.taizo <taizod1024@gmail.com>",
   "license": "MIT",
