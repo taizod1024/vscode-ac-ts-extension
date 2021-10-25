@@ -18,10 +18,7 @@
 		{
 			"type": "npm",
 			"script": "esbuild-watch",
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
+			"group": "build",
 			"problemMatcher": [],
 			"label": "npm: esbuild-watch",
 			"detail": "npm run esbuild-base -- --sourcemap --watch"
