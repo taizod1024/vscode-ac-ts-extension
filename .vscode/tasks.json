@@ -11,20 +11,12 @@
 			"presentation": {
 				"reveal": "never"
 			},
-			"group": "build",
-			"label": "npm: esbuild",
-			"detail": "npm run esbuild-base -- --sourcemap"
-		},
-		{
-			"type": "npm",
-			"script": "esbuild-watch",
 			"group": {
 				"kind": "build",
 				"isDefault": true
 			},
-			"problemMatcher": [],
-			"label": "npm: esbuild-watch",
-			"detail": "npm run esbuild-base -- --sourcemap --watch"
+			"label": "npm: esbuild",
+			"detail": "npm run esbuild-base -- --sourcemap"
 		}
 	]
 }
