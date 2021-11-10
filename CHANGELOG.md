@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.74](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.73...v0.0.74) (2021-11-10)
+
+
+### Features
+
+* テストファイルからtestTaskを実行可能に修正 ([07dd2a3](https://github.com/taizod1024/ac-ts-extension/commit/07dd2a3441a0a0038dba051bdbc26adc8fadddb0))
+
 ### [0.0.73](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.72...v0.0.73) (2021-10-26)
 
 
