@@ -25,35 +25,35 @@
     "commands": [
       {
         "command": "ac-ts-extension.loginSite",
-        "title": "AtCoder Extension: login Site..."
+        "title": "AtCoder/Yukicoder Extension: login Site..."
       },
       {
         "command": "ac-ts-extension.initTask",
-        "title": "AtCoder Extension: Init Task..."
+        "title": "AtCoder/Yukicoder Extension: Init Task..."
       },
       {
         "command": "ac-ts-extension.reinitTask",
-        "title": "AtCoder Extension: Reinit Task..."
+        "title": "AtCoder/Yukicoder Extension: Reinit Task..."
       },
       {
         "command": "ac-ts-extension.testTask",
-        "title": "AtCoder Extension: Test Task"
+        "title": "AtCoder/Yukicoder Extension: Test Task"
       },
       {
         "command": "ac-ts-extension.debugTask",
-        "title": "AtCoder Extension: Debug Task"
+        "title": "AtCoder/Yukicoder Extension: Debug Task"
       },
       {
         "command": "ac-ts-extension.submitTask",
-        "title": "AtCoder Extension: Submit Task"
+        "title": "AtCoder/Yukicoder Extension: Submit Task"
       },
       {
         "command": "ac-ts-extension.removeTask",
-        "title": "AtCoder Extension: Remove Task..."
+        "title": "AtCoder/Yukicoder Extension: Remove Task..."
       },
       {
         "command": "ac-ts-extension.browseTask",
-        "title": "AtCoder Extension: Browse Task"
+        "title": "AtCoder/Yukicoder Extension: Browse Task"
       }
     ]
   },
