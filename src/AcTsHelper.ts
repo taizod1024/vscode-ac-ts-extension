@@ -29,13 +29,21 @@ class AcTsHelper {
                 let site = filenames.pop();
                 // check path
                 if (`${actsextension.projectpath}\\src\\${site}\\${contest}` === basename) {
-                    // check extension
+                    // check valid extension
                     if (actsextension.extensions.includes(extension)) {
                         vscode.window.activeTextEditor.document.save();
                         actsextension.site = site;
                         actsextension.contest = contest;
                         actsextension.task = task;
                         actsextension.extension = extension;
+                        return true;
+                    }
+                    // check test file and extension already selected
+                    if (extension === ".txt" && actsextension.extension) {
+                        vscode.window.activeTextEditor.document.save();
+                        actsextension.site = site;
+                        actsextension.contest = contest;
+                        actsextension.task = task;
                         return true;
                     }
                 }
