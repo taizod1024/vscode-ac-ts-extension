@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.75](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.74...v0.0.75) (2021-12-24)
+
+
+### Features
+
+* javascript対応 ([27922f8](https://github.com/taizod1024/ac-ts-extension/commit/27922f89bfe8037bb8fd3c1e2c5ad8e477c5e478))
+
 ### [0.0.74](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.73...v0.0.74) (2021-11-10)
 
 
