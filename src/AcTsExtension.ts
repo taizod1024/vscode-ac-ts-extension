@@ -4,6 +4,7 @@ import child_process, { ExecFileSyncOptions } from "child_process";
 import { atcoder } from './AtCoder';
 import { yukicoder } from './Yukicoder';
 import { typescript } from './TypeScript';
+import { javascript } from './JavaScript';
 import { python } from './Python';
 
 // atcoder / yukicoder 
@@ -28,7 +29,7 @@ export interface Coder {
     saveConfig(json: any): void;
 };
 
-// python / typescript
+// python / typescript / javascript
 export interface Lang {
 
     // prop
@@ -96,8 +97,8 @@ class AcTsExtension {
 
         // coders and langs
         this.coders = [atcoder, yukicoder];
-        this.langs = [typescript, python];
-        
+        this.langs = [typescript, javascript, python];
+
         // sites and extensions
         this.sites = this.coders.map(val => val.name);
         this.extensions = this.langs.map(val => val.extension);

@@ -4,6 +4,7 @@ import superagent from "superagent";
 import * as cheerio from "cheerio";
 import { actsextension, Coder } from './AcTsExtension';
 import { typescript } from './TypeScript';
+import { javascript } from './JavaScript';
 import { python } from './Python';
 
 class AtCoder implements Coder {
@@ -48,7 +49,7 @@ class AtCoder implements Coder {
 
     }
 
-    isSelected():boolean {
+    isSelected(): boolean {
         return actsextension.site === "atcoder";
     }
 
@@ -222,6 +223,7 @@ class AtCoder implements Coder {
 
     getLanguageId(): number {
         if (typescript.isSelected()) { return 4057; }
+        if (javascript.isSelected()) { return 4030; }
         if (python.isSelected()) { return 4006; }
         return 0;
     }
