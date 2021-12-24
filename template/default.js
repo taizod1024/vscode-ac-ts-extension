@@ -1,4 +1,4 @@
-import * as fs from "fs";
+let fs = require("fs");
 
 // util for input
 const lineit = (function* () {
@@ -28,7 +28,7 @@ const main = function () {
   // TODO edit the code
 
   // param
-  let n: number;
+  let n;
 
   // init
   n = Number(read());
