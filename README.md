@@ -79,8 +79,8 @@ Yukicoder の場合はプロフィール画面の API キーを入力します�
 - サイトを`atcoder`,`yukicoder`から選択します。
 - コンテスト名は AtCoder の場合は `abc190`の形式、Yukicoder の場合は`351`の形式で入力します。いずれも URL から確認してください。
 - 問題名は AtCoder の場合は `abc190_a` の形式、Yukicoder の場合は`1692`の形式で入力します。いずれも URL から確認してください。
-- 解答する言語は`.py`,`.ts`から選択します。
-- ソースコードは `src/atcoder/abcXXX/abcXXX_X.py`, `abcXXX_X.ts` に生成されます。
+- 解答する言語は`.py`,`.ts`, `.js` から選択します。
+- ソースコードは `src/atcoder/abcXXX/abcXXX_X.py`, `abcXXX_X.ts`, `abcXXX_X.js` に生成されます。
 - テストデータは `src/atcoder/abcXXX/abcXXX_X.txt` にダウンロードされます。
 - フォルダは自動的に作成されます。
 - 既にソースコードやテストデータがある場合はスキップされます。
@@ -202,7 +202,7 @@ Takahashi
 
 ### ソースコードのひな形
 
-独自のソースコードをひな形に使用する場合はフォルダ配下の `template/default.py`, `default.ts` に格納してください。
+独自のソースコードをひな形に使用する場合はフォルダ配下の `template/default.py`, `default.ts`, `default.js` に格納してください。
 
 ### Python 設定
 
