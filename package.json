@@ -9,6 +9,13 @@
   "categories": [
     "Other"
   ],
+  "keywords": [
+    "atcoder",
+    "yukicoder",
+    "python",
+    "typescript",
+    "javascript"
+  ],
   "publisher": "taizod1024",
   "main": "./build/main.js",
   "activationEvents": [
