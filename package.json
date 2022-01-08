@@ -2,7 +2,7 @@
   "version": "0.0.63",
   "name": "ac-ts-extension",
   "displayName": "AtCoder/Yukicoder Extension",
-  "description": "atcoder/yukicoder vscode extension for python/typescript",
+  "description": "atcoder/yukicoder vscode extension for python/typescript/javascript",
   "engines": {
     "vscode": "^1.60.0"
   },
