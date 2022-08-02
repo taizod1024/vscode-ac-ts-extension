@@ -80,8 +80,7 @@ class Yukicoder implements Coder {
   async getTestAsync() {
     // show channel
     actsextension.channel.appendLine(
-      `[${actsextension.timestamp()}] yukicoder.problemnourl: ${
-        this.problemnourl
+      `[${actsextension.timestamp()}] yukicoder.problemnourl: ${this.problemnourl
       }`
     );
     actsextension.channel.appendLine(
@@ -150,8 +149,7 @@ class Yukicoder implements Coder {
   async submitTaskAsync() {
     // show channel
     actsextension.channel.appendLine(
-      `[${actsextension.timestamp()}] yukicoder.problemnourl: ${
-        this.problemnourl
+      `[${actsextension.timestamp()}] yukicoder.problemnourl: ${this.problemnourl
       }`
     );
     actsextension.channel.appendLine(
@@ -166,8 +164,7 @@ class Yukicoder implements Coder {
 
     // submit task
     actsextension.channel.appendLine(
-      `[${actsextension.timestamp()}] yukicoder.api_submiturl: ${
-        this.api_submiturl
+      `[${actsextension.timestamp()}] yukicoder.api_submiturl: ${this.api_submiturl
       }`
     );
     const code = fs.readFileSync(actsextension.taskfile).toString();
