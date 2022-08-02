@@ -65,15 +65,17 @@
     ]
   },
   "scripts": {
+    "nodecheck": "node --version | findstr \"v16.13.0\"",
     "vscode:prepublish": "npm run esbuild-base -- --minify",
     "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=build/main.js --format=cjs --platform=node --external:vscode --external:vm2",
     "esbuild": "npm run esbuild-base -- --sourcemap",
     "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
     "test": "node ./build/test/runTest.js",
-    "release": "npm run release-merge && npm run release-postmerge",
-    "release-merge": "git switch main && git merge --no-ff develop",
-    "release-postmerge": "npx standard-version && vsce publish && git push --follow-tags origin main && git push origin develop && git switch develop",
-    "package": "vsce package",
+    "release": "npm run release-premerge && npx standard-version && vsce publish && npm run release-postmerge",
+    "release-no-publish": "npm run release-premerge && npx standard-version && vsce package && npm run release-postmerge",
+    "release-premerge": "npm run nodecheck && git switch main && git merge --no-ff develop",
+    "release-postmerge": "git push --follow-tags origin main && git push origin develop && git switch develop",
+    "package": "npm run nodecheck && vsce package",
     "clean": "rmdir /q /s .\\build || exit /b 0"
   },
   "author": "yamamoto.taizo <taizod1024@gmail.com>",
