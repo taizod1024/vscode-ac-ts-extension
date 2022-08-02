@@ -14,7 +14,8 @@
     "yukicoder",
     "python",
     "typescript",
-    "javascript"
+    "javascript",
+    "windows"
   ],
   "publisher": "taizod1024",
   "main": "./build/main.js",
