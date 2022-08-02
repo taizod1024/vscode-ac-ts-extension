@@ -25,7 +25,7 @@ class Python implements Lang {
         }
     }
 
-    isSelected():boolean {
+    isSelected(): boolean {
         return actsextension.extension === ".py";
     }
 

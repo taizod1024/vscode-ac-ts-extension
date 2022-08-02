@@ -10,7 +10,7 @@ class TypeScript implements Lang {
     // prop
     name = "typescript";
     extension = ".ts";
-    
+
     // method
     checkLang(): void {
         if (!fs.existsSync(actsextension.packagejsonfile) || !fs.existsSync(actsextension.packagelockjsonfile)) {
@@ -18,7 +18,7 @@ class TypeScript implements Lang {
         }
     }
 
-    isSelected():boolean {
+    isSelected(): boolean {
         return actsextension.extension === ".ts";
     }
 
