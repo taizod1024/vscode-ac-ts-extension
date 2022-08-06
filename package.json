@@ -73,7 +73,6 @@
     "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
     "test": "node ./build/test/runTest.js",
     "release": "npm run release-premerge && npx standard-version && vsce publish && npm run release-postmerge",
-    "release-no-publish": "npm run release-premerge && npx standard-version && vsce package && npm run release-postmerge",
     "release-premerge": "npm run nodecheck && git switch main && git merge --no-ff develop",
     "release-postmerge": "git push --follow-tags origin main && git push origin develop && git switch develop",
     "package": "npm run nodecheck && vsce package",
