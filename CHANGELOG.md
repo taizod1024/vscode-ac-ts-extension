@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.81](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.80...v0.0.81) (2022-08-07)
+
+
+### Bug Fixes
+
+* 言語選択時にESCで抜ける際のエラーの修正 ([cba8e95](https://github.com/taizod1024/ac-ts-extension/commit/cba8e95ae2b31df06bb76a239708fb70e258ebf9))
+
 ### [0.0.80](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.79...v0.0.80) (2022-08-02)
 
 ### [0.0.79](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.78...v0.0.79) (2022-08-02)
