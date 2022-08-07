@@ -5,4 +5,3 @@ build
 ### root: no commit
 *.vsix
 *.zip
-.npmrc
