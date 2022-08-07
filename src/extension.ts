@@ -130,21 +130,22 @@ export function activate(context: vscode.ExtensionContext) {
                         let taskmessage: string;
                         let contest: string;
                         let task: string;
-                        if (site === actsextension.site) {
-                            contest = actsextension.contest;
-                            task = actsextension.task;
-                        }
+                        // load site depending data
                         if (site === "atcoder") {
                             contestregexp = atcoder.contestregexp;
                             contestmessage = atcoder.contestmessage;
                             taskregexp = atcoder.taskregexp;
                             taskmessage = atcoder.taskmessage;
+                            contest = atcoder.contest;
+                            task = atcoder.task;
                         }
                         if (site === "yukicoder") {
                             contestregexp = yukicoder.contestregexp;
                             contestmessage = yukicoder.contestmessage;
                             taskregexp = yukicoder.taskregexp;
                             taskmessage = yukicoder.taskmessage;
+                            contest = yukicoder.contest;
+                            task = yukicoder.task;
                         }
                         // input contest
                         vscode.window
@@ -187,6 +188,15 @@ export function activate(context: vscode.ExtensionContext) {
                                             .then(extension => {
                                                 if (extension === undefined) {
                                                     return;
+                                                }
+                                                // save site depending data
+                                                if (site === "atcoder") {
+                                                    atcoder.contest = contest;
+                                                    atcoder.task = task;
+                                                }
+                                                if (site === "yukicoder") {
+                                                    yukicoder.contest = contest;
+                                                    yukicoder.task = task;
                                                 }
                                                 // exec command
                                                 actsextension.site = site;
