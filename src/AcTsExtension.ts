@@ -1,21 +1,22 @@
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
 import * as fs from "fs";
 import child_process, { ExecFileSyncOptions } from "child_process";
-import { atcoder } from './AtCoder';
-import { yukicoder } from './Yukicoder';
-import { typescript } from './TypeScript';
-import { javascript } from './JavaScript';
-import { python } from './Python';
+import { atcoder } from "./AtCoder";
+import { yukicoder } from "./Yukicoder";
+import { typescript } from "./TypeScript";
+import { javascript } from "./JavaScript";
+import { python } from "./Python";
 
-// atcoder / yukicoder 
+// atcoder / yukicoder
 export interface Coder {
-
     // prop
     name: string;
     contestregexp: RegExp;
     contestmessage: string;
     taskregexp: RegExp;
     taskmessage?: string;
+    contest?: string;
+    task?: string;
 
     // method
     isSelected(): boolean;
@@ -27,11 +28,10 @@ export interface Coder {
     browseTask(): void;
     loadConfig(json: any): void;
     saveConfig(json: any): void;
-};
+}
 
 // python / typescript / javascript
 export interface Lang {
-
     // prop
     name: string;
     extension: string;
@@ -40,11 +40,10 @@ export interface Lang {
     isSelected(): boolean;
     checkLang(): void;
     testLang(debug: boolean): any;
-};
+}
 
 // extension core
 class AcTsExtension {
-
     // constant
     public appname: string;
     public appid: string;
@@ -89,7 +88,6 @@ class AcTsExtension {
 
     // setup function
     constructor() {
-
         // init constant
         this.appname = "AtCoder Extension";
         this.appid = "ac-ts-extension";
@@ -113,7 +111,6 @@ class AcTsExtension {
     }
 
     public async initPropAsync(withtask: boolean) {
-
         // TODO settings
 
         // init prop
@@ -144,14 +141,16 @@ class AcTsExtension {
         await this.coder.initPropAsync(withtask);
 
         // check lang
-        this.lang.checkLang();
+        if (this.lang) {
+            // this.lang is null on loginSite
+            this.lang.checkLang();
+        }
 
         // save config
         this.saveConfig();
     }
 
     public async loginSiteAsync() {
-
         // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
 
@@ -165,7 +164,6 @@ class AcTsExtension {
     }
 
     public async initTaskAsync() {
-
         // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
         this.channel.appendLine(`[${this.timestamp()}] contest: ${this.contest}`);
@@ -178,13 +176,14 @@ class AcTsExtension {
         // check testfile not exits
         let text;
         if (!fs.existsSync(this.testfile)) {
-
             // get testtext
             text = await this.coder.getTestAsync();
         }
 
         // create taskfile
-        if (!fs.existsSync(this.taskpath)) { fs.mkdirSync(this.taskpath, { recursive: true }); }
+        if (!fs.existsSync(this.taskpath)) {
+            fs.mkdirSync(this.taskpath, { recursive: true });
+        }
         if (fs.existsSync(this.taskfile)) {
             this.channel.appendLine(`[${this.timestamp()}] taskfile: "${this.taskfile}" exist`);
         } else {
@@ -198,7 +197,9 @@ class AcTsExtension {
         }
 
         // create testfile
-        if (!fs.existsSync(this.testpath)) { fs.mkdirSync(this.testpath, { recursive: true }); }
+        if (!fs.existsSync(this.testpath)) {
+            fs.mkdirSync(this.testpath, { recursive: true });
+        }
         if (fs.existsSync(this.testfile)) {
             this.channel.appendLine(`[${this.timestamp()}] testfile: "${this.testfile}" exist`);
         } else {
@@ -210,17 +211,18 @@ class AcTsExtension {
         }
 
         // open file
-        vscode.workspace.openTextDocument(this.taskfile)
-            .then((a: vscode.TextDocument) => {
+        vscode.workspace.openTextDocument(this.taskfile).then(
+            (a: vscode.TextDocument) => {
                 vscode.window.showTextDocument(a, 1, false);
-            }, (err: any) => {
+            },
+            (err: any) => {
                 throw err;
-            });
+            }
+        );
         this.channel.appendLine(`---- SUCCESS: ${this.task} initialized ----`);
     }
 
     public async testTaskAsync(debug: boolean): Promise<void> {
-
         // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
         this.channel.appendLine(`[${this.timestamp()}] contest: ${this.contest}`);
@@ -250,17 +252,21 @@ class AcTsExtension {
         }
 
         // make dir
-        if (!fs.existsSync(this.tmptestpath)) { fs.mkdirSync(this.tmptestpath); }
+        if (!fs.existsSync(this.tmptestpath)) {
+            fs.mkdirSync(this.tmptestpath);
+        }
 
         // read testfile
         const txt = fs.readFileSync(this.testfile).toString();
         const wrk = txt.split(this.separator.trim()).map(x => x.trim());
-        if (wrk[wrk.length - 1] === "") { wrk.pop(); }
+        if (wrk[wrk.length - 1] === "") {
+            wrk.pop();
+        }
         const ios: any[] = [];
         while (0 < wrk.length) {
             ios.push({
                 in: wrk.shift(),
-                out: wrk.shift()
+                out: wrk.shift(),
             });
         }
 
@@ -275,10 +281,8 @@ class AcTsExtension {
         const that = this;
         let iosx = 0;
         return new Promise((resolve, reject) => {
-
             // run test
             (function runtest() {
-
                 that.channel.show(true);
 
                 // create test input file
@@ -315,8 +319,9 @@ class AcTsExtension {
                         }
                         // wait command complete
                         (function waitunlock() {
-                            try { fs.unlinkSync(that.tmptestinfile); }
-                            catch (ex) {
+                            try {
+                                fs.unlinkSync(that.tmptestinfile);
+                            } catch (ex) {
                                 if (ex instanceof Error) {
                                     if (!ex.message.match(/EBUSY/)) {
                                         reject(ex);
@@ -386,7 +391,6 @@ class AcTsExtension {
     }
 
     public async submitTaskAsync() {
-
         // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
         this.channel.appendLine(`[${this.timestamp()}] contest: ${this.contest}`);
@@ -409,7 +413,6 @@ class AcTsExtension {
     }
 
     public async removeTaskAsync() {
-
         // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
         this.channel.appendLine(`[${this.timestamp()}] contest: ${this.contest}`);
@@ -439,7 +442,6 @@ class AcTsExtension {
     }
 
     public async browseTaskAsync() {
-
         // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
         this.channel.appendLine(`[${this.timestamp()}] contest: ${this.contest}`);
@@ -457,14 +459,14 @@ class AcTsExtension {
 
     // config
     public loadConfig() {
-        const json = (fs.existsSync(this.configfile))
+        const json = fs.existsSync(this.configfile)
             ? JSON.parse(fs.readFileSync(this.configfile).toString())
             : {
-                site: "",
-                contest: "",
-                task: "",
-                extension: ""
-            };
+                  site: "",
+                  contest: "",
+                  task: "",
+                  extension: "",
+              };
         this.site = json.site || "";
         this.contest = json.contest || "";
         this.task = json.task || "";
@@ -476,7 +478,7 @@ class AcTsExtension {
             site: this.site,
             contest: this.contest,
             task: this.task,
-            extension: this.extension
+            extension: this.extension,
         };
         this.coders.forEach(val => val.saveConfig(json));
         fs.writeFileSync(this.configfile, JSON.stringify(json));
@@ -485,14 +487,20 @@ class AcTsExtension {
     // message
     public responseToMessage(ex: any): string {
         let texts = [];
-        if (ex.status) { texts.push(ex.status); }
-        if (ex.message) { texts.push(ex.message); }
-        if (ex.response?.text) { texts.push(ex.response.text); }
+        if (ex.status) {
+            texts.push(ex.status);
+        }
+        if (ex.message) {
+            texts.push(ex.message);
+        }
+        if (ex.response?.text) {
+            texts.push(ex.response.text);
+        }
         let message = texts.join(" ");
         return message;
     }
     public timestamp(): string {
         return new Date().toLocaleString("ja-JP").split(" ")[1];
     }
-};
+}
 export const actsextension = new AcTsExtension();
