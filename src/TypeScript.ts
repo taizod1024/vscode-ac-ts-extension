@@ -1,10 +1,10 @@
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
 import * as fs from "fs";
 import child_process, { ExecFileSyncOptions } from "child_process";
-import { actsextension, Lang } from './AcTsExtension';
+import { actsextension } from "./AcTsExtension";
+import { AcTsLang } from "./AcTsLang";
 
-class TypeScript implements Lang {
-
+class TypeScript implements AcTsLang {
     // implemente
 
     // prop
@@ -34,14 +34,14 @@ class TypeScript implements Lang {
                 args: ["<", actsextension.tmptestinfile, ">", actsextension.tmptestoutfile, "2>", actsextension.tmptesterrfile],
                 console: "integratedTerminal",
                 skipFiles: ["node_modules/**"],
-                env: { TS_NODE_TRANSPILE_ONLY: "1" }
+                env: { TS_NODE_TRANSPILE_ONLY: "1" },
             };
             vscode.debug.startDebugging(actsextension.projectfolder, launchconfig);
         } else {
             const command = `node --require ts-node/register ${actsextension.taskfile} < ${actsextension.tmptestinfile} > ${actsextension.tmptestoutfile} 2> ${actsextension.tmptesterrfile}`;
             const options = {
                 cwd: actsextension.projectpath,
-                env: { TS_NODE_TRANSPILE_ONLY: "1" }
+                env: { TS_NODE_TRANSPILE_ONLY: "1" },
             };
             child = child_process.exec(command, options);
         }
