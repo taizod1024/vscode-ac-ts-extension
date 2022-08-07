@@ -128,6 +128,12 @@ export function activate(context: vscode.ExtensionContext) {
                         let contestmessage: string;
                         let taskregexp: RegExp;
                         let taskmessage: string;
+                        let contest: string;
+                        let task: string;
+                        if (site === actsextension.site) {
+                            contest = actsextension.contest;
+                            task = actsextension.task;
+                        }
                         if (site === "atcoder") {
                             contestregexp = atcoder.contestregexp;
                             contestmessage = atcoder.contestmessage;
@@ -145,7 +151,7 @@ export function activate(context: vscode.ExtensionContext) {
                             .showInputBox({
                                 prompt: contestmessage,
                                 ignoreFocusOut: true,
-                                value: actsextension.contest,
+                                value: contest,
                                 validateInput: param => {
                                     return contestregexp.test(param) ? "" : contestmessage;
                                 },
@@ -159,7 +165,7 @@ export function activate(context: vscode.ExtensionContext) {
                                     .showInputBox({
                                         prompt: taskmessage,
                                         ignoreFocusOut: true,
-                                        value: actsextension.task,
+                                        value: task,
                                         validateInput: param => {
                                             return taskregexp.test(param) ? "" : taskmessage;
                                         },
