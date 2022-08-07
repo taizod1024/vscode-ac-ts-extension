@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.82](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.81...v0.0.82) (2022-08-07)
+
+
+### Features
+
+* site変更時はcontest, taskをクリア ([8e7fb5e](https://github.com/taizod1024/ac-ts-extension/commit/8e7fb5e684925aa9e6fdd86332f3710318678a62))
+* サイトごとのコンテストとタスクの分離 ([1e5847b](https://github.com/taizod1024/ac-ts-extension/commit/1e5847b18e03ba22266b120eff5af5e8c3ddfc79))
+
+
+### Bug Fixes
+
+* initTaskの前にloginSiteをすると言語が決まっていないためにエラー発生 ([9ed7e17](https://github.com/taizod1024/ac-ts-extension/commit/9ed7e17aa488b435c3708684c077e2e01bbb596c))
+
 ### [0.0.81](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.80...v0.0.81) (2022-08-07)
 
 
