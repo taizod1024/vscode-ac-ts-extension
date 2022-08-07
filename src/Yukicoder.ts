@@ -1,17 +1,16 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
 import superagent from "superagent";
-import { actsextension, Coder } from "./AcTsExtension";
+import { actsextension } from "./AcTsExtension";
+import { AcTsCoder } from "./AcTsCoder";
 import { typescript } from "./TypeScript";
 import { javascript } from "./JavaScript";
 import { python } from "./Python";
 
-class Yukicoder implements Coder {
+class Yukicoder implements AcTsCoder {
     // param
     apikey: string;
     problemid: string;
-    contest: string;
-    task: string;
 
     // prop
     problemnourl: string;
@@ -27,7 +26,10 @@ class Yukicoder implements Coder {
     contestregexp: RegExp;
     contestmessage: string;
     taskregexp: RegExp;
-    taskmessage?: string;
+    taskmessage: string;
+    contest: string;
+    task: string;
+    extension: string;
 
     // method
     constructor() {
@@ -35,6 +37,9 @@ class Yukicoder implements Coder {
         this.contestmessage = "input contestid from url [e.g.: 314, 315]";
         this.taskregexp = /^[0-9]+$/;
         this.taskmessage = "input problemno from url [e.g.: 1680, 1681]";
+        this.contest = "";
+        this.task = "";
+        this.extension = "";
     }
 
     isSelected(): boolean {
@@ -173,6 +178,7 @@ class Yukicoder implements Coder {
         yukicoder.apikey = json.yukicoder?.encapikey ? Buffer.from(json.yukicoder?.encapikey, "base64").toString() : "";
         yukicoder.contest = json.yukicoder?.contest;
         yukicoder.task = json.yukicoder?.task;
+        yukicoder.extension = json.yukicoder?.extension;
     }
 
     saveConfig(json: any) {
@@ -180,6 +186,7 @@ class Yukicoder implements Coder {
         json.yukicoder.encapikey = Buffer.from(yukicoder.apikey).toString("base64");
         json.yukicoder.contest = yukicoder.contest;
         json.yukicoder.task = yukicoder.task;
+        json.yukicoder.extension = yukicoder.extension;
     }
 }
 export const yukicoder = new Yukicoder();

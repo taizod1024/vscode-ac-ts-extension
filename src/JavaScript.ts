@@ -1,10 +1,10 @@
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
 import * as fs from "fs";
 import child_process, { ExecFileSyncOptions } from "child_process";
-import { actsextension, Lang } from './AcTsExtension';
+import { actsextension } from "./AcTsExtension";
+import { AcTsLang } from "./AcTsLang";
 
-class JavaScript implements Lang {
-
+class JavaScript implements AcTsLang {
     // implemente
 
     // prop
@@ -32,7 +32,7 @@ class JavaScript implements Lang {
                 program: actsextension.taskfile,
                 args: ["<", actsextension.tmptestinfile, ">", actsextension.tmptestoutfile, "2>", actsextension.tmptesterrfile],
                 console: "integratedTerminal",
-                skipFiles: ["node_modules/**"]
+                skipFiles: ["node_modules/**"],
             };
             vscode.debug.startDebugging(actsextension.projectfolder, launchconfig);
         } else {

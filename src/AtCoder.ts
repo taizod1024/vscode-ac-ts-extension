@@ -2,17 +2,16 @@ import * as vscode from "vscode";
 import * as fs from "fs";
 import superagent from "superagent";
 import * as cheerio from "cheerio";
-import { actsextension, Coder } from "./AcTsExtension";
+import { actsextension } from "./AcTsExtension";
+import { AcTsCoder } from "./AcTsCoder";
 import { typescript } from "./TypeScript";
 import { javascript } from "./JavaScript";
 import { python } from "./Python";
 
-class AtCoder implements Coder {
+class AtCoder implements AcTsCoder {
     // param
     username: string;
     password: string;
-    contest: string;
-    task: string;
 
     // prop
     loginurl: string;
@@ -27,7 +26,10 @@ class AtCoder implements Coder {
     contestregexp: RegExp;
     contestmessage: string;
     taskregexp: RegExp;
-    taskmessage?: string;
+    taskmessage: string;
+    contest: string;
+    task: string;
+    extension: string;
 
     // method
     constructor() {
@@ -36,6 +38,9 @@ class AtCoder implements Coder {
         this.taskregexp = /^(.+)_(.+)$/;
         this.taskmessage = "input task [e.g.: abc190_a, abc190_b]";
         this.loginurl = "https://atcoder.jp/login?continue=https%3A%2F%2Fatcoder.jp%2F&lang=ja";
+        this.contest = "";
+        this.task = "";
+        this.extension = "";
     }
 
     initPropAsync(withtask: boolean) {
@@ -257,8 +262,9 @@ class AtCoder implements Coder {
     loadConfig(json: any) {
         atcoder.username = json.atcoder?.username || "";
         atcoder.password = json.atcoder?.encpassword ? Buffer.from(json.atcoder?.encpassword, "base64").toString() : "";
-        atcoder.contest = json.atcoder?.task;
+        atcoder.contest = json.atcoder?.contest;
         atcoder.task = json.atcoder?.task;
+        atcoder.extension = json.atcoder?.extension;
     }
 
     saveConfig(json: any) {
@@ -267,6 +273,7 @@ class AtCoder implements Coder {
         json.atcoder.encpassword = Buffer.from(atcoder.password).toString("base64");
         json.atcoder.contest = atcoder.contest;
         json.atcoder.task = atcoder.task;
+        json.atcoder.extension = atcoder.extension;
     }
 }
 export const atcoder = new AtCoder();

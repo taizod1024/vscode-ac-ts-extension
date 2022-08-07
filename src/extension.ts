@@ -130,22 +130,32 @@ export function activate(context: vscode.ExtensionContext) {
                         let taskmessage: string;
                         let contest: string;
                         let task: string;
+                        let extension: string;
                         // load site depending data
-                        if (site === "atcoder") {
-                            contestregexp = atcoder.contestregexp;
-                            contestmessage = atcoder.contestmessage;
-                            taskregexp = atcoder.taskregexp;
-                            taskmessage = atcoder.taskmessage;
-                            contest = atcoder.contest;
-                            task = atcoder.task;
-                        }
-                        if (site === "yukicoder") {
-                            contestregexp = yukicoder.contestregexp;
-                            contestmessage = yukicoder.contestmessage;
-                            taskregexp = yukicoder.taskregexp;
-                            taskmessage = yukicoder.taskmessage;
-                            contest = yukicoder.contest;
-                            task = yukicoder.task;
+                        try {
+                            if (site === "atcoder") {
+                                atcoder.checkLogin();
+                                contestregexp = atcoder.contestregexp;
+                                contestmessage = atcoder.contestmessage;
+                                taskregexp = atcoder.taskregexp;
+                                taskmessage = atcoder.taskmessage;
+                                contest = atcoder.contest;
+                                task = atcoder.task;
+                                extension = atcoder.extension;
+                            }
+                            if (site === "yukicoder") {
+                                yukicoder.checkLogin();
+                                contestregexp = yukicoder.contestregexp;
+                                contestmessage = yukicoder.contestmessage;
+                                taskregexp = yukicoder.taskregexp;
+                                taskmessage = yukicoder.taskmessage;
+                                contest = yukicoder.contest;
+                                task = yukicoder.task;
+                                extension = yukicoder.extension;
+                            }
+                        } catch (ex) {
+                            actsextension.channel.appendLine("**** " + ex + " ****");
+                            return;
                         }
                         // input contest
                         vscode.window
@@ -176,10 +186,10 @@ export function activate(context: vscode.ExtensionContext) {
                                             return;
                                         }
                                         // select extension
-                                        let idx = actsextension.extensions.indexOf(actsextension.extension);
+                                        let idx = actsextension.extensions.indexOf(extension);
                                         if (1 <= idx) {
                                             actsextension.extensions.splice(idx, 1);
-                                            actsextension.extensions.unshift(actsextension.extension);
+                                            actsextension.extensions.unshift(extension);
                                         }
                                         vscode.window
                                             .showQuickPick(actsextension.extensions, {
@@ -193,10 +203,12 @@ export function activate(context: vscode.ExtensionContext) {
                                                 if (site === "atcoder") {
                                                     atcoder.contest = contest;
                                                     atcoder.task = task;
+                                                    atcoder.extension = extension;
                                                 }
                                                 if (site === "yukicoder") {
                                                     yukicoder.contest = contest;
                                                     yukicoder.task = task;
+                                                    yukicoder.extension = extension;
                                                 }
                                                 // exec command
                                                 actsextension.site = site;
