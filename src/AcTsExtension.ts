@@ -1,10 +1,10 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
 import child_process, { ExecFileSyncOptions } from "child_process";
-import { AcTsCoder } from "./AcTsCoder";
+import { AcTsSite } from "./AcTsSite";
 import { AcTsLang } from "./AcTsLang";
-import { atcoder } from "./coder/AtCoder";
-import { yukicoder } from "./coder/Yukicoder";
+import { atcoder } from "./site/AtCoder";
+import { yukicoder } from "./site/Yukicoder";
 import { typescript } from "./lang/TypeScript";
 import { javascript } from "./lang/JavaScript";
 import { python } from "./lang/Python";
@@ -29,8 +29,8 @@ class AcTsExtension {
     public extension: string;
 
     // prop
-    public actscoders: AcTsCoder[];
-    public actscoder: AcTsCoder;
+    public actssites: AcTsSite[];
+    public actscoder: AcTsSite;
     public actslangs: AcTsLang[];
     public actslang: AcTsLang;
     public sites: string[];
@@ -61,11 +61,11 @@ class AcTsExtension {
         this.configfile = `${process.env.USERPROFILE}\\.${this.appid}.json`;
 
         // coders and langs
-        this.actscoders = [atcoder, yukicoder];
+        this.actssites = [atcoder, yukicoder];
         this.actslangs = [typescript, javascript, python];
 
         // sites and extensions
-        this.sites = this.actscoders.map(val => val.name);
+        this.sites = this.actssites.map(val => val.name);
         this.extensions = this.actslangs.map(val => val.extension);
 
         // init context
@@ -100,7 +100,7 @@ class AcTsExtension {
         this.timeout = 5000;
 
         // site specific
-        this.actscoder = this.actscoders.find(val => val.isSelected());
+        this.actscoder = this.actssites.find(val => val.isSelected());
         this.actslang = this.actslangs.find(val => val.isSelected());
 
         // check and init coder
@@ -438,7 +438,7 @@ class AcTsExtension {
         this.contest = json.contest || "";
         this.task = json.task || "";
         this.extension = json.extension;
-        this.actscoders.forEach(val => val.loadConfig(json));
+        this.actssites.forEach(val => val.loadConfig(json));
     }
     public saveConfig() {
         const json = {
@@ -447,7 +447,7 @@ class AcTsExtension {
             task: this.task,
             extension: this.extension,
         };
-        this.actscoders.forEach(val => val.saveConfig(json));
+        this.actssites.forEach(val => val.saveConfig(json));
         fs.writeFileSync(this.configfile, JSON.stringify(json));
     }
 

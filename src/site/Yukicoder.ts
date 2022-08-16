@@ -2,12 +2,12 @@ import * as vscode from "vscode";
 import * as fs from "fs";
 import superagent from "superagent";
 import { actsextension } from "../AcTsExtension";
-import { AcTsCoder } from "../AcTsCoder";
+import { AcTsSite } from "../AcTsSite";
 import { typescript } from "../lang/TypeScript";
 import { javascript } from "../lang/JavaScript";
 import { python } from "../lang/Python";
 
-class Yukicoder implements AcTsCoder {
+class Yukicoder implements AcTsSite {
     // param
     apikey: string;
     problemid: string;
