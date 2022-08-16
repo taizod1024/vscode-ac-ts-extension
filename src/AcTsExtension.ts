@@ -27,14 +27,14 @@ class AcTsExtension {
     public contest: string;
     public task: string;
     public extension: string;
+    public basesite: BaseSite;
+    public baselang: BaseLang;
 
     // prop
     public sites: string[];
     public extensions: string[];
     public basesites: BaseSite[];
-    public basesite: BaseSite;
     public baselangs: BaseLang[];
-    public baselang: BaseLang;
     public tasktmplfile: string;
     public usertasktmplfile: string;
     public taskpath: string;
@@ -78,8 +78,6 @@ class AcTsExtension {
     }
 
     public async initPropAsync(withtask: boolean) {
-        // TODO settings
-
         // init prop
         this.tasktmplfile = `${this.vscodeextensionpath}\\template\\default${this.extension}`;
         this.usertasktmplfile = `${this.projectpath}\\template\\default${this.extension}`;

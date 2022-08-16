@@ -30,13 +30,13 @@ class JavaScript implements BaseLang {
                 type: "pwa-node",
                 request: "launch",
                 program: actsextension.taskfile,
-                args: ["<", actsextension.tmptestinfile, ">", actsextension.tmptestoutfile, "2>", actsextension.tmptesterrfile],
+                args: ["<", actsextension.tmptestinfile, "1>", actsextension.tmptestoutfile, "2>", actsextension.tmptesterrfile],
                 console: "integratedTerminal",
                 skipFiles: ["node_modules/**"],
             };
             vscode.debug.startDebugging(actsextension.projectfolder, launchconfig);
         } else {
-            const command = `node ${actsextension.taskfile} < ${actsextension.tmptestinfile} > ${actsextension.tmptestoutfile} 2> ${actsextension.tmptesterrfile}`;
+            const command = `node ${actsextension.taskfile} < ${actsextension.tmptestinfile} 1> ${actsextension.tmptestoutfile} 2> ${actsextension.tmptesterrfile}`;
             const options = {
                 cwd: actsextension.projectpath,
             };

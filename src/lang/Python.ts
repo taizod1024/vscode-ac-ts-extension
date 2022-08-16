@@ -35,12 +35,12 @@ class Python implements BaseLang {
                 type: "python",
                 request: "launch",
                 program: actsextension.taskfile,
-                args: ["<", actsextension.tmptestinfile, ">", actsextension.tmptestoutfile, "2>", actsextension.tmptesterrfile],
+                args: ["<", actsextension.tmptestinfile, "1>", actsextension.tmptestoutfile, "2>", actsextension.tmptesterrfile],
                 console: "integratedTerminal",
             };
             vscode.debug.startDebugging(actsextension.projectfolder, launchconfig);
         } else {
-            const command = `python -u ${actsextension.taskfile} < ${actsextension.tmptestinfile} > ${actsextension.tmptestoutfile} 2> ${actsextension.tmptesterrfile}`;
+            const command = `python -u ${actsextension.taskfile} < ${actsextension.tmptestinfile} 1> ${actsextension.tmptestoutfile} 2> ${actsextension.tmptesterrfile}`;
             const options = {
                 cwd: actsextension.projectpath,
             };
