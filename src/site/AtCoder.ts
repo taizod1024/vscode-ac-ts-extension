@@ -3,12 +3,12 @@ import * as fs from "fs";
 import superagent from "superagent";
 import * as cheerio from "cheerio";
 import { actsextension } from "../AcTsExtension";
-import { AcTsSite } from "../AcTsSite";
+import { BaseSite } from "../BaseSite";
 import { typescript } from "../lang/TypeScript";
 import { javascript } from "../lang/JavaScript";
 import { python } from "../lang/Python";
 
-class AtCoder implements AcTsSite {
+class AtCoder implements BaseSite {
     // param
     username: string;
     password: string;

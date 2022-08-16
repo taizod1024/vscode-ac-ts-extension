@@ -2,9 +2,9 @@ import * as vscode from "vscode";
 import * as fs from "fs";
 import child_process, { ExecFileSyncOptions } from "child_process";
 import { actsextension } from "../AcTsExtension";
-import { AcTsLang } from "../AcTsLang";
+import { BaseLang } from "../BaseLang";
 
-class JavaScript implements AcTsLang {
+class JavaScript implements BaseLang {
     // implemente
 
     // prop

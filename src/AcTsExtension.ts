@@ -1,8 +1,8 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
 import child_process, { ExecFileSyncOptions } from "child_process";
-import { AcTsSite } from "./AcTsSite";
-import { AcTsLang } from "./AcTsLang";
+import { BaseSite } from "./BaseSite";
+import { BaseLang } from "./BaseLang";
 import { atcoder } from "./site/AtCoder";
 import { yukicoder } from "./site/Yukicoder";
 import { typescript } from "./lang/TypeScript";
@@ -29,12 +29,12 @@ class AcTsExtension {
     public extension: string;
 
     // prop
-    public actssites: AcTsSite[];
-    public actscoder: AcTsSite;
-    public actslangs: AcTsLang[];
-    public actslang: AcTsLang;
     public sites: string[];
     public extensions: string[];
+    public basesites: BaseSite[];
+    public basesite: BaseSite;
+    public baselangs: BaseLang[];
+    public baselang: BaseLang;
     public tasktmplfile: string;
     public usertasktmplfile: string;
     public taskpath: string;
@@ -61,12 +61,12 @@ class AcTsExtension {
         this.configfile = `${process.env.USERPROFILE}\\.${this.appid}.json`;
 
         // coders and langs
-        this.actssites = [atcoder, yukicoder];
-        this.actslangs = [typescript, javascript, python];
+        this.basesites = [atcoder, yukicoder];
+        this.baselangs = [typescript, javascript, python];
 
         // sites and extensions
-        this.sites = this.actssites.map(val => val.name);
-        this.extensions = this.actslangs.map(val => val.extension);
+        this.sites = this.basesites.map(val => val.name);
+        this.extensions = this.baselangs.map(val => val.extension);
 
         // init context
         this.channel = vscode.window.createOutputChannel(this.appname);
@@ -100,17 +100,17 @@ class AcTsExtension {
         this.timeout = 5000;
 
         // site specific
-        this.actscoder = this.actssites.find(val => val.isSelected());
-        this.actslang = this.actslangs.find(val => val.isSelected());
+        this.basesite = this.basesites.find(val => val.isSelected());
+        this.baselang = this.baselangs.find(val => val.isSelected());
 
         // check and init coder
-        this.actscoder.checkLogin();
-        await this.actscoder.initPropAsync(withtask);
+        this.basesite.checkLogin();
+        await this.basesite.initPropAsync(withtask);
 
         // check lang if exists
-        if (this.actslang) {
+        if (this.baselang) {
             // this.lang is null on loginSite
-            this.actslang.checkLang();
+            this.baselang.checkLang();
         }
 
         // save config
@@ -125,7 +125,7 @@ class AcTsExtension {
         await this.initPropAsync(false);
 
         // login site
-        await this.actscoder.loginSiteAsync();
+        await this.basesite.loginSiteAsync();
 
         actsextension.channel.appendLine(`---- SUCCESS: ${this.site} done ----`);
     }
@@ -144,7 +144,7 @@ class AcTsExtension {
         let text;
         if (!fs.existsSync(this.testfile)) {
             // get testtext
-            text = await this.actscoder.getTestAsync();
+            text = await this.basesite.getTestAsync();
         }
 
         // create taskfile
@@ -265,7 +265,7 @@ class AcTsExtension {
                 let istimeout = false;
 
                 // exec command if typescript
-                child = that.actslang.testLang(debug);
+                child = that.baselang.testLang(debug);
 
                 // wait child process
                 (function waitchild() {
@@ -374,7 +374,7 @@ class AcTsExtension {
         }
 
         // submit task
-        await this.actscoder.submitTaskAsync();
+        await this.basesite.submitTaskAsync();
 
         actsextension.channel.appendLine(`---- SUCCESS: ${actsextension.task} submitted ----`);
     }
@@ -419,7 +419,7 @@ class AcTsExtension {
         await this.initPropAsync(true);
 
         // open task
-        this.actscoder.browseTask();
+        this.basesite.browseTask();
 
         this.channel.appendLine(`---- SUCCESS: browse ${this.task} ----`);
     }
@@ -438,7 +438,7 @@ class AcTsExtension {
         this.contest = json.contest || "";
         this.task = json.task || "";
         this.extension = json.extension;
-        this.actssites.forEach(val => val.loadConfig(json));
+        this.basesites.forEach(val => val.loadConfig(json));
     }
     public saveConfig() {
         const json = {
@@ -447,7 +447,7 @@ class AcTsExtension {
             task: this.task,
             extension: this.extension,
         };
-        this.actssites.forEach(val => val.saveConfig(json));
+        this.basesites.forEach(val => val.saveConfig(json));
         fs.writeFileSync(this.configfile, JSON.stringify(json));
     }
 

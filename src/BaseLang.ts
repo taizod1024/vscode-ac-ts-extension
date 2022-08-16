@@ -1,6 +1,6 @@
 // python / typescript / javascript
 
-export interface AcTsLang {
+export interface BaseLang {
     // prop
     name: string;
     extension: string;
