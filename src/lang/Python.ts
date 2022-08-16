@@ -1,8 +1,8 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
 import child_process, { ExecFileSyncOptions } from "child_process";
-import { actsextension } from "./AcTsExtension";
-import { AcTsLang } from "./AcTsLang";
+import { actsextension } from "../AcTsExtension";
+import { AcTsLang } from "../AcTsLang";
 
 class Python implements AcTsLang {
     // implements

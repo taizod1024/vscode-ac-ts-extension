@@ -3,11 +3,11 @@ import * as fs from "fs";
 import child_process, { ExecFileSyncOptions } from "child_process";
 import { AcTsCoder } from "./AcTsCoder";
 import { AcTsLang } from "./AcTsLang";
-import { atcoder } from "./AtCoder";
-import { yukicoder } from "./Yukicoder";
-import { typescript } from "./TypeScript";
-import { javascript } from "./JavaScript";
-import { python } from "./Python";
+import { atcoder } from "./coder/AtCoder";
+import { yukicoder } from "./coder/Yukicoder";
+import { typescript } from "./lang/TypeScript";
+import { javascript } from "./lang/JavaScript";
+import { python } from "./lang/Python";
 
 // extension core
 class AcTsExtension {
