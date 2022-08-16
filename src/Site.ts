@@ -1,6 +1,4 @@
-// atcoder / yukicoder
-
-export interface BaseSite {
+export interface Site {
     // prop
     name: string;
     contestregexp: RegExp;

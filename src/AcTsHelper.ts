@@ -1,21 +1,20 @@
-import * as vscode from 'vscode';
-import { actsextension } from './AcTsExtension';
+import * as vscode from "vscode";
+import { acts } from "./AcTsExtension";
 
 // extension helper
 class AcTsHelper {
-
     public checkProjectPath(): boolean {
         if (vscode.workspace.workspaceFolders?.length === 1) {
-            actsextension.projectpath = vscode.workspace.workspaceFolders[0].uri.fsPath;
+            acts.projectpath = vscode.workspace.workspaceFolders[0].uri.fsPath;
             return true;
         }
         const msg = `*** WARN: no root or multi root is not supported ***`;
-        actsextension.channel.appendLine(msg);
+        acts.channel.appendLine(msg);
         return false;
     }
 
     public checkActiveFile(): boolean {
-        if (actsextension.projectpath) {
+        if (acts.projectpath) {
             const filenames = vscode.window.activeTextEditor?.document?.fileName?.split("\\");
             if (filenames) {
                 // disassemble
@@ -24,34 +23,34 @@ class AcTsHelper {
                 let basenames = filename.split(".");
                 let filenamewithoutextension = basenames[0];
                 let task = filenamewithoutextension;
-                let extension = (2 <= basenames.length) ? ("." + basenames.slice(-1)[0]) : "";
+                let extension = 2 <= basenames.length ? "." + basenames.slice(-1)[0] : "";
                 let contest = filenames.pop();
                 let site = filenames.pop();
                 // check path
-                if (`${actsextension.projectpath}\\src\\${site}\\${contest}` === basename) {
+                if (`${acts.projectpath}\\src\\${site}\\${contest}` === basename) {
                     // check valid extension
-                    if (actsextension.extensions.includes(extension)) {
+                    if (acts.extensions.includes(extension)) {
                         vscode.window.activeTextEditor.document.save();
-                        actsextension.site = site;
-                        actsextension.contest = contest;
-                        actsextension.task = task;
-                        actsextension.extension = extension;
+                        acts.site = site;
+                        acts.contest = contest;
+                        acts.task = task;
+                        acts.extension = extension;
                         return true;
                     }
                     // check test file and extension already selected
-                    if (extension === ".txt" && actsextension.extension) {
+                    if (extension === ".txt" && acts.extension) {
                         vscode.window.activeTextEditor.document.save();
-                        actsextension.site = site;
-                        actsextension.contest = contest;
-                        actsextension.task = task;
+                        acts.site = site;
+                        acts.contest = contest;
+                        acts.task = task;
                         return true;
                     }
                 }
             }
         }
         const msg = `*** WARN: missing task, select task file ***`;
-        actsextension.channel.appendLine(msg);
+        acts.channel.appendLine(msg);
         return false;
     }
-};
+}
 export const actshelper = new AcTsHelper();

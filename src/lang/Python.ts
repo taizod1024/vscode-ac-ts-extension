@@ -1,10 +1,10 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
 import child_process, { ExecFileSyncOptions } from "child_process";
-import { actsextension } from "../AcTsExtension";
-import { BaseLang } from "../BaseLang";
+import { acts } from "../AcTsExtension";
+import { Lang } from "../Lang";
 
-class Python implements BaseLang {
+class Python implements Lang {
     // implements
 
     // prop
@@ -15,7 +15,7 @@ class Python implements BaseLang {
     checkLang(): void {
         // throw if non-zero returned
         const command = `python --version`;
-        const options = { cwd: actsextension.projectpath };
+        const options = { cwd: acts.projectpath };
         try {
             child_process.execSync(command, options);
         } catch (ex) {
@@ -24,25 +24,25 @@ class Python implements BaseLang {
     }
 
     isSelected(): boolean {
-        return actsextension.extension === ".py";
+        return acts.extension === ".py";
     }
 
     testLang(debug: boolean): any {
         let child = null;
         if (debug) {
             const launchconfig = {
-                name: actsextension.appid,
+                name: acts.appid,
                 type: "python",
                 request: "launch",
-                program: actsextension.taskfile,
-                args: ["<", actsextension.tmptestinfile, "1>", actsextension.tmptestoutfile, "2>", actsextension.tmptesterrfile],
+                program: acts.taskfile,
+                args: ["<", acts.tmptestinfile, "1>", acts.tmptestoutfile, "2>", acts.tmptesterrfile],
                 console: "integratedTerminal",
             };
-            vscode.debug.startDebugging(actsextension.projectfolder, launchconfig);
+            vscode.debug.startDebugging(acts.projectfolder, launchconfig);
         } else {
-            const command = `python -u ${actsextension.taskfile} < ${actsextension.tmptestinfile} 1> ${actsextension.tmptestoutfile} 2> ${actsextension.tmptesterrfile}`;
+            const command = `python -u ${acts.taskfile} < ${acts.tmptestinfile} 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
             const options = {
-                cwd: actsextension.projectpath,
+                cwd: acts.projectpath,
             };
             child = child_process.exec(command, options);
         }

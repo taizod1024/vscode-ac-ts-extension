@@ -1,8 +1,8 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
 import child_process, { ExecFileSyncOptions } from "child_process";
-import { BaseSite } from "./BaseSite";
-import { BaseLang } from "./BaseLang";
+import { Site as Site } from "./Site";
+import { Lang as Lang } from "./Lang";
 import { atcoder } from "./site/AtCoder";
 import { yukicoder } from "./site/Yukicoder";
 import { typescript } from "./lang/TypeScript";
@@ -27,14 +27,14 @@ class AcTsExtension {
     public contest: string;
     public task: string;
     public extension: string;
-    public basesite: BaseSite;
-    public baselang: BaseLang;
+    public Site: Site;
+    public Lang: Lang;
 
     // prop
     public sites: string[];
     public extensions: string[];
-    public basesites: BaseSite[];
-    public baselangs: BaseLang[];
+    public Sites: Site[];
+    public Langs: Lang[];
     public tasktmplfile: string;
     public usertasktmplfile: string;
     public taskpath: string;
@@ -61,12 +61,12 @@ class AcTsExtension {
         this.configfile = `${process.env.USERPROFILE}\\.${this.appid}.json`;
 
         // coders and langs
-        this.basesites = [atcoder, yukicoder];
-        this.baselangs = [typescript, javascript, python];
+        this.Sites = [atcoder, yukicoder];
+        this.Langs = [typescript, javascript, python];
 
         // sites and extensions
-        this.sites = this.basesites.map(val => val.name);
-        this.extensions = this.baselangs.map(val => val.extension);
+        this.sites = this.Sites.map(val => val.name);
+        this.extensions = this.Langs.map(val => val.extension);
 
         // init context
         this.channel = vscode.window.createOutputChannel(this.appname);
@@ -98,17 +98,17 @@ class AcTsExtension {
         this.timeout = 5000;
 
         // site specific
-        this.basesite = this.basesites.find(val => val.isSelected());
-        this.baselang = this.baselangs.find(val => val.isSelected());
+        this.Site = this.Sites.find(val => val.isSelected());
+        this.Lang = this.Langs.find(val => val.isSelected());
 
         // check and init coder
-        this.basesite.checkLogin();
-        await this.basesite.initPropAsync(withtask);
+        this.Site.checkLogin();
+        await this.Site.initPropAsync(withtask);
 
         // check lang if exists
-        if (this.baselang) {
+        if (this.Lang) {
             // this.lang is null on loginSite
-            this.baselang.checkLang();
+            this.Lang.checkLang();
         }
 
         // save config
@@ -123,9 +123,9 @@ class AcTsExtension {
         await this.initPropAsync(false);
 
         // login site
-        await this.basesite.loginSiteAsync();
+        await this.Site.loginSiteAsync();
 
-        actsextension.channel.appendLine(`---- SUCCESS: ${this.site} done ----`);
+        acts.channel.appendLine(`---- SUCCESS: ${this.site} done ----`);
     }
 
     public async initTaskAsync() {
@@ -142,7 +142,7 @@ class AcTsExtension {
         let text;
         if (!fs.existsSync(this.testfile)) {
             // get testtext
-            text = await this.basesite.getTestAsync();
+            text = await this.Site.getTestAsync();
         }
 
         // create taskfile
@@ -263,7 +263,7 @@ class AcTsExtension {
                 let istimeout = false;
 
                 // exec command if typescript
-                child = that.baselang.testLang(debug);
+                child = that.Lang.testLang(debug);
 
                 // wait child process
                 (function waitchild() {
@@ -372,9 +372,9 @@ class AcTsExtension {
         }
 
         // submit task
-        await this.basesite.submitTaskAsync();
+        await this.Site.submitTaskAsync();
 
-        actsextension.channel.appendLine(`---- SUCCESS: ${actsextension.task} submitted ----`);
+        acts.channel.appendLine(`---- SUCCESS: ${acts.task} submitted ----`);
     }
 
     public async removeTaskAsync() {
@@ -417,7 +417,7 @@ class AcTsExtension {
         await this.initPropAsync(true);
 
         // open task
-        this.basesite.browseTask();
+        this.Site.browseTask();
 
         this.channel.appendLine(`---- SUCCESS: browse ${this.task} ----`);
     }
@@ -436,7 +436,7 @@ class AcTsExtension {
         this.contest = json.contest || "";
         this.task = json.task || "";
         this.extension = json.extension;
-        this.basesites.forEach(val => val.loadConfig(json));
+        this.Sites.forEach(val => val.loadConfig(json));
     }
     public saveConfig() {
         const json = {
@@ -445,7 +445,7 @@ class AcTsExtension {
             task: this.task,
             extension: this.extension,
         };
-        this.basesites.forEach(val => val.saveConfig(json));
+        this.Sites.forEach(val => val.saveConfig(json));
         fs.writeFileSync(this.configfile, JSON.stringify(json));
     }
 
@@ -468,4 +468,4 @@ class AcTsExtension {
         return new Date().toLocaleString("ja-JP").split(" ")[1];
     }
 }
-export const actsextension = new AcTsExtension();
+export const acts = new AcTsExtension();

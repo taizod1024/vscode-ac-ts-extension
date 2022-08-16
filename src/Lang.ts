@@ -1,6 +1,4 @@
-// python / typescript / javascript
-
-export interface BaseLang {
+export interface Lang {
     // prop
     name: string;
     extension: string;

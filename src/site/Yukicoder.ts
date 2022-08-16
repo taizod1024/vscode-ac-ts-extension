@@ -1,13 +1,13 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
 import superagent from "superagent";
-import { actsextension } from "../AcTsExtension";
-import { BaseSite } from "../BaseSite";
+import { acts } from "../AcTsExtension";
+import { Site } from "../Site";
 import { typescript } from "../lang/TypeScript";
 import { javascript } from "../lang/JavaScript";
 import { python } from "../lang/Python";
 
-class Yukicoder implements BaseSite {
+class Yukicoder implements Site {
     // param
     apikey: string;
     problemid: string;
@@ -43,28 +43,28 @@ class Yukicoder implements BaseSite {
     }
 
     isSelected(): boolean {
-        return actsextension.site === "yukicoder";
+        return acts.site === "yukicoder";
     }
 
     async initPropAsync(withtask: boolean) {
         if (withtask) {
-            this.problemnourl = `https://yukicoder.me/problems/no/${actsextension.task}`;
-            this.api_problemnourl = `https://yukicoder.me/api/v1/problems/no/${actsextension.task}`;
+            this.problemnourl = `https://yukicoder.me/problems/no/${acts.task}`;
+            this.api_problemnourl = `https://yukicoder.me/api/v1/problems/no/${acts.task}`;
 
             // problemno to problemid
             this.problemid = await (async () => {
                 const agent = superagent.agent().set("accept", "application/json").set("Authorization", `Bearer ${this.apikey}`);
                 const res = await agent
                     .get(this.api_problemnourl)
-                    .proxy(actsextension.proxy)
+                    .proxy(acts.proxy)
                     .catch(res => {
-                        throw `ERROR: ${actsextension.responseToMessage(res)}`;
+                        throw `ERROR: ${acts.responseToMessage(res)}`;
                     });
                 return JSON.parse(res.text).ProblemId;
             })();
             this.api_problemidurl = `https://yukicoder.me/api/v1/problems/${this.problemid}`;
             this.api_submiturl = `https://yukicoder.me/api/v1/problems/${this.problemid}/submit`;
-            this.submissionsurl = `https://yukicoder.me/problems/no/${actsextension.task}/submissions?status=&lang_id=&my_submission=enabled`;
+            this.submissionsurl = `https://yukicoder.me/problems/no/${acts.task}/submissions?status=&lang_id=&my_submission=enabled`;
         }
     }
 
@@ -76,27 +76,27 @@ class Yukicoder implements BaseSite {
 
     async loginSiteAsync() {
         // show channel
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] yukicoder.apikey: ********`);
+        acts.channel.appendLine(`[${acts.timestamp()}] yukicoder.apikey: ********`);
     }
 
     async getTestAsync() {
         // show channel
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] yukicoder.problemnourl: ${this.problemnourl}`);
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] yukicoder.apikey: ********`);
+        acts.channel.appendLine(`[${acts.timestamp()}] yukicoder.problemnourl: ${this.problemnourl}`);
+        acts.channel.appendLine(`[${acts.timestamp()}] yukicoder.apikey: ********`);
 
         // get agent
         const agent = superagent.agent().set("accept", "application/json").set("Authorization", `Bearer ${this.apikey}`);
 
         // get file list
         let fileiurl = `${this.api_problemidurl}/file/in`;
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] yukicoder.fileinurl: ${fileiurl}`);
+        acts.channel.appendLine(`[${acts.timestamp()}] yukicoder.fileinurl: ${fileiurl}`);
         const resfilei = await agent
             .get(fileiurl)
-            .proxy(actsextension.proxy)
+            .proxy(acts.proxy)
             .catch(res => {
-                throw `ERROR: ${actsextension.responseToMessage(res)}`;
+                throw `ERROR: ${acts.responseToMessage(res)}`;
             });
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] -> ${resfilei.status}`);
+        acts.channel.appendLine(`[${acts.timestamp()}] -> ${resfilei.status}`);
 
         // get file
         let text = "";
@@ -107,26 +107,26 @@ class Yukicoder implements BaseSite {
 
             // get response
             let fileixurl = `${this.api_problemidurl}/file/in/${fileix}`;
-            actsextension.channel.appendLine(`[${actsextension.timestamp()}] yukicoder.fileiurl-${nx}: ${fileixurl}`);
+            acts.channel.appendLine(`[${acts.timestamp()}] yukicoder.fileiurl-${nx}: ${fileixurl}`);
             const resfileix = await agent
                 .get(fileixurl)
-                .proxy(actsextension.proxy)
+                .proxy(acts.proxy)
                 .catch(res => {
-                    throw `ERROR: ${actsextension.responseToMessage(res)}`;
+                    throw `ERROR: ${acts.responseToMessage(res)}`;
                 });
 
             let fileoxurl = `${this.api_problemidurl}/file/out/${fileix}`;
-            actsextension.channel.appendLine(`[${actsextension.timestamp()}] yukicoder.fileourl-${nx}: ${fileoxurl}`);
+            acts.channel.appendLine(`[${acts.timestamp()}] yukicoder.fileourl-${nx}: ${fileoxurl}`);
             const resfileox = await agent
                 .get(fileoxurl)
-                .proxy(actsextension.proxy)
+                .proxy(acts.proxy)
                 .catch(res => {
-                    throw `ERROR: ${actsextension.responseToMessage(res)}`;
+                    throw `ERROR: ${acts.responseToMessage(res)}`;
                 });
 
             // response to test text
-            text += resfileix.text.trim() + actsextension.separator;
-            text += resfileox.text.trim() + actsextension.separator;
+            text += resfileix.text.trim() + acts.separator;
+            text += resfileox.text.trim() + acts.separator;
         }
 
         return text;
@@ -134,30 +134,30 @@ class Yukicoder implements BaseSite {
 
     async submitTaskAsync() {
         // show channel
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] yukicoder.problemnourl: ${this.problemnourl}`);
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] yukicoder.apikey: ********`);
+        acts.channel.appendLine(`[${acts.timestamp()}] yukicoder.problemnourl: ${this.problemnourl}`);
+        acts.channel.appendLine(`[${acts.timestamp()}] yukicoder.apikey: ********`);
 
         // get agent
         const agent = superagent.agent().set("accept", "application/json").set("Authorization", `Bearer ${this.apikey}`);
 
         // submit task
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] yukicoder.api_submiturl: ${this.api_submiturl}`);
-        const code = fs.readFileSync(actsextension.taskfile).toString();
+        acts.channel.appendLine(`[${acts.timestamp()}] yukicoder.api_submiturl: ${this.api_submiturl}`);
+        const code = fs.readFileSync(acts.taskfile).toString();
         const res3 = await agent
             .post(this.api_submiturl)
-            .proxy(actsextension.proxy)
+            .proxy(acts.proxy)
             .set("Content-Type", "multipart/form-data")
             .field("lang", this.getLanguage())
             .field("source", code)
             .catch(res => {
-                throw `ERROR: ${actsextension.responseToMessage(res)}`;
+                throw `ERROR: ${acts.responseToMessage(res)}`;
             });
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] -> ${res3.status}`);
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] submissionsurl: ${this.submissionsurl}`);
+        acts.channel.appendLine(`[${acts.timestamp()}] -> ${res3.status}`);
+        acts.channel.appendLine(`[${acts.timestamp()}] submissionsurl: ${this.submissionsurl}`);
     }
 
     browseTask() {
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] taskurl: ${this.api_problemidurl}`);
+        acts.channel.appendLine(`[${acts.timestamp()}] taskurl: ${this.api_problemidurl}`);
         vscode.env.openExternal(vscode.Uri.parse(this.problemnourl));
     }
 

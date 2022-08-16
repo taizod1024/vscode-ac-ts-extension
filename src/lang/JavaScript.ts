@@ -1,10 +1,10 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
 import child_process, { ExecFileSyncOptions } from "child_process";
-import { actsextension } from "../AcTsExtension";
-import { BaseLang } from "../BaseLang";
+import { acts } from "../AcTsExtension";
+import { Lang } from "../Lang";
 
-class JavaScript implements BaseLang {
+class JavaScript implements Lang {
     // implemente
 
     // prop
@@ -13,32 +13,32 @@ class JavaScript implements BaseLang {
 
     // method
     checkLang(): void {
-        if (!fs.existsSync(actsextension.packagejsonfile) || !fs.existsSync(actsextension.packagelockjsonfile)) {
+        if (!fs.existsSync(acts.packagejsonfile) || !fs.existsSync(acts.packagelockjsonfile)) {
             throw `ERROR: missing package.json or package-lock.json, install node.js, run "npm init"`;
         }
     }
 
     isSelected(): boolean {
-        return actsextension.extension === ".js";
+        return acts.extension === ".js";
     }
 
     testLang(debug: boolean): any {
         let child = null;
         if (debug) {
             const launchconfig = {
-                name: actsextension.appid,
+                name: acts.appid,
                 type: "pwa-node",
                 request: "launch",
-                program: actsextension.taskfile,
-                args: ["<", actsextension.tmptestinfile, "1>", actsextension.tmptestoutfile, "2>", actsextension.tmptesterrfile],
+                program: acts.taskfile,
+                args: ["<", acts.tmptestinfile, "1>", acts.tmptestoutfile, "2>", acts.tmptesterrfile],
                 console: "integratedTerminal",
                 skipFiles: ["node_modules/**"],
             };
-            vscode.debug.startDebugging(actsextension.projectfolder, launchconfig);
+            vscode.debug.startDebugging(acts.projectfolder, launchconfig);
         } else {
-            const command = `node ${actsextension.taskfile} < ${actsextension.tmptestinfile} 1> ${actsextension.tmptestoutfile} 2> ${actsextension.tmptesterrfile}`;
+            const command = `node ${acts.taskfile} < ${acts.tmptestinfile} 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
             const options = {
-                cwd: actsextension.projectpath,
+                cwd: acts.projectpath,
             };
             child = child_process.exec(command, options);
         }
