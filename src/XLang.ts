@@ -1,4 +1,4 @@
-export interface Lang {
+export interface XLang {
     // prop
     name: string;
     extension: string;

@@ -3,12 +3,12 @@ import * as fs from "fs";
 import superagent from "superagent";
 import * as cheerio from "cheerio";
 import { acts } from "../AcTsExtension";
-import { Site } from "../Site";
-import { typescript } from "../lang/TypeScript";
-import { javascript } from "../lang/JavaScript";
-import { python } from "../lang/Python";
+import { XSite } from "../XSite";
+import { typescript } from "../xlang/TypeScript";
+import { javascript } from "../xlang/JavaScript";
+import { python } from "../xlang/Python";
 
-class AtCoder implements Site {
+class AtCoder implements XSite {
     // param
     username: string;
     password: string;

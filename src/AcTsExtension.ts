@@ -1,13 +1,13 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
 import child_process, { ExecFileSyncOptions } from "child_process";
-import { Site as Site } from "./Site";
-import { Lang as Lang } from "./Lang";
-import { atcoder } from "./site/AtCoder";
-import { yukicoder } from "./site/Yukicoder";
-import { typescript } from "./lang/TypeScript";
-import { javascript } from "./lang/JavaScript";
-import { python } from "./lang/Python";
+import { XSite } from "./XSite";
+import { XLang } from "./XLang";
+import { atcoder } from "./xsite/AtCoder";
+import { yukicoder } from "./xsite/Yukicoder";
+import { typescript } from "./xlang/TypeScript";
+import { javascript } from "./xlang/JavaScript";
+import { python } from "./xlang/Python";
 
 // extension core
 class AcTsExtension {
@@ -27,14 +27,14 @@ class AcTsExtension {
     public contest: string;
     public task: string;
     public extension: string;
-    public Site: Site;
-    public Lang: Lang;
+    public xsite: XSite;
+    public xlang: XLang;
 
     // prop
     public sites: string[];
     public extensions: string[];
-    public Sites: Site[];
-    public Langs: Lang[];
+    public xsites: XSite[];
+    public xlangs: XLang[];
     public tasktmplfile: string;
     public usertasktmplfile: string;
     public taskpath: string;
@@ -61,12 +61,12 @@ class AcTsExtension {
         this.configfile = `${process.env.USERPROFILE}\\.${this.appid}.json`;
 
         // coders and langs
-        this.Sites = [atcoder, yukicoder];
-        this.Langs = [typescript, javascript, python];
+        this.xsites = [atcoder, yukicoder];
+        this.xlangs = [typescript, javascript, python];
 
         // sites and extensions
-        this.sites = this.Sites.map(val => val.name);
-        this.extensions = this.Langs.map(val => val.extension);
+        this.sites = this.xsites.map(xsite => xsite.name);
+        this.extensions = this.xlangs.map(xlang => xlang.extension);
 
         // init context
         this.channel = vscode.window.createOutputChannel(this.appname);
@@ -98,17 +98,17 @@ class AcTsExtension {
         this.timeout = 5000;
 
         // site specific
-        this.Site = this.Sites.find(val => val.isSelected());
-        this.Lang = this.Langs.find(val => val.isSelected());
+        this.xsite = this.xsites.find(xsite => xsite.isSelected());
+        this.xlang = this.xlangs.find(xlang => xlang.isSelected());
 
         // check and init coder
-        this.Site.checkLogin();
-        await this.Site.initPropAsync(withtask);
+        this.xsite.checkLogin();
+        await this.xsite.initPropAsync(withtask);
 
         // check lang if exists
-        if (this.Lang) {
+        if (this.xlang) {
             // this.lang is null on loginSite
-            this.Lang.checkLang();
+            this.xlang.checkLang();
         }
 
         // save config
@@ -123,7 +123,7 @@ class AcTsExtension {
         await this.initPropAsync(false);
 
         // login site
-        await this.Site.loginSiteAsync();
+        await this.xsite.loginSiteAsync();
 
         acts.channel.appendLine(`---- SUCCESS: ${this.site} done ----`);
     }
@@ -142,7 +142,7 @@ class AcTsExtension {
         let text;
         if (!fs.existsSync(this.testfile)) {
             // get testtext
-            text = await this.Site.getTestAsync();
+            text = await this.xsite.getTestAsync();
         }
 
         // create taskfile
@@ -263,11 +263,14 @@ class AcTsExtension {
                 let istimeout = false;
 
                 // exec command if typescript
-                child = that.Lang.testLang(debug);
+                child = that.xlang.testLang(debug);
 
                 // wait child process
                 (function waitchild() {
-                    if (child?.exitCode === null) {
+                    if (child === null) {
+                        setTimeout(waitchild, 500);
+                        return;
+                    } else if (child.exitCode === null) {
                         timecount += 500;
                         if (timecount < that.timeout) {
                             setTimeout(waitchild, 500);
@@ -372,7 +375,7 @@ class AcTsExtension {
         }
 
         // submit task
-        await this.Site.submitTaskAsync();
+        await this.xsite.submitTaskAsync();
 
         acts.channel.appendLine(`---- SUCCESS: ${acts.task} submitted ----`);
     }
@@ -417,7 +420,7 @@ class AcTsExtension {
         await this.initPropAsync(true);
 
         // open task
-        this.Site.browseTask();
+        this.xsite.browseTask();
 
         this.channel.appendLine(`---- SUCCESS: browse ${this.task} ----`);
     }
@@ -436,7 +439,7 @@ class AcTsExtension {
         this.contest = json.contest || "";
         this.task = json.task || "";
         this.extension = json.extension;
-        this.Sites.forEach(val => val.loadConfig(json));
+        this.xsites.forEach(val => val.loadConfig(json));
     }
     public saveConfig() {
         const json = {
@@ -445,7 +448,7 @@ class AcTsExtension {
             task: this.task,
             extension: this.extension,
         };
-        this.Sites.forEach(val => val.saveConfig(json));
+        this.xsites.forEach(val => val.saveConfig(json));
         fs.writeFileSync(this.configfile, JSON.stringify(json));
     }
 

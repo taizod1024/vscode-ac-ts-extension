@@ -1,4 +1,4 @@
-export interface Site {
+export interface XSite {
     // prop
     name: string;
     contestregexp: RegExp;
