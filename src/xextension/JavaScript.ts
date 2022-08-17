@@ -12,17 +12,19 @@ class JavaScript implements XExtension {
     extension = ".js";
 
     // method
+    isSelected(): boolean {
+        return acts.extension === ".js";
+    }
+
     checkLang(): void {
         if (!fs.existsSync(acts.packagejsonfile) || !fs.existsSync(acts.packagelockjsonfile)) {
             throw `ERROR: missing package.json or package-lock.json, install node.js, run "npm init"`;
         }
     }
 
-    isSelected(): boolean {
-        return acts.extension === ".js";
-    }
+    compileTask(): void {}
 
-    testLang(debug: boolean): any {
+    testTask(debug: boolean): any {
         let child = null;
         if (debug) {
             const launchconfig = {
@@ -37,9 +39,7 @@ class JavaScript implements XExtension {
             vscode.debug.startDebugging(acts.projectfolder, launchconfig);
         } else {
             const command = `node ${acts.taskfile} < ${acts.tmptestinfile} 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
-            const options = {
-                cwd: acts.projectpath,
-            };
+            const options = { cwd: acts.projectpath };
             child = child_process.exec(command, options);
         }
         return child;

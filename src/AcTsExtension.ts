@@ -10,6 +10,9 @@ import { javascript } from "./xextension/JavaScript";
 import { python } from "./xextension/Python";
 import { langc } from "./xextension/LangC";
 
+// TODO LangCpp追加
+// TODO Java追加
+
 // extension core
 class AcTsExtension {
     // constant
@@ -37,12 +40,12 @@ class AcTsExtension {
     public usertasktmplfile: string;
     public taskpath: string;
     public taskfile: string;
-    public execfile: string;
     public taskbuildpath: string;
     public taskbuildfile: string;
     public testpath: string;
     public testfile: string;
     public tmptestpath: string;
+    public tmpexecfile: string;
     public tmptestinfile: string;
     public tmptestoutfile: string;
     public tmptesterrfile: string;
@@ -88,12 +91,12 @@ class AcTsExtension {
         this.usertasktmplfile = `${this.projectpath}\\template\\default${this.extension}`;
         this.taskpath = `${this.projectpath}\\src\\${this.site}\\${this.contest}`;
         this.taskfile = `${this.projectpath}\\src\\${this.site}\\${this.contest}\\${this.task}${this.extension}`;
-        this.execfile = `${this.projectpath}\\src\\${this.site}\\${this.contest}\\${this.task}${process.env.WINDIR ? ".exe" : ".out"}`;
         this.taskbuildpath = `${process.env.TEMP}\\${this.appid}\\build\\${this.site}`;
         this.taskbuildfile = `${this.taskbuildpath}\\${this.task}.js`;
         this.testpath = `${this.projectpath}\\src\\${this.site}\\${this.contest}`;
         this.testfile = `${this.projectpath}\\src\\${this.site}\\${this.contest}\\${this.task}.txt`;
         this.tmptestpath = `${process.env.TEMP}\\${this.appid}`;
+        this.tmpexecfile = `${process.env.TEMP}\\${this.appid}\\${this.task}${process.env.WINDIR ? ".exe" : ".out"}`;
         this.tmptestinfile = `${process.env.TEMP}\\${this.appid}\\test_in.txt`;
         this.tmptestoutfile = `${process.env.TEMP}\\${this.appid}\\test_out.txt`;
         this.tmptesterrfile = `${process.env.TEMP}\\${this.appid}\\test_err.txt`;
@@ -246,6 +249,9 @@ class AcTsExtension {
             throw `WARN: there is no test set`;
         }
 
+        // compile task
+        this.xextension.compileTask();
+
         // run test set
         let ok = 0;
         let ng = 0;
@@ -268,11 +274,14 @@ class AcTsExtension {
                 let timecount = 0;
                 let istimeout = false;
 
-                // exec command if typescript
-                child = that.xextension.testLang(debug);
+                // test task
+                child = that.xextension.testTask(debug);
 
                 // wait child process
                 (function waitchild() {
+                    // TODO exit codeの取得
+                    // TODO exit codeが0の場合は標準エラーがあってもエラーにしない
+                    // TODO debugu時のexit codeの取得、なぜかうまくいかない
                     if (child?.exitCode === null) {
                         timecount += 500;
                         if (timecount < that.timeout) {
@@ -305,10 +314,6 @@ class AcTsExtension {
                             // test done
                             (function commanddone() {
                                 that.channel.show(true);
-                                // delete executable
-                                if (fs.existsSync(that.execfile)) {
-                                    fs.unlinkSync(that.execfile);
-                                }
                                 // read output
                                 const out = fs.readFileSync(that.tmptestoutfile).toString().trim().replace(/\n/g, "\r\n");
                                 fs.unlinkSync(that.tmptestoutfile);
@@ -329,6 +334,10 @@ class AcTsExtension {
                                 // chceck canceled
                                 if (out === "") {
                                     that.channel.appendLine(`---- CANCELED OR NO OUTPUT ----`);
+                                    // delete executable if canceled
+                                    if (fs.existsSync(that.tmpexecfile)) {
+                                        fs.unlinkSync(that.tmpexecfile);
+                                    }
                                     resolve();
                                     return;
                                 }
@@ -346,6 +355,10 @@ class AcTsExtension {
                                 if (iosx < ios.length) {
                                     setTimeout(runtest, 500);
                                     return;
+                                }
+                                // delete executable if done
+                                if (fs.existsSync(that.tmpexecfile)) {
+                                    fs.unlinkSync(that.tmpexecfile);
                                 }
                                 // test set done
                                 let msg = `${that.task} OK=${ok}, NG=${ng}`;
@@ -461,7 +474,7 @@ class AcTsExtension {
 
     // expand command
     public expandString(str: string): string {
-        return str.replace(/\$taskfile/g, this.taskfile).replace(/\$execfile/g, this.execfile);
+        return str.replace(/\$taskfile/g, this.taskfile).replace(/\$execfile/g, this.tmpexecfile);
     }
 
     // message

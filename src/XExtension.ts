@@ -6,5 +6,6 @@ export interface XExtension {
     // method
     isSelected(): boolean;
     checkLang(): void;
-    testLang(debug: boolean): any;
+    compileTask(): void;
+    testTask(debug: boolean): any;
 }

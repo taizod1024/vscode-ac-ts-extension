@@ -12,17 +12,19 @@ class TypeScript implements XExtension {
     extension = ".ts";
 
     // method
+    isSelected(): boolean {
+        return acts.extension === this.extension;
+    }
+
     checkLang(): void {
         if (!fs.existsSync(acts.packagejsonfile) || !fs.existsSync(acts.packagelockjsonfile)) {
             throw `ERROR: missing package.json or package-lock.json, install node.js, run "npm init && npm install --save-dev typescript ts-node @types/node"`;
         }
     }
 
-    isSelected(): boolean {
-        return acts.extension === this.extension;
-    }
+    compileTask(): void {}
 
-    testLang(debug: boolean): any {
+    testTask(debug: boolean): any {
         let child = null;
         if (debug) {
             const launchconfig = {
@@ -39,10 +41,7 @@ class TypeScript implements XExtension {
             vscode.debug.startDebugging(acts.projectfolder, launchconfig);
         } else {
             const command = `node --require ts-node/register ${acts.taskfile} < ${acts.tmptestinfile} 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
-            const options = {
-                cwd: acts.projectpath,
-                env: { TS_NODE_TRANSPILE_ONLY: "1" },
-            };
+            const options = { cwd: acts.projectpath, env: { TS_NODE_TRANSPILE_ONLY: "1" } };
             child = child_process.exec(command, options);
         }
         return child;

@@ -12,6 +12,10 @@ class Python implements XExtension {
     extension = ".py";
 
     // method
+    isSelected(): boolean {
+        return acts.extension === ".py";
+    }
+
     checkLang(): void {
         // throw if non-zero returned
         const command = `python --version`;
@@ -19,15 +23,13 @@ class Python implements XExtension {
         try {
             child_process.execSync(command, options);
         } catch (ex) {
-            throw `ERROR: cannot run "${command}"`;
+            throw `ERROR: check failed, command="${command}"`;
         }
     }
 
-    isSelected(): boolean {
-        return acts.extension === ".py";
-    }
+    compileTask(): void {}
 
-    testLang(debug: boolean): any {
+    testTask(debug: boolean): any {
         let child = null;
         if (debug) {
             const launchconfig = {
@@ -41,9 +43,7 @@ class Python implements XExtension {
             vscode.debug.startDebugging(acts.projectfolder, launchconfig);
         } else {
             const command = `python -u ${acts.taskfile} < ${acts.tmptestinfile} 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
-            const options = {
-                cwd: acts.projectpath,
-            };
+            const options = { cwd: acts.projectpath };
             child = child_process.exec(command, options);
         }
         return child;

@@ -351,6 +351,7 @@ export function activate(context: vscode.ExtensionContext) {
                 if (!actshelper.checkActiveFile()) {
                     return;
                 }
+                // TODO select language
                 // exec command
                 acts.submitTaskAsync().catch(ex => {
                     acts.channel.appendLine("**** " + ex + " ****");
