@@ -63,7 +63,52 @@
         "command": "ac-ts-extension.browseTask",
         "title": "AtCoder/Yukicoder Extension: Browse Task"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "AtCoder/Yukicoder Extension",
+      "properties": {
+        "atcoderYukicoderExtension.executableFilenameForLinux": {
+          "type": "string",
+          "description": "the default filename for executable for linux, replacing with $execfile",
+          "default": "./a.out"
+        },
+        "atcoderYukicoderExtension.executableFilenameForWindows": {
+          "type": "string",
+          "description": "the default filename for executable for windows, replacing with $execfile",
+          "default": ".\\a.exe"
+        },
+        "atcoderYukicoderExtension.typescriptExecutor": {
+          "type": "string",
+          "description": "command line for TypeScript",
+          "default": "node --require ts-node/register $taskfile"
+        },
+        "atcoderYukicoderExtension.javascriptExecutor": {
+          "type": "string",
+          "description": "command line for JavaScript",
+          "default": "node $taskfile"
+        },
+        "atcoderYukicoderExtension.pythonExecutor": {
+          "type": "string",
+          "description": "command line for Python",
+          "default": "python -u $taskfile"
+        },
+        "atcoderYukicoderExtension.CExecutor": {
+          "type": "string",
+          "description": "command line for C(GCC)",
+          "default": "gcc $taskfile -o $execfile -lm && $execfile"
+        },
+        "atcoderYukicoderExtension.C++Executor": {
+          "type": "string",
+          "description": "command line for C++(GCC)",
+          "default": "g++ $taskfile -o $execfile && $execfile"
+        },
+        "atcoderYukicoderExtension.javaExecutor": {
+          "type": "string",
+          "description": "command line for Java",
+          "default": "javac $taskfile && java Main"
+        }
+      }
+    }
   },
   "scripts": {
     "nodecheck": "node --version | findstr \"v16.13.0\"",
