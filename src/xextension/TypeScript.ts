@@ -19,7 +19,7 @@ class TypeScript implements XExtension {
     }
 
     isSelected(): boolean {
-        return acts.extension === ".ts";
+        return acts.extension === this.extension;
     }
 
     testLang(debug: boolean): any {

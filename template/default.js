@@ -25,7 +25,7 @@ const readchar = () => String(charit.next().value);
 
 // main
 const main = function () {
-  // TODO edit the code
+  // TODO edit this code
 
   // param
   let n;

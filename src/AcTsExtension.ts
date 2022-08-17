@@ -8,6 +8,7 @@ import { yukicoder } from "./xsite/Yukicoder";
 import { typescript } from "./xextension/TypeScript";
 import { javascript } from "./xextension/JavaScript";
 import { python } from "./xextension/Python";
+import { langc } from "./xextension/LangC";
 
 // extension core
 class AcTsExtension {
@@ -27,18 +28,16 @@ class AcTsExtension {
     public contest: string;
     public task: string;
     public extension: string;
-    public xsite: XSite;
-    public xextension: XExtension;
+    public language: string;
 
     // prop
-    public sites: string[];
-    public extensions: string[];
-    public xsites: XSite[];
-    public xextensions: XExtension[];
+    public xsite: XSite;
+    public xextension: XExtension;
     public tasktmplfile: string;
     public usertasktmplfile: string;
     public taskpath: string;
     public taskfile: string;
+    public execfile: string;
     public taskbuildpath: string;
     public taskbuildfile: string;
     public testpath: string;
@@ -53,6 +52,12 @@ class AcTsExtension {
     public proxy: any;
     public timeout: number;
 
+    // const
+    public sites: string[];
+    public extensions: string[];
+    public xsites: XSite[];
+    public xextensions: XExtension[];
+
     // setup function
     constructor() {
         // init constant
@@ -62,7 +67,7 @@ class AcTsExtension {
 
         // coders and langs
         this.xsites = [atcoder, yukicoder];
-        this.xextensions = [typescript, javascript, python];
+        this.xextensions = [typescript, javascript, python, langc];
 
         // sites and extensions
         this.sites = this.xsites.map(xsite => xsite.name);
@@ -83,6 +88,7 @@ class AcTsExtension {
         this.usertasktmplfile = `${this.projectpath}\\template\\default${this.extension}`;
         this.taskpath = `${this.projectpath}\\src\\${this.site}\\${this.contest}`;
         this.taskfile = `${this.projectpath}\\src\\${this.site}\\${this.contest}\\${this.task}${this.extension}`;
+        this.execfile = `${this.projectpath}\\src\\${this.site}\\${this.contest}\\${this.task}${process.env.WINDIR ? ".exe" : ".out"}`;
         this.taskbuildpath = `${process.env.TEMP}\\${this.appid}\\build\\${this.site}`;
         this.taskbuildfile = `${this.taskbuildpath}\\${this.task}.js`;
         this.testpath = `${this.projectpath}\\src\\${this.site}\\${this.contest}`;
@@ -267,10 +273,7 @@ class AcTsExtension {
 
                 // wait child process
                 (function waitchild() {
-                    if (child === null) {
-                        setTimeout(waitchild, 500);
-                        return;
-                    } else if (child.exitCode === null) {
+                    if (child?.exitCode === null) {
                         timecount += 500;
                         if (timecount < that.timeout) {
                             setTimeout(waitchild, 500);
@@ -302,6 +305,10 @@ class AcTsExtension {
                             // test done
                             (function commanddone() {
                                 that.channel.show(true);
+                                // delete executable
+                                if (fs.existsSync(that.execfile)) {
+                                    fs.unlinkSync(that.execfile);
+                                }
                                 // read output
                                 const out = fs.readFileSync(that.tmptestoutfile).toString().trim().replace(/\n/g, "\r\n");
                                 fs.unlinkSync(that.tmptestoutfile);
@@ -450,6 +457,11 @@ class AcTsExtension {
         };
         this.xsites.forEach(val => val.saveConfig(json));
         fs.writeFileSync(this.configfile, JSON.stringify(json));
+    }
+
+    // expand command
+    public expandString(str: string): string {
+        return str.replace(/\$taskfile/g, this.taskfile).replace(/\$execfile/g, this.execfile);
     }
 
     // message

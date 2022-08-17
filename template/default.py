@@ -1,4 +1,4 @@
-# TODO edit the code
+# TODO edit this code
 
 # param
 n = int(input())

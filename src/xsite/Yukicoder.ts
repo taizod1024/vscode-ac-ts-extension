@@ -171,7 +171,7 @@ class Yukicoder implements XSite {
         if (python.isSelected()) {
             return "python3";
         }
-        return "";
+        throw "ERROR: unsupported language";
     }
 
     loadConfig(json: any) {

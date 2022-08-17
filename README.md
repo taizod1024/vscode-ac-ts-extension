@@ -95,7 +95,7 @@ Yukicoder の場合はプロフィール画面の API キーを入力します�
 #### Python ひな型
 
 ```Python
-# TODO edit the code
+# TODO edit this code
 
 # param
 n = int(input())
@@ -123,7 +123,7 @@ const readchar = () => String((charit.next()).value);
 // main
 const main = function () {
 
-    // TODO edit the code
+    // TODO edit this code
 
     // param
     let n: number;

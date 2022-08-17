@@ -7,6 +7,7 @@ import { XSite } from "../XSite";
 import { typescript } from "../xextension/TypeScript";
 import { javascript } from "../xextension/JavaScript";
 import { python } from "../xextension/Python";
+import { XExtension } from "../XExtension";
 
 class AtCoder implements XSite {
     // param
@@ -256,7 +257,7 @@ class AtCoder implements XSite {
         if (python.isSelected()) {
             return 4006;
         }
-        return 0;
+        throw "ERROR: unsupported language";
     }
 
     loadConfig(json: any) {

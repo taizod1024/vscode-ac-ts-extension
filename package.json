@@ -67,44 +67,49 @@
     "configuration": {
       "title": "AtCoder/Yukicoder Extension",
       "properties": {
-        "atcoderYukicoderExtension.executableFilenameForLinux": {
-          "type": "string",
-          "description": "the default filename for executable for linux, replacing with $execfile",
-          "default": "./a.out"
-        },
-        "atcoderYukicoderExtension.executableFilenameForWindows": {
-          "type": "string",
-          "description": "the default filename for executable for windows, replacing with $execfile",
-          "default": ".\\a.exe"
-        },
-        "atcoderYukicoderExtension.typescriptExecutor": {
+        "ac-ts-extension.typescriptExecutor": {
           "type": "string",
           "description": "command line for TypeScript",
           "default": "node --require ts-node/register $taskfile"
         },
-        "atcoderYukicoderExtension.javascriptExecutor": {
+        "ac-ts-extension.javascriptExecutor": {
           "type": "string",
           "description": "command line for JavaScript",
           "default": "node $taskfile"
         },
-        "atcoderYukicoderExtension.pythonExecutor": {
+        "ac-ts-extension.pythonExecutor": {
           "type": "string",
           "description": "command line for Python",
           "default": "python -u $taskfile"
         },
-        "atcoderYukicoderExtension.CExecutor": {
+        "ac-ts-extension.cChecker": {
           "type": "string",
-          "description": "command line for C(GCC)",
+          "description": "command line checker for C",
+          "default": "gcc --version"
+        },
+        "ac-ts-extension.cExecutor": {
+          "type": "string",
+          "description": "command line executor for C",
           "default": "gcc $taskfile -o $execfile -lm && $execfile"
         },
-        "atcoderYukicoderExtension.C++Executor": {
+        "ac-ts-extension.c++Checker": {
           "type": "string",
-          "description": "command line for C++(GCC)",
+          "description": "command line checker for C++",
+          "default": "g++ --version"
+        },
+        "ac-ts-extension.c++Executor": {
+          "type": "string",
+          "description": "command line executor for C++",
           "default": "g++ $taskfile -o $execfile && $execfile"
         },
-        "atcoderYukicoderExtension.javaExecutor": {
+        "ac-ts-extension.javaChecker": {
           "type": "string",
-          "description": "command line for Java",
+          "description": "command line checker for Java",
+          "default": "javac --version"
+        },
+        "ac-ts-extension.javaExecutor": {
+          "type": "string",
+          "description": "command line executor for Java",
           "default": "javac $taskfile && java Main"
         }
       }
