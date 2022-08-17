@@ -1,4 +1,4 @@
-export interface XLang {
+export interface XExtension {
     // prop
     name: string;
     extension: string;

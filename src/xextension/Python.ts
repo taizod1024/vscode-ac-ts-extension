@@ -2,24 +2,29 @@ import * as vscode from "vscode";
 import * as fs from "fs";
 import child_process, { ExecFileSyncOptions } from "child_process";
 import { acts } from "../AcTsExtension";
-import { XLang } from "../XLang";
+import { XExtension } from "../XExtension";
 
-class TypeScript implements XLang {
-    // implemente
+class Python implements XExtension {
+    // implements
 
     // prop
-    name = "typescript";
-    extension = ".ts";
+    name = "python";
+    extension = ".py";
 
     // method
     checkLang(): void {
-        if (!fs.existsSync(acts.packagejsonfile) || !fs.existsSync(acts.packagelockjsonfile)) {
-            throw `ERROR: missing package.json or package-lock.json, install node.js, run "npm init && npm install --save-dev typescript ts-node @types/node"`;
+        // throw if non-zero returned
+        const command = `python --version`;
+        const options = { cwd: acts.projectpath };
+        try {
+            child_process.execSync(command, options);
+        } catch (ex) {
+            throw `ERROR: cannot run "${command}"`;
         }
     }
 
     isSelected(): boolean {
-        return acts.extension === ".ts";
+        return acts.extension === ".py";
     }
 
     testLang(debug: boolean): any {
@@ -27,25 +32,21 @@ class TypeScript implements XLang {
         if (debug) {
             const launchconfig = {
                 name: acts.appid,
-                type: "pwa-node",
+                type: "python",
                 request: "launch",
-                runtimeArgs: ["--require", "ts-node/register"],
                 program: acts.taskfile,
                 args: ["<", acts.tmptestinfile, "1>", acts.tmptestoutfile, "2>", acts.tmptesterrfile],
                 console: "integratedTerminal",
-                skipFiles: ["node_modules/**"],
-                env: { TS_NODE_TRANSPILE_ONLY: "1" },
             };
             vscode.debug.startDebugging(acts.projectfolder, launchconfig);
         } else {
-            const command = `node --require ts-node/register ${acts.taskfile} < ${acts.tmptestinfile} 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
+            const command = `python -u ${acts.taskfile} < ${acts.tmptestinfile} 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
             const options = {
                 cwd: acts.projectpath,
-                env: { TS_NODE_TRANSPILE_ONLY: "1" },
             };
             child = child_process.exec(command, options);
         }
         return child;
     }
 }
-export const typescript = new TypeScript();
+export const python = new Python();

@@ -2,12 +2,12 @@ import * as vscode from "vscode";
 import * as fs from "fs";
 import child_process, { ExecFileSyncOptions } from "child_process";
 import { XSite } from "./XSite";
-import { XLang } from "./XLang";
+import { XExtension } from "./XExtension";
 import { atcoder } from "./xsite/AtCoder";
 import { yukicoder } from "./xsite/Yukicoder";
-import { typescript } from "./xlang/TypeScript";
-import { javascript } from "./xlang/JavaScript";
-import { python } from "./xlang/Python";
+import { typescript } from "./xextension/TypeScript";
+import { javascript } from "./xextension/JavaScript";
+import { python } from "./xextension/Python";
 
 // extension core
 class AcTsExtension {
@@ -28,13 +28,13 @@ class AcTsExtension {
     public task: string;
     public extension: string;
     public xsite: XSite;
-    public xlang: XLang;
+    public xextension: XExtension;
 
     // prop
     public sites: string[];
     public extensions: string[];
     public xsites: XSite[];
-    public xlangs: XLang[];
+    public xextensions: XExtension[];
     public tasktmplfile: string;
     public usertasktmplfile: string;
     public taskpath: string;
@@ -62,11 +62,11 @@ class AcTsExtension {
 
         // coders and langs
         this.xsites = [atcoder, yukicoder];
-        this.xlangs = [typescript, javascript, python];
+        this.xextensions = [typescript, javascript, python];
 
         // sites and extensions
         this.sites = this.xsites.map(xsite => xsite.name);
-        this.extensions = this.xlangs.map(xlang => xlang.extension);
+        this.extensions = this.xextensions.map(xlang => xlang.extension);
 
         // init context
         this.channel = vscode.window.createOutputChannel(this.appname);
@@ -99,16 +99,16 @@ class AcTsExtension {
 
         // site specific
         this.xsite = this.xsites.find(xsite => xsite.isSelected());
-        this.xlang = this.xlangs.find(xlang => xlang.isSelected());
+        this.xextension = this.xextensions.find(xlang => xlang.isSelected());
 
         // check and init coder
         this.xsite.checkLogin();
         await this.xsite.initPropAsync(withtask);
 
         // check lang if exists
-        if (this.xlang) {
+        if (this.xextension) {
             // this.lang is null on loginSite
-            this.xlang.checkLang();
+            this.xextension.checkLang();
         }
 
         // save config
@@ -263,7 +263,7 @@ class AcTsExtension {
                 let istimeout = false;
 
                 // exec command if typescript
-                child = that.xlang.testLang(debug);
+                child = that.xextension.testLang(debug);
 
                 // wait child process
                 (function waitchild() {

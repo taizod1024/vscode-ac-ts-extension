@@ -3,9 +3,9 @@ import * as fs from "fs";
 import superagent from "superagent";
 import { acts } from "../AcTsExtension";
 import { XSite } from "../XSite";
-import { typescript } from "../xlang/TypeScript";
-import { javascript } from "../xlang/JavaScript";
-import { python } from "../xlang/Python";
+import { typescript } from "../xextension/TypeScript";
+import { javascript } from "../xextension/JavaScript";
+import { python } from "../xextension/Python";
 
 class Yukicoder implements XSite {
     // param
