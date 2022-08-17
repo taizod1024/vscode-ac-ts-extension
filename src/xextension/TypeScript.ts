@@ -24,26 +24,25 @@ class TypeScript implements XExtension {
 
     compileTask(): void {}
 
-    testTask(debug: boolean): any {
-        let child = null;
-        if (debug) {
-            const launchconfig = {
-                name: acts.appid,
-                type: "pwa-node",
-                request: "launch",
-                runtimeArgs: ["--require", "ts-node/register"],
-                program: acts.taskfile,
-                args: ["<", acts.tmptestinfile, "1>", acts.tmptestoutfile, "2>", acts.tmptesterrfile],
-                console: "integratedTerminal",
-                skipFiles: ["node_modules/**"],
-                env: { TS_NODE_TRANSPILE_ONLY: "1" },
-            };
-            vscode.debug.startDebugging(acts.projectfolder, launchconfig);
-        } else {
-            const command = `node --require ts-node/register ${acts.taskfile} < ${acts.tmptestinfile} 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
-            const options = { cwd: acts.projectpath, env: { TS_NODE_TRANSPILE_ONLY: "1" } };
-            child = child_process.exec(command, options);
-        }
+    debugTask(): any {
+        const launchconfig = {
+            name: acts.appid,
+            type: "pwa-node",
+            request: "launch",
+            runtimeArgs: ["--require", "ts-node/register"],
+            program: acts.taskfile,
+            args: ["<", acts.tmptestinfile, "1>", acts.tmptestoutfile, "2>", acts.tmptesterrfile],
+            console: "integratedTerminal",
+            skipFiles: ["node_modules/**"],
+            env: { TS_NODE_TRANSPILE_ONLY: "1" },
+        };
+        vscode.debug.startDebugging(acts.projectfolder, launchconfig);
+    }
+
+    testTask(): any {
+        const command = `node --require ts-node/register ${acts.taskfile} < ${acts.tmptestinfile} 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
+        const options = { cwd: acts.projectpath, env: { TS_NODE_TRANSPILE_ONLY: "1" } };
+        const child = child_process.exec(command, options);
         return child;
     }
 }

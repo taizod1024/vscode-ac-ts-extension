@@ -116,7 +116,7 @@ class AcTsExtension {
 
         // check lang if exists
         if (this.xextension) {
-            // this.lang is null on loginSite
+            // this.xextension is null when loginSite
             this.xextension.checkLang();
         }
 
@@ -274,8 +274,12 @@ class AcTsExtension {
                 let timecount = 0;
                 let istimeout = false;
 
-                // test task
-                child = that.xextension.testTask(debug);
+                // test or debug task
+                if (debug) {
+                    that.xextension.debugTask();
+                } else {
+                    child = that.xextension.testTask();
+                }
 
                 // wait child process
                 (function waitchild() {

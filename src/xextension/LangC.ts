@@ -19,7 +19,6 @@ class LangC implements XExtension {
     // TODO ロジックの共通化
     // TODO implementsからextendsに変更
     checkLang(): void {
-        // throw if non-zero returned
         const config = vscode.workspace.getConfiguration(acts.appid);
         const cmd = acts.expandString(config.get("cChecker"));
         const command = `(${cmd}) 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
@@ -33,7 +32,6 @@ class LangC implements XExtension {
     }
 
     compileTask(): void {
-        // throw if non-zero returned
         const config = vscode.workspace.getConfiguration(acts.appid);
         const cmd = acts.expandString(config.get("cCompiler"));
         const command = `(${cmd}) 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
@@ -46,18 +44,16 @@ class LangC implements XExtension {
         }
     }
 
-    testTask(debug: boolean): any {
-        let child = null;
-        if (debug) {
-            throw "ERROR: debug is not supported";
-        } else {
-            // config
-            const config = vscode.workspace.getConfiguration(acts.appid);
-            const cmd = acts.expandString(config.get("cExecutor"));
-            const command = `(${cmd}) < ${acts.tmptestinfile} 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
-            const options = { cwd: acts.projectpath };
-            child = child_process.exec(command, options);
-        }
+    debugTask(): any {
+        throw "ERROR: debug is not supported";
+    }
+
+    testTask(): any {
+        const config = vscode.workspace.getConfiguration(acts.appid);
+        const cmd = acts.expandString(config.get("cExecutor"));
+        const command = `(${cmd}) < ${acts.tmptestinfile} 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
+        const options = { cwd: acts.projectpath };
+        const child = child_process.exec(command, options);
         return child;
     }
 }

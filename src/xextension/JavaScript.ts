@@ -24,24 +24,23 @@ class JavaScript implements XExtension {
 
     compileTask(): void {}
 
-    testTask(debug: boolean): any {
-        let child = null;
-        if (debug) {
-            const launchconfig = {
-                name: acts.appid,
-                type: "pwa-node",
-                request: "launch",
-                program: acts.taskfile,
-                args: ["<", acts.tmptestinfile, "1>", acts.tmptestoutfile, "2>", acts.tmptesterrfile],
-                console: "integratedTerminal",
-                skipFiles: ["node_modules/**"],
-            };
-            vscode.debug.startDebugging(acts.projectfolder, launchconfig);
-        } else {
-            const command = `node ${acts.taskfile} < ${acts.tmptestinfile} 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
-            const options = { cwd: acts.projectpath };
-            child = child_process.exec(command, options);
-        }
+    debugTask(): any {
+        const launchconfig = {
+            name: acts.appid,
+            type: "pwa-node",
+            request: "launch",
+            program: acts.taskfile,
+            args: ["<", acts.tmptestinfile, "1>", acts.tmptestoutfile, "2>", acts.tmptesterrfile],
+            console: "integratedTerminal",
+            skipFiles: ["node_modules/**"],
+        };
+        vscode.debug.startDebugging(acts.projectfolder, launchconfig);
+    }
+
+    testTask(): any {
+        const command = `node ${acts.taskfile} < ${acts.tmptestinfile} 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
+        const options = { cwd: acts.projectpath };
+        const child = child_process.exec(command, options);
         return child;
     }
 }

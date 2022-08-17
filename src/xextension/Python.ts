@@ -17,7 +17,6 @@ class Python implements XExtension {
     }
 
     checkLang(): void {
-        // throw if non-zero returned
         const command = `python --version`;
         const options = { cwd: acts.projectpath };
         try {
@@ -29,23 +28,22 @@ class Python implements XExtension {
 
     compileTask(): void {}
 
-    testTask(debug: boolean): any {
-        let child = null;
-        if (debug) {
-            const launchconfig = {
-                name: acts.appid,
-                type: "python",
-                request: "launch",
-                program: acts.taskfile,
-                args: ["<", acts.tmptestinfile, "1>", acts.tmptestoutfile, "2>", acts.tmptesterrfile],
-                console: "integratedTerminal",
-            };
-            vscode.debug.startDebugging(acts.projectfolder, launchconfig);
-        } else {
-            const command = `python -u ${acts.taskfile} < ${acts.tmptestinfile} 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
-            const options = { cwd: acts.projectpath };
-            child = child_process.exec(command, options);
-        }
+    debugTask(): any {
+        const launchconfig = {
+            name: acts.appid,
+            type: "python",
+            request: "launch",
+            program: acts.taskfile,
+            args: ["<", acts.tmptestinfile, "1>", acts.tmptestoutfile, "2>", acts.tmptesterrfile],
+            console: "integratedTerminal",
+        };
+        vscode.debug.startDebugging(acts.projectfolder, launchconfig);
+    }
+
+    testTask(): any {
+        const command = `python -u ${acts.taskfile} < ${acts.tmptestinfile} 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
+        const options = { cwd: acts.projectpath };
+        const child = child_process.exec(command, options);
         return child;
     }
 }
