@@ -21,8 +21,10 @@ class Java implements XExtension {
     checkLang(): void {
         // check
         const config = vscode.workspace.getConfiguration(acts.appid);
-        const cmd = acts.expandString(config.get("javaChecker"));
-        const command = `(${cmd}) 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
+        const cmdchk = String(config.get("javaChecker"));
+        acts.channel.appendLine(`[${acts.timestamp()}] checker: ${cmdchk}`);
+        const cmdexp = acts.expandString(cmdchk);
+        const command = `(${cmdexp}) 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
         const options = { cwd: acts.projectpath };
         try {
             child_process.execSync(command, options);
@@ -41,8 +43,10 @@ class Java implements XExtension {
 
         // compile
         const config = vscode.workspace.getConfiguration(acts.appid);
-        const cmd = acts.expandString(config.get("javaCompiler"));
-        const command = `(${cmd}) 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
+        const cmdcmp = String(config.get("javaCompiler"));
+        acts.channel.appendLine(`[${acts.timestamp()}] compiler: ${cmdcmp}`);
+        const cmdexp = acts.expandString(cmdcmp);
+        const command = `(${cmdexp}) 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
         const options = { cwd: acts.projectpath };
         try {
             child_process.execSync(command, options);
@@ -50,6 +54,10 @@ class Java implements XExtension {
             const err = fs.readFileSync(acts.tmptesterrfile).toString().trim().replace(/\n/g, "\r\n");
             throw `ERROR: compile failed\r\n${err}\r\n`;
         }
+
+        // show executor
+        const cmdexe = String(config.get("javaExecutor"));
+        acts.channel.appendLine(`[${acts.timestamp()}] executor: ${cmdexe}`);
     }
 
     debugTask(): any {
@@ -59,8 +67,9 @@ class Java implements XExtension {
     testTask(): any {
         // test
         const config = vscode.workspace.getConfiguration(acts.appid);
-        const cmd = acts.expandString(config.get("javaExecutor"));
-        const command = `(${cmd}) < ${acts.tmptestinfile} 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
+        const cmdexe = String(config.get("javaExecutor"));
+        const cmdexp = acts.expandString(cmdexe);
+        const command = `(${cmdexp}) < ${acts.tmptestinfile} 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
         const options = { cwd: acts.projectpath };
         const child = child_process.exec(command, options);
         return child;

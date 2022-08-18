@@ -4,7 +4,7 @@ import child_process, { ExecFileSyncOptions } from "child_process";
 import { acts } from "../AcTsExtension";
 import { XExtension } from "../XExtension";
 
-class LangC implements XExtension {
+class Cc implements XExtension {
     // implements
 
     // prop
@@ -16,6 +16,7 @@ class LangC implements XExtension {
         return acts.extension === this.extension;
     }
 
+    // TODO javaに倣って修正
     // TODO ロジックの共通化
     // TODO implementsからextendsに変更
     checkLang(): void {
@@ -60,4 +61,4 @@ class LangC implements XExtension {
         return child;
     }
 }
-export const langc = new LangC();
+export const cc = new Cc();

@@ -8,7 +8,7 @@ import { yukicoder } from "./xsite/Yukicoder";
 import { typescript } from "./xextension/TypeScript";
 import { javascript } from "./xextension/JavaScript";
 import { python } from "./xextension/Python";
-import { langc } from "./xextension/LangC";
+import { cc } from "./xextension/Cc";
 import { cpp } from "./xextension/Cpp";
 import { java } from "./xextension/Java";
 
@@ -69,7 +69,7 @@ class AcTsExtension {
 
         // coders and langs
         this.xsites = [atcoder, yukicoder];
-        this.xextensions = [langc, cpp, java, typescript, javascript, python];
+        this.xextensions = [cpp, python, java, cc, javascript, typescript];
 
         // sites and extensions
         this.sites = this.xsites.map(xsite => xsite.name);
