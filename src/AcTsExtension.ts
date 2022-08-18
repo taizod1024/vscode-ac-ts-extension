@@ -9,9 +9,8 @@ import { typescript } from "./xextension/TypeScript";
 import { javascript } from "./xextension/JavaScript";
 import { python } from "./xextension/Python";
 import { langc } from "./xextension/LangC";
-
-// TODO LangCpp追加
-// TODO Java追加
+import { cpp } from "./xextension/Cpp";
+import { java } from "./xextension/Java";
 
 // extension core
 class AcTsExtension {
@@ -70,7 +69,7 @@ class AcTsExtension {
 
         // coders and langs
         this.xsites = [atcoder, yukicoder];
-        this.xextensions = [typescript, javascript, python, langc];
+        this.xextensions = [langc, cpp, java, typescript, javascript, python];
 
         // sites and extensions
         this.sites = this.xsites.map(xsite => xsite.name);
@@ -225,7 +224,8 @@ class AcTsExtension {
             fs.unlinkSync(this.tmptestoutfile);
         }
 
-        // make dir
+        // make tmptestpath
+        this.channel.appendLine(`[${this.timestamp()}] tmptestpath: "${this.tmptestpath}"`);
         if (!fs.existsSync(this.tmptestpath)) {
             fs.mkdirSync(this.tmptestpath);
         }
@@ -270,7 +270,7 @@ class AcTsExtension {
                 fs.writeFileSync(that.tmptestinfile, io.in);
 
                 // exec command
-                let child;
+                let child = null;
                 let timecount = 0;
                 let istimeout = false;
 
@@ -478,7 +478,10 @@ class AcTsExtension {
 
     // expand command
     public expandString(str: string): string {
-        return str.replace(/\$taskfile/g, this.taskfile).replace(/\$execfile/g, this.tmpexecfile);
+        return str
+            .replace(/\$taskfile/g, this.taskfile)
+            .replace(/\$execfile/g, this.tmpexecfile)
+            .replace(/\$tmptestpath/g, this.tmptestpath);
     }
 
     // message

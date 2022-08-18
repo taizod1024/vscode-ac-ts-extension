@@ -110,7 +110,7 @@
         "ac-ts-extension.javaExecutor": {
           "type": "string",
           "description": "command line executor for Java",
-          "default": "java Main"
+          "default": "cd $tmptestpath && java Main"
         }
       }
     }

@@ -4,12 +4,12 @@ import child_process, { ExecFileSyncOptions } from "child_process";
 import { acts } from "../AcTsExtension";
 import { XExtension } from "../XExtension";
 
-class LangC implements XExtension {
+class Cpp implements XExtension {
     // implements
 
     // prop
-    name = "C";
-    extension = ".c";
+    name = "C++";
+    extension = ".cpp";
 
     // method
     isSelected(): boolean {
@@ -19,9 +19,8 @@ class LangC implements XExtension {
     // TODO ロジックの共通化
     // TODO implementsからextendsに変更
     checkLang(): void {
-        // check
         const config = vscode.workspace.getConfiguration(acts.appid);
-        const cmd = acts.expandString(config.get("cChecker"));
+        const cmd = acts.expandString(config.get("c++Checker"));
         const command = `(${cmd}) 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
         const options = { cwd: acts.projectpath };
         try {
@@ -33,9 +32,8 @@ class LangC implements XExtension {
     }
 
     compileTask(): void {
-        // compile
         const config = vscode.workspace.getConfiguration(acts.appid);
-        const cmd = acts.expandString(config.get("cCompiler"));
+        const cmd = acts.expandString(config.get("c++Compiler"));
         const command = `(${cmd}) 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
         const options = { cwd: acts.projectpath };
         try {
@@ -51,13 +49,12 @@ class LangC implements XExtension {
     }
 
     testTask(): any {
-        // test
         const config = vscode.workspace.getConfiguration(acts.appid);
-        const cmd = acts.expandString(config.get("cExecutor"));
+        const cmd = acts.expandString(config.get("c++Executor"));
         const command = `(${cmd}) < ${acts.tmptestinfile} 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
         const options = { cwd: acts.projectpath };
         const child = child_process.exec(command, options);
         return child;
     }
 }
-export const langc = new LangC();
+export const cpp = new Cpp();
