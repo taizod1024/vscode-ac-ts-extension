@@ -283,7 +283,7 @@ class AcTsExtension {
 
                 // wait child process
                 (function waitchild() {
-                    // TODO exit codeの取得
+                    // DOING exit codeの取得、0以外の場合にatcoderでエラーになるか確認
                     // TODO exit codeが0の場合は標準エラーがあってもエラーにしない
                     // TODO debugu時のexit codeの取得、なぜかうまくいかない
                     if (child?.exitCode === null) {

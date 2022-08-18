@@ -15,9 +15,6 @@ class Cpp implements IExtension {
         return acts.extension === this.extension;
     }
 
-    // TODO javaに倣って修正
-    // TODO ロジックの共通化
-    // TODO implementsからextendsに変更
     checkLang(): void {
         // check
         const cfgkey = "c++Checker";

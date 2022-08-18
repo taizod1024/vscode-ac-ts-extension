@@ -15,8 +15,6 @@ class Java implements IExtension {
         return acts.extension === this.extension;
     }
 
-    // TODO ロジックの共通化
-    // TODO implementsからextendsに変更
     checkLang(): void {
         // check
         const cfgkey = "javaChecker";
