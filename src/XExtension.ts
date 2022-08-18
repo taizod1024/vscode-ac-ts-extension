@@ -1,4 +1,4 @@
-export interface IExtension {
+export interface XExtension {
     // prop
     extension: string;
 

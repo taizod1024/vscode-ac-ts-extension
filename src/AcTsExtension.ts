@@ -1,16 +1,16 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
 import child_process, { ExecFileSyncOptions } from "child_process";
-import { ISite } from "./ISite";
-import { IExtension } from "./IExtension";
-import { atcoder } from "./xsite/AtCoder";
-import { yukicoder } from "./xsite/Yukicoder";
-import { typescript } from "./xextension/TypeScript";
-import { javascript } from "./xextension/JavaScript";
-import { python } from "./xextension/Python";
-import { cc } from "./xextension/Cc";
-import { cpp } from "./xextension/Cpp";
-import { java } from "./xextension/Java";
+import { XSite } from "./XSite";
+import { XExtension } from "./XExtension";
+import { atcoder } from "./XSite/AtCoder";
+import { yukicoder } from "./XSite/Yukicoder";
+import { typescript } from "./XExtension/TypeScript";
+import { javascript } from "./XExtension/JavaScript";
+import { python } from "./XExtension/Python";
+import { cc } from "./XExtension/Cc";
+import { cpp } from "./XExtension/Cpp";
+import { java } from "./XExtension/Java";
 
 // extension core
 class AcTsExtension {
@@ -33,8 +33,8 @@ class AcTsExtension {
     public language: string;
 
     // prop
-    public xsite: ISite;
-    public xextension: IExtension;
+    public xsite: XSite;
+    public xextension: XExtension;
     public tasktmplfile: string;
     public usertasktmplfile: string;
     public taskpath: string;
@@ -57,8 +57,8 @@ class AcTsExtension {
     // const
     public sites: string[];
     public extensions: string[];
-    public xsites: ISite[];
-    public xextensions: IExtension[];
+    public xsites: XSite[];
+    public xextensions: XExtension[];
 
     // setup function
     constructor() {

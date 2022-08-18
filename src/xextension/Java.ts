@@ -2,9 +2,9 @@ import * as vscode from "vscode";
 import * as fs from "fs";
 import child_process, { ExecFileSyncOptions } from "child_process";
 import { acts } from "../AcTsExtension";
-import { IExtension } from "../IExtension";
+import { XExtension } from "../XExtension";
 
-class Java implements IExtension {
+class Java implements XExtension {
     // implements
 
     // prop

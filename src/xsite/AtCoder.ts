@@ -3,13 +3,13 @@ import * as fs from "fs";
 import superagent from "superagent";
 import * as cheerio from "cheerio";
 import { acts } from "../AcTsExtension";
-import { ISite } from "../ISite";
-import { typescript } from "../xextension/TypeScript";
-import { javascript } from "../xextension/JavaScript";
-import { python } from "../xextension/Python";
-import { IExtension } from "../IExtension";
+import { XSite } from "../XSite";
+import { typescript } from "../XExtension/TypeScript";
+import { javascript } from "../XExtension/JavaScript";
+import { python } from "../XExtension/Python";
+import { XExtension } from "../XExtension";
 
-class AtCoder implements ISite {
+class AtCoder implements XSite {
     // param
     username: string;
     password: string;
