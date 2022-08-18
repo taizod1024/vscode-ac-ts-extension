@@ -1,8 +1,6 @@
-import * as vscode from "vscode";
-import * as fs from "fs";
-import child_process, { ExecFileSyncOptions } from "child_process";
 import { acts } from "../AcTsExtension";
 import { XExtension } from "../XExtension";
+import { xexthelper } from "../XExtensionHelper";
 
 class Cc implements XExtension {
     // implements
@@ -16,41 +14,11 @@ class Cc implements XExtension {
     }
 
     checkLang(): void {
-        // check
-        const cfgkey = "cChecker";
-        const config = vscode.workspace.getConfiguration(acts.appid);
-        const cmdchk = String(config.get(cfgkey));
-        acts.channel.appendLine(`[${acts.timestamp()}] checker: ${cmdchk}`);
-        const cmdexp = acts.expandString(cmdchk);
-        const command = `(${cmdexp}) 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
-        const options = { cwd: acts.projectpath };
-        try {
-            child_process.execSync(command, options);
-        } catch (ex) {
-            const err = fs.readFileSync(acts.tmptesterrfile).toString().trim().replace(/\n/g, "\r\n");
-            throw `ERROR: check failed\r\n${err}\r\n`;
-        }
+        xexthelper.checkLang("cChecker");
     }
 
     compileTask(): void {
-        // compile
-        const cfgkey = "cCompiler";
-        const config = vscode.workspace.getConfiguration(acts.appid);
-        const cmdcmp = String(config.get(cfgkey));
-        acts.channel.appendLine(`[${acts.timestamp()}] compiler: ${cmdcmp}`);
-        const cmdexp = acts.expandString(cmdcmp);
-        const command = `(${cmdexp}) 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
-        const options = { cwd: acts.projectpath };
-        try {
-            child_process.execSync(command, options);
-        } catch (ex) {
-            const err = fs.readFileSync(acts.tmptesterrfile).toString().trim().replace(/\n/g, "\r\n");
-            throw `ERROR: compile failed\r\n${err}\r\n`;
-        }
-
-        // show executor
-        const cmdexe = String(config.get("cExecutor"));
-        acts.channel.appendLine(`[${acts.timestamp()}] executor: ${cmdexe}`);
+        xexthelper.compileTask("cCompiler", "cExecutor");
     }
 
     debugTask(): any {
@@ -58,15 +26,7 @@ class Cc implements XExtension {
     }
 
     testTask(): any {
-        // test
-        const cfgkey = "cExecutor";
-        const config = vscode.workspace.getConfiguration(acts.appid);
-        const cmdexe = String(config.get(cfgkey));
-        const cmdexp = acts.expandString(cmdexe);
-        const command = `(${cmdexp}) < ${acts.tmptestinfile} 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
-        const options = { cwd: acts.projectpath };
-        const child = child_process.exec(command, options);
-        return child;
+        return xexthelper.testTask("cExecutor");
     }
 }
 export const cc = new Cc();
