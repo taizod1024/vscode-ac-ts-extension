@@ -7,7 +7,7 @@ import { XSite } from "../XSite";
 import { typescript } from "../xextension/TypeScript";
 import { javascript } from "../xextension/JavaScript";
 import { python } from "../xextension/Python";
-import { XExtension } from "../XExtension";
+import { IExtension } from "../XExtension";
 
 class AtCoder implements XSite {
     // param

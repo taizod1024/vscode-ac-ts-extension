@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import * as fs from "fs";
 import child_process, { ExecFileSyncOptions } from "child_process";
 import { XSite } from "./XSite";
-import { XExtension } from "./XExtension";
+import { IExtension } from "./XExtension";
 import { atcoder } from "./xsite/AtCoder";
 import { yukicoder } from "./xsite/Yukicoder";
 import { typescript } from "./xextension/TypeScript";
@@ -34,7 +34,7 @@ class AcTsExtension {
 
     // prop
     public xsite: XSite;
-    public xextension: XExtension;
+    public xextension: IExtension;
     public tasktmplfile: string;
     public usertasktmplfile: string;
     public taskpath: string;
@@ -58,7 +58,7 @@ class AcTsExtension {
     public sites: string[];
     public extensions: string[];
     public xsites: XSite[];
-    public xextensions: XExtension[];
+    public xextensions: IExtension[];
 
     // setup function
     constructor() {
@@ -217,12 +217,12 @@ class AcTsExtension {
         if (!fs.existsSync(this.testfile)) {
             throw `ERROR: missing testfile="${this.testfile}", do init task`;
         }
-        if (fs.existsSync(this.tmptestinfile)) {
-            fs.unlinkSync(this.tmptestinfile);
-        }
-        if (fs.existsSync(this.tmptestoutfile)) {
-            fs.unlinkSync(this.tmptestoutfile);
-        }
+
+        // delete files in tmptestpath
+        fs.readdirSync(this.tmptestpath).forEach(filename => {
+            const filepath = `${this.tmptestpath}\\${filename}`;
+            fs.unlinkSync(filepath);
+        });
 
         // make tmptestpath
         this.channel.appendLine(`[${this.timestamp()}] tmptestpath: "${this.tmptestpath}"`);
@@ -360,10 +360,11 @@ class AcTsExtension {
                                     setTimeout(runtest, 500);
                                     return;
                                 }
-                                // delete executable if done
-                                if (fs.existsSync(that.tmpexecfile)) {
-                                    fs.unlinkSync(that.tmpexecfile);
-                                }
+                                // delete files in tmptestpath
+                                fs.readdirSync(that.tmptestpath).forEach(filename => {
+                                    const filepath = `${that.tmptestpath}\\${filename}`;
+                                    fs.unlinkSync(filepath);
+                                });
                                 // test set done
                                 let msg = `${that.task} OK=${ok}, NG=${ng}`;
                                 if (ng === 0) {
