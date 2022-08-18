@@ -1,8 +1,8 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
 import child_process, { ExecFileSyncOptions } from "child_process";
-import { XSite } from "./XSite";
-import { IExtension } from "./XExtension";
+import { ISite } from "./ISite";
+import { IExtension } from "./IExtension";
 import { atcoder } from "./xsite/AtCoder";
 import { yukicoder } from "./xsite/Yukicoder";
 import { typescript } from "./xextension/TypeScript";
@@ -33,7 +33,7 @@ class AcTsExtension {
     public language: string;
 
     // prop
-    public xsite: XSite;
+    public xsite: ISite;
     public xextension: IExtension;
     public tasktmplfile: string;
     public usertasktmplfile: string;
@@ -57,7 +57,7 @@ class AcTsExtension {
     // const
     public sites: string[];
     public extensions: string[];
-    public xsites: XSite[];
+    public xsites: ISite[];
     public xextensions: IExtension[];
 
     // setup function

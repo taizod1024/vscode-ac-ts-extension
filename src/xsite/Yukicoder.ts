@@ -2,12 +2,12 @@ import * as vscode from "vscode";
 import * as fs from "fs";
 import superagent from "superagent";
 import { acts } from "../AcTsExtension";
-import { XSite } from "../XSite";
+import { ISite } from "../ISite";
 import { typescript } from "../xextension/TypeScript";
 import { javascript } from "../xextension/JavaScript";
 import { python } from "../xextension/Python";
 
-class Yukicoder implements XSite {
+class Yukicoder implements ISite {
     // param
     apikey: string;
     problemid: string;
