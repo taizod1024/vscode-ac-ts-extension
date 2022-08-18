@@ -8,7 +8,6 @@ class Python implements IExtension {
     // implements
 
     // prop
-    name = "python";
     extension = ".py";
 
     // method

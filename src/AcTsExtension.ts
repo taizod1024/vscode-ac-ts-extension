@@ -218,17 +218,17 @@ class AcTsExtension {
             throw `ERROR: missing testfile="${this.testfile}", do init task`;
         }
 
-        // delete files in tmptestpath
-        fs.readdirSync(this.tmptestpath).forEach(filename => {
-            const filepath = `${this.tmptestpath}\\${filename}`;
-            fs.unlinkSync(filepath);
-        });
-
         // make tmptestpath
         this.channel.appendLine(`[${this.timestamp()}] tmptestpath: "${this.tmptestpath}"`);
         if (!fs.existsSync(this.tmptestpath)) {
             fs.mkdirSync(this.tmptestpath);
         }
+
+        // delete files in tmptestpath
+        fs.readdirSync(this.tmptestpath).forEach(filename => {
+            const filepath = `${this.tmptestpath}\\${filename}`;
+            fs.unlinkSync(filepath);
+        });
 
         // read testfile
         const txt = fs.readFileSync(this.testfile).toString();
@@ -318,6 +318,8 @@ class AcTsExtension {
                             // test done
                             (function commanddone() {
                                 that.channel.show(true);
+                                // show exit code
+                                that.channel.appendLine(`[${that.timestamp()}] - exitcode="${child?.exitCode}"`);
                                 // read output
                                 const out = fs.readFileSync(that.tmptestoutfile).toString().trim().replace(/\n/g, "\r\n");
                                 fs.unlinkSync(that.tmptestoutfile);

@@ -1,6 +1,5 @@
 export interface IExtension {
     // prop
-    name: string;
     extension: string;
 
     // method

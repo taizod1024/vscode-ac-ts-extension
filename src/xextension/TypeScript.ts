@@ -8,7 +8,6 @@ class TypeScript implements IExtension {
     // implemente
 
     // prop
-    name = "typescript";
     extension = ".ts";
 
     // method

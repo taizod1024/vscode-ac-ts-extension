@@ -8,7 +8,6 @@ class Java implements IExtension {
     // implements
 
     // prop
-    name = "Java";
     extension = ".java";
 
     // method
@@ -20,8 +19,9 @@ class Java implements IExtension {
     // TODO implementsからextendsに変更
     checkLang(): void {
         // check
+        const cfgkey = "javaChecker";
         const config = vscode.workspace.getConfiguration(acts.appid);
-        const cmdchk = String(config.get("javaChecker"));
+        const cmdchk = String(config.get(cfgkey));
         acts.channel.appendLine(`[${acts.timestamp()}] checker: ${cmdchk}`);
         const cmdexp = acts.expandString(cmdchk);
         const command = `(${cmdexp}) 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
@@ -29,21 +29,23 @@ class Java implements IExtension {
         try {
             child_process.execSync(command, options);
         } catch (ex) {
-            const err = fs.readFileSync(acts.tmptesterrfile).toString().trim().replace(/\n/g, "\r\n");
+            const err = fs.readFileSync(acts.tmptesterrfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
             throw `ERROR: check failed\r\n${err}\r\n`;
         }
     }
 
     compileTask(): void {
-        // modify executable filename
-        const tmptaskfile = `${process.env.TEMP}\\${acts.appid}\\Main.java`;
-        fs.copyFileSync(acts.taskfile, tmptaskfile);
+        // modify taskfile and execfile
+        let taskfile = acts.taskfile;
+        let tmptaskfile = `${process.env.TEMP}\\${acts.appid}\\Main.java`;
+        fs.copyFileSync(taskfile, tmptaskfile);
         acts.taskfile = tmptaskfile;
         acts.tmpexecfile = `${process.env.TEMP}\\${acts.appid}\\Main.class`;
 
         // compile
+        const cfgkey = "javaCompiler";
         const config = vscode.workspace.getConfiguration(acts.appid);
-        const cmdcmp = String(config.get("javaCompiler"));
+        const cmdcmp = String(config.get(cfgkey));
         acts.channel.appendLine(`[${acts.timestamp()}] compiler: ${cmdcmp}`);
         const cmdexp = acts.expandString(cmdcmp);
         const command = `(${cmdexp}) 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
@@ -51,7 +53,8 @@ class Java implements IExtension {
         try {
             child_process.execSync(command, options);
         } catch (ex) {
-            const err = fs.readFileSync(acts.tmptesterrfile).toString().trim().replace(/\n/g, "\r\n");
+            let err = fs.readFileSync(acts.tmptesterrfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
+            err = err.split(tmptaskfile).join(taskfile); // rewrite taskfile
             throw `ERROR: compile failed\r\n${err}\r\n`;
         }
 
@@ -66,8 +69,9 @@ class Java implements IExtension {
 
     testTask(): any {
         // test
+        const cfgkey = "javaExecutor";
         const config = vscode.workspace.getConfiguration(acts.appid);
-        const cmdexe = String(config.get("javaExecutor"));
+        const cmdexe = String(config.get(cfgkey));
         const cmdexp = acts.expandString(cmdexe);
         const command = `(${cmdexp}) < ${acts.tmptestinfile} 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
         const options = { cwd: acts.projectpath };

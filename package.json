@@ -105,7 +105,7 @@
         "ac-ts-extension.javaCompiler": {
           "type": "string",
           "description": "command line compiler for Java",
-          "default": "javac $taskfile"
+          "default": "javac -J-Duser.language=en $taskfile"
         },
         "ac-ts-extension.javaExecutor": {
           "type": "string",

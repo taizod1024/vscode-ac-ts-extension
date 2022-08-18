@@ -8,7 +8,6 @@ class Cpp implements IExtension {
     // implements
 
     // prop
-    name = "C++";
     extension = ".cpp";
 
     // method
@@ -20,9 +19,13 @@ class Cpp implements IExtension {
     // TODO ロジックの共通化
     // TODO implementsからextendsに変更
     checkLang(): void {
+        // check
+        const cfgkey = "c++Checker";
         const config = vscode.workspace.getConfiguration(acts.appid);
-        const cmd = acts.expandString(config.get("c++Checker"));
-        const command = `(${cmd}) 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
+        const cmdchk = String(config.get(cfgkey));
+        acts.channel.appendLine(`[${acts.timestamp()}] checker: ${cmdchk}`);
+        const cmdexp = acts.expandString(cmdchk);
+        const command = `(${cmdexp}) 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
         const options = { cwd: acts.projectpath };
         try {
             child_process.execSync(command, options);
@@ -33,9 +36,13 @@ class Cpp implements IExtension {
     }
 
     compileTask(): void {
+        // compile
+        const cfgkey = "c++Compiler";
         const config = vscode.workspace.getConfiguration(acts.appid);
-        const cmd = acts.expandString(config.get("c++Compiler"));
-        const command = `(${cmd}) 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
+        const cmdcmp = String(config.get(cfgkey));
+        acts.channel.appendLine(`[${acts.timestamp()}] compiler: ${cmdcmp}`);
+        const cmdexp = acts.expandString(cmdcmp);
+        const command = `(${cmdexp}) 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
         const options = { cwd: acts.projectpath };
         try {
             child_process.execSync(command, options);
@@ -43,6 +50,10 @@ class Cpp implements IExtension {
             const err = fs.readFileSync(acts.tmptesterrfile).toString().trim().replace(/\n/g, "\r\n");
             throw `ERROR: compile failed\r\n${err}\r\n`;
         }
+
+        // show executor
+        const cmdexe = String(config.get("cExecutor"));
+        acts.channel.appendLine(`[${acts.timestamp()}] executor: ${cmdexe}`);
     }
 
     debugTask(): any {
@@ -50,9 +61,12 @@ class Cpp implements IExtension {
     }
 
     testTask(): any {
+        // test
+        const cfgkey = "c++Executor";
         const config = vscode.workspace.getConfiguration(acts.appid);
-        const cmd = acts.expandString(config.get("c++Executor"));
-        const command = `(${cmd}) < ${acts.tmptestinfile} 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
+        const cmdexe = String(config.get(cfgkey));
+        const cmdexp = acts.expandString(cmdexe);
+        const command = `(${cmdexp}) < ${acts.tmptestinfile} 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
         const options = { cwd: acts.projectpath };
         const child = child_process.exec(command, options);
         return child;

@@ -8,7 +8,6 @@ class JavaScript implements IExtension {
     // implemente
 
     // prop
-    name = "javascript";
     extension = ".js";
 
     // method
