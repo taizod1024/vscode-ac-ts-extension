@@ -43,7 +43,7 @@ class AcTsExtension {
     public taskbuildfile: string;
     public testpath: string;
     public testfile: string;
-    public tmptestpath: string;
+    public tmppath: string;
     public tmpexecfile: string;
     public tmptestinfile: string;
     public tmptestoutfile: string;
@@ -94,7 +94,7 @@ class AcTsExtension {
         this.taskbuildfile = `${this.taskbuildpath}\\${this.task}.js`;
         this.testpath = `${this.projectpath}\\src\\${this.site}\\${this.contest}`;
         this.testfile = `${this.projectpath}\\src\\${this.site}\\${this.contest}\\${this.task}.txt`;
-        this.tmptestpath = `${process.env.TEMP}\\${this.appid}`;
+        this.tmppath = `${process.env.TEMP}\\${this.appid}`;
         this.tmpexecfile = `${process.env.TEMP}\\${this.appid}\\${this.task}${process.env.WINDIR ? ".exe" : ".out"}`;
         this.tmptestinfile = `${process.env.TEMP}\\${this.appid}\\test_in.txt`;
         this.tmptestoutfile = `${process.env.TEMP}\\${this.appid}\\test_out.txt`;
@@ -218,15 +218,15 @@ class AcTsExtension {
             throw `ERROR: missing testfile="${this.testfile}", do init task`;
         }
 
-        // make tmptestpath
-        this.channel.appendLine(`[${this.timestamp()}] tmptestpath: "${this.tmptestpath}"`);
-        if (!fs.existsSync(this.tmptestpath)) {
-            fs.mkdirSync(this.tmptestpath);
+        // make tmppath
+        this.channel.appendLine(`[${this.timestamp()}] tmppath: "${this.tmppath}"`);
+        if (!fs.existsSync(this.tmppath)) {
+            fs.mkdirSync(this.tmppath);
         }
 
-        // delete files in tmptestpath
-        fs.readdirSync(this.tmptestpath).forEach(filename => {
-            const filepath = `${this.tmptestpath}\\${filename}`;
+        // delete files in tmppath
+        fs.readdirSync(this.tmppath).forEach(filename => {
+            const filepath = `${this.tmppath}\\${filename}`;
             fs.unlinkSync(filepath);
         });
 
@@ -362,9 +362,9 @@ class AcTsExtension {
                                     setTimeout(runtest, 500);
                                     return;
                                 }
-                                // delete files in tmptestpath
-                                fs.readdirSync(that.tmptestpath).forEach(filename => {
-                                    const filepath = `${that.tmptestpath}\\${filename}`;
+                                // delete files in tmppath
+                                fs.readdirSync(that.tmppath).forEach(filename => {
+                                    const filepath = `${that.tmppath}\\${filename}`;
                                     fs.unlinkSync(filepath);
                                 });
                                 // test set done
@@ -484,7 +484,7 @@ class AcTsExtension {
         return str
             .replace(/\$taskfile/g, this.taskfile)
             .replace(/\$execfile/g, this.tmpexecfile)
-            .replace(/\$tmptestpath/g, this.tmptestpath);
+            .replace(/\$tmppath/g, this.tmppath);
     }
 
     // message

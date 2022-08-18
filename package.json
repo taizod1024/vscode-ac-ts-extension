@@ -69,48 +69,48 @@
       "properties": {
         "ac-ts-extension.cChecker": {
           "type": "string",
-          "description": "command line checker for C",
+          "description": "command line checker for C, you can use $taskfile, $execfile, $tmppath.",
           "default": "gcc --version"
         },
         "ac-ts-extension.cCompiler": {
           "type": "string",
-          "description": "command line compiler for C",
+          "description": "command line compiler for C, you can use $taskfile, $execfile, $tmppath.",
           "default": "gcc $taskfile -o $execfile -lm"
         },
         "ac-ts-extension.cExecutor": {
           "type": "string",
-          "description": "command line executor for C",
+          "description": "command line executor for C, you can use $taskfile, $execfile, $tmppath.",
           "default": "$execfile"
         },
         "ac-ts-extension.c++Checker": {
           "type": "string",
-          "description": "command line checker for C++",
+          "description": "command line checker for C++, you can use $taskfile, $execfile, $tmppath.",
           "default": "g++ --version"
         },
         "ac-ts-extension.c++Compiler": {
           "type": "string",
-          "description": "command line compiler for C++",
+          "description": "command line compiler for C++, you can use $taskfile, $execfile, $tmppath.",
           "default": "g++ $taskfile -o $execfile"
         },
         "ac-ts-extension.c++Executor": {
           "type": "string",
-          "description": "command line executor for C++",
+          "description": "command line executor for C++, you can use $taskfile, $execfile, $tmppath.",
           "default": "$execfile"
         },
         "ac-ts-extension.javaChecker": {
           "type": "string",
-          "description": "command line checker for Java",
+          "description": "command line checker for Java, you can use $taskfile, $execfile, $tmppath.",
           "default": "javac --version"
         },
         "ac-ts-extension.javaCompiler": {
           "type": "string",
-          "description": "command line compiler for Java",
+          "description": "command line compiler for Java, you can use $taskfile, $execfile, $tmppath.",
           "default": "javac -J-Duser.language=en $taskfile"
         },
         "ac-ts-extension.javaExecutor": {
           "type": "string",
-          "description": "command line executor for Java",
-          "default": "cd $tmptestpath && java Main"
+          "description": "command line executor for Java, you can use $taskfile, $execfile, $tmppath.",
+          "default": "cd $tmppath && java Main"
         }
       }
     }
