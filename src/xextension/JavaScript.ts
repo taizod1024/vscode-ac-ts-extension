@@ -21,7 +21,7 @@ class JavaScript implements XExtension {
     compileTask(): void {}
 
     debugTask(): any {
-        const launchconfig = {
+        const debugconfig = {
             name: acts.appid,
             type: "pwa-node",
             request: "launch",
@@ -30,7 +30,7 @@ class JavaScript implements XExtension {
             console: "integratedTerminal",
             skipFiles: ["node_modules/**"],
         };
-        vscode.debug.startDebugging(acts.projectfolder, launchconfig);
+        vscode.debug.startDebugging(acts.projectfolder, debugconfig);
     }
 
     testTask(): any {

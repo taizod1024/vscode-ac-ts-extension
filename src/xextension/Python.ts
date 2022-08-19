@@ -26,7 +26,7 @@ class Python implements XExtension {
     compileTask(): void {}
 
     debugTask(): any {
-        const launchconfig = {
+        const debugconfig = {
             name: acts.appid,
             type: "python",
             request: "launch",
@@ -34,7 +34,7 @@ class Python implements XExtension {
             args: ["<", acts.tmpinfile, "1>", acts.tmpoutfile, "2>", acts.tmperrfile],
             console: "integratedTerminal",
         };
-        vscode.debug.startDebugging(acts.projectfolder, launchconfig);
+        vscode.debug.startDebugging(acts.projectfolder, debugconfig);
     }
 
     testTask(): any {

@@ -21,7 +21,7 @@ class TypeScript implements XExtension {
     compileTask(): void {}
 
     debugTask(): any {
-        const launchconfig = {
+        const debugconfig = {
             name: acts.appid,
             type: "pwa-node",
             request: "launch",
@@ -32,7 +32,7 @@ class TypeScript implements XExtension {
             skipFiles: ["node_modules/**"],
             env: { TS_NODE_TRANSPILE_ONLY: "1" },
         };
-        vscode.debug.startDebugging(acts.projectfolder, launchconfig);
+        vscode.debug.startDebugging(acts.projectfolder, debugconfig);
     }
 
     testTask(): any {
