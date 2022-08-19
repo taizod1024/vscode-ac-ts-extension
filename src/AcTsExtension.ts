@@ -161,14 +161,14 @@ class AcTsExtension {
             fs.mkdirSync(this.taskpath, { recursive: true });
         }
         if (fs.existsSync(this.taskfile)) {
-            this.channel.appendLine(`[${this.timestamp()}] taskfile: "${this.taskfile}" exist`);
+            this.channel.appendLine(`[${this.timestamp()}] taskfile: ${this.taskfile} exist`);
         } else {
             if (fs.existsSync(this.usertasktmplfile)) {
                 fs.copyFileSync(this.usertasktmplfile, this.taskfile);
-                this.channel.appendLine(`[${this.timestamp()}] taskfile: "${this.taskfile}" created from user template`);
+                this.channel.appendLine(`[${this.timestamp()}] taskfile: ${this.taskfile} created from user template`);
             } else {
                 fs.copyFileSync(this.tasktmplfile, this.taskfile);
-                this.channel.appendLine(`[${this.timestamp()}] taskfile: "${this.taskfile}" created from system template`);
+                this.channel.appendLine(`[${this.timestamp()}] taskfile: ${this.taskfile} created from system template`);
             }
         }
 
@@ -177,10 +177,10 @@ class AcTsExtension {
             fs.mkdirSync(this.testpath, { recursive: true });
         }
         if (fs.existsSync(this.testfile)) {
-            this.channel.appendLine(`[${this.timestamp()}] testfile: "${this.testfile}" exist`);
+            this.channel.appendLine(`[${this.timestamp()}] testfile: ${this.testfile} exist`);
         } else {
             fs.writeFileSync(this.testfile, text);
-            this.channel.appendLine(`[${this.timestamp()}] testfile: "${this.testfile}" created`);
+            this.channel.appendLine(`[${this.timestamp()}] testfile: ${this.testfile} created`);
             if (text === "") {
                 this.channel.appendLine(`[${this.timestamp()}] WARN: there is no test set`);
             }
@@ -213,19 +213,19 @@ class AcTsExtension {
         await this.initPropAsync(true);
 
         // check taskfile
-        this.channel.appendLine(`[${this.timestamp()}] taskfile: "${this.taskfile}"`);
+        this.channel.appendLine(`[${this.timestamp()}] taskfile: ${this.taskfile}`);
         if (!fs.existsSync(this.taskfile)) {
             throw `ERROR: missing taskfile="${this.taskfile}", do init task`;
         }
 
         // check testfile
-        this.channel.appendLine(`[${this.timestamp()}] testfile: "${this.testfile}"`);
+        this.channel.appendLine(`[${this.timestamp()}] testfile: ${this.testfile}`);
         if (!fs.existsSync(this.testfile)) {
             throw `ERROR: missing testfile="${this.testfile}", do init task`;
         }
 
         // make tmppath
-        this.channel.appendLine(`[${this.timestamp()}] tmppath: "${this.tmppath}"`);
+        this.channel.appendLine(`[${this.timestamp()}] tmppath: ${this.tmppath}`);
         if (!fs.existsSync(this.tmppath)) {
             fs.mkdirSync(this.tmppath);
         }
@@ -322,8 +322,6 @@ class AcTsExtension {
                             // test done
                             (function commanddone() {
                                 that.channel.show(true);
-                                // show exit code
-                                that.channel.appendLine(`[${that.timestamp()}] - exitcode="${child?.exitCode}"`);
                                 // read output
                                 const out = fs.readFileSync(that.tmpoutfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
                                 fs.unlinkSync(that.tmpoutfile);
@@ -331,7 +329,8 @@ class AcTsExtension {
                                 const err = fs.readFileSync(that.tmperrfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
                                 fs.unlinkSync(that.tmperrfile);
                                 that.channel.appendLine(`[${that.timestamp()}] - stdout="${out}"`);
-                                that.channel.appendLine(`[${that.timestamp()}] - stderr="${err}"`);
+                                that.channel.appendLine(`[${that.timestamp()}] - stderr=${err}`);
+                                that.channel.appendLine(`[${that.timestamp()}] - exit  =${child?.exitCode}`);
                                 if (child?.exitCode !== 0 && child?.exitCode !== undefined) {
                                     reject(`ERROR: error occurred`);
                                     return;
@@ -353,10 +352,10 @@ class AcTsExtension {
                                 }
                                 // check output
                                 if (out === io.out) {
-                                    that.channel.appendLine(`[${that.timestamp()}]   => OK`);
+                                    that.channel.appendLine(`[${that.timestamp()}] -> OK`);
                                     ok++;
                                 } else {
-                                    that.channel.appendLine(`[${that.timestamp()}]   => NG`);
+                                    that.channel.appendLine(`[${that.timestamp()}] -> NG`);
                                     ng++;
                                 }
                                 // next test
@@ -400,7 +399,7 @@ class AcTsExtension {
         await this.initPropAsync(true);
 
         // check taskfile
-        this.channel.appendLine(`[${this.timestamp()}] taskfile: "${this.taskfile}"`);
+        this.channel.appendLine(`[${this.timestamp()}] taskfile: ${this.taskfile}`);
         if (!fs.existsSync(this.taskfile)) {
             throw `ERROR: missing taskfile="${this.taskfile}", do init task`;
         }
@@ -426,18 +425,18 @@ class AcTsExtension {
 
         // Remove Taskfile
         if (!fs.existsSync(this.taskfile)) {
-            this.channel.appendLine(`[${this.timestamp()}] taskfile: "${this.taskfile}" missing`);
+            this.channel.appendLine(`[${this.timestamp()}] taskfile: ${this.taskfile} missing`);
         } else {
             fs.unlinkSync(this.taskfile);
-            this.channel.appendLine(`[${this.timestamp()}] taskfile: "${this.taskfile}" removed`);
+            this.channel.appendLine(`[${this.timestamp()}] taskfile: ${this.taskfile} removed`);
         }
 
         // remove testfile
         if (!fs.existsSync(this.testfile)) {
-            this.channel.appendLine(`[${this.timestamp()}] testfile: "${this.testfile}" missing`);
+            this.channel.appendLine(`[${this.timestamp()}] testfile: ${this.testfile} missing`);
         } else {
             fs.unlinkSync(this.testfile);
-            this.channel.appendLine(`[${this.timestamp()}] testfile: "${this.testfile}" removed`);
+            this.channel.appendLine(`[${this.timestamp()}] testfile: ${this.testfile} removed`);
         }
 
         this.channel.appendLine(`---- SUCCESS: ${this.task} removed ----`);

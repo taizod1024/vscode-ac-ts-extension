@@ -19,9 +19,9 @@ class XExtensionHelper {
             throw `ERROR: check failed\r\n${err}\r\n`;
         }
         const out = fs.readFileSync(acts.tmpoutfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
-        acts.channel.appendLine(`[${acts.timestamp()}] - stdout: "${out}"`);
+        acts.channel.appendLine(`[${acts.timestamp()}] - stdout: ${out}`);
         const err = fs.readFileSync(acts.tmperrfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
-        acts.channel.appendLine(`[${acts.timestamp()}] - stderr: "${err}"`);
+        acts.channel.appendLine(`[${acts.timestamp()}] - stderr: ${err}`);
     }
 
     compileTask(cmpkey: string, exeky: string): void {
@@ -40,9 +40,9 @@ class XExtensionHelper {
             throw `ERROR: compile failed\r\n${err}\r\n`;
         }
         const out = fs.readFileSync(acts.tmpoutfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
-        acts.channel.appendLine(`[${acts.timestamp()}] - stdout: "${out}"`);
+        acts.channel.appendLine(`[${acts.timestamp()}] - stdout: ${out}`);
         const err = fs.readFileSync(acts.tmperrfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
-        acts.channel.appendLine(`[${acts.timestamp()}] - stderr: "${err}"`);
+        acts.channel.appendLine(`[${acts.timestamp()}] - stderr: ${err}`);
 
         // show executor
         const cmdexe = String(config.get(exeky));
