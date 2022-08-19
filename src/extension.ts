@@ -2,32 +2,32 @@ import * as vscode from "vscode";
 import superagent from "superagent";
 require("superagent-proxy")(superagent);
 import { actshelper } from "./AcTsHelper";
-import { actsextension } from "./AcTsExtension";
-import { atcoder } from "./AtCoder";
-import { yukicoder } from "./Yukicoder";
+import { acts } from "./AcTsExtension";
+import { atcoder } from "./XSite/AtCoder";
+import { yukicoder } from "./XSite/Yukicoder";
 
 // extension entrypoint
 export function activate(context: vscode.ExtensionContext) {
     (function () {
         const cmdid = "loginSite";
         context.subscriptions.push(
-            vscode.commands.registerCommand(`${actsextension.appid}.${cmdid}`, () => {
-                actsextension.channel.show(true);
-                actsextension.channel.clear();
-                actsextension.channel.appendLine(`${actsextension.appid}.${cmdid}:`);
-                actsextension.vscodeextensionpath = context.extensionPath;
+            vscode.commands.registerCommand(`${acts.appid}.${cmdid}`, () => {
+                acts.channel.show(true);
+                acts.channel.clear();
+                acts.channel.appendLine(`${acts.appid}.${cmdid}:`);
+                acts.vscodeextensionpath = context.extensionPath;
                 // check condition
                 if (!actshelper.checkProjectPath()) {
                     return;
                 }
                 // select site
-                let idx = actsextension.sites.indexOf(actsextension.site);
+                let idx = acts.sites.indexOf(acts.site);
                 if (1 <= idx) {
-                    actsextension.sites.splice(idx, 1);
-                    actsextension.sites.unshift(actsextension.site);
+                    acts.sites.splice(idx, 1);
+                    acts.sites.unshift(acts.site);
                 }
                 vscode.window
-                    .showQuickPick(actsextension.sites, {
+                    .showQuickPick(acts.sites, {
                         placeHolder: "SELECT SITE",
                     })
                     .then(site => {
@@ -61,11 +61,11 @@ export function activate(context: vscode.ExtensionContext) {
                                                 return;
                                             }
                                             // exec command
-                                            actsextension.site = site;
+                                            acts.site = site;
                                             atcoder.username = username;
                                             atcoder.password = password;
-                                            actsextension.loginSiteAsync().catch(ex => {
-                                                actsextension.channel.appendLine("**** " + ex + " ****");
+                                            acts.loginSiteAsync().catch(ex => {
+                                                acts.channel.appendLine("**** " + ex + " ****");
                                             });
                                         });
                                 });
@@ -85,10 +85,10 @@ export function activate(context: vscode.ExtensionContext) {
                                         return;
                                     }
                                     // exec command
-                                    actsextension.site = site;
+                                    acts.site = site;
                                     yukicoder.apikey = apikey;
-                                    actsextension.loginSiteAsync().catch(ex => {
-                                        actsextension.channel.appendLine("**** " + ex + " ****");
+                                    acts.loginSiteAsync().catch(ex => {
+                                        acts.channel.appendLine("**** " + ex + " ****");
                                     });
                                 });
                         }
@@ -100,23 +100,23 @@ export function activate(context: vscode.ExtensionContext) {
     (function () {
         const cmdid = "initTask";
         context.subscriptions.push(
-            vscode.commands.registerCommand(`${actsextension.appid}.${cmdid}`, () => {
-                actsextension.channel.show(true);
-                actsextension.channel.clear();
-                actsextension.channel.appendLine(`${actsextension.appid}.${cmdid}:`);
-                actsextension.vscodeextensionpath = context.extensionPath;
+            vscode.commands.registerCommand(`${acts.appid}.${cmdid}`, () => {
+                acts.channel.show(true);
+                acts.channel.clear();
+                acts.channel.appendLine(`${acts.appid}.${cmdid}:`);
+                acts.vscodeextensionpath = context.extensionPath;
                 // check condition
                 if (!actshelper.checkProjectPath()) {
                     return;
                 }
                 // select site
-                let idx = actsextension.sites.indexOf(actsextension.site);
+                let idx = acts.sites.indexOf(acts.site);
                 if (1 <= idx) {
-                    actsextension.sites.splice(idx, 1);
-                    actsextension.sites.unshift(actsextension.site);
+                    acts.sites.splice(idx, 1);
+                    acts.sites.unshift(acts.site);
                 }
                 vscode.window
-                    .showQuickPick(actsextension.sites, {
+                    .showQuickPick(acts.sites, {
                         placeHolder: "SELECT SITE",
                     })
                     .then(site => {
@@ -131,6 +131,8 @@ export function activate(context: vscode.ExtensionContext) {
                         let contest: string;
                         let task: string;
                         let extension: string;
+                        let language: string;
+                        // TODO site依存データの読込・保存タイミングが整理できていない
                         // load site depending data
                         try {
                             if (site === "atcoder") {
@@ -142,6 +144,7 @@ export function activate(context: vscode.ExtensionContext) {
                                 contest = atcoder.contest;
                                 task = atcoder.task;
                                 extension = atcoder.extension;
+                                language = atcoder.language;
                             }
                             if (site === "yukicoder") {
                                 yukicoder.checkLogin();
@@ -152,9 +155,10 @@ export function activate(context: vscode.ExtensionContext) {
                                 contest = yukicoder.contest;
                                 task = yukicoder.task;
                                 extension = yukicoder.extension;
+                                language = yukicoder.language;
                             }
                         } catch (ex) {
-                            actsextension.channel.appendLine("**** " + ex + " ****");
+                            acts.channel.appendLine("**** " + ex + " ****");
                             return;
                         }
                         // input contest
@@ -186,13 +190,13 @@ export function activate(context: vscode.ExtensionContext) {
                                             return;
                                         }
                                         // select extension
-                                        let idx = actsextension.extensions.indexOf(extension);
+                                        let idx = acts.extensions.indexOf(extension);
                                         if (1 <= idx) {
-                                            actsextension.extensions.splice(idx, 1);
-                                            actsextension.extensions.unshift(extension);
+                                            acts.extensions.splice(idx, 1);
+                                            acts.extensions.unshift(extension);
                                         }
                                         vscode.window
-                                            .showQuickPick(actsextension.extensions, {
+                                            .showQuickPick(acts.extensions, {
                                                 placeHolder: "SELECT EXTENSION",
                                             })
                                             .then(extension => {
@@ -200,23 +204,25 @@ export function activate(context: vscode.ExtensionContext) {
                                                     return;
                                                 }
                                                 // save site depending data
+                                                acts.site = site;
+                                                acts.contest = contest;
+                                                acts.task = task;
+                                                acts.extension = extension;
                                                 if (site === "atcoder") {
                                                     atcoder.contest = contest;
                                                     atcoder.task = task;
                                                     atcoder.extension = extension;
+                                                    atcoder.language = language;
                                                 }
                                                 if (site === "yukicoder") {
                                                     yukicoder.contest = contest;
                                                     yukicoder.task = task;
                                                     yukicoder.extension = extension;
+                                                    yukicoder.language = language;
                                                 }
                                                 // exec command
-                                                actsextension.site = site;
-                                                actsextension.contest = contest;
-                                                actsextension.task = task;
-                                                actsextension.extension = extension;
-                                                actsextension.initTaskAsync().catch(ex => {
-                                                    actsextension.channel.appendLine("**** " + ex + " ****");
+                                                acts.initTaskAsync().catch(ex => {
+                                                    acts.channel.appendLine("**** " + ex + " ****");
                                                 });
                                             });
                                     });
@@ -229,11 +235,11 @@ export function activate(context: vscode.ExtensionContext) {
     (function () {
         const cmdid = "reinitTask";
         context.subscriptions.push(
-            vscode.commands.registerCommand(`${actsextension.appid}.${cmdid}`, () => {
-                actsextension.channel.show(true);
-                actsextension.channel.clear();
-                actsextension.channel.appendLine(`${actsextension.appid}.${cmdid}:`);
-                actsextension.vscodeextensionpath = context.extensionPath;
+            vscode.commands.registerCommand(`${acts.appid}.${cmdid}`, () => {
+                acts.channel.show(true);
+                acts.channel.clear();
+                acts.channel.appendLine(`${acts.appid}.${cmdid}:`);
+                acts.vscodeextensionpath = context.extensionPath;
                 // check condition
                 if (!actshelper.checkProjectPath()) {
                     return;
@@ -242,23 +248,36 @@ export function activate(context: vscode.ExtensionContext) {
                     return;
                 }
                 // input select extension
-                let idx = actsextension.extensions.indexOf(actsextension.extension);
+                let idx = acts.extensions.indexOf(acts.extension);
                 if (1 <= idx) {
-                    actsextension.extensions.splice(idx, 1);
-                    actsextension.extensions.unshift(actsextension.extension);
+                    acts.extensions.splice(idx, 1);
+                    acts.extensions.unshift(acts.extension);
                 }
                 vscode.window
-                    .showQuickPick(actsextension.extensions, {
+                    .showQuickPick(acts.extensions, {
                         placeHolder: "SELECT EXTENSION",
                     })
                     .then(extension => {
                         if (extension === undefined) {
                             return;
                         }
+                        // save site depending data
+                        acts.extension = extension;
+                        if (acts.site === "atcoder") {
+                            atcoder.contest = acts.contest;
+                            atcoder.task = acts.task;
+                            atcoder.extension = acts.extension;
+                            atcoder.language = acts.language;
+                        }
+                        if (acts.site === "yukicoder") {
+                            yukicoder.contest = acts.contest;
+                            yukicoder.task = acts.task;
+                            yukicoder.extension = acts.extension;
+                            yukicoder.language = acts.language;
+                        }
                         // exec command
-                        actsextension.extension = extension;
-                        actsextension.initTaskAsync().catch(ex => {
-                            actsextension.channel.appendLine("**** " + ex + " ****");
+                        acts.initTaskAsync().catch(ex => {
+                            acts.channel.appendLine("**** " + ex + " ****");
                         });
                     });
             })
@@ -268,11 +287,11 @@ export function activate(context: vscode.ExtensionContext) {
     (function () {
         const cmdid = "testTask";
         context.subscriptions.push(
-            vscode.commands.registerCommand(`${actsextension.appid}.${cmdid}`, () => {
-                actsextension.channel.show(true);
-                actsextension.channel.clear();
-                actsextension.channel.appendLine(`${actsextension.appid}.${cmdid}:`);
-                actsextension.vscodeextensionpath = context.extensionPath;
+            vscode.commands.registerCommand(`${acts.appid}.${cmdid}`, () => {
+                acts.channel.show(true);
+                acts.channel.clear();
+                acts.channel.appendLine(`${acts.appid}.${cmdid}:`);
+                acts.vscodeextensionpath = context.extensionPath;
                 // check condition
                 if (!actshelper.checkProjectPath()) {
                     return;
@@ -281,8 +300,8 @@ export function activate(context: vscode.ExtensionContext) {
                     return;
                 }
                 // exec command
-                actsextension.testTaskAsync(false).catch(ex => {
-                    actsextension.channel.appendLine("**** " + ex + " ****");
+                acts.testTaskAsync(false).catch(ex => {
+                    acts.channel.appendLine("**** " + ex + " ****");
                 });
             })
         );
@@ -291,11 +310,11 @@ export function activate(context: vscode.ExtensionContext) {
     (function () {
         const cmdid = "debugTask";
         context.subscriptions.push(
-            vscode.commands.registerCommand(`${actsextension.appid}.${cmdid}`, () => {
-                actsextension.channel.show(true);
-                actsextension.channel.clear();
-                actsextension.channel.appendLine(`${actsextension.appid}.${cmdid}:`);
-                actsextension.vscodeextensionpath = context.extensionPath;
+            vscode.commands.registerCommand(`${acts.appid}.${cmdid}`, () => {
+                acts.channel.show(true);
+                acts.channel.clear();
+                acts.channel.appendLine(`${acts.appid}.${cmdid}:`);
+                acts.vscodeextensionpath = context.extensionPath;
                 // check condition
                 if (!actshelper.checkProjectPath()) {
                     return;
@@ -304,8 +323,8 @@ export function activate(context: vscode.ExtensionContext) {
                     return;
                 }
                 // exec command
-                actsextension.testTaskAsync(true).catch(ex => {
-                    actsextension.channel.appendLine("**** " + ex + " ****");
+                acts.testTaskAsync(true).catch(ex => {
+                    acts.channel.appendLine("**** " + ex + " ****");
                 });
             })
         );
@@ -314,11 +333,11 @@ export function activate(context: vscode.ExtensionContext) {
     (function () {
         const cmdid = "submitTask";
         context.subscriptions.push(
-            vscode.commands.registerCommand(`${actsextension.appid}.${cmdid}`, () => {
-                actsextension.channel.show(true);
-                actsextension.channel.clear();
-                actsextension.channel.appendLine(`${actsextension.appid}.${cmdid}:`);
-                actsextension.vscodeextensionpath = context.extensionPath;
+            vscode.commands.registerCommand(`${acts.appid}.${cmdid}`, () => {
+                acts.channel.show(true);
+                acts.channel.clear();
+                acts.channel.appendLine(`${acts.appid}.${cmdid}:`);
+                acts.vscodeextensionpath = context.extensionPath;
                 // check condition
                 if (!actshelper.checkProjectPath()) {
                     return;
@@ -326,10 +345,46 @@ export function activate(context: vscode.ExtensionContext) {
                 if (!actshelper.checkActiveFile()) {
                     return;
                 }
-                // exec command
-                actsextension.submitTaskAsync().catch(ex => {
-                    actsextension.channel.appendLine("**** " + ex + " ****");
-                });
+                // select language
+                let languages: string[];
+                if (acts.site === "atcoder") {
+                    languages = atcoder.xlanguages.filter(val => val.xextension.extension === acts.extension).map(val => val.language);
+                }
+                if (acts.site === "yukicoder") {
+                    languages = yukicoder.xlanguages.filter(val => val.xextension.extension === acts.extension).map(val => val.language);
+                }
+                let idx = acts.extensions.indexOf(acts.language);
+                if (1 <= idx) {
+                    languages.splice(idx, 1);
+                    languages.unshift(acts.language);
+                }
+                vscode.window
+                    .showQuickPick(languages, {
+                        placeHolder: "SELECT LANGUAGE",
+                    })
+                    .then(language => {
+                        if (language === undefined) {
+                            return;
+                        }
+                        // save site depending data
+                        acts.language = language;
+                        if (acts.site === "atcoder") {
+                            atcoder.contest = acts.contest;
+                            atcoder.task = acts.task;
+                            atcoder.extension = acts.extension;
+                            atcoder.language = acts.language;
+                        }
+                        if (acts.site === "yukicoder") {
+                            yukicoder.contest = acts.contest;
+                            yukicoder.task = acts.task;
+                            yukicoder.extension = acts.extension;
+                            yukicoder.language = acts.language;
+                        }
+                        // exec command
+                        acts.submitTaskAsync().catch(ex => {
+                            acts.channel.appendLine("**** " + ex + " ****");
+                        });
+                    });
             })
         );
     })();
@@ -337,11 +392,11 @@ export function activate(context: vscode.ExtensionContext) {
     (function () {
         const cmdid = "removeTask";
         context.subscriptions.push(
-            vscode.commands.registerCommand(`${actsextension.appid}.${cmdid}`, () => {
-                actsextension.channel.show(true);
-                actsextension.channel.clear();
-                actsextension.channel.appendLine(`${actsextension.appid}.${cmdid}:`);
-                actsextension.vscodeextensionpath = context.extensionPath;
+            vscode.commands.registerCommand(`${acts.appid}.${cmdid}`, () => {
+                acts.channel.show(true);
+                acts.channel.clear();
+                acts.channel.appendLine(`${acts.appid}.${cmdid}:`);
+                acts.vscodeextensionpath = context.extensionPath;
                 // check condition
                 if (!actshelper.checkProjectPath()) {
                     return;
@@ -359,8 +414,8 @@ export function activate(context: vscode.ExtensionContext) {
                             return;
                         }
                         // exec command
-                        actsextension.removeTaskAsync().catch(ex => {
-                            actsextension.channel.appendLine("**** " + ex + " ****");
+                        acts.removeTaskAsync().catch(ex => {
+                            acts.channel.appendLine("**** " + ex + " ****");
                         });
                     });
             })
@@ -370,11 +425,11 @@ export function activate(context: vscode.ExtensionContext) {
     (function () {
         const cmdid = "browseTask";
         context.subscriptions.push(
-            vscode.commands.registerCommand(`${actsextension.appid}.${cmdid}`, () => {
-                actsextension.channel.show(true);
-                actsextension.channel.clear();
-                actsextension.channel.appendLine(`${actsextension.appid}.${cmdid}:`);
-                actsextension.vscodeextensionpath = context.extensionPath;
+            vscode.commands.registerCommand(`${acts.appid}.${cmdid}`, () => {
+                acts.channel.show(true);
+                acts.channel.clear();
+                acts.channel.appendLine(`${acts.appid}.${cmdid}:`);
+                acts.vscodeextensionpath = context.extensionPath;
                 // check condition
                 if (!actshelper.checkProjectPath()) {
                     return;
@@ -383,8 +438,8 @@ export function activate(context: vscode.ExtensionContext) {
                     return;
                 }
                 // exec command
-                actsextension.browseTaskAsync().catch(ex => {
-                    actsextension.channel.appendLine("**** " + ex + " ****");
+                acts.browseTaskAsync().catch(ex => {
+                    acts.channel.appendLine("**** " + ex + " ****");
                 });
             })
         );

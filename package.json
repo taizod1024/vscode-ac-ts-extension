@@ -1,7 +1,7 @@
 {
   "version": "0.0.83",
   "name": "ac-ts-extension",
-  "displayName": "AtCoder/Yukicoder Extension",
+  "displayName": "AtCoder Extension",
   "description": "atcoder/yukicoder vscode extension for python/typescript/javascript",
   "engines": {
     "vscode": "^1.60.0"
@@ -33,37 +33,87 @@
     "commands": [
       {
         "command": "ac-ts-extension.loginSite",
-        "title": "AtCoder/Yukicoder Extension: login Site..."
+        "title": "AtCoder Extension: login Site..."
       },
       {
         "command": "ac-ts-extension.initTask",
-        "title": "AtCoder/Yukicoder Extension: Init Task..."
+        "title": "AtCoder Extension: Init Task..."
       },
       {
         "command": "ac-ts-extension.reinitTask",
-        "title": "AtCoder/Yukicoder Extension: Reinit Task..."
+        "title": "AtCoder Extension: Reinit Task..."
       },
       {
         "command": "ac-ts-extension.testTask",
-        "title": "AtCoder/Yukicoder Extension: Test Task"
+        "title": "AtCoder Extension: Test Task"
       },
       {
         "command": "ac-ts-extension.debugTask",
-        "title": "AtCoder/Yukicoder Extension: Debug Task"
+        "title": "AtCoder Extension: Debug Task"
       },
       {
         "command": "ac-ts-extension.submitTask",
-        "title": "AtCoder/Yukicoder Extension: Submit Task"
+        "title": "AtCoder Extension: Submit Task"
       },
       {
         "command": "ac-ts-extension.removeTask",
-        "title": "AtCoder/Yukicoder Extension: Remove Task..."
+        "title": "AtCoder Extension: Remove Task..."
       },
       {
         "command": "ac-ts-extension.browseTask",
-        "title": "AtCoder/Yukicoder Extension: Browse Task"
+        "title": "AtCoder Extension: Browse Task"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "AtCoder Extension",
+      "properties": {
+        "atcoderExtension.cChecker": {
+          "type": "string",
+          "description": "command line checker for C, you can use $taskfile, $execfile, $tmppath.",
+          "default": "gcc --version"
+        },
+        "atcoderExtension.cCompiler": {
+          "type": "string",
+          "description": "command line compiler for C, you can use $taskfile, $execfile, $tmppath.",
+          "default": "gcc $taskfile -o $execfile -lm"
+        },
+        "atcoderExtension.cExecutor": {
+          "type": "string",
+          "description": "command line executor for C, you can use $taskfile, $execfile, $tmppath.",
+          "default": "$execfile"
+        },
+        "atcoderExtension.c++Checker": {
+          "type": "string",
+          "description": "command line checker for C++, you can use $taskfile, $execfile, $tmppath.",
+          "default": "g++ --version"
+        },
+        "atcoderExtension.c++Compiler": {
+          "type": "string",
+          "description": "command line compiler for C++, you can use $taskfile, $execfile, $tmppath.",
+          "default": "g++ $taskfile -o $execfile"
+        },
+        "atcoderExtension.c++Executor": {
+          "type": "string",
+          "description": "command line executor for C++, you can use $taskfile, $execfile, $tmppath.",
+          "default": "$execfile"
+        },
+        "atcoderExtension.javaChecker": {
+          "type": "string",
+          "description": "command line checker for Java, you can use $taskfile, $execfile, $tmppath.",
+          "default": "javac --version"
+        },
+        "atcoderExtension.javaCompiler": {
+          "type": "string",
+          "description": "command line compiler for Java, you can use $taskfile, $execfile, $tmppath.",
+          "default": "javac -J-Duser.language=en $taskfile"
+        },
+        "atcoderExtension.javaExecutor": {
+          "type": "string",
+          "description": "command line executor for Java, you can use $taskfile, $execfile, $tmppath.",
+          "default": "cd $tmppath && java Main"
+        }
+      }
+    }
   },
   "scripts": {
     "nodecheck": "node --version | findstr \"v16.13.0\"",

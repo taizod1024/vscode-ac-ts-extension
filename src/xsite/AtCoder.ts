@@ -2,13 +2,17 @@ import * as vscode from "vscode";
 import * as fs from "fs";
 import superagent from "superagent";
 import * as cheerio from "cheerio";
-import { actsextension } from "./AcTsExtension";
-import { AcTsCoder } from "./AcTsCoder";
-import { typescript } from "./TypeScript";
-import { javascript } from "./JavaScript";
-import { python } from "./Python";
+import { acts } from "../AcTsExtension";
+import { XSite } from "../XSite";
+import { XLanguage } from "../XLanguage";
+import { cc } from "../XExtension/Cc";
+import { cpp } from "../XExtension/Cpp";
+import { java } from "../XExtension/Java";
+import { javascript } from "../XExtension/JavaScript";
+import { python } from "../XExtension/Python";
+import { typescript } from "../XExtension/TypeScript";
 
-class AtCoder implements AcTsCoder {
+class AtCoder implements XSite {
     // param
     username: string;
     password: string;
@@ -22,7 +26,7 @@ class AtCoder implements AcTsCoder {
     // implements
 
     // prop
-    name = "atcoder";
+    site = "atcoder";
     contestregexp: RegExp;
     contestmessage: string;
     taskregexp: RegExp;
@@ -30,6 +34,8 @@ class AtCoder implements AcTsCoder {
     contest: string;
     task: string;
     extension: string;
+    language: string;
+    xlanguages: XLanguage[];
 
     // method
     constructor() {
@@ -41,18 +47,57 @@ class AtCoder implements AcTsCoder {
         this.contest = "";
         this.task = "";
         this.extension = "";
+        this.language = "";
+        this.xlanguages = [
+            {
+                language: "C (GCC x.x.x)",
+                xextension: cc,
+                id: 4001,
+            },
+            {
+                language: "C (Clang x.x.x)",
+                xextension: cc,
+                id: 4002,
+            },
+            {
+                language: "C++ (GCC x.x.x)",
+                xextension: cpp,
+                id: 4003,
+            },
+            {
+                language: "C++ (Clang x.x.x)",
+                xextension: cpp,
+                id: 4004,
+            },
+            {
+                language: "Java (OpenJDK x.x.x)",
+                xextension: java,
+                id: 4005,
+            },
+            {
+                language: "JavaScript (Node.js x.x.x)",
+                xextension: javascript,
+                id: 4030,
+            },
+            {
+                language: "Python (x.x.x)",
+                xextension: python,
+                id: 4006,
+            },
+            {
+                language: "TypeScript (x.x)",
+                xextension: typescript,
+                id: 4057,
+            },
+        ];
     }
 
     initPropAsync(withtask: boolean) {
         if (withtask) {
-            this.taskurl = `https://atcoder.jp/contests/${actsextension.contest}/tasks/${actsextension.task}`;
-            this.submiturl = `https://atcoder.jp/contests/${actsextension.contest}/submit`;
-            this.submissionsurl = `https://atcoder.jp/contests/${actsextension.contest}/submissions/me`;
+            this.taskurl = `https://atcoder.jp/contests/${this.contest}/tasks/${this.task}`;
+            this.submiturl = `https://atcoder.jp/contests/${this.contest}/submit`;
+            this.submissionsurl = `https://atcoder.jp/contests/${this.contest}/submissions/me`;
         }
-    }
-
-    isSelected(): boolean {
-        return actsextension.site === "atcoder";
     }
 
     checkLogin() {
@@ -63,30 +108,30 @@ class AtCoder implements AcTsCoder {
 
     async loginSiteAsync() {
         // show channel
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] atcoder.loginurl: ${this.loginurl}`);
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] atcoder.username: ${this.username}`);
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] atcoder.password: ********`);
+        acts.channel.appendLine(`[${acts.timestamp()}] atcoder.loginurl: ${this.loginurl}`);
+        acts.channel.appendLine(`[${acts.timestamp()}] atcoder.username: ${this.username}`);
+        acts.channel.appendLine(`[${acts.timestamp()}] atcoder.password: ********`);
 
         // get agent
         const agent = superagent.agent();
 
         // login get
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] login_get:`);
+        acts.channel.appendLine(`[${acts.timestamp()}] login_get:`);
         const res1 = await agent
             .get(this.loginurl)
-            .proxy(actsextension.proxy)
+            .proxy(acts.proxy)
             .catch(res => {
-                throw `ERROR: ${actsextension.responseToMessage(res)}`;
+                throw `ERROR: ${acts.responseToMessage(res)}`;
             });
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] -> ${res1.status}`);
+        acts.channel.appendLine(`[${acts.timestamp()}] -> ${res1.status}`);
 
         // login post
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] login_post:`);
+        acts.channel.appendLine(`[${acts.timestamp()}] login_post:`);
         const $ = cheerio.load(res1.text);
         const csrf_token = $("input").val();
         const res2 = await agent
             .post(this.loginurl)
-            .proxy(actsextension.proxy)
+            .proxy(acts.proxy)
             .set("Content-Type", "application/x-www-form-urlencoded")
             .send({
                 username: this.username,
@@ -94,9 +139,9 @@ class AtCoder implements AcTsCoder {
                 csrf_token: csrf_token,
             })
             .catch(res => {
-                throw `ERROR: ${actsextension.responseToMessage(res)}`;
+                throw `ERROR: ${acts.responseToMessage(res)}`;
             });
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] -> ${res2.status}`);
+        acts.channel.appendLine(`[${acts.timestamp()}] -> ${res2.status}`);
 
         // check login
         if (res2.text.indexOf(`ようこそ、${this.username} さん。`) < 0) {
@@ -106,30 +151,30 @@ class AtCoder implements AcTsCoder {
 
     async getTestAsync() {
         // show channel
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] atcoder.taskurl: ${this.taskurl}`);
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] atcoder.username: ${this.username}`);
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] atcoder.password: ********`);
+        acts.channel.appendLine(`[${acts.timestamp()}] atcoder.taskurl: ${this.taskurl}`);
+        acts.channel.appendLine(`[${acts.timestamp()}] atcoder.username: ${this.username}`);
+        acts.channel.appendLine(`[${acts.timestamp()}] atcoder.password: ********`);
 
         // get agent
         const agent = superagent.agent();
 
         // login get
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] atcoder.login_get:`);
+        acts.channel.appendLine(`[${acts.timestamp()}] atcoder.login_get:`);
         const res1 = await agent
             .get(this.loginurl)
-            .proxy(actsextension.proxy)
+            .proxy(acts.proxy)
             .catch(res => {
-                throw `ERROR: ${actsextension.responseToMessage(res)}`;
+                throw `ERROR: ${acts.responseToMessage(res)}`;
             });
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] -> ${res1.status}`);
+        acts.channel.appendLine(`[${acts.timestamp()}] -> ${res1.status}`);
 
         // login post
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] atcoder.login_post:`);
+        acts.channel.appendLine(`[${acts.timestamp()}] atcoder.login_post:`);
         const $ = cheerio.load(res1.text);
         const csrf_token = $("input").val();
         const res2 = await agent
             .post(this.loginurl)
-            .proxy(actsextension.proxy)
+            .proxy(acts.proxy)
             .set("Content-Type", "application/x-www-form-urlencoded")
             .send({
                 username: this.username,
@@ -137,9 +182,9 @@ class AtCoder implements AcTsCoder {
                 csrf_token: csrf_token,
             })
             .catch(res => {
-                throw `ERROR: ${actsextension.responseToMessage(res)}`;
+                throw `ERROR: ${acts.responseToMessage(res)}`;
             });
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] -> ${res2.status}`);
+        acts.channel.appendLine(`[${acts.timestamp()}] -> ${res2.status}`);
 
         // check login
         if (res2.text.indexOf(`ようこそ、${this.username} さん。`) < 0) {
@@ -147,28 +192,28 @@ class AtCoder implements AcTsCoder {
         }
 
         // get task
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] atcoder.get_task:`);
+        acts.channel.appendLine(`[${acts.timestamp()}] atcoder.get_task:`);
         const response = await agent
             .get(this.taskurl)
-            .proxy(actsextension.proxy)
+            .proxy(acts.proxy)
             .catch(res => {
-                throw `ERROR: ${actsextension.responseToMessage(res)}`;
+                throw `ERROR: ${acts.responseToMessage(res)}`;
             });
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] -> ${response.status}`);
+        acts.channel.appendLine(`[${acts.timestamp()}] -> ${response.status}`);
 
         // response to test text
         let text = "";
         let idx = 1;
         while (true) {
-            let m1 = response.text.match(new RegExp(`<h3>入力例 ${idx}<\/h3><pre>([^<]*)<\/pre>`));
+            let m1 = response.text.match(new RegExp(`<h3>入力例 ${idx}<\/h3>[\s\r\n]*<pre>([^<]*)<\/pre>`));
             if (m1 === null) {
                 break;
             }
-            let m2 = response.text.match(new RegExp(`<h3>出力例 ${idx}<\/h3><pre>([^<]*)<\/pre>`));
+            let m2 = response.text.match(new RegExp(`<h3>出力例 ${idx}<\/h3>[\s\r\n]*<pre>([^<]*)<\/pre>`));
             if (m2 === null) {
                 break;
             }
-            text += m1[1].trim() + actsextension.separator + m2[1].trim() + actsextension.separator;
+            text += m1[1].trim() + acts.separator + m2[1].trim() + acts.separator;
             idx++;
         }
         idx--;
@@ -180,31 +225,31 @@ class AtCoder implements AcTsCoder {
 
     async submitTaskAsync() {
         // show channel
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] atcoder.taskurl: ${this.taskurl}`);
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] atcoder.username: ${this.username}`);
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] atcoder.password: ********`);
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] atcoder.submiturl: ${this.submiturl}`);
+        acts.channel.appendLine(`[${acts.timestamp()}] atcoder.taskurl: ${this.taskurl}`);
+        acts.channel.appendLine(`[${acts.timestamp()}] atcoder.username: ${this.username}`);
+        acts.channel.appendLine(`[${acts.timestamp()}] atcoder.password: ********`);
+        acts.channel.appendLine(`[${acts.timestamp()}] atcoder.submiturl: ${this.submiturl}`);
 
         // get agent
         const agent = superagent.agent();
 
         // login get
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] login_get:`);
+        acts.channel.appendLine(`[${acts.timestamp()}] login_get:`);
         const res1 = await agent
             .get(this.loginurl)
-            .proxy(actsextension.proxy)
+            .proxy(acts.proxy)
             .catch(res => {
-                throw `ERROR: ${actsextension.responseToMessage(res)}`;
+                throw `ERROR: ${acts.responseToMessage(res)}`;
             });
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] -> ${res1.status}`);
+        acts.channel.appendLine(`[${acts.timestamp()}] -> ${res1.status}`);
 
         // login post
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] login_post:`);
+        acts.channel.appendLine(`[${acts.timestamp()}] login_post:`);
         const $ = cheerio.load(res1.text);
         const csrf_token = $("input").val();
         const res2 = await agent
             .post(this.loginurl)
-            .proxy(actsextension.proxy)
+            .proxy(acts.proxy)
             .set("Content-Type", "application/x-www-form-urlencoded")
             .send({
                 username: this.username,
@@ -212,9 +257,9 @@ class AtCoder implements AcTsCoder {
                 csrf_token: csrf_token,
             })
             .catch(res => {
-                throw `ERROR: ${actsextension.responseToMessage(res)}`;
+                throw `ERROR: ${acts.responseToMessage(res)}`;
             });
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] -> ${res2.status}`);
+        acts.channel.appendLine(`[${acts.timestamp()}] -> ${res2.status}`);
 
         // check login
         if (res2.text.indexOf(`ようこそ、${this.username} さん。`) < 0) {
@@ -222,41 +267,36 @@ class AtCoder implements AcTsCoder {
         }
 
         // submit task
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] submit_task:`);
-        const code = fs.readFileSync(actsextension.taskfile).toString();
+        acts.channel.appendLine(`[${acts.timestamp()}] submit_task:`);
+        const code = fs.readFileSync(acts.taskfile).toString();
         const res3 = await agent
             .post(this.submiturl)
-            .proxy(actsextension.proxy)
+            .proxy(acts.proxy)
             .set("Content-Type", "application/x-www-form-urlencoded")
             .send({
-                "data.TaskScreenName": actsextension.task,
+                "data.TaskScreenName": this.task,
                 "data.LanguageId": this.getLanguageId(),
                 csrf_token: csrf_token,
                 sourceCode: code,
             })
             .catch(res => {
-                throw `ERROR: ${actsextension.responseToMessage(res)}`;
+                throw `ERROR: ${acts.responseToMessage(res)}`;
             });
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] -> ${res3.status}`);
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] submissionsurl: ${this.submissionsurl}`);
+        acts.channel.appendLine(`[${acts.timestamp()}] -> ${res3.status}`);
+        acts.channel.appendLine(`[${acts.timestamp()}] submissionsurl: ${this.submissionsurl}`);
     }
 
     browseTask() {
-        actsextension.channel.appendLine(`[${actsextension.timestamp()}] taskurl: ${this.taskurl}`);
+        acts.channel.appendLine(`[${acts.timestamp()}] taskurl: ${this.taskurl}`);
         vscode.env.openExternal(vscode.Uri.parse(this.taskurl));
     }
 
     getLanguageId(): number {
-        if (typescript.isSelected()) {
-            return 4057;
+        const xlanguage = this.xlanguages.find(val => val.language === this.language);
+        if (!xlanguage) {
+            throw `ERROR: unsupported language, language=${this.language}`;
         }
-        if (javascript.isSelected()) {
-            return 4030;
-        }
-        if (python.isSelected()) {
-            return 4006;
-        }
-        return 0;
+        return Number(xlanguage.id);
     }
 
     loadConfig(json: any) {
@@ -265,6 +305,7 @@ class AtCoder implements AcTsCoder {
         atcoder.contest = json.atcoder?.contest;
         atcoder.task = json.atcoder?.task;
         atcoder.extension = json.atcoder?.extension;
+        atcoder.language = json.atcoder?.language;
     }
 
     saveConfig(json: any) {
@@ -274,6 +315,7 @@ class AtCoder implements AcTsCoder {
         json.atcoder.contest = atcoder.contest;
         json.atcoder.task = atcoder.task;
         json.atcoder.extension = atcoder.extension;
+        json.atcoder.language = atcoder.language;
     }
 }
 export const atcoder = new AtCoder();
