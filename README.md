@@ -1,16 +1,16 @@
 # AtCoder Extension
 
-C/C++/Java/Python/JavaScript/TypeScript での[AtCoder](https://atcoder.jp/?lang=ja)/[Yukicoder](https://yukicoder.me/)への参加をサポートする Visual Studio Code の拡張機能です。
+C/C++/Java/Python/JavaScript/TypeScript での [AtCoder](https://atcoder.jp/?lang=ja)/[Yukicoder](https://yukicoder.me/) への参加をサポートする Visual Studio Code の拡張機能です。
 
 ## 変更
 
 - 2022/08/19
-   - <span style="color:red">C/C++/Javaに対応しました。</span>
-      - vscodeの設定からC/C++/Javaのコマンドラインを指定できます。
+   - <span style="color:red;font-weight:bold">C/C++/Javaに対応しました。</span>
+      - <span style="font-weight:bold">vscodeの設定からC/C++/Javaのコマンドを指定します。</span>
       - 提出時の言語はsubmitTask時に選択します。例：C(GCC)、C(Clang)
       - Javaはファイル名とクラス名の間に関係性があるので適宜書き換えます。
       - デバッグ実行はサポートしていません。
-   - <span style="color:red">テンプレートファイル名を`default.xx`から`template.xx`に変更しました。</span>
+   - <span style="color:red;font-weight:bold">テンプレートファイル名を`default.xx`から`template.xx`に変更しました。</span>
    - AtCoderの仕様に合わせて戻り値が0以外の場合にエラーになるようにしました。  
    - vscode拡張機能名から"Yukicoder"を外しました。  
      表示名が長すぎることへの対処なのでYukicoder向けの機能はそのまま残っています。
@@ -54,6 +54,7 @@ vscode の [拡張機能] から `AtCoder Extension` を検索してインスト
 ### C/C++/Java
 
 gcc/g++/clang/jdk等をインストールします。  
+環境に合わせて設定からコマンドを変更します。
 
 ### Python
 
@@ -282,6 +283,7 @@ Takahashi
 
 解答の作成が完了したら、ソースコードを開いてから `AtCoder Extension: Submit Task` で解答を提出します。
 
+- 言語を選択します。
 - 構文エラーがあっても提出されます。テスト実行が失敗していても提出されます。注意してください。
 
 ![submittask](https://github.com/taizod1024/ac-ts-extension/blob/main/images/submittask.gif?raw=true)
@@ -316,7 +318,7 @@ Takahashi
 | Java Compiler | `javac -J-Duser.language=en $taskfile` | Javaコンパイラ |
 | Java Executor | `cd $tmppath && java Main` | Java実行ファイル |
 
-パラメタとして以下を使用できます。
+パラメタを使用できます。
 
 | パラメタ名 | 記法 | 内容 |
 | --- | --- | --- |
