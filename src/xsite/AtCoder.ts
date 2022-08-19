@@ -23,7 +23,7 @@ class AtCoder implements XSite {
     // implements
 
     // prop
-    name = "atcoder";
+    site = "atcoder";
     contestregexp: RegExp;
     contestmessage: string;
     taskregexp: RegExp;
@@ -248,16 +248,16 @@ class AtCoder implements XSite {
     }
 
     getLanguageId(): number {
-        if (typescript.isSelected()) {
+        if (this.extension === typescript.extension) {
             return 4057;
         }
-        if (javascript.isSelected()) {
+        if (this.extension === javascript.extension) {
             return 4030;
         }
-        if (python.isSelected()) {
+        if (this.extension === python.extension) {
             return 4006;
         }
-        throw "ERROR: unsupported language";
+        throw `ERROR: unsupported language, extension=${this.extension}`;
     }
 
     loadConfig(json: any) {

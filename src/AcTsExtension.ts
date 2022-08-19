@@ -74,7 +74,7 @@ class AcTsExtension {
         this.xextensions = [cpp, python, java, cc, javascript, typescript];
 
         // sites and extensions
-        this.sites = this.xsites.map(xsite => xsite.name);
+        this.sites = this.xsites.map(xsite => xsite.site);
         this.extensions = this.xextensions.map(xlang => xlang.extension);
 
         // init context
@@ -108,8 +108,8 @@ class AcTsExtension {
         this.timeout = 5000;
 
         // site specific
-        this.xsite = this.xsites.find(xsite => xsite.isSelected());
-        this.xextension = this.xextensions.find(xlang => xlang.isSelected());
+        this.xsite = this.xsites.find(xsite => xsite.site === this.site);
+        this.xextension = this.xextensions.find(xlang => (xlang.extension = this.extension));
 
         // check and init coder
         this.xsite.checkLogin();

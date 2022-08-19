@@ -22,7 +22,7 @@ class Yukicoder implements XSite {
     // implements
 
     // prop
-    name = "yukicoder";
+    site = "yukicoder";
     contestregexp: RegExp;
     contestmessage: string;
     taskregexp: RegExp;
@@ -162,16 +162,16 @@ class Yukicoder implements XSite {
     }
 
     getLanguage(): string {
-        if (typescript.isSelected()) {
+        if (this.extension === typescript.extension) {
             return "typescript";
         }
-        if (javascript.isSelected()) {
+        if (this.extension === javascript.extension) {
             return "node";
         }
-        if (python.isSelected()) {
+        if (this.extension === python.extension) {
             return "python3";
         }
-        throw "ERROR: unsupported language";
+        throw `ERROR: unsupported language, extension=${this.extension}`;
     }
 
     loadConfig(json: any) {

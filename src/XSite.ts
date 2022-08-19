@@ -1,6 +1,6 @@
 export interface XSite {
     // prop
-    name: string;
+    site: string;
     contestregexp: RegExp;
     contestmessage: string;
     taskregexp: RegExp;
