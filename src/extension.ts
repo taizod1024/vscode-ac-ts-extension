@@ -8,31 +8,6 @@ import { yukicoder } from "./XSite/Yukicoder";
 
 // extension entrypoint
 export function activate(context: vscode.ExtensionContext) {
-    // vscode.debug.registerDebugAdapterTrackerFactory("*", {
-    //     createDebugAdapterTracker(_session: vscode.DebugSession) {
-    //         return {
-    //             onDidSendMessage(message) {
-    //                 acts.channel.appendLine(`**** onDidSendMessage, message=${JSON.stringify(message)} ****`);
-    //             },
-    //             onWillReceiveMessage(message) {
-    //                 acts.channel.appendLine(`**** onWillReceiveMessage, message=${JSON.stringify(message)} ****`);
-    //             },
-    //             onWillStartSession() {
-    //                 acts.channel.appendLine(`**** onWillStartSession ****`);
-    //             },
-    //             onWillStopSession() {
-    //                 acts.channel.appendLine(`**** onWillStopSession ****`);
-    //             },
-    //             onError(error) {
-    //                 acts.channel.appendLine(`**** onError, error=${error} ****`);
-    //             },
-    //             onExit(code, signal) {
-    //                 acts.channel.appendLine(`**** onExit, code=${code}, signal=${signal} ****`);
-    //             },
-    //         };
-    //     },
-    // });
-
     (function () {
         const cmdid = "loginSite";
         context.subscriptions.push(

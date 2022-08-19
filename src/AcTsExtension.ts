@@ -289,7 +289,11 @@ class AcTsExtension {
 
                 // wait child process
                 (function waitchild() {
-                    // TODO debugu時のexit codeの取得、なぜかうまくいかない
+                    // - 通常実行時：
+                    //   - コマンド実行中はchild.exitCodeがnullになるのでタイムアウトまで待つ
+                    // - デバッグ実行時は、、、
+                    //   - vscode.debug.activeDebugSessionがあてにならないのでリダイレクトのファイルの有無で判断する
+                    //   - 戻り値は取得できないので制限とする
                     if (child?.exitCode === null) {
                         timecount += 500;
                         if (timecount < that.timeout) {
@@ -321,6 +325,7 @@ class AcTsExtension {
                             }
                             // test done
                             (function commanddone() {
+                                console.log(vscode.debug.activeDebugSession);
                                 that.channel.show(true);
                                 // read output
                                 const out = fs.readFileSync(that.tmpoutfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
