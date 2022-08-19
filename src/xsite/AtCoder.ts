@@ -205,11 +205,11 @@ class AtCoder implements XSite {
         let text = "";
         let idx = 1;
         while (true) {
-            let m1 = response.text.match(new RegExp(`<h3>入力例 ${idx}<\/h3><pre>([^<]*)<\/pre>`));
+            let m1 = response.text.match(new RegExp(`<h3>入力例 ${idx}<\/h3>[\s\r\n]*<pre>([^<]*)<\/pre>`));
             if (m1 === null) {
                 break;
             }
-            let m2 = response.text.match(new RegExp(`<h3>出力例 ${idx}<\/h3><pre>([^<]*)<\/pre>`));
+            let m2 = response.text.match(new RegExp(`<h3>出力例 ${idx}<\/h3>[\s\r\n]*<pre>([^<]*)<\/pre>`));
             if (m2 === null) {
                 break;
             }
