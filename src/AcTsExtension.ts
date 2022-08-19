@@ -89,8 +89,8 @@ class AcTsExtension {
 
     public async initPropAsync(withtask: boolean) {
         // init prop
-        this.tasktmplfile = `${this.vscodeextensionpath}\\template\\default${this.extension}`;
-        this.usertasktmplfile = `${this.projectpath}\\template\\default${this.extension}`;
+        this.tasktmplfile = `${this.vscodeextensionpath}\\template\\template${this.extension}`;
+        this.usertasktmplfile = `${this.projectpath}\\template\\template${this.extension}`;
         this.taskpath = `${this.projectpath}\\src\\${this.site}\\${this.contest}`;
         this.taskfile = `${this.projectpath}\\src\\${this.site}\\${this.contest}\\${this.task}${this.extension}`;
         this.taskbuildpath = `${process.env.TEMP}\\${this.appid}\\build\\${this.site}`;
@@ -185,6 +185,9 @@ class AcTsExtension {
                 this.channel.appendLine(`[${this.timestamp()}] WARN: there is no test set`);
             }
         }
+
+        // init task with extension
+        this.xextension.initTask();
 
         // open file
         vscode.workspace.openTextDocument(this.taskfile).then(
@@ -401,6 +404,9 @@ class AcTsExtension {
         if (!fs.existsSync(this.taskfile)) {
             throw `ERROR: missing taskfile="${this.taskfile}", do init task`;
         }
+
+        // submit task with extension
+        this.xextension.submitTask();
 
         // submit task
         await this.xsite.submitTaskAsync();

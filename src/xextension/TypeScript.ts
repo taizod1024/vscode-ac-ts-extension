@@ -17,6 +17,7 @@ class TypeScript implements XExtension {
         }
     }
 
+    initTask(): void {}
     compileTask(): void {}
 
     debugTask(): any {
@@ -40,5 +41,7 @@ class TypeScript implements XExtension {
         const child = child_process.exec(command, options);
         return child;
     }
+
+    submitTask(): void {}
 }
 export const typescript = new TypeScript();

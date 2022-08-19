@@ -4,7 +4,9 @@ export interface XExtension {
 
     // method
     checkLang(): void;
+    initTask(): void;
     compileTask(): void;
     testTask(): any;
     debugTask(): any;
+    submitTask(): void;
 }

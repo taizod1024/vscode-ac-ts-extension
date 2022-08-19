@@ -13,6 +13,8 @@ class Cc implements XExtension {
         xexthelper.checkLang("cChecker");
     }
 
+    initTask(): void {}
+
     compileTask(): void {
         xexthelper.compileTask("cCompiler", "cExecutor");
     }
@@ -24,5 +26,7 @@ class Cc implements XExtension {
     testTask(): any {
         return xexthelper.testTask("cExecutor");
     }
+
+    submitTask(): void {}
 }
 export const cc = new Cc();

@@ -17,6 +17,7 @@ class JavaScript implements XExtension {
         }
     }
 
+    initTask(): void {}
     compileTask(): void {}
 
     debugTask(): any {
@@ -38,5 +39,7 @@ class JavaScript implements XExtension {
         const child = child_process.exec(command, options);
         return child;
     }
+
+    submitTask(): void {}
 }
 export const javascript = new JavaScript();

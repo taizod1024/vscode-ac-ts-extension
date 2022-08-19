@@ -13,6 +13,8 @@ class Cpp implements XExtension {
         xexthelper.checkLang("c++Checker");
     }
 
+    initTask(): void {}
+
     compileTask(): void {
         xexthelper.compileTask("c++Compiler", "c++Executor");
     }
@@ -24,5 +26,7 @@ class Cpp implements XExtension {
     testTask(): any {
         return xexthelper.testTask("c++Executor");
     }
+
+    submitTask(): void {}
 }
 export const cpp = new Cpp();

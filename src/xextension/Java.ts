@@ -1,4 +1,3 @@
-import * as vscode from "vscode";
 import * as fs from "fs";
 import child_process, { ExecFileSyncOptions } from "child_process";
 import { acts } from "../AcTsExtension";
@@ -16,11 +15,20 @@ class Java implements XExtension {
         xexthelper.checkLang("javaChecker");
     }
 
+    initTask(): void {
+        // rewrite class name to task name
+        let text = fs.readFileSync(acts.taskfile).toString();
+        text = text.replace(new RegExp("class template", "g"), `class ${acts.task}`);
+        fs.writeFileSync(acts.taskfile, text);
+    }
+
     compileTask(): void {
-        // modify taskfile and execfile
+        // replace and rewrite taskfile and tmpexecfile
         const taskfile = acts.taskfile;
         const tmptaskfile = `${process.env.TEMP}\\${acts.appid}\\Main.java`;
-        fs.copyFileSync(taskfile, tmptaskfile);
+        let text = fs.readFileSync(acts.taskfile).toString();
+        text = text.replace(new RegExp(`class ${acts.task}`, "g"), "class Main");
+        fs.writeFileSync(tmptaskfile, text);
         acts.taskfile = tmptaskfile;
         acts.tmpexecfile = `${process.env.TEMP}\\${acts.appid}\\Main.class`;
 
@@ -42,6 +50,16 @@ class Java implements XExtension {
 
     testTask(): any {
         return xexthelper.testTask("javaExecutor");
+        return xexthelper.testTask("javaExecutor");
+    }
+
+    submitTask(): void {
+        // replace and rewrite taskfile
+        const tmptaskfile = `${process.env.TEMP}\\${acts.appid}\\Main.java`;
+        let text = fs.readFileSync(acts.taskfile).toString();
+        text = text.replace(new RegExp(`class ${acts.task}`, "g"), "class Main");
+        fs.writeFileSync(tmptaskfile, text);
+        acts.taskfile = tmptaskfile;
     }
 }
 export const java = new Java();

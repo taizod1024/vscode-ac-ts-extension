@@ -21,6 +21,8 @@ class Python implements XExtension {
         }
     }
 
+    initTask(): void {}
+
     compileTask(): void {}
 
     debugTask(): any {
@@ -41,5 +43,7 @@ class Python implements XExtension {
         const child = child_process.exec(command, options);
         return child;
     }
+
+    submitTask(): void {}
 }
 export const python = new Python();
