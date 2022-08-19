@@ -1,13 +1,27 @@
 # AtCoder Extension
 
-Python/TypeScript/JavaScript での[AtCoder](https://atcoder.jp/?lang=ja)/[Yukicoder](https://yukicoder.me/)への参加をサポートする Visual Studio Code の拡張機能です。
+C/C++/Java/Python/JavaScript/TypeScript での[AtCoder](https://atcoder.jp/?lang=ja)/[Yukicoder](https://yukicoder.me/)への参加をサポートする Visual Studio Code の拡張機能です。
+
+## 変更
+
+- 2022/08/19
+   - <span style="color:red">C/C++/Javaに対応しました。</span>
+      - vscodeの設定からC/C++/Javaのコマンドラインを指定できます。
+      - 提出時の言語はsubmitTask時に選択します。例：C(GCC)、C(Clang)
+      - Javaはファイル名とクラス名の間に関係性があるので適宜書き換えます。
+      - デバッグ実行はサポートしていません。
+   - <span style="color:red">テンプレートファイル名を`default.xx`から`template.xx`に変更しました。</span>
+   - AtCoderの仕様に合わせて戻り値が0以外の場合にエラーになるようにしました。  
+   - vscode拡張機能名から"Yukicoder"を外しました。  
+     表示名が長すぎることへの対処なのでYukicoder向けの機能はそのまま残っています。
 
 ## 機能
 
-Python/TypeScript/JavaScript での Visual Studio Code から AtCoder/Yukicoder への参加をサポートします。
+C/C++/Java/Python/JavaScript/TypeScript での Visual Studio Code から AtCoder/Yukicoder への参加をサポートします。
 
 - AtCoder/Yukicoder へのログイン
-- Python/TypeScript/JavaScript のソースコードの生成、テストデータのダウンロード
+- C/C++/Java/Python/JavaScript/TypeScript のソースコードの生成
+- テストデータのダウンロード
 - 解答のテスト実行、デバッグ実行
 - 解答の提出
 - ブラウザでの問題ページの表示
@@ -20,11 +34,14 @@ Python/TypeScript/JavaScript での Visual Studio Code から AtCoder/Yukicoder 
 
 ## 環境
 
-- Windows 10 (20H2 で動作確認)
-- Visual Studio Code (1.60.2 で動作確認)
-- Python (3.9.7 で動作確認)
-- TypeScript (Node.js 16.1 で動作確認)
-- JavaScript (Node.js 16.1 で動作確認)
+- Windows 10 (21H2)
+- Visual Studio Code (1.70.2)
+- C (mingw 11.2.0.07112021)
+- C++ (mingw 11.2.0.07112021)
+- Java (AdoptOpenJDKjre 16.0.1.901)
+- Python (3.10.6)
+- TypeScript (Node.js 16.13.0)
+- JavaScript (Node.js 16.13.0)
 
 ## 準備
 
@@ -32,7 +49,11 @@ Python/TypeScript/JavaScript での Visual Studio Code から AtCoder/Yukicoder 
 
 ### vscode
 
-vscode の [拡張機能] から `AtCoder/Yukicoder Extension` を検索してインストールします。
+vscode の [拡張機能] から `AtCoder Extension` を検索してインストールします。
+
+### C/C++/Java
+
+gcc/g++/clang/jdk等をインストールします。  
 
 ### Python
 
@@ -67,20 +88,20 @@ vscode で `F1` を押下（もしくは [表示] > [コマンド パレット] 
 
 ### AtCoder/Yukicoder へログインする
 
-はじめに `AtCoder/Yukicoder Extension: Login Site` でユーザ名とパスワードを入力して AtCoder にログインします。
+はじめに `AtCoder Extension: Login Site` でユーザ名とパスワードを入力して AtCoder にログインします。
 Yukicoder の場合はプロフィール画面の API キーを入力します。
 
 ![loginsite](https://github.com/taizod1024/ac-ts-extension/blob/main/images/loginsite.gif?raw=true)
 
 ### 問題をはじめる
 
-まずはじめに `AtCoder/Yukicoder Extension: Init Task` で問題名を入力して提出用のソースコードの生成と問題用のテストデータのダウンロードをします。
+まずはじめに `AtCoder Extension: Init Task` で問題名を入力して提出用のソースコードの生成と問題用のテストデータのダウンロードをします。
 
 - サイトを`atcoder`,`yukicoder`から選択します。
 - コンテスト名は AtCoder の場合は `abc190`の形式、Yukicoder の場合は`351`の形式で入力します。いずれも URL から確認してください。
 - 問題名は AtCoder の場合は `abc190_a` の形式、Yukicoder の場合は`1692`の形式で入力します。いずれも URL から確認してください。
 - 解答する言語は`.py`,`.ts`, `.js` から選択します。
-- ソースコードは `src/atcoder/abcXXX/abcXXX_X.py`, `abcXXX_X.ts`, `abcXXX_X.js` に生成されます。
+- ソースコードは `src/atcoder/abcXXX/abcXXX_X.ts` に生成されます。
 - テストデータは `src/atcoder/abcXXX/abcXXX_X.txt` にダウンロードされます。
 - フォルダは自動的に作成されます。
 - 既にソースコードやテストデータがある場合はスキップされます。
@@ -91,6 +112,81 @@ Yukicoder の場合はプロフィール画面の API キーを入力します�
 
 生成されたソースコードの main()を修正します。
 ソースコードのひな型にカスタマイズしたい場合は、後述の[設定](#設定)を参照してください。
+
+#### C ひな型
+
+```c
+#include <stdio.h>
+
+int main(void)
+{
+  /* TODO edit this code */
+
+  /* param */
+  int n;
+  scanf("%d", &n);
+
+  /* solve */
+  int ans;
+  ans = n;
+
+  /* answer */
+  printf("%d", ans);
+
+  return 0;
+}
+```
+
+#### C++ ひな型
+
+```C++
+#include <stdio.h>
+#include <iostream>
+
+int main()
+{
+  /* TODO edit this code */
+
+  /* param */
+  int n;
+  std::cin >> n;
+
+  /* solve */
+  int ans;
+  ans = n;
+
+  /* answer */
+  std::cout << ans;
+
+  return 0;
+}
+```
+
+#### Java ひな型
+
+```Java
+import java.util.Scanner;
+
+public class template {
+
+  public static void main(String[] args) {
+
+    // TODO edit this code
+
+    // param
+    Scanner sc = new Scanner(System.in);
+    int n = Integer.parseInt(sc.next());
+    sc.close();
+
+    // resolve
+    int ans = n;
+
+    // answer
+    System.out.println(ans);
+  }
+
+}
+```
 
 #### Python ひな型
 
@@ -149,7 +245,7 @@ TypeScript と同様です。
 
 ### 問題の解答をテストする
 
-問題の解答を作成したら、ソースコードを開いてから `AtCoder/Yukicoder Extension: Test Task` でテスト実行します。
+問題の解答を作成したら、ソースコードを開いてから `AtCoder Extension: Test Task` でテスト実行します。
 
 - 処理が 5 秒以上続くと自動的に中断します。
 - 誤差が許容される問題の多くは NG になります。目視で判断してください。
@@ -176,7 +272,7 @@ Takahashi
 
 ### 問題の解答をデバッグする
 
-問題の解答をデバッグするには、ソースコードを開いてから `AtCoder/Yukicoder Extension: Debug Task` でデバッグ実行します。
+問題の解答をデバッグするには、ソースコードを開いてから `AtCoder Extension: Debug Task` でデバッグ実行します。
 
 - テストデータの個数だけデバッグ実行が繰り返されます。
 
@@ -184,7 +280,7 @@ Takahashi
 
 ### 問題の解答を提出する
 
-解答の作成が完了したら、ソースコードを開いてから `AtCoder/Yukicoder Extension: Submit Task` で解答を提出します。
+解答の作成が完了したら、ソースコードを開いてから `AtCoder Extension: Submit Task` で解答を提出します。
 
 - 構文エラーがあっても提出されます。テスト実行が失敗していても提出されます。注意してください。
 
@@ -192,19 +288,47 @@ Takahashi
 
 ### 不要なソースコードとテストデータを削除する
 
-`AtCoder/Yukicoder Extension: Remove Task` を実行すると、問題のソースコードとテストデータを対で削除します。
+`AtCoder Extension: Remove Task` を実行すると、問題のソースコードとテストデータを対で削除します。
 
 ### ブラウザで問題ページを開く
 
-`AtCoder/Yukicoder Extension: Browse Task` を実行すると、ブラウザで問題ページを開きます。
+`AtCoder Extension: Browse Task` を実行すると、ブラウザで問題ページを開きます。
 
 ## 設定
 
 ### ソースコードのひな形
 
-独自のソースコードをひな形に使用する場合はフォルダ配下の `template/default.py`, `default.ts`, `default.js` に格納してください。
+独自のソースコードをひな形に使用する場合はフォルダ配下の `template/template.c`, `template.cpp`, `template.java`, `template.py`, `template.js`, `template.ts` に格納してください。
+
+### C/C++/Java 設定
+
+自身の環境に合わせてvscodeの設定を変更します。
+
+| 設定名 | 内容 | 補足 |
+| --- | --- | --- |
+| C Checker | `gcc --version` | Cコンパイラ存在チェック |
+| C Compiler | `gcc $taskfile -o $execfile -lm` | Cコンパイラ |
+| C Executor | `$execfile` | C実行ファイル |
+| C++ Checker | `g++ --version` | C++コンパイラ存在チェック |
+| C++ Compiler | `g++ $taskfile -o $execfile` | C++コンパイラ |
+| C++ Executor | `$execfile` | C++実行ファイル |
+| Java Checker | `javac --version` | Javaコンパイラ存在チェック |
+| Java Compiler | `javac -J-Duser.language=en $taskfile` | Javaコンパイラ |
+| Java Executor | `cd $tmppath && java Main` | Java実行ファイル |
+
+パラメタとして以下を使用できます。
+
+| パラメタ名 | 記法 | 内容 |
+| --- | --- | --- |
+| 一時フォルダ   | `$tmppath` | `C:\Users\...\AppData\Local\Temp\ac-ts-extension` |
+| タスクファイル | `$taskfile` | `C:\Users\...\src\atcoder\practice\practice_1.c` |
+| 実行ファイル   | `$execfile` | `C:\Users\...\AppData\Local\Temp\ac-ts-extension\practice_1.exe` |
 
 ### Python 設定
+
+特にありません。
+
+### JavaScript 設定
 
 特にありません。
 
@@ -218,10 +342,6 @@ TypeScript のテスト実行には ts-node を使用しています。
 TypeScript のデバッグ実行には vscode のデバッグ機能から ts-node を呼び出しています。
 
 - `tsconfig.json` があればそれに従います。
-
-### JavaScript 設定
-
-特にありません。
 
 ### プロキシ設定
 

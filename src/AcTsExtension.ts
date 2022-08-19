@@ -329,7 +329,7 @@ class AcTsExtension {
                                 fs.unlinkSync(that.tmptesterrfile);
                                 that.channel.appendLine(`[${that.timestamp()}] - stderr="${err}"`);
                                 that.channel.appendLine(`[${that.timestamp()}] - stdout="${out}"`);
-                                if (child?.exitCode !== 0) {
+                                if (child?.exitCode !== 0 && child?.exitCode !== null) {
                                     reject(`ERROR: error occurred`);
                                     return;
                                 }
