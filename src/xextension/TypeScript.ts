@@ -27,7 +27,7 @@ class TypeScript implements XExtension {
             request: "launch",
             runtimeArgs: ["--require", "ts-node/register"],
             program: acts.taskfile,
-            args: ["<", acts.tmptestinfile, "1>", acts.tmptestoutfile, "2>", acts.tmptesterrfile],
+            args: ["<", acts.tmpinfile, "1>", acts.tmpoutfile, "2>", acts.tmperrfile],
             console: "integratedTerminal",
             skipFiles: ["node_modules/**"],
             env: { TS_NODE_TRANSPILE_ONLY: "1" },
@@ -36,7 +36,7 @@ class TypeScript implements XExtension {
     }
 
     testTask(): any {
-        const command = `node --require ts-node/register ${acts.taskfile} < ${acts.tmptestinfile} 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
+        const command = `node --require ts-node/register ${acts.taskfile} < ${acts.tmpinfile} 1> ${acts.tmpoutfile} 2> ${acts.tmperrfile}`;
         const options = { cwd: acts.projectpath, env: { TS_NODE_TRANSPILE_ONLY: "1" } };
         const child = child_process.exec(command, options);
         return child;

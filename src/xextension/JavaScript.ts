@@ -26,7 +26,7 @@ class JavaScript implements XExtension {
             type: "pwa-node",
             request: "launch",
             program: acts.taskfile,
-            args: ["<", acts.tmptestinfile, "1>", acts.tmptestoutfile, "2>", acts.tmptesterrfile],
+            args: ["<", acts.tmpinfile, "1>", acts.tmpoutfile, "2>", acts.tmperrfile],
             console: "integratedTerminal",
             skipFiles: ["node_modules/**"],
         };
@@ -34,7 +34,7 @@ class JavaScript implements XExtension {
     }
 
     testTask(): any {
-        const command = `node ${acts.taskfile} < ${acts.tmptestinfile} 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
+        const command = `node ${acts.taskfile} < ${acts.tmpinfile} 1> ${acts.tmpoutfile} 2> ${acts.tmperrfile}`;
         const options = { cwd: acts.projectpath };
         const child = child_process.exec(command, options);
         return child;

@@ -31,14 +31,14 @@ class Python implements XExtension {
             type: "python",
             request: "launch",
             program: acts.taskfile,
-            args: ["<", acts.tmptestinfile, "1>", acts.tmptestoutfile, "2>", acts.tmptesterrfile],
+            args: ["<", acts.tmpinfile, "1>", acts.tmpoutfile, "2>", acts.tmperrfile],
             console: "integratedTerminal",
         };
         vscode.debug.startDebugging(acts.projectfolder, launchconfig);
     }
 
     testTask(): any {
-        const command = `python -u ${acts.taskfile} < ${acts.tmptestinfile} 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
+        const command = `python -u ${acts.taskfile} < ${acts.tmpinfile} 1> ${acts.tmpoutfile} 2> ${acts.tmperrfile}`;
         const options = { cwd: acts.projectpath };
         const child = child_process.exec(command, options);
         return child;

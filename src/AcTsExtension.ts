@@ -47,9 +47,9 @@ class AcTsExtension {
     public testfile: string;
     public tmppath: string;
     public tmpexecfile: string;
-    public tmptestinfile: string;
-    public tmptestoutfile: string;
-    public tmptesterrfile: string;
+    public tmpinfile: string;
+    public tmpoutfile: string;
+    public tmperrfile: string;
     public packagejsonfile: string;
     public packagelockjsonfile: string;
     public separator: string;
@@ -99,9 +99,9 @@ class AcTsExtension {
         this.testfile = `${this.projectpath}\\src\\${this.site}\\${this.contest}\\${this.task}.txt`;
         this.tmppath = `${process.env.TEMP}\\${this.appid}`;
         this.tmpexecfile = `${process.env.TEMP}\\${this.appid}\\${this.task}${process.env.WINDIR ? ".exe" : ".out"}`;
-        this.tmptestinfile = `${process.env.TEMP}\\${this.appid}\\test_in.txt`;
-        this.tmptestoutfile = `${process.env.TEMP}\\${this.appid}\\test_out.txt`;
-        this.tmptesterrfile = `${process.env.TEMP}\\${this.appid}\\test_err.txt`;
+        this.tmpinfile = `${process.env.TEMP}\\${this.appid}\\test_in.txt`;
+        this.tmpoutfile = `${process.env.TEMP}\\${this.appid}\\test_out.txt`;
+        this.tmperrfile = `${process.env.TEMP}\\${this.appid}\\test_err.txt`;
         this.packagejsonfile = `${this.projectpath}\\package.json`;
         this.packagelockjsonfile = `${this.projectpath}\\package-lock.json`;
         this.separator = "\r\n--------\r\n";
@@ -273,7 +273,7 @@ class AcTsExtension {
                 that.channel.appendLine(`[${that.timestamp()}] test-${iosx}:`);
                 that.channel.appendLine(`[${that.timestamp()}] - input ="${io.in}"`);
                 that.channel.appendLine(`[${that.timestamp()}] - output="${io.out}"`);
-                fs.writeFileSync(that.tmptestinfile, io.in);
+                fs.writeFileSync(that.tmpinfile, io.in);
 
                 // exec command
                 let child = null;
@@ -301,14 +301,14 @@ class AcTsExtension {
                     }
                     // wait output
                     (function waitoutput() {
-                        if (!fs.existsSync(that.tmptestoutfile)) {
+                        if (!fs.existsSync(that.tmpoutfile)) {
                             setTimeout(waitoutput, 500);
                             return;
                         }
                         // wait command complete
                         (function waitunlock() {
                             try {
-                                fs.unlinkSync(that.tmptestinfile);
+                                fs.unlinkSync(that.tmpinfile);
                             } catch (ex) {
                                 if (ex instanceof Error) {
                                     if (!ex.message.match(/EBUSY/)) {
@@ -325,11 +325,11 @@ class AcTsExtension {
                                 // show exit code
                                 that.channel.appendLine(`[${that.timestamp()}] - exitcode="${child?.exitCode}"`);
                                 // read output
-                                const out = fs.readFileSync(that.tmptestoutfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
-                                fs.unlinkSync(that.tmptestoutfile);
+                                const out = fs.readFileSync(that.tmpoutfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
+                                fs.unlinkSync(that.tmpoutfile);
                                 // check error
-                                const err = fs.readFileSync(that.tmptesterrfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
-                                fs.unlinkSync(that.tmptesterrfile);
+                                const err = fs.readFileSync(that.tmperrfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
+                                fs.unlinkSync(that.tmperrfile);
                                 that.channel.appendLine(`[${that.timestamp()}] - stdout="${out}"`);
                                 that.channel.appendLine(`[${that.timestamp()}] - stderr="${err}"`);
                                 if (child?.exitCode !== 0 && child?.exitCode !== undefined) {
