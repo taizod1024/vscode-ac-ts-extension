@@ -6,7 +6,7 @@ import { acts } from "./AcTsExtension";
 class XExtensionHelper {
     checkLang(chkkey: string): void {
         // check
-        const config = vscode.workspace.getConfiguration(acts.appid);
+        const config = vscode.workspace.getConfiguration(acts.appcfgkey);
         const cmdchk = String(config.get(chkkey));
         acts.channel.appendLine(`[${acts.timestamp()}] checker: ${cmdchk}`);
         const cmdexp = acts.expandString(cmdchk);
@@ -22,7 +22,7 @@ class XExtensionHelper {
 
     compileTask(cmpkey: string, exeky: string): void {
         // compile
-        const config = vscode.workspace.getConfiguration(acts.appid);
+        const config = vscode.workspace.getConfiguration(acts.appcfgkey);
         const cmdcmp = String(config.get(cmpkey));
         acts.channel.appendLine(`[${acts.timestamp()}] compiler: ${cmdcmp}`);
         const cmdexp = acts.expandString(cmdcmp);
@@ -42,7 +42,7 @@ class XExtensionHelper {
 
     testTask(exekey: string): any {
         // test
-        const config = vscode.workspace.getConfiguration(acts.appid);
+        const config = vscode.workspace.getConfiguration(acts.appcfgkey);
         const cmdexe = String(config.get(exekey));
         const cmdexp = acts.expandString(cmdexe);
         const command = `(${cmdexp}) < ${acts.tmptestinfile} 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;

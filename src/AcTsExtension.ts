@@ -17,6 +17,7 @@ class AcTsExtension {
     // constant
     public appname: string;
     public appid: string;
+    public appcfgkey: string;
     public configfile: string;
 
     // context
@@ -65,6 +66,7 @@ class AcTsExtension {
         // init constant
         this.appname = "AtCoder Extension";
         this.appid = "ac-ts-extension";
+        this.appcfgkey = "atcoderExtension";
         this.configfile = `${process.env.USERPROFILE}\\.${this.appid}.json`;
 
         // coders and langs

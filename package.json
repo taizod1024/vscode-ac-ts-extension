@@ -67,47 +67,47 @@
     "configuration": {
       "title": "AtCoder/Yukicoder Extension",
       "properties": {
-        "ac-ts-extension.cChecker": {
+        "atcoderExtension.cChecker": {
           "type": "string",
           "description": "command line checker for C, you can use $taskfile, $execfile, $tmppath.",
           "default": "gcc --version"
         },
-        "ac-ts-extension.cCompiler": {
+        "atcoderExtension.cCompiler": {
           "type": "string",
           "description": "command line compiler for C, you can use $taskfile, $execfile, $tmppath.",
           "default": "gcc $taskfile -o $execfile -lm"
         },
-        "ac-ts-extension.cExecutor": {
+        "atcoderExtension.cExecutor": {
           "type": "string",
           "description": "command line executor for C, you can use $taskfile, $execfile, $tmppath.",
           "default": "$execfile"
         },
-        "ac-ts-extension.c++Checker": {
+        "atcoderExtension.c++Checker": {
           "type": "string",
           "description": "command line checker for C++, you can use $taskfile, $execfile, $tmppath.",
           "default": "g++ --version"
         },
-        "ac-ts-extension.c++Compiler": {
+        "atcoderExtension.c++Compiler": {
           "type": "string",
           "description": "command line compiler for C++, you can use $taskfile, $execfile, $tmppath.",
           "default": "g++ $taskfile -o $execfile"
         },
-        "ac-ts-extension.c++Executor": {
+        "atcoderExtension.c++Executor": {
           "type": "string",
           "description": "command line executor for C++, you can use $taskfile, $execfile, $tmppath.",
           "default": "$execfile"
         },
-        "ac-ts-extension.javaChecker": {
+        "atcoderExtension.javaChecker": {
           "type": "string",
           "description": "command line checker for Java, you can use $taskfile, $execfile, $tmppath.",
           "default": "javac --version"
         },
-        "ac-ts-extension.javaCompiler": {
+        "atcoderExtension.javaCompiler": {
           "type": "string",
           "description": "command line compiler for Java, you can use $taskfile, $execfile, $tmppath.",
           "default": "javac -J-Duser.language=en $taskfile"
         },
-        "ac-ts-extension.javaExecutor": {
+        "atcoderExtension.javaExecutor": {
           "type": "string",
           "description": "command line executor for Java, you can use $taskfile, $execfile, $tmppath.",
           "default": "cd $tmppath && java Main"
