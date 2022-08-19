@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.84](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.83...v0.0.84) (2022-08-19)
+
+
+### Features
+
+* 設定追加 ([99138f7](https://github.com/taizod1024/ac-ts-extension/commit/99138f7dad16f7f69f38843302f7ee97c6d982f2))
+
+
+### Bug Fixes
+
+* reinitTaskが正常に動作しない現象に対応 ([f29d391](https://github.com/taizod1024/ac-ts-extension/commit/f29d39158b6d86cb63a7fcd9ab0743d230254f43))
+* 入力例のHTMLの変更に対応 ([4dde40b](https://github.com/taizod1024/ac-ts-extension/commit/4dde40bb35290cd99595ff953844385dd973d9a6))
+
 ### [0.0.83](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.82...v0.0.83) (2022-08-07)
 
 ### [0.0.82](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.81...v0.0.82) (2022-08-07)
