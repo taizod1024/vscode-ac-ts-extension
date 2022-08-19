@@ -204,6 +204,10 @@ export function activate(context: vscode.ExtensionContext) {
                                                     return;
                                                 }
                                                 // save site depending data
+                                                acts.site = site;
+                                                acts.contest = contest;
+                                                acts.task = task;
+                                                acts.extension = extension;
                                                 if (site === "atcoder") {
                                                     atcoder.contest = contest;
                                                     atcoder.task = task;
@@ -217,10 +221,6 @@ export function activate(context: vscode.ExtensionContext) {
                                                     yukicoder.language = language;
                                                 }
                                                 // exec command
-                                                acts.site = site;
-                                                acts.contest = contest;
-                                                acts.task = task;
-                                                acts.extension = extension;
                                                 acts.initTaskAsync().catch(ex => {
                                                     acts.channel.appendLine("**** " + ex + " ****");
                                                 });
@@ -261,8 +261,21 @@ export function activate(context: vscode.ExtensionContext) {
                         if (extension === undefined) {
                             return;
                         }
-                        // exec command
+                        // save site depending data
                         acts.extension = extension;
+                        if (acts.site === "atcoder") {
+                            atcoder.contest = acts.contest;
+                            atcoder.task = acts.task;
+                            atcoder.extension = acts.extension;
+                            atcoder.language = acts.language;
+                        }
+                        if (acts.site === "yukicoder") {
+                            yukicoder.contest = acts.contest;
+                            yukicoder.task = acts.task;
+                            yukicoder.extension = acts.extension;
+                            yukicoder.language = acts.language;
+                        }
+                        // exec command
                         acts.initTaskAsync().catch(ex => {
                             acts.channel.appendLine("**** " + ex + " ****");
                         });
@@ -354,20 +367,20 @@ export function activate(context: vscode.ExtensionContext) {
                             return;
                         }
                         // save site depending data
+                        acts.language = language;
                         if (acts.site === "atcoder") {
                             atcoder.contest = acts.contest;
                             atcoder.task = acts.task;
                             atcoder.extension = acts.extension;
-                            atcoder.language = language;
+                            atcoder.language = acts.language;
                         }
                         if (acts.site === "yukicoder") {
                             yukicoder.contest = acts.contest;
                             yukicoder.task = acts.task;
                             yukicoder.extension = acts.extension;
-                            yukicoder.language = language;
+                            yukicoder.language = acts.language;
                         }
                         // exec command
-                        acts.language = language;
                         acts.submitTaskAsync().catch(ex => {
                             acts.channel.appendLine("**** " + ex + " ****");
                         });
