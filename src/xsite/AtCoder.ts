@@ -4,10 +4,13 @@ import superagent from "superagent";
 import * as cheerio from "cheerio";
 import { acts } from "../AcTsExtension";
 import { XSite } from "../XSite";
-import { typescript } from "../XExtension/TypeScript";
+import { XLanguage } from "../XLanguage";
+import { cc } from "../XExtension/Cc";
+import { cpp } from "../XExtension/Cpp";
+import { java } from "../XExtension/Java";
 import { javascript } from "../XExtension/JavaScript";
 import { python } from "../XExtension/Python";
-import { XExtension } from "../XExtension";
+import { typescript } from "../XExtension/TypeScript";
 
 class AtCoder implements XSite {
     // param
@@ -31,6 +34,8 @@ class AtCoder implements XSite {
     contest: string;
     task: string;
     extension: string;
+    language: string;
+    xlanguages: XLanguage[];
 
     // method
     constructor() {
@@ -42,18 +47,57 @@ class AtCoder implements XSite {
         this.contest = "";
         this.task = "";
         this.extension = "";
+        this.language = "";
+        this.xlanguages = [
+            {
+                language: "C (GCC x.x.x)",
+                xextension: cc,
+                id: 4001,
+            },
+            {
+                language: "C (Clang x.x.x)",
+                xextension: cc,
+                id: 4002,
+            },
+            {
+                language: "C++ (GCC x.x.x)",
+                xextension: cpp,
+                id: 4003,
+            },
+            {
+                language: "C++ (Clang x.x.x)",
+                xextension: cpp,
+                id: 4004,
+            },
+            {
+                language: "Java (OpenJDK x.x.x)",
+                xextension: java,
+                id: 4005,
+            },
+            {
+                language: "JavaScript (Node.js x.x.x)",
+                xextension: javascript,
+                id: 4030,
+            },
+            {
+                language: "Python (x.x.x)",
+                xextension: python,
+                id: 4006,
+            },
+            {
+                language: "TypeScript (x.x)",
+                xextension: typescript,
+                id: 4057,
+            },
+        ];
     }
 
     initPropAsync(withtask: boolean) {
         if (withtask) {
-            this.taskurl = `https://atcoder.jp/contests/${acts.contest}/tasks/${acts.task}`;
-            this.submiturl = `https://atcoder.jp/contests/${acts.contest}/submit`;
-            this.submissionsurl = `https://atcoder.jp/contests/${acts.contest}/submissions/me`;
+            this.taskurl = `https://atcoder.jp/contests/${this.contest}/tasks/${this.task}`;
+            this.submiturl = `https://atcoder.jp/contests/${this.contest}/submit`;
+            this.submissionsurl = `https://atcoder.jp/contests/${this.contest}/submissions/me`;
         }
-    }
-
-    isSelected(): boolean {
-        return acts.site === "atcoder";
     }
 
     checkLogin() {
@@ -230,7 +274,7 @@ class AtCoder implements XSite {
             .proxy(acts.proxy)
             .set("Content-Type", "application/x-www-form-urlencoded")
             .send({
-                "data.TaskScreenName": acts.task,
+                "data.TaskScreenName": this.task,
                 "data.LanguageId": this.getLanguageId(),
                 csrf_token: csrf_token,
                 sourceCode: code,
@@ -248,16 +292,11 @@ class AtCoder implements XSite {
     }
 
     getLanguageId(): number {
-        if (this.extension === typescript.extension) {
-            return 4057;
+        const xlanguage = this.xlanguages.find(val => val.language === this.language);
+        if (!xlanguage) {
+            throw `ERROR: unsupported language, language=${this.language}`;
         }
-        if (this.extension === javascript.extension) {
-            return 4030;
-        }
-        if (this.extension === python.extension) {
-            return 4006;
-        }
-        throw `ERROR: unsupported language, extension=${this.extension}`;
+        return Number(xlanguage.id);
     }
 
     loadConfig(json: any) {
@@ -266,6 +305,7 @@ class AtCoder implements XSite {
         atcoder.contest = json.atcoder?.contest;
         atcoder.task = json.atcoder?.task;
         atcoder.extension = json.atcoder?.extension;
+        atcoder.language = json.atcoder?.language;
     }
 
     saveConfig(json: any) {
@@ -275,6 +315,7 @@ class AtCoder implements XSite {
         json.atcoder.contest = atcoder.contest;
         json.atcoder.task = atcoder.task;
         json.atcoder.extension = atcoder.extension;
+        json.atcoder.language = atcoder.language;
     }
 }
 export const atcoder = new AtCoder();

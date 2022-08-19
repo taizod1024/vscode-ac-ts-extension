@@ -156,6 +156,8 @@ export function activate(context: vscode.ExtensionContext) {
                         let contest: string;
                         let task: string;
                         let extension: string;
+                        let language: string;
+                        // TODO site依存データの読込・保存タイミングが整理できていない
                         // load site depending data
                         try {
                             if (site === "atcoder") {
@@ -167,6 +169,7 @@ export function activate(context: vscode.ExtensionContext) {
                                 contest = atcoder.contest;
                                 task = atcoder.task;
                                 extension = atcoder.extension;
+                                language = atcoder.language;
                             }
                             if (site === "yukicoder") {
                                 yukicoder.checkLogin();
@@ -177,6 +180,7 @@ export function activate(context: vscode.ExtensionContext) {
                                 contest = yukicoder.contest;
                                 task = yukicoder.task;
                                 extension = yukicoder.extension;
+                                language = yukicoder.language;
                             }
                         } catch (ex) {
                             acts.channel.appendLine("**** " + ex + " ****");
@@ -229,11 +233,13 @@ export function activate(context: vscode.ExtensionContext) {
                                                     atcoder.contest = contest;
                                                     atcoder.task = task;
                                                     atcoder.extension = extension;
+                                                    atcoder.language = language;
                                                 }
                                                 if (site === "yukicoder") {
                                                     yukicoder.contest = contest;
                                                     yukicoder.task = task;
                                                     yukicoder.extension = extension;
+                                                    yukicoder.language = language;
                                                 }
                                                 // exec command
                                                 acts.site = site;
@@ -351,11 +357,46 @@ export function activate(context: vscode.ExtensionContext) {
                 if (!actshelper.checkActiveFile()) {
                     return;
                 }
-                // TODO select language
-                // exec command
-                acts.submitTaskAsync().catch(ex => {
-                    acts.channel.appendLine("**** " + ex + " ****");
-                });
+                // select language
+                let languages: string[];
+                if (acts.site === "atcoder") {
+                    languages = atcoder.xlanguages.filter(val => val.xextension.extension === acts.extension).map(val => val.language);
+                }
+                if (acts.site === "yukicoder") {
+                    languages = yukicoder.xlanguages.filter(val => val.xextension.extension === acts.extension).map(val => val.language);
+                }
+                let idx = acts.extensions.indexOf(acts.language);
+                if (1 <= idx) {
+                    languages.splice(idx, 1);
+                    languages.unshift(acts.language);
+                }
+                vscode.window
+                    .showQuickPick(languages, {
+                        placeHolder: "SELECT LANGUAGE",
+                    })
+                    .then(language => {
+                        if (language === undefined) {
+                            return;
+                        }
+                        // save site depending data
+                        if (acts.site === "atcoder") {
+                            atcoder.contest = acts.contest;
+                            atcoder.task = acts.task;
+                            atcoder.extension = acts.extension;
+                            atcoder.language = language;
+                        }
+                        if (acts.site === "yukicoder") {
+                            yukicoder.contest = acts.contest;
+                            yukicoder.task = acts.task;
+                            yukicoder.extension = acts.extension;
+                            yukicoder.language = language;
+                        }
+                        // exec command
+                        acts.language = language;
+                        acts.submitTaskAsync().catch(ex => {
+                            acts.channel.appendLine("**** " + ex + " ****");
+                        });
+                    });
             })
         );
     })();

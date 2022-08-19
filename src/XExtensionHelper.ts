@@ -15,9 +15,13 @@ class XExtensionHelper {
         try {
             child_process.execSync(command, options);
         } catch (ex) {
-            const err = fs.readFileSync(acts.tmptesterrfile).toString().trim().replace(/\n/g, "\r\n");
+            const err = fs.readFileSync(acts.tmptesterrfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
             throw `ERROR: check failed\r\n${err}\r\n`;
         }
+        const err = fs.readFileSync(acts.tmptesterrfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
+        acts.channel.appendLine(`[${acts.timestamp()}] - stderr: ${err}`);
+        const out = fs.readFileSync(acts.tmptesterrfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
+        acts.channel.appendLine(`[${acts.timestamp()}] - stdout: ${out}`);
     }
 
     compileTask(cmpkey: string, exeky: string): void {
@@ -25,15 +29,20 @@ class XExtensionHelper {
         const config = vscode.workspace.getConfiguration(acts.appcfgkey);
         const cmdcmp = String(config.get(cmpkey));
         acts.channel.appendLine(`[${acts.timestamp()}] compiler: ${cmdcmp}`);
+        acts.channel.appendLine(`[${acts.timestamp()}] - execfile ${acts.tmpexecfile}`);
         const cmdexp = acts.expandString(cmdcmp);
         const command = `(${cmdexp}) 1> ${acts.tmptestoutfile} 2> ${acts.tmptesterrfile}`;
         const options = { cwd: acts.projectpath };
         try {
             child_process.execSync(command, options);
         } catch (ex) {
-            const err = fs.readFileSync(acts.tmptesterrfile).toString().trim().replace(/\n/g, "\r\n");
+            const err = fs.readFileSync(acts.tmptesterrfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
             throw `ERROR: compile failed\r\n${err}\r\n`;
         }
+        const err = fs.readFileSync(acts.tmptesterrfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
+        acts.channel.appendLine(`[${acts.timestamp()}] - stderr: ${err}`);
+        const out = fs.readFileSync(acts.tmptesterrfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
+        acts.channel.appendLine(`[${acts.timestamp()}] - stdout: ${out}`);
 
         // show executor
         const cmdexe = String(config.get(exeky));

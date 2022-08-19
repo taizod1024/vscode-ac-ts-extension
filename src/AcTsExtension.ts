@@ -11,6 +11,7 @@ import { python } from "./XExtension/Python";
 import { cc } from "./XExtension/Cc";
 import { cpp } from "./XExtension/Cpp";
 import { java } from "./XExtension/Java";
+import { XLanguage } from "./XLanguage";
 
 // extension core
 class AcTsExtension {
@@ -74,8 +75,8 @@ class AcTsExtension {
         this.xextensions = [cpp, python, java, cc, javascript, typescript];
 
         // sites and extensions
-        this.sites = this.xsites.map(xsite => xsite.site);
-        this.extensions = this.xextensions.map(xlang => xlang.extension);
+        this.sites = this.xsites.map(val => val.site);
+        this.extensions = this.xextensions.map(val => val.extension);
 
         // init context
         this.channel = vscode.window.createOutputChannel(this.appname);
@@ -108,8 +109,8 @@ class AcTsExtension {
         this.timeout = 5000;
 
         // site specific
-        this.xsite = this.xsites.find(xsite => xsite.site === this.site);
-        this.xextension = this.xextensions.find(xlang => (xlang.extension = this.extension));
+        this.xsite = this.xsites.find(val => val.site === this.site);
+        this.xextension = this.xextensions.find(val => val.extension === this.extension);
 
         // check and init coder
         this.xsite.checkLogin();
@@ -285,8 +286,6 @@ class AcTsExtension {
 
                 // wait child process
                 (function waitchild() {
-                    // DOING exit codeの取得、0以外の場合にatcoderでエラーになるか確認
-                    // TODO exit codeが0の場合は標準エラーがあってもエラーにしない
                     // TODO debugu時のexit codeの取得、なぜかうまくいかない
                     if (child?.exitCode === null) {
                         timecount += 500;
@@ -323,14 +322,14 @@ class AcTsExtension {
                                 // show exit code
                                 that.channel.appendLine(`[${that.timestamp()}] - exitcode="${child?.exitCode}"`);
                                 // read output
-                                const out = fs.readFileSync(that.tmptestoutfile).toString().trim().replace(/\n/g, "\r\n");
+                                const out = fs.readFileSync(that.tmptestoutfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
                                 fs.unlinkSync(that.tmptestoutfile);
                                 // check error
-                                const err = fs.readFileSync(that.tmptesterrfile).toString().trim().replace(/\n/g, "\r\n");
+                                const err = fs.readFileSync(that.tmptesterrfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
                                 fs.unlinkSync(that.tmptesterrfile);
-                                if (err) {
-                                    that.channel.appendLine(out);
-                                    that.channel.appendLine(err);
+                                that.channel.appendLine(`[${that.timestamp()}] - stderr="${err}"`);
+                                that.channel.appendLine(`[${that.timestamp()}] - stdout="${out}"`);
+                                if (child?.exitCode !== 0) {
                                     reject(`ERROR: error occurred`);
                                     return;
                                 }
@@ -350,12 +349,11 @@ class AcTsExtension {
                                     return;
                                 }
                                 // check output
-                                that.channel.appendLine(`[${that.timestamp()}] - answer="${out}"`);
                                 if (out === io.out) {
-                                    that.channel.appendLine(`[${that.timestamp()}] -> OK`);
+                                    that.channel.appendLine(`[${that.timestamp()}]   => OK`);
                                     ok++;
                                 } else {
-                                    that.channel.appendLine(`[${that.timestamp()}] -> NG`);
+                                    that.channel.appendLine(`[${that.timestamp()}]   => NG`);
                                     ng++;
                                 }
                                 // next test
@@ -393,6 +391,7 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] contest: ${this.contest}`);
         this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
         this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
+        this.channel.appendLine(`[${this.timestamp()}] language: ${this.language}`);
 
         //  init command
         await this.initPropAsync(true);
@@ -463,11 +462,13 @@ class AcTsExtension {
                   contest: "",
                   task: "",
                   extension: "",
+                  language: "",
               };
         this.site = json.site || "";
         this.contest = json.contest || "";
         this.task = json.task || "";
         this.extension = json.extension;
+        this.language = json.language;
         this.xsites.forEach(val => val.loadConfig(json));
     }
     public saveConfig() {
@@ -476,6 +477,7 @@ class AcTsExtension {
             contest: this.contest,
             task: this.task,
             extension: this.extension,
+            language: this.language,
         };
         this.xsites.forEach(val => val.saveConfig(json));
         fs.writeFileSync(this.configfile, JSON.stringify(json));

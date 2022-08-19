@@ -11,10 +11,6 @@ class TypeScript implements XExtension {
     extension = ".ts";
 
     // method
-    isSelected(): boolean {
-        return acts.extension === this.extension;
-    }
-
     checkLang(): void {
         if (!fs.existsSync(acts.packagejsonfile) || !fs.existsSync(acts.packagelockjsonfile)) {
             throw `ERROR: missing package.json or package-lock.json, install node.js, run "npm init && npm install --save-dev typescript ts-node @types/node"`;

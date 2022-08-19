@@ -9,10 +9,6 @@ class Cpp implements XExtension {
     extension = ".cpp";
 
     // method
-    isSelected(): boolean {
-        return acts.extension === this.extension;
-    }
-
     checkLang(): void {
         xexthelper.checkLang("c++Checker");
     }

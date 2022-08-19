@@ -3,9 +3,13 @@ import * as fs from "fs";
 import superagent from "superagent";
 import { acts } from "../AcTsExtension";
 import { XSite } from "../XSite";
-import { typescript } from "../XExtension/TypeScript";
+import { XLanguage } from "../XLanguage";
+import { cc } from "../XExtension/Cc";
+import { cpp } from "../XExtension/Cpp";
+import { java } from "../XExtension/Java";
 import { javascript } from "../XExtension/JavaScript";
 import { python } from "../XExtension/Python";
+import { typescript } from "../XExtension/TypeScript";
 
 class Yukicoder implements XSite {
     // param
@@ -30,6 +34,8 @@ class Yukicoder implements XSite {
     contest: string;
     task: string;
     extension: string;
+    language: string;
+    xlanguages: XLanguage[];
 
     // method
     constructor() {
@@ -40,16 +46,70 @@ class Yukicoder implements XSite {
         this.contest = "";
         this.task = "";
         this.extension = "";
-    }
-
-    isSelected(): boolean {
-        return acts.site === "yukicoder";
+        this.language = "";
+        this.xlanguages = [
+            {
+                language: "C++14 (gcc x.x.x + boost x.x.x)",
+                xextension: cpp,
+                id: "cpp14",
+            },
+            {
+                language: "C++17 (gcc x.x.x + boost x.x.x)",
+                xextension: cpp,
+                id: "cpp17",
+            },
+            {
+                language: "C++17(clang) (gcc x.x.x + boost x.x.x)",
+                xextension: cpp,
+                id: "cpp-clang",
+            },
+            {
+                language: "C++23(draft) (gcc x.x.x + boost x.x.x)",
+                xextension: cpp,
+                id: "cpp23",
+            },
+            {
+                language: "C++11 (gcc x.x.x)",
+                xextension: cpp,
+                id: "cpp",
+            },
+            {
+                language: "C (gcc x.x.x)",
+                xextension: cc,
+                id: "c11",
+            },
+            {
+                language: "C90 (gcc x.x.x)",
+                xextension: cc,
+                id: "c",
+            },
+            {
+                language: "Java17 (openjdk x.x.x)",
+                xextension: java,
+                id: "java8",
+            },
+            {
+                language: "Python3 (x.x.x)",
+                xextension: python,
+                id: "python3",
+            },
+            {
+                language: "JavaScript (node x.x.x)",
+                xextension: javascript,
+                id: "node",
+            },
+            {
+                language: "TypeScript (x.x)",
+                xextension: typescript,
+                id: "typescript",
+            },
+        ];
     }
 
     async initPropAsync(withtask: boolean) {
         if (withtask) {
-            this.problemnourl = `https://yukicoder.me/problems/no/${acts.task}`;
-            this.api_problemnourl = `https://yukicoder.me/api/v1/problems/no/${acts.task}`;
+            this.problemnourl = `https://yukicoder.me/problems/no/${this.task}`;
+            this.api_problemnourl = `https://yukicoder.me/api/v1/problems/no/${this.task}`;
 
             // problemno to problemid
             this.problemid = await (async () => {
@@ -64,7 +124,7 @@ class Yukicoder implements XSite {
             })();
             this.api_problemidurl = `https://yukicoder.me/api/v1/problems/${this.problemid}`;
             this.api_submiturl = `https://yukicoder.me/api/v1/problems/${this.problemid}/submit`;
-            this.submissionsurl = `https://yukicoder.me/problems/no/${acts.task}/submissions?status=&lang_id=&my_submission=enabled`;
+            this.submissionsurl = `https://yukicoder.me/problems/no/${this.task}/submissions?status=&lang_id=&my_submission=enabled`;
         }
     }
 
@@ -147,7 +207,7 @@ class Yukicoder implements XSite {
             .post(this.api_submiturl)
             .proxy(acts.proxy)
             .set("Content-Type", "multipart/form-data")
-            .field("lang", this.getLanguage())
+            .field("lang", this.getLanguageId())
             .field("source", code)
             .catch(res => {
                 throw `ERROR: ${acts.responseToMessage(res)}`;
@@ -161,17 +221,12 @@ class Yukicoder implements XSite {
         vscode.env.openExternal(vscode.Uri.parse(this.problemnourl));
     }
 
-    getLanguage(): string {
-        if (this.extension === typescript.extension) {
-            return "typescript";
+    getLanguageId(): string {
+        const xlanguage = this.xlanguages.find(val => val.language === this.language);
+        if (!xlanguage) {
+            throw `ERROR: unsupported language, language=${this.language}`;
         }
-        if (this.extension === javascript.extension) {
-            return "node";
-        }
-        if (this.extension === python.extension) {
-            return "python3";
-        }
-        throw `ERROR: unsupported language, extension=${this.extension}`;
+        return String(xlanguage.id);
     }
 
     loadConfig(json: any) {
@@ -179,6 +234,7 @@ class Yukicoder implements XSite {
         yukicoder.contest = json.yukicoder?.contest;
         yukicoder.task = json.yukicoder?.task;
         yukicoder.extension = json.yukicoder?.extension;
+        yukicoder.language = json.yukicoder?.language;
     }
 
     saveConfig(json: any) {
@@ -187,6 +243,7 @@ class Yukicoder implements XSite {
         json.yukicoder.contest = yukicoder.contest;
         json.yukicoder.task = yukicoder.task;
         json.yukicoder.extension = yukicoder.extension;
+        json.yukicoder.language = yukicoder.language;
     }
 }
 export const yukicoder = new Yukicoder();

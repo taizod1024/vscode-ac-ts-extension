@@ -11,10 +11,6 @@ class Python implements XExtension {
     extension = ".py";
 
     // method
-    isSelected(): boolean {
-        return acts.extension === ".py";
-    }
-
     checkLang(): void {
         const command = `python --version`;
         const options = { cwd: acts.projectpath };

@@ -12,10 +12,6 @@ class Java implements XExtension {
     extension = ".java";
 
     // method
-    isSelected(): boolean {
-        return acts.extension === this.extension;
-    }
-
     checkLang(): void {
         xexthelper.checkLang("javaChecker");
     }
@@ -32,7 +28,7 @@ class Java implements XExtension {
             xexthelper.compileTask("javaCompiler", "javaExecutor");
         } catch (ex) {
             // rewrite taskfile and execfile
-            if (ex instanceof String) {
+            if (typeof ex === "string" || ex instanceof String) {
                 const err = ex.split(tmptaskfile).join(taskfile);
                 throw err;
             }

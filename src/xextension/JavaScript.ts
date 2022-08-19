@@ -11,10 +11,6 @@ class JavaScript implements XExtension {
     extension = ".js";
 
     // method
-    isSelected(): boolean {
-        return acts.extension === ".js";
-    }
-
     checkLang(): void {
         if (!fs.existsSync(acts.packagejsonfile) || !fs.existsSync(acts.packagelockjsonfile)) {
             throw `ERROR: missing package.json or package-lock.json, install node.js, run "npm init"`;

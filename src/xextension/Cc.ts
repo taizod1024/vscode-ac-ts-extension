@@ -9,10 +9,6 @@ class Cc implements XExtension {
     extension = ".c";
 
     // method
-    isSelected(): boolean {
-        return acts.extension === this.extension;
-    }
-
     checkLang(): void {
         xexthelper.checkLang("cChecker");
     }

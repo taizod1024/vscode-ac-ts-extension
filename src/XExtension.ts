@@ -3,7 +3,6 @@ export interface XExtension {
     extension: string;
 
     // method
-    isSelected(): boolean;
     checkLang(): void;
     compileTask(): void;
     testTask(): any;
