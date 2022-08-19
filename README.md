@@ -1,17 +1,18 @@
 # AtCoder Extension
 
-C/C++/Java/Python/JavaScript/TypeScript での [AtCoder](https://atcoder.jp/?lang=ja)/[Yukicoder](https://yukicoder.me/) への参加をサポートする Visual Studio Code の拡張機能です。
+C / C++ / Java / Python / JavaScript / TypeScript での [AtCoder](https://atcoder.jp/?lang=ja) / [Yukicoder](https://yukicoder.me/) への参加をサポートする Visual Studio Code の拡張機能です。
 
 ## 変更
 
 - 2022/08/19
-   - <span style="color:red;font-weight:bold">C/C++/Javaに対応しました。</span>
-      - <span style="font-weight:bold">vscodeの設定からC/C++/Javaのコマンドを指定します。</span>
+   - <span style="color:red">C/C++/Javaに対応しました。</span>
+      - vscodeの設定からC/C++/Javaのコマンドを指定します。
       - 提出時の言語はsubmitTask時に選択します。例：C(GCC)、C(Clang)
       - Javaはファイル名とクラス名の間に関係性があるので適宜書き換えます。
       - デバッグ実行はサポートしていません。
-   - <span style="color:red;font-weight:bold">テンプレートファイル名を`default.xx`から`template.xx`に変更しました。</span>
+   - <span style="color:red">テンプレートファイル名を`default.xx`から`template.xx`に変更しました。</span>
    - AtCoderの仕様に合わせて戻り値が0以外の場合にエラーになるようにしました。  
+   - Pythong/JavaScript/TypeScriptのデバッグ実行が必ず失敗するようになっていたのを修正しました。
    - vscode拡張機能名から"Yukicoder"を外しました。  
      表示名が長すぎることへの対処なのでYukicoder向けの機能はそのまま残っています。
 
@@ -30,7 +31,10 @@ C/C++/Java/Python/JavaScript/TypeScript での Visual Studio Code から AtCoder
 
 ## 制限
 
-マルチルートワークスペースには対応していません。
+- マルチルートワークスペースには対応していません。
+- Python/JavaScript/TypeScriptのデバッグ実行時は以下の場合のNG判定ができません。
+  - 戻り値が0以外によるNG判定
+  - 例外が発生したことによるNG判定
 
 ## 環境
 
