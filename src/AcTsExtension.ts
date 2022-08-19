@@ -330,9 +330,9 @@ class AcTsExtension {
                                 // check error
                                 const err = fs.readFileSync(that.tmptesterrfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
                                 fs.unlinkSync(that.tmptesterrfile);
-                                that.channel.appendLine(`[${that.timestamp()}] - stderr="${err}"`);
-                                that.channel.appendLine(`[${that.timestamp()}] - stdout="${out}"`);
-                                if (child?.exitCode !== 0 && child?.exitCode !== null) {
+                                that.channel.appendLine(`[${that.timestamp()}] - stderr=${err}`);
+                                that.channel.appendLine(`[${that.timestamp()}] - stdout=${out}`);
+                                if (child?.exitCode !== 0 && child?.exitCode !== undefined) {
                                     reject(`ERROR: error occurred`);
                                     return;
                                 }

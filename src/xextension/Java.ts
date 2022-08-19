@@ -50,7 +50,6 @@ class Java implements XExtension {
 
     testTask(): any {
         return xexthelper.testTask("javaExecutor");
-        return xexthelper.testTask("javaExecutor");
     }
 
     submitTask(): void {
