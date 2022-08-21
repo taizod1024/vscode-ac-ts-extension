@@ -15,7 +15,7 @@ class Python implements XExtension {
 
     // method
     checkLang(): void {
-        const command = `python --version`;
+        const command = `python3 --version`;
         const options = { cwd: acts.projectpath };
         try {
             child_process.execSync(command, options);
