@@ -3,8 +3,8 @@ import superagent from "superagent";
 require("superagent-proxy")(superagent);
 import { actshelper } from "./AcTsHelper";
 import { acts } from "./AcTsExtension";
-import { atcoder } from "./XSite/AtCoder";
-import { yukicoder } from "./XSite/Yukicoder";
+import { atcoder } from "./xsite/AtCoder";
+import { yukicoder } from "./xsite/Yukicoder";
 
 // extension entrypoint
 export function activate(context: vscode.ExtensionContext) {

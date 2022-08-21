@@ -1,17 +1,17 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
+const path = require("path");
 import child_process, { ExecFileSyncOptions } from "child_process";
 import { XSite } from "./XSite";
 import { XExtension } from "./XExtension";
-import { atcoder } from "./XSite/AtCoder";
-import { yukicoder } from "./XSite/Yukicoder";
+import { atcoder } from "./xsite/AtCoder";
+import { yukicoder } from "./xsite/Yukicoder";
 import { typescript } from "./XExtension/TypeScript";
 import { javascript } from "./XExtension/JavaScript";
 import { python } from "./XExtension/Python";
 import { cc } from "./XExtension/Cc";
 import { cpp } from "./XExtension/Cpp";
 import { java } from "./XExtension/Java";
-import { XLanguage } from "./XLanguage";
 
 // extension core
 class AcTsExtension {
@@ -20,6 +20,7 @@ class AcTsExtension {
     public appid: string;
     public appcfgkey: string;
     public configfile: string;
+    public tmppath: string;
 
     // context
     public vscodeextensionpath: string;
@@ -41,11 +42,8 @@ class AcTsExtension {
     public usertasktmplfile: string;
     public taskpath: string;
     public taskfile: string;
-    public taskbuildpath: string;
-    public taskbuildfile: string;
     public testpath: string;
     public testfile: string;
-    public tmppath: string;
     public tmpexecfile: string;
     public tmpinfile: string;
     public tmpoutfile: string;
@@ -68,7 +66,13 @@ class AcTsExtension {
         this.appname = "AtCoder Extension";
         this.appid = "ac-ts-extension";
         this.appcfgkey = "atcoderExtension";
-        this.configfile = `${process.env.USERPROFILE}\\.${this.appid}.json`;
+        if (process.env.WINDIR) {
+            this.configfile = path.normalize(`${process.env.USERPROFILE}/.${this.appid}.json`);
+            this.tmppath = path.normalize(`${process.env.TEMP}/${this.appid}`);
+        } else {
+            this.configfile = path.normalize(`${process.env.HOME}/.${this.appid}.json`);
+            this.tmppath = path.normalize(`/tmp/${this.appid}/${process.env.USER}`);
+        }
 
         // coders and langs
         this.xsites = [atcoder, yukicoder];
@@ -89,21 +93,18 @@ class AcTsExtension {
 
     public async initPropAsync(withtask: boolean) {
         // init prop
-        this.tasktmplfile = `${this.vscodeextensionpath}\\template\\template${this.extension}`;
-        this.usertasktmplfile = `${this.projectpath}\\template\\template${this.extension}`;
-        this.taskpath = `${this.projectpath}\\src\\${this.site}\\${this.contest}`;
-        this.taskfile = `${this.projectpath}\\src\\${this.site}\\${this.contest}\\${this.task}${this.extension}`;
-        this.taskbuildpath = `${process.env.TEMP}\\${this.appid}\\build\\${this.site}`;
-        this.taskbuildfile = `${this.taskbuildpath}\\${this.task}.js`;
-        this.testpath = `${this.projectpath}\\src\\${this.site}\\${this.contest}`;
-        this.testfile = `${this.projectpath}\\src\\${this.site}\\${this.contest}\\${this.task}.txt`;
-        this.tmppath = `${process.env.TEMP}\\${this.appid}`;
-        this.tmpexecfile = `${process.env.TEMP}\\${this.appid}\\${this.task}${process.env.WINDIR ? ".exe" : ".out"}`;
-        this.tmpinfile = `${process.env.TEMP}\\${this.appid}\\test_in.txt`;
-        this.tmpoutfile = `${process.env.TEMP}\\${this.appid}\\test_out.txt`;
-        this.tmperrfile = `${process.env.TEMP}\\${this.appid}\\test_err.txt`;
-        this.packagejsonfile = `${this.projectpath}\\package.json`;
-        this.packagelockjsonfile = `${this.projectpath}\\package-lock.json`;
+        this.tasktmplfile = path.normalize(`${this.vscodeextensionpath}/template/template${this.extension}`);
+        this.usertasktmplfile = path.normalize(`${this.projectpath}/template/template${this.extension}`);
+        this.taskpath = path.normalize(`${this.projectpath}/src/${this.site}/${this.contest}`);
+        this.taskfile = path.normalize(`${this.projectpath}/src/${this.site}/${this.contest}/${this.task}${this.extension}`);
+        this.testpath = path.normalize(`${this.projectpath}/src/${this.site}/${this.contest}`);
+        this.testfile = path.normalize(`${this.projectpath}/src/${this.site}/${this.contest}/${this.task}.txt`);
+        this.tmpexecfile = path.normalize(`${this.tmppath}/${this.task}${process.env.WINDIR ? ".exe" : ".out"}`);
+        this.tmpinfile = path.normalize(`${this.tmppath}/test_in.txt`);
+        this.tmpoutfile = path.normalize(`${this.tmppath}/test_out.txt`);
+        this.tmperrfile = path.normalize(`${this.tmppath}/test_err.txt`);
+        this.packagejsonfile = path.normalize(`${this.projectpath}/package.json`);
+        this.packagelockjsonfile = path.normalize(`${this.projectpath}/package-lock.json`);
         this.separator = "\r\n--------\r\n";
         this.proxy = "";
         this.timeout = 5000;
@@ -227,12 +228,12 @@ class AcTsExtension {
         // make tmppath
         this.channel.appendLine(`[${this.timestamp()}] tmppath: ${this.tmppath}`);
         if (!fs.existsSync(this.tmppath)) {
-            fs.mkdirSync(this.tmppath);
+            fs.mkdirSync(this.tmppath, { recursive: true });
         }
 
         // delete files in tmppath
         fs.readdirSync(this.tmppath).forEach(filename => {
-            const filepath = `${this.tmppath}\\${filename}`;
+            const filepath = path.normalize(`${this.tmppath}/${filename}`);
             fs.unlinkSync(filepath);
         });
 
@@ -371,8 +372,8 @@ class AcTsExtension {
                                 }
                                 // delete files in tmppath
                                 fs.readdirSync(that.tmppath).forEach(filename => {
-                                    const filepath = `${that.tmppath}\\${filename}`;
-                                    fs.unlinkSync(filepath);
+                                    const filepath = path.normalize(`${that.tmppath}/${filename}`);
+                                    // fs.unlinkSync(filepath);
                                 });
                                 // test set done
                                 let msg = `${that.task} OK=${ok}, NG=${ng}`;

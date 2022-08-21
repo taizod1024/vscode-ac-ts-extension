@@ -2,7 +2,7 @@
   "version": "0.0.63",
   "name": "ac-ts-extension",
   "displayName": "AtCoder Extension",
-  "description": "atcoder/yukicoder vscode extension for python/typescript/javascript",
+  "description": "atcoder/yukicoder vscode extension for c/cpp/java/python/javascript/typescript",
   "engines": {
     "vscode": "^1.60.0"
   },
@@ -100,7 +100,7 @@
         "atcoderExtension.javaChecker": {
           "type": "string",
           "description": "command line checker for Java, you can use $taskfile, $execfile, $tmppath.",
-          "default": "javac --version"
+          "default": "javac -version"
         },
         "atcoderExtension.javaCompiler": {
           "type": "string",
@@ -148,7 +148,7 @@
     "@typescript-eslint/eslint-plugin": "^4.31.2",
     "@typescript-eslint/parser": "^4.31.2",
     "bufferutil": "^4.0.3",
-    "esbuild": "^0.13.6",
+    "esbuild": "^0.12.9",
     "eslint": "^7.32.0",
     "generator-code": "^1.6.1",
     "glob": "^7.2.0",

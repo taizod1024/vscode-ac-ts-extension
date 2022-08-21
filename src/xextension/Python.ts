@@ -10,6 +10,9 @@ class Python implements XExtension {
     // prop
     extension = ".py";
 
+    // TODO helperにコマンド設定を集約
+    // TODO 言語別に設定を分ける
+
     // method
     checkLang(): void {
         const command = `python --version`;

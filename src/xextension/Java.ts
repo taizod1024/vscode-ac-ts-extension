@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import child_process, { ExecFileSyncOptions } from "child_process";
+const path = require("path");
 import { acts } from "../AcTsExtension";
 import { XExtension } from "../XExtension";
 import { xexthelper } from "../XExtensionHelper";
@@ -25,12 +26,12 @@ class Java implements XExtension {
     compileTask(): void {
         // replace and rewrite taskfile and tmpexecfile
         const taskfile = acts.taskfile;
-        const tmptaskfile = `${process.env.TEMP}\\${acts.appid}\\Main.java`;
+        const tmptaskfile = path.normalize(`${acts.tmppath}/Main.java`);
         let text = fs.readFileSync(acts.taskfile).toString();
         text = text.replace(new RegExp(`class ${acts.task}`, "g"), "class Main");
         fs.writeFileSync(tmptaskfile, text);
         acts.taskfile = tmptaskfile;
-        acts.tmpexecfile = `${process.env.TEMP}\\${acts.appid}\\Main.class`;
+        acts.tmpexecfile = path.normalize(`${acts.tmppath}/Main.class`);
 
         try {
             xexthelper.compileTask("javaCompiler", "javaExecutor");
@@ -54,7 +55,7 @@ class Java implements XExtension {
 
     submitTask(): void {
         // replace and rewrite taskfile
-        const tmptaskfile = `${process.env.TEMP}\\${acts.appid}\\Main.java`;
+        const tmptaskfile = path.normalize(`${acts.tmppath}/Main.java`);
         let text = fs.readFileSync(acts.taskfile).toString();
         text = text.replace(new RegExp(`class ${acts.task}`, "g"), "class Main");
         fs.writeFileSync(tmptaskfile, text);
