@@ -5,12 +5,12 @@ import * as cheerio from "cheerio";
 import { acts } from "../AcTsExtension";
 import { XSite } from "../XSite";
 import { XLanguage } from "../XLanguage";
-import { cc } from "../XExtension/Cc";
-import { cpp } from "../XExtension/Cpp";
-import { java } from "../XExtension/Java";
-import { javascript } from "../XExtension/JavaScript";
-import { python } from "../XExtension/Python";
-import { typescript } from "../XExtension/TypeScript";
+import { cc } from "../xextension/Cc";
+import { cpp } from "../xextension/Cpp";
+import { java } from "../xextension/Java";
+import { javascript } from "../xextension/JavaScript";
+import { python } from "../xextension/Python";
+import { typescript } from "../xextension/TypeScript";
 
 class AtCoder implements XSite {
     // param
@@ -50,42 +50,47 @@ class AtCoder implements XSite {
         this.language = "";
         this.xlanguages = [
             {
-                language: "C (GCC x.x.x)",
+                language: "C (GCC 9.2.1)",
                 xextension: cc,
                 id: 4001,
             },
             {
-                language: "C (Clang x.x.x)",
+                language: "C (Clang 10.0.0)",
                 xextension: cc,
                 id: 4002,
             },
             {
-                language: "C++ (GCC x.x.x)",
+                language: "C++ (GCC 9.2.1)",
                 xextension: cpp,
                 id: 4003,
             },
             {
-                language: "C++ (Clang x.x.x)",
+                language: "C++ (Clang 10.0.0)",
                 xextension: cpp,
                 id: 4004,
             },
             {
-                language: "Java (OpenJDK x.x.x)",
+                language: "Java (OpenJDK 11.0.6)",
                 xextension: java,
                 id: 4005,
             },
             {
-                language: "JavaScript (Node.js x.x.x)",
+                language: "Java (OpenJDK 1.8.0)",
+                xextension: java,
+                id: 4052,
+            },
+            {
+                language: "JavaScript (Node.js 12.16.1)",
                 xextension: javascript,
                 id: 4030,
             },
             {
-                language: "Python (x.x.x)",
+                language: "Python (3.8.2)",
                 xextension: python,
                 id: 4006,
             },
             {
-                language: "TypeScript (x.x)",
+                language: "TypeScript (3.8)",
                 xextension: typescript,
                 id: 4057,
             },

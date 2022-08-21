@@ -2,12 +2,11 @@
 
 # param
 a = int(input())
-b = int(input())
-c = int(input())
+b, c = map(int, input().split())
 s = input()
 
 # solve
-ans = (a + b + c) + " " + s
+ans = a + b + c
 
 # answer
-print(ans)
+print("{} {}".format(ans, s))
