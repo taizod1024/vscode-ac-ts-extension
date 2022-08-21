@@ -10,13 +10,13 @@ class Cc implements XExtension {
 
     // method
     checkLang(): void {
-        xexthelper.checkLang("cChecker");
+        xexthelper.checkLang("c", "checker");
     }
 
     initTask(): void {}
 
     compileTask(): void {
-        xexthelper.compileTask("cCompiler", "cExecutor");
+        xexthelper.compileTask("c", "compiler", "executor");
     }
 
     debugTask(): any {
@@ -24,7 +24,7 @@ class Cc implements XExtension {
     }
 
     testTask(): any {
-        return xexthelper.testTask("cExecutor");
+        return xexthelper.testTask("c", "executor");
     }
 
     submitTask(): void {}

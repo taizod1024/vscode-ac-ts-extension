@@ -3,6 +3,7 @@ import * as fs from "fs";
 import child_process, { ExecFileSyncOptions } from "child_process";
 import { acts } from "../AcTsExtension";
 import { XExtension } from "../XExtension";
+import { xexthelper } from "../XExtensionHelper";
 
 class Python implements XExtension {
     // implements
@@ -15,13 +16,7 @@ class Python implements XExtension {
 
     // method
     checkLang(): void {
-        const command = `python3 --version`;
-        const options = { cwd: acts.projectpath };
-        try {
-            child_process.execSync(command, options);
-        } catch (ex) {
-            throw `ERROR: check failed, command="${command}"`;
-        }
+        xexthelper.checkLang("python", "checker");
     }
 
     initTask(): void {}
@@ -41,10 +36,7 @@ class Python implements XExtension {
     }
 
     testTask(): any {
-        const command = `python3 -u ${acts.taskfile} < ${acts.tmpinfile} 1> ${acts.tmpoutfile} 2> ${acts.tmperrfile}`;
-        const options = { cwd: acts.projectpath };
-        const child = child_process.exec(command, options);
-        return child;
+        return xexthelper.testTask("python", "executor");
     }
 
     submitTask(): void {}

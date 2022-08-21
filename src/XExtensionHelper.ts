@@ -4,9 +4,9 @@ import child_process, { ExecFileSyncOptions } from "child_process";
 import { acts } from "./AcTsExtension";
 
 class XExtensionHelper {
-    checkLang(chkkey: string): void {
+    checkLang(lang: string, chkkey: string): void {
         // check
-        const config = vscode.workspace.getConfiguration(acts.appcfgkey);
+        const config = vscode.workspace.getConfiguration(acts.appcfgkey + "." + lang);
         const cmdchk = String(config.get(chkkey));
         acts.channel.appendLine(`[${acts.timestamp()}] checker: ${cmdchk}`);
         const cmdexp = acts.expandString(cmdchk);
@@ -24,9 +24,9 @@ class XExtensionHelper {
         acts.channel.appendLine(`[${acts.timestamp()}] - stderr: ${err}`);
     }
 
-    compileTask(cmpkey: string, exeky: string): void {
+    compileTask(lang: string, cmpkey: string, exeky: string): void {
         // compile
-        const config = vscode.workspace.getConfiguration(acts.appcfgkey);
+        const config = vscode.workspace.getConfiguration(acts.appcfgkey + "." + lang);
         const cmdcmp = String(config.get(cmpkey));
         acts.channel.appendLine(`[${acts.timestamp()}] compiler: ${cmdcmp}`);
         acts.channel.appendLine(`[${acts.timestamp()}] - execfile ${acts.tmpexecfile}`);
@@ -49,9 +49,9 @@ class XExtensionHelper {
         acts.channel.appendLine(`[${acts.timestamp()}] executor: ${cmdexe}`);
     }
 
-    testTask(exekey: string): any {
+    testTask(lang: string, exekey: string): any {
         // test
-        const config = vscode.workspace.getConfiguration(acts.appcfgkey);
+        const config = vscode.workspace.getConfiguration(acts.appcfgkey + "." + lang);
         const cmdexe = String(config.get(exekey));
         const cmdexp = acts.expandString(cmdexe);
         const command = `(${cmdexp}) < ${acts.tmpinfile} 1> ${acts.tmpoutfile} 2> ${acts.tmperrfile}`;
