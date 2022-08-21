@@ -4,12 +4,12 @@ import superagent from "superagent";
 import { acts } from "../AcTsExtension";
 import { XSite } from "../XSite";
 import { XLanguage } from "../XLanguage";
-import { cc } from "../XExtension/Cc";
-import { cpp } from "../XExtension/Cpp";
-import { java } from "../XExtension/Java";
-import { javascript } from "../XExtension/JavaScript";
-import { python } from "../XExtension/Python";
-import { typescript } from "../XExtension/TypeScript";
+import { cc } from "../xextension/Cc";
+import { cpp } from "../xextension/Cpp";
+import { java } from "../xextension/Java";
+import { javascript } from "../xextension/JavaScript";
+import { python } from "../xextension/Python";
+import { typescript } from "../xextension/TypeScript";
 
 class Yukicoder implements XSite {
     // param
@@ -49,57 +49,57 @@ class Yukicoder implements XSite {
         this.language = "";
         this.xlanguages = [
             {
-                language: "C++14 (gcc x.x.x + boost x.x.x)",
+                language: "C++14 (gcc 11.2.0 + boost 1.78.0)",
                 xextension: cpp,
                 id: "cpp14",
             },
             {
-                language: "C++17 (gcc x.x.x + boost x.x.x)",
+                language: "C++17 (gcc 11.2.0 + boost 1.78.0",
                 xextension: cpp,
                 id: "cpp17",
             },
             {
-                language: "C++17(clang) (gcc x.x.x + boost x.x.x)",
+                language: "C++17(clang  Beta) (gcc 10.0.0 + boost 1.78.0)",
                 xextension: cpp,
                 id: "cpp-clang",
             },
             {
-                language: "C++23(draft) (gcc x.x.x + boost x.x.x)",
+                language: "C++23(draft) (gcc 11.2.0 + boost 1.78.0)",
                 xextension: cpp,
                 id: "cpp23",
             },
             {
-                language: "C++11 (gcc x.x.x)",
+                language: "C++11 (gcc 8.5.0)",
                 xextension: cpp,
                 id: "cpp",
             },
             {
-                language: "C (gcc x.x.x)",
+                language: "C (gcc 11.2.0)",
                 xextension: cc,
                 id: "c11",
             },
             {
-                language: "C90 (gcc x.x.x)",
+                language: "C90 (gcc 8.5.0)",
                 xextension: cc,
                 id: "c",
             },
             {
-                language: "Java17 (openjdk x.x.x)",
+                language: "Java17 (openjdk 17.0.1)",
                 xextension: java,
                 id: "java8",
             },
             {
-                language: "Python3 (x.x.x)",
+                language: "Python3 (3.10.1 + numpy 1.22.3 + scipy 1.8.0)",
                 xextension: python,
                 id: "python3",
             },
             {
-                language: "JavaScript (node x.x.x)",
+                language: "JavaScript (node v17.7.1)",
                 xextension: javascript,
                 id: "node",
             },
             {
-                language: "TypeScript (x.x)",
+                language: "TypeScript (4.6.2)",
                 xextension: typescript,
                 id: "typescript",
             },

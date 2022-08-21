@@ -6,12 +6,12 @@ import { XSite } from "./XSite";
 import { XExtension } from "./XExtension";
 import { atcoder } from "./xsite/AtCoder";
 import { yukicoder } from "./xsite/Yukicoder";
-import { typescript } from "./XExtension/TypeScript";
-import { javascript } from "./XExtension/JavaScript";
-import { python } from "./XExtension/Python";
-import { cc } from "./XExtension/Cc";
-import { cpp } from "./XExtension/Cpp";
-import { java } from "./XExtension/Java";
+import { typescript } from "./xextension/TypeScript";
+import { javascript } from "./xextension/JavaScript";
+import { python } from "./xextension/Python";
+import { cc } from "./xextension/Cc";
+import { cpp } from "./xextension/Cpp";
+import { java } from "./xextension/Java";
 
 // extension core
 class AcTsExtension {
