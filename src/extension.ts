@@ -408,11 +408,11 @@ export function activate(context: vscode.ExtensionContext) {
                 }
                 // input confirm
                 vscode.window
-                    .showQuickPick(["REMOVE"], {
+                    .showQuickPick(["REMOVE TASK"], {
                         placeHolder: "PRESS ESC TO EXIT",
                     })
                     .then(confirm => {
-                        if (confirm !== "REMOVE") {
+                        if (confirm !== "REMOVE TASK") {
                             return;
                         }
                         // exec command
@@ -443,6 +443,39 @@ export function activate(context: vscode.ExtensionContext) {
                 acts.browseTaskAsync().catch(ex => {
                     acts.channel.appendLine("**** " + ex + " ****");
                 });
+            })
+        );
+    })();
+
+    (function () {
+        const cmdid = "clearState";
+        context.subscriptions.push(
+            vscode.commands.registerCommand(`${acts.appid}.${cmdid}`, () => {
+                acts.channel.show(true);
+                acts.channel.clear();
+                acts.channel.appendLine(`${acts.appid}.${cmdid}:`);
+                acts.vscodeextensionpath = context.extensionPath;
+                // check condition
+                if (!actshelper.checkProjectPath()) {
+                    return;
+                }
+                if (!actshelper.checkActiveFile()) {
+                    return;
+                }
+                // input confirm
+                vscode.window
+                    .showQuickPick(["CLEAR STATE"], {
+                        placeHolder: "PRESS ESC TO EXIT",
+                    })
+                    .then(confirm => {
+                        if (confirm !== "CLEAR STATE") {
+                            return;
+                        }
+                        // exec command
+                        acts.clearStateAsync().catch(ex => {
+                            acts.channel.appendLine("**** " + ex + " ****");
+                        });
+                    });
             })
         );
     })();

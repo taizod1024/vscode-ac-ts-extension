@@ -360,11 +360,6 @@ class AcTsExtension {
                                     setTimeout(runtest, 500);
                                     return;
                                 }
-                                // delete files in tmppath
-                                fs.readdirSync(that.tmppath).forEach(filename => {
-                                    const filepath = path.normalize(`${that.tmppath}/${filename}`);
-                                    // fs.unlinkSync(filepath);
-                                });
                                 // test set done
                                 let msg = `${that.task} OK=${ok}, NG=${ng}`;
                                 if (ng === 0) {
@@ -419,7 +414,7 @@ class AcTsExtension {
         // init command
         await this.initPropAsync(true);
 
-        // Remove Taskfile
+        // remove Taskfile
         if (!fs.existsSync(this.taskfile)) {
             this.channel.appendLine(`[${this.timestamp()}] taskfile: ${this.taskfile} missing`);
         } else {
@@ -454,7 +449,28 @@ class AcTsExtension {
         this.channel.appendLine(`---- SUCCESS: browse ${this.task} ----`);
     }
 
-    // config
+    public async clearStateAsync() {
+        // delete tmppath
+        if (fs.existsSync(this.tmppath)) {
+            // delete files
+            fs.readdirSync(this.tmppath).forEach(filename => {
+                const filepath = path.normalize(`${this.tmppath}/${filename}`);
+                fs.unlinkSync(filepath);
+            });
+
+            // delete tmppath
+            fs.rmdirSync(this.tmppath);
+        }
+
+        // delete statefile
+        if (fs.existsSync(this.statefile)) {
+            fs.unlinkSync(this.statefile);
+        }
+
+        this.channel.appendLine(`---- SUCCESS: state cleard ----`);
+    }
+
+    // state
     public loadState() {
         const json = fs.existsSync(this.statefile)
             ? JSON.parse(fs.readFileSync(this.statefile).toString())
