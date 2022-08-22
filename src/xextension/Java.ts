@@ -13,7 +13,7 @@ class Java implements XExtension {
 
     // method
     checkLang(): void {
-        xexthelper.checkLang("java", "checker");
+        xexthelper.checkLang("java");
     }
 
     initTask(): void {
@@ -25,7 +25,7 @@ class Java implements XExtension {
 
     compileTask(): void {
         acts.execfile = acts.taskfile.replace(".java", ".class");
-        xexthelper.compileTask("java", "compiler", "executor");
+        xexthelper.compileTask("java");
     }
 
     debugTask(): any {
@@ -33,7 +33,7 @@ class Java implements XExtension {
     }
 
     testTask(): any {
-        return xexthelper.testTask("java", "executor");
+        return xexthelper.testTask("java");
     }
 
     submitTask(): void {

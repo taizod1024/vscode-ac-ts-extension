@@ -13,7 +13,7 @@ class JavaScript implements XExtension {
 
     // method
     checkLang(): void {
-        xexthelper.checkLang("javascript", "checker");
+        xexthelper.checkLang("javascript");
     }
 
     initTask(): void {}
@@ -33,7 +33,7 @@ class JavaScript implements XExtension {
     }
 
     testTask(): any {
-        return xexthelper.testTask("javascript", "executor");
+        return xexthelper.testTask("javascript");
     }
 
     submitTask(): void {}

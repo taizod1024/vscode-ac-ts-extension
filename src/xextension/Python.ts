@@ -16,7 +16,7 @@ class Python implements XExtension {
 
     // method
     checkLang(): void {
-        xexthelper.checkLang("python", "checker");
+        xexthelper.checkLang("python");
     }
 
     initTask(): void {}
@@ -36,7 +36,7 @@ class Python implements XExtension {
     }
 
     testTask(): any {
-        return xexthelper.testTask("python", "executor");
+        return xexthelper.testTask("python");
     }
 
     submitTask(): void {}

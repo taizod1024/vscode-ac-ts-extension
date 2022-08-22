@@ -13,7 +13,7 @@ class TypeScript implements XExtension {
 
     // method
     checkLang(): void {
-        xexthelper.checkLang("typescript", "checker");
+        xexthelper.checkLang("typescript");
     }
 
     initTask(): void {}
@@ -35,12 +35,7 @@ class TypeScript implements XExtension {
     }
 
     testTask(): any {
-        // TODO 何故かexitがnullになる実行されていない模様、環境変数が足りないため
-        // return xexthelper.testTask("typescript", "executor");
-        const command = `node --require ts-node/register ${acts.taskfile} < ${acts.tmpstdinfile} 1> ${acts.tmpstdoutfile} 2> ${acts.tmpstderrfile}`;
-        const options = { cwd: acts.projectpath, env: { TS_NODE_TRANSPILE_ONLY: "1" } };
-        const child = child_process.exec(command, options);
-        return child;
+        return xexthelper.testTask("typescript", { env: { TS_NODE_TRANSPILE_ONLY: "1" } });
     }
 
     submitTask(): void {}
