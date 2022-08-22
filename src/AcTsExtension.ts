@@ -71,6 +71,11 @@ class AcTsExtension {
             this.tmppath = path.normalize(`/tmp/${this.appid}/${process.env.USER}`);
         }
 
+        // make tmppath
+        if (!fs.existsSync(this.tmppath)) {
+            fs.mkdirSync(this.tmppath, { recursive: true });
+        }
+
         // coders and langs
         this.xsites = [atcoder, yukicoder];
         this.xextensions = [cpp, python, java, cc, javascript, typescript];
@@ -214,12 +219,6 @@ class AcTsExtension {
         this.channel.appendLine(`[${this.timestamp()}] testfile: ${this.testfile}`);
         if (!fs.existsSync(this.testfile)) {
             throw `ERROR: missing testfile="${this.testfile}", do init task`;
-        }
-
-        // make tmppath
-        this.channel.appendLine(`[${this.timestamp()}] tmppath: ${this.tmppath}`);
-        if (!fs.existsSync(this.tmppath)) {
-            fs.mkdirSync(this.tmppath, { recursive: true });
         }
 
         // delete files in tmppath
