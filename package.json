@@ -54,7 +54,7 @@
       },
       {
         "command": "ac-ts-extension.submitTask",
-        "title": "AtCoder Extension: Submit Task"
+        "title": "AtCoder Extension: Submit Task..."
       },
       {
         "command": "ac-ts-extension.removeTask",
@@ -66,7 +66,7 @@
       },
       {
         "command": "ac-ts-extension.clearState",
-        "title": "AtCoder Extension: Clear State"
+        "title": "AtCoder Extension: Clear State..."
       }
     ],
     "configuration": [
