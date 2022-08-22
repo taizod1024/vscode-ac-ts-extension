@@ -42,14 +42,11 @@ class AcTsExtension {
     public usertasktmplfile: string;
     public taskpath: string;
     public taskfile: string;
-    public testpath: string;
     public testfile: string;
-    public tmpexecfile: string;
-    public tmpinfile: string;
-    public tmpoutfile: string;
-    public tmperrfile: string;
-    public packagejsonfile: string;
-    public packagelockjsonfile: string;
+    public execfile: string;
+    public tmpstdinfile: string;
+    public tmpstdoutfile: string;
+    public tmpstderrfile: string;
     public separator: string;
     public proxy: any;
     public timeout: number;
@@ -96,15 +93,12 @@ class AcTsExtension {
         this.tasktmplfile = path.normalize(`${this.vscodeextensionpath}/template/template${this.extension}`);
         this.usertasktmplfile = path.normalize(`${this.projectpath}/template/template${this.extension}`);
         this.taskpath = path.normalize(`${this.projectpath}/src/${this.site}/${this.contest}`);
-        this.taskfile = path.normalize(`${this.projectpath}/src/${this.site}/${this.contest}/${this.task}${this.extension}`);
-        this.testpath = path.normalize(`${this.projectpath}/src/${this.site}/${this.contest}`);
-        this.testfile = path.normalize(`${this.projectpath}/src/${this.site}/${this.contest}/${this.task}.txt`);
-        this.tmpexecfile = path.normalize(`${this.tmppath}/${this.task}${process.env.WINDIR ? ".exe" : ".out"}`);
-        this.tmpinfile = path.normalize(`${this.tmppath}/test_in.txt`);
-        this.tmpoutfile = path.normalize(`${this.tmppath}/test_out.txt`);
-        this.tmperrfile = path.normalize(`${this.tmppath}/test_err.txt`);
-        this.packagejsonfile = path.normalize(`${this.projectpath}/package.json`);
-        this.packagelockjsonfile = path.normalize(`${this.projectpath}/package-lock.json`);
+        this.taskfile = path.normalize(`${this.taskpath}/${this.task}${this.extension}`);
+        this.testfile = path.normalize(`${this.taskpath}/${this.task}.txt`);
+        this.execfile = path.normalize(`${this.taskpath}/${this.task}${process.env.WINDIR ? ".exe" : ".out"}`);
+        this.tmpstdinfile = path.normalize(`${this.tmppath}/test_stdin.txt`);
+        this.tmpstdoutfile = path.normalize(`${this.tmppath}/test_stdout.txt`);
+        this.tmpstderrfile = path.normalize(`${this.tmppath}/test_stderr.txt`);
         this.separator = "\r\n--------\r\n";
         this.proxy = "";
         this.timeout = 5000;
@@ -174,9 +168,6 @@ class AcTsExtension {
         }
 
         // create testfile
-        if (!fs.existsSync(this.testpath)) {
-            fs.mkdirSync(this.testpath, { recursive: true });
-        }
         if (fs.existsSync(this.testfile)) {
             this.channel.appendLine(`[${this.timestamp()}] testfile: ${this.testfile} exist`);
         } else {
@@ -274,7 +265,7 @@ class AcTsExtension {
                 that.channel.appendLine(`[${that.timestamp()}] test-${iosx}:`);
                 that.channel.appendLine(`[${that.timestamp()}] - input ="${io.in}"`);
                 that.channel.appendLine(`[${that.timestamp()}] - output="${io.out}"`);
-                fs.writeFileSync(that.tmpinfile, io.in);
+                fs.writeFileSync(that.tmpstdinfile, io.in);
 
                 // exec command
                 let child = null;
@@ -306,14 +297,14 @@ class AcTsExtension {
                     }
                     // wait output
                     (function waitoutput() {
-                        if (!fs.existsSync(that.tmpoutfile)) {
+                        if (!fs.existsSync(that.tmpstdoutfile)) {
                             setTimeout(waitoutput, 500);
                             return;
                         }
                         // wait command complete
                         (function waitunlock() {
                             try {
-                                fs.unlinkSync(that.tmpinfile);
+                                fs.unlinkSync(that.tmpstdinfile);
                             } catch (ex) {
                                 if (ex instanceof Error) {
                                     if (!ex.message.match(/EBUSY/)) {
@@ -329,11 +320,11 @@ class AcTsExtension {
                                 console.log(vscode.debug.activeDebugSession);
                                 that.channel.show(true);
                                 // read output
-                                const out = fs.readFileSync(that.tmpoutfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
-                                fs.unlinkSync(that.tmpoutfile);
+                                const out = fs.readFileSync(that.tmpstdoutfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
+                                fs.unlinkSync(that.tmpstdoutfile);
                                 // check error
-                                const err = fs.readFileSync(that.tmperrfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
-                                fs.unlinkSync(that.tmperrfile);
+                                const err = fs.readFileSync(that.tmpstderrfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
+                                fs.unlinkSync(that.tmpstderrfile);
                                 that.channel.appendLine(`[${that.timestamp()}] - stdout="${out}"`);
                                 that.channel.appendLine(`[${that.timestamp()}] - stderr=${err}`);
                                 that.channel.appendLine(`[${that.timestamp()}] - exit  =${child?.exitCode}`);
@@ -350,8 +341,8 @@ class AcTsExtension {
                                 if (out === "") {
                                     that.channel.appendLine(`---- CANCELED OR NO OUTPUT ----`);
                                     // delete executable if canceled
-                                    if (fs.existsSync(that.tmpexecfile)) {
-                                        fs.unlinkSync(that.tmpexecfile);
+                                    if (fs.existsSync(that.execfile)) {
+                                        fs.unlinkSync(that.execfile);
                                     }
                                     resolve();
                                     return;
@@ -498,8 +489,13 @@ class AcTsExtension {
     public expandString(str: string): string {
         return str
             .replace(/\$taskfile/g, this.taskfile)
-            .replace(/\$execfile/g, this.tmpexecfile)
-            .replace(/\$tmppath/g, this.tmppath);
+            .replace(/\$execfile/g, this.execfile)
+            .replace(/\$tmppath/g, this.tmppath)
+            .replace(/\$taskpath/g, this.taskpath)
+            .replace(/\$site/g, this.site)
+            .replace(/\$contest/g, this.contest)
+            .replace(/\$task/g, this.task)
+            .replace(/\$extension/g, this.extension);
     }
 
     // message

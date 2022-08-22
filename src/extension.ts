@@ -35,6 +35,7 @@ export function activate(context: vscode.ExtensionContext) {
                             return;
                         }
                         if (site === "atcoder") {
+                            acts.channel.appendLine(`[${acts.timestamp()}] atcoder.siteurl: ${atcoder.siteurl}`);
                             // input username
                             vscode.window
                                 .showInputBox({
@@ -71,6 +72,7 @@ export function activate(context: vscode.ExtensionContext) {
                                 });
                         }
                         if (site === "yukicoder") {
+                            acts.channel.appendLine(`[${acts.timestamp()}] yukicoder.siteurl: ${yukicoder.siteurl}`);
                             // input apikey
                             vscode.window
                                 .showInputBox({

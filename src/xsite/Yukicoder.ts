@@ -26,7 +26,8 @@ class Yukicoder implements XSite {
     // implements
 
     // prop
-    site = "yukicoder";
+    site: string;
+    siteurl: string;
     contestregexp: RegExp;
     contestmessage: string;
     taskregexp: RegExp;
@@ -39,6 +40,8 @@ class Yukicoder implements XSite {
 
     // method
     constructor() {
+        this.site = "yukicoder";
+        this.siteurl = "https://yukicoder.me/";
         this.contestregexp = /^[0-9]+$/;
         this.contestmessage = "input contestid from url [e.g.: 314, 315]";
         this.taskregexp = /^[0-9]+$/;

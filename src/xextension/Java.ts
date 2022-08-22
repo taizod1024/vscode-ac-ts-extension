@@ -24,25 +24,8 @@ class Java implements XExtension {
     }
 
     compileTask(): void {
-        // replace and rewrite taskfile and tmpexecfile
-        const taskfile = acts.taskfile;
-        const tmptaskfile = path.normalize(`${acts.tmppath}/Main.java`);
-        let text = fs.readFileSync(acts.taskfile).toString();
-        text = text.replace(new RegExp(`class ${acts.task}`, "g"), "class Main");
-        fs.writeFileSync(tmptaskfile, text);
-        acts.taskfile = tmptaskfile;
-        acts.tmpexecfile = path.normalize(`${acts.tmppath}/Main.class`);
-
-        try {
-            xexthelper.compileTask("java", "compiler", "executor");
-        } catch (ex) {
-            // rewrite taskfile and execfile
-            if (typeof ex === "string" || ex instanceof String) {
-                const err = ex.split(tmptaskfile).join(taskfile);
-                throw err;
-            }
-            throw ex;
-        }
+        acts.execfile = acts.taskfile.replace(".java", ".class");
+        xexthelper.compileTask("java", "compiler", "executor");
     }
 
     debugTask(): any {

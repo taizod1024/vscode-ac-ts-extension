@@ -25,7 +25,7 @@ class JavaScript implements XExtension {
             type: "pwa-node",
             request: "launch",
             program: acts.taskfile,
-            args: ["<", acts.tmpinfile, "1>", acts.tmpoutfile, "2>", acts.tmperrfile],
+            args: ["<", acts.tmpstdinfile, "1>", acts.tmpstdoutfile, "2>", acts.tmpstderrfile],
             console: "integratedTerminal",
             skipFiles: ["node_modules/**"],
         };

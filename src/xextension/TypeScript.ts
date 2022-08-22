@@ -26,7 +26,7 @@ class TypeScript implements XExtension {
             request: "launch",
             runtimeArgs: ["--require", "ts-node/register"],
             program: acts.taskfile,
-            args: ["<", acts.tmpinfile, "1>", acts.tmpoutfile, "2>", acts.tmperrfile],
+            args: ["<", acts.tmpstdinfile, "1>", acts.tmpstdoutfile, "2>", acts.tmpstderrfile],
             console: "integratedTerminal",
             skipFiles: ["node_modules/**"],
             env: { TS_NODE_TRANSPILE_ONLY: "1" },

@@ -26,7 +26,8 @@ class AtCoder implements XSite {
     // implements
 
     // prop
-    site = "atcoder";
+    site: string;
+    siteurl: string;
     contestregexp: RegExp;
     contestmessage: string;
     taskregexp: RegExp;
@@ -39,6 +40,8 @@ class AtCoder implements XSite {
 
     // method
     constructor() {
+        this.site = "atcoder";
+        this.siteurl = "https://atcoder.jp/";
         this.contestregexp = /^(.+)$/;
         this.contestmessage = "input contest [e.g.: abc190, abc191]";
         this.taskregexp = /^(.+)_(.+)$/;

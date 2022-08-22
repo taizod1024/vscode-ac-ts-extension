@@ -70,17 +70,17 @@
         "properties": {
           "atcoderExtension.c.checker": {
             "type": "string",
-            "description": "command line checker for C, you can use $taskfile, $execfile, $tmppath.",
+            "description": "command line checker for C",
             "default": "gcc --version"
           },
           "atcoderExtension.c.compiler": {
             "type": "string",
-            "description": "command line compiler for C, you can use $taskfile, $execfile, $tmppath.",
+            "description": "command line compiler for C",
             "default": "gcc $taskfile -o $execfile -lm"
           },
           "atcoderExtension.c.executor": {
             "type": "string",
-            "description": "command line executor for C, you can use $taskfile, $execfile, $tmppath.",
+            "description": "command line executor for C",
             "default": "$execfile"
           }
         }
@@ -90,17 +90,17 @@
         "properties": {
           "atcoderExtension.c++.checker": {
             "type": "string",
-            "description": "command line checker for C++, you can use $taskfile, $execfile, $tmppath.",
+            "description": "command line checker for C++",
             "default": "g++ --version"
           },
           "atcoderExtension.c++.compiler": {
             "type": "string",
-            "description": "command line compiler for C++, you can use $taskfile, $execfile, $tmppath.",
+            "description": "command line compiler for C++",
             "default": "g++ $taskfile -o $execfile"
           },
           "atcoderExtension.c++.executor": {
             "type": "string",
-            "description": "command line executor for C++, you can use $taskfile, $execfile, $tmppath.",
+            "description": "command line executor for C++",
             "default": "$execfile"
           }
         }
@@ -110,18 +110,18 @@
         "properties": {
           "atcoderExtension.java.checker": {
             "type": "string",
-            "description": "command line checker for Java, you can use $taskfile, $execfile, $tmppath.",
+            "description": "command line checker for Java",
             "default": "javac -version"
           },
           "atcoderExtension.java.compiler": {
             "type": "string",
-            "description": "command line compiler for Java, you can use $taskfile, $execfile, $tmppath.",
+            "description": "command line compiler for Java",
             "default": "javac -J-Duser.language=en $taskfile"
           },
           "atcoderExtension.java.executor": {
             "type": "string",
-            "description": "command line executor for Java, you can use $taskfile, $execfile, $tmppath.",
-            "default": "cd $tmppath && java Main"
+            "description": "command line executor for Java",
+            "default": "cd $taskpath && java $task"
           }
         }
       },
@@ -130,12 +130,12 @@
         "properties": {
           "atcoderExtension.python.checker": {
             "type": "string",
-            "description": "command line checker for Python, you can use $taskfile, $execfile, $tmppath.",
+            "description": "command line checker for Python",
             "default": "python3 --version"
           },
           "atcoderExtension.python.executor": {
             "type": "string",
-            "description": "command line executor for Python, you can use $taskfile, $execfile, $tmppath.",
+            "description": "command line executor for Python",
             "default": "python3 -u $taskfile"
           }
         }
@@ -145,12 +145,12 @@
         "properties": {
           "atcoderExtension.javascript.checker": {
             "type": "string",
-            "description": "command line checker for JavaScript, you can use $taskfile, $execfile, $tmppath.",
+            "description": "command line checker for JavaScript",
             "default": "node --version"
           },
           "atcoderExtension.javascript.executor": {
             "type": "string",
-            "description": "command line executor for JavaScript, you can use $taskfile, $execfile, $tmppath.",
+            "description": "command line executor for JavaScript",
             "default": "node $taskfile"
           }
         }
@@ -160,12 +160,12 @@
         "properties": {
           "atcoderExtension.typescript.checker": {
             "type": "string",
-            "description": "command line checker for TypeScript, you can use $taskfile, $execfile, $tmppath.",
+            "description": "command line checker for TypeScript",
             "default": "node --version"
           },
           "atcoderExtension.typescript.executor": {
             "type": "string",
-            "description": "command line executor for TypeScript, you can use $taskfile, $execfile, $tmppath.",
+            "description": "command line executor for TypeScript",
             "default": "node --require ts-node/register $taskfile"
           }
         }
