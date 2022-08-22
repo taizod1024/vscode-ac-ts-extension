@@ -19,6 +19,7 @@ class AcTsHelper {
             const filenames = vscode.window.activeTextEditor?.document?.fileName?.split(path.sep);
             if (filenames) {
                 // disassemble
+                // TODO pathの使用
                 let filename = filenames.pop();
                 let basename = filenames.join(path.sep);
                 let basenames = filename.split(".");
