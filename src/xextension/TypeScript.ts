@@ -35,6 +35,7 @@ class TypeScript implements XExtension {
     }
 
     testTask(): any {
+        // TODO 何故かexitがnullになる実行されていない模様
         return xexthelper.testTask("typescript", "executor");
     }
 

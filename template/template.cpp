@@ -16,7 +16,7 @@ int main()
     int ans = a + b + c;
 
     // answer
-    std::cout << ans << s;
+    std::cout << ans << " " << s;
 
     return 0;
   }
