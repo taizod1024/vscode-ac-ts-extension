@@ -232,7 +232,7 @@ class Yukicoder implements XSite {
         return String(xlanguage.id);
     }
 
-    loadConfig(json: any) {
+    loadState(json: any) {
         yukicoder.apikey = json.yukicoder?.encapikey ? Buffer.from(json.yukicoder?.encapikey, "base64").toString() : "";
         yukicoder.contest = json.yukicoder?.contest;
         yukicoder.task = json.yukicoder?.task;
@@ -240,7 +240,7 @@ class Yukicoder implements XSite {
         yukicoder.language = json.yukicoder?.language;
     }
 
-    saveConfig(json: any) {
+    saveState(json: any) {
         json.yukicoder = {};
         json.yukicoder.encapikey = Buffer.from(yukicoder.apikey).toString("base64");
         json.yukicoder.contest = yukicoder.contest;

@@ -307,7 +307,7 @@ class AtCoder implements XSite {
         return Number(xlanguage.id);
     }
 
-    loadConfig(json: any) {
+    loadState(json: any) {
         atcoder.username = json.atcoder?.username || "";
         atcoder.password = json.atcoder?.encpassword ? Buffer.from(json.atcoder?.encpassword, "base64").toString() : "";
         atcoder.contest = json.atcoder?.contest;
@@ -316,7 +316,7 @@ class AtCoder implements XSite {
         atcoder.language = json.atcoder?.language;
     }
 
-    saveConfig(json: any) {
+    saveState(json: any) {
         json.atcoder = {};
         json.atcoder.username = atcoder.username;
         json.atcoder.encpassword = Buffer.from(atcoder.password).toString("base64");

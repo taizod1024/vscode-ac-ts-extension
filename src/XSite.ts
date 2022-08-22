@@ -22,6 +22,6 @@ export interface XSite {
     submitTaskAsync(): void;
     browseTask(): void;
     getLanguageId(): any;
-    loadConfig(json: any): void;
-    saveConfig(json: any): void;
+    loadState(json: any): void;
+    saveState(json: any): void;
 }

@@ -19,7 +19,7 @@ class AcTsExtension {
     public appname: string;
     public appid: string;
     public appcfgkey: string;
-    public configfile: string;
+    public statefile: string;
     public tmppath: string;
 
     // context
@@ -64,10 +64,10 @@ class AcTsExtension {
         this.appid = "ac-ts-extension";
         this.appcfgkey = "atcoderExtension";
         if (process.env.WINDIR) {
-            this.configfile = path.normalize(`${process.env.USERPROFILE}/.${this.appid}.json`);
+            this.statefile = path.normalize(`${process.env.USERPROFILE}/.${this.appid}.json`);
             this.tmppath = path.normalize(`${process.env.TEMP}/${this.appid}`);
         } else {
-            this.configfile = path.normalize(`${process.env.HOME}/.${this.appid}.json`);
+            this.statefile = path.normalize(`${process.env.HOME}/.${this.appid}.json`);
             this.tmppath = path.normalize(`/tmp/${this.appid}/${process.env.USER}`);
         }
 
@@ -89,8 +89,8 @@ class AcTsExtension {
         this.channel.show(true);
         this.channel.appendLine(`[${this.timestamp()}] ${this.appname}`);
 
-        // load config
-        this.loadConfig();
+        // load state
+        this.loadState();
     }
 
     public async initPropAsync(withtask: boolean) {
@@ -122,8 +122,8 @@ class AcTsExtension {
             this.xextension.checkLang();
         }
 
-        // save config
-        this.saveConfig();
+        // save state
+        this.saveState();
     }
 
     public async loginSiteAsync() {
@@ -455,9 +455,9 @@ class AcTsExtension {
     }
 
     // config
-    public loadConfig() {
-        const json = fs.existsSync(this.configfile)
-            ? JSON.parse(fs.readFileSync(this.configfile).toString())
+    public loadState() {
+        const json = fs.existsSync(this.statefile)
+            ? JSON.parse(fs.readFileSync(this.statefile).toString())
             : {
                   site: "",
                   contest: "",
@@ -470,9 +470,9 @@ class AcTsExtension {
         this.task = json.task || "";
         this.extension = json.extension;
         this.language = json.language;
-        this.xsites.forEach(val => val.loadConfig(json));
+        this.xsites.forEach(val => val.loadState(json));
     }
-    public saveConfig() {
+    public saveState() {
         const json = {
             site: this.site,
             contest: this.contest,
@@ -480,8 +480,8 @@ class AcTsExtension {
             extension: this.extension,
             language: this.language,
         };
-        this.xsites.forEach(val => val.saveConfig(json));
-        fs.writeFileSync(this.configfile, JSON.stringify(json));
+        this.xsites.forEach(val => val.saveState(json));
+        fs.writeFileSync(this.statefile, JSON.stringify(json));
     }
 
     // expand command
