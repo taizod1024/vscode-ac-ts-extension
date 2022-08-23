@@ -54,5 +54,15 @@ class AcTsHelper {
         acts.channel.appendLine(msg);
         return false;
     }
+
+    public moveToHead(srcarr: string[], val: string) {
+        const dstarr = Array.from(srcarr);
+        const idx = dstarr.indexOf(val);
+        if (1 <= idx) {
+            dstarr.splice(idx, 1);
+            dstarr.unshift(val);
+        }
+        return dstarr;
+    }
 }
-export const actshelper = new AcTsHelper();
+export const extensionhelper = new AcTsHelper();
