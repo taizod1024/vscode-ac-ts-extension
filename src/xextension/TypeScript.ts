@@ -3,22 +3,25 @@ import * as fs from "fs";
 import child_process, { ExecFileSyncOptions } from "child_process";
 import { acts } from "../AcTsExtension";
 import { XExtension } from "../XExtension";
+import { xexthelper } from "../XExtensionHelper";
 
 class TypeScript implements XExtension {
     // implemente
 
     // prop
     extension = ".ts";
+    language = "typescript";
 
     // method
     checkLang(): void {
-        if (!fs.existsSync(acts.packagejsonfile) || !fs.existsSync(acts.packagelockjsonfile)) {
-            throw `ERROR: missing package.json or package-lock.json, install node.js, run "npm init && npm install --save-dev typescript ts-node @types/node"`;
-        }
+        xexthelper.checkLang(this.language);
     }
 
     initTask(): void {}
-    compileTask(): void {}
+
+    compileTask(): void {
+        xexthelper.compileTask(this.language);
+    }
 
     debugTask(): any {
         const debugconfig = {
@@ -27,7 +30,7 @@ class TypeScript implements XExtension {
             request: "launch",
             runtimeArgs: ["--require", "ts-node/register"],
             program: acts.taskfile,
-            args: ["<", acts.tmpinfile, "1>", acts.tmpoutfile, "2>", acts.tmperrfile],
+            args: ["<", acts.tmpstdinfile, "1>", acts.tmpstdoutfile, "2>", acts.tmpstderrfile],
             console: "integratedTerminal",
             skipFiles: ["node_modules/**"],
             env: { TS_NODE_TRANSPILE_ONLY: "1" },
@@ -36,10 +39,7 @@ class TypeScript implements XExtension {
     }
 
     testTask(): any {
-        const command = `node --require ts-node/register ${acts.taskfile} < ${acts.tmpinfile} 1> ${acts.tmpoutfile} 2> ${acts.tmperrfile}`;
-        const options = { cwd: acts.projectpath, env: { TS_NODE_TRANSPILE_ONLY: "1" } };
-        const child = child_process.exec(command, options);
-        return child;
+        return xexthelper.testTask(this.language, { env: { TS_NODE_TRANSPILE_ONLY: "1" } });
     }
 
     submitTask(): void {}

@@ -3,8 +3,8 @@ import superagent from "superagent";
 require("superagent-proxy")(superagent);
 import { actshelper } from "./AcTsHelper";
 import { acts } from "./AcTsExtension";
-import { atcoder } from "./XSite/AtCoder";
-import { yukicoder } from "./XSite/Yukicoder";
+import { atcoder } from "./xsite/AtCoder";
+import { yukicoder } from "./xsite/Yukicoder";
 
 // extension entrypoint
 export function activate(context: vscode.ExtensionContext) {
@@ -35,6 +35,7 @@ export function activate(context: vscode.ExtensionContext) {
                             return;
                         }
                         if (site === "atcoder") {
+                            acts.channel.appendLine(`[${acts.timestamp()}] atcoder.siteurl: ${atcoder.siteurl}`);
                             // input username
                             vscode.window
                                 .showInputBox({
@@ -65,12 +66,13 @@ export function activate(context: vscode.ExtensionContext) {
                                             atcoder.username = username;
                                             atcoder.password = password;
                                             acts.loginSiteAsync().catch(ex => {
-                                                acts.channel.appendLine("**** " + ex + " ****");
+                                                acts.channel.appendLine(`**** ${ex} ****`);
                                             });
                                         });
                                 });
                         }
                         if (site === "yukicoder") {
+                            acts.channel.appendLine(`[${acts.timestamp()}] yukicoder.siteurl: ${yukicoder.siteurl}`);
                             // input apikey
                             vscode.window
                                 .showInputBox({
@@ -88,7 +90,7 @@ export function activate(context: vscode.ExtensionContext) {
                                     acts.site = site;
                                     yukicoder.apikey = apikey;
                                     acts.loginSiteAsync().catch(ex => {
-                                        acts.channel.appendLine("**** " + ex + " ****");
+                                        acts.channel.appendLine(`**** ${ex} ****`);
                                     });
                                 });
                         }
@@ -158,7 +160,7 @@ export function activate(context: vscode.ExtensionContext) {
                                 language = yukicoder.language;
                             }
                         } catch (ex) {
-                            acts.channel.appendLine("**** " + ex + " ****");
+                            acts.channel.appendLine(`**** ${ex} ****`);
                             return;
                         }
                         // input contest
@@ -277,7 +279,7 @@ export function activate(context: vscode.ExtensionContext) {
                         }
                         // exec command
                         acts.initTaskAsync().catch(ex => {
-                            acts.channel.appendLine("**** " + ex + " ****");
+                            acts.channel.appendLine(`**** ${ex} ****`);
                         });
                     });
             })
@@ -301,7 +303,7 @@ export function activate(context: vscode.ExtensionContext) {
                 }
                 // exec command
                 acts.testTaskAsync(false).catch(ex => {
-                    acts.channel.appendLine("**** " + ex + " ****");
+                    acts.channel.appendLine(`**** ${ex} ****`);
                 });
             })
         );
@@ -324,7 +326,7 @@ export function activate(context: vscode.ExtensionContext) {
                 }
                 // exec command
                 acts.testTaskAsync(true).catch(ex => {
-                    acts.channel.appendLine("**** " + ex + " ****");
+                    acts.channel.appendLine(`**** ${ex} ****`);
                 });
             })
         );
@@ -406,16 +408,16 @@ export function activate(context: vscode.ExtensionContext) {
                 }
                 // input confirm
                 vscode.window
-                    .showQuickPick(["REMOVE"], {
+                    .showQuickPick(["REMOVE TASK"], {
                         placeHolder: "PRESS ESC TO EXIT",
                     })
                     .then(confirm => {
-                        if (confirm !== "REMOVE") {
+                        if (confirm !== "REMOVE TASK") {
                             return;
                         }
                         // exec command
                         acts.removeTaskAsync().catch(ex => {
-                            acts.channel.appendLine("**** " + ex + " ****");
+                            acts.channel.appendLine(`**** ${ex} ****`);
                         });
                     });
             })
@@ -439,8 +441,41 @@ export function activate(context: vscode.ExtensionContext) {
                 }
                 // exec command
                 acts.browseTaskAsync().catch(ex => {
-                    acts.channel.appendLine("**** " + ex + " ****");
+                    acts.channel.appendLine(`**** ${ex} ****`);
                 });
+            })
+        );
+    })();
+
+    (function () {
+        const cmdid = "clearState";
+        context.subscriptions.push(
+            vscode.commands.registerCommand(`${acts.appid}.${cmdid}`, () => {
+                acts.channel.show(true);
+                acts.channel.clear();
+                acts.channel.appendLine(`${acts.appid}.${cmdid}:`);
+                acts.vscodeextensionpath = context.extensionPath;
+                // check condition
+                if (!actshelper.checkProjectPath()) {
+                    return;
+                }
+                if (!actshelper.checkActiveFile()) {
+                    return;
+                }
+                // input confirm
+                vscode.window
+                    .showQuickPick(["CLEAR STATE"], {
+                        placeHolder: "PRESS ESC TO EXIT",
+                    })
+                    .then(confirm => {
+                        if (confirm !== "CLEAR STATE") {
+                            return;
+                        }
+                        // exec command
+                        acts.clearStateAsync().catch(ex => {
+                            acts.channel.appendLine(`**** ${ex} ****`);
+                        });
+                    });
             })
         );
     })();

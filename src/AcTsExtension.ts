@@ -1,25 +1,27 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
+const path = require("path");
 import child_process, { ExecFileSyncOptions } from "child_process";
 import { XSite } from "./XSite";
 import { XExtension } from "./XExtension";
-import { atcoder } from "./XSite/AtCoder";
-import { yukicoder } from "./XSite/Yukicoder";
-import { typescript } from "./XExtension/TypeScript";
-import { javascript } from "./XExtension/JavaScript";
-import { python } from "./XExtension/Python";
-import { cc } from "./XExtension/Cc";
-import { cpp } from "./XExtension/Cpp";
-import { java } from "./XExtension/Java";
-import { XLanguage } from "./XLanguage";
+import { atcoder } from "./xsite/AtCoder";
+import { yukicoder } from "./xsite/Yukicoder";
+import { typescript } from "./xextension/TypeScript";
+import { javascript } from "./xextension/JavaScript";
+import { python } from "./xextension/Python";
+import { cc } from "./xextension/Cc";
+import { cpp } from "./xextension/Cpp";
+import { java } from "./xextension/Java";
+import { user1 } from "./xextension/User1";
 
 // extension core
 class AcTsExtension {
     // constant
-    public appname: string;
-    public appid: string;
-    public appcfgkey: string;
-    public configfile: string;
+    public appname = "AtCoder Extension";
+    public appid = "ac-ts-extension";
+    public appcfgkey = "atcoderExtension";
+    public statefile: string;
+    public tmppath: string;
 
     // context
     public vscodeextensionpath: string;
@@ -41,69 +43,65 @@ class AcTsExtension {
     public usertasktmplfile: string;
     public taskpath: string;
     public taskfile: string;
-    public taskbuildpath: string;
-    public taskbuildfile: string;
-    public testpath: string;
     public testfile: string;
-    public tmppath: string;
-    public tmpexecfile: string;
-    public tmpinfile: string;
-    public tmpoutfile: string;
-    public tmperrfile: string;
-    public packagejsonfile: string;
-    public packagelockjsonfile: string;
+    public execfile: string;
+    public tmpstdinfile: string;
+    public tmpstdoutfile: string;
+    public tmpstderrfile: string;
     public separator: string;
     public proxy: any;
     public timeout: number;
 
     // const
-    public sites: string[];
-    public extensions: string[];
+    public get sites() {
+        return this.xsites.map(val => val.site);
+    }
+    public get extensions() {
+        return this.xextensions.map(val => val.extension);
+    }
     public xsites: XSite[];
     public xextensions: XExtension[];
 
     // setup function
     constructor() {
         // init constant
-        this.appname = "AtCoder Extension";
-        this.appid = "ac-ts-extension";
-        this.appcfgkey = "atcoderExtension";
-        this.configfile = `${process.env.USERPROFILE}\\.${this.appid}.json`;
+        if (process.env.WINDIR) {
+            this.statefile = path.normalize(`${process.env.USERPROFILE}/.${this.appid}.json`);
+            this.tmppath = path.normalize(`${process.env.TEMP}/${this.appid}`);
+        } else {
+            this.statefile = path.normalize(`${process.env.HOME}/.${this.appid}.json`);
+            this.tmppath = path.normalize(`/tmp/${this.appid}/${process.env.USER}`);
+        }
+
+        // make tmppath
+        if (!fs.existsSync(this.tmppath)) {
+            fs.mkdirSync(this.tmppath, { recursive: true });
+        }
 
         // coders and langs
         this.xsites = [atcoder, yukicoder];
-        this.xextensions = [cpp, python, java, cc, javascript, typescript];
-
-        // sites and extensions
-        this.sites = this.xsites.map(val => val.site);
-        this.extensions = this.xextensions.map(val => val.extension);
+        this.xextensions = [cpp, python, java, cc, javascript, typescript, user1];
 
         // init context
         this.channel = vscode.window.createOutputChannel(this.appname);
         this.channel.show(true);
         this.channel.appendLine(`[${this.timestamp()}] ${this.appname}`);
 
-        // load config
-        this.loadConfig();
+        // load state
+        this.loadState();
     }
 
     public async initPropAsync(withtask: boolean) {
         // init prop
-        this.tasktmplfile = `${this.vscodeextensionpath}\\template\\template${this.extension}`;
-        this.usertasktmplfile = `${this.projectpath}\\template\\template${this.extension}`;
-        this.taskpath = `${this.projectpath}\\src\\${this.site}\\${this.contest}`;
-        this.taskfile = `${this.projectpath}\\src\\${this.site}\\${this.contest}\\${this.task}${this.extension}`;
-        this.taskbuildpath = `${process.env.TEMP}\\${this.appid}\\build\\${this.site}`;
-        this.taskbuildfile = `${this.taskbuildpath}\\${this.task}.js`;
-        this.testpath = `${this.projectpath}\\src\\${this.site}\\${this.contest}`;
-        this.testfile = `${this.projectpath}\\src\\${this.site}\\${this.contest}\\${this.task}.txt`;
-        this.tmppath = `${process.env.TEMP}\\${this.appid}`;
-        this.tmpexecfile = `${process.env.TEMP}\\${this.appid}\\${this.task}${process.env.WINDIR ? ".exe" : ".out"}`;
-        this.tmpinfile = `${process.env.TEMP}\\${this.appid}\\test_in.txt`;
-        this.tmpoutfile = `${process.env.TEMP}\\${this.appid}\\test_out.txt`;
-        this.tmperrfile = `${process.env.TEMP}\\${this.appid}\\test_err.txt`;
-        this.packagejsonfile = `${this.projectpath}\\package.json`;
-        this.packagelockjsonfile = `${this.projectpath}\\package-lock.json`;
+        this.tasktmplfile = path.normalize(`${this.vscodeextensionpath}/template/template${this.extension}`);
+        this.usertasktmplfile = path.normalize(`${this.projectpath}/template/template${this.extension}`);
+        this.taskpath = path.normalize(`${this.projectpath}/src/${this.site}/${this.contest}`);
+        this.taskfile = path.normalize(`${this.taskpath}/${this.task}${this.extension}`);
+        this.testfile = path.normalize(`${this.taskpath}/${this.task}.txt`);
+        this.execfile = path.normalize(`${this.taskpath}/${this.task}${process.env.WINDIR ? ".exe" : ".out"}`);
+        this.tmpstdinfile = path.normalize(`${this.tmppath}/test_stdin.txt`);
+        this.tmpstdoutfile = path.normalize(`${this.tmppath}/test_stdout.txt`);
+        this.tmpstderrfile = path.normalize(`${this.tmppath}/test_stderr.txt`);
         this.separator = "\r\n--------\r\n";
         this.proxy = "";
         this.timeout = 5000;
@@ -122,8 +120,8 @@ class AcTsExtension {
             this.xextension.checkLang();
         }
 
-        // save config
-        this.saveConfig();
+        // save state
+        this.saveState();
     }
 
     public async loginSiteAsync() {
@@ -173,9 +171,6 @@ class AcTsExtension {
         }
 
         // create testfile
-        if (!fs.existsSync(this.testpath)) {
-            fs.mkdirSync(this.testpath, { recursive: true });
-        }
         if (fs.existsSync(this.testfile)) {
             this.channel.appendLine(`[${this.timestamp()}] testfile: ${this.testfile} exist`);
         } else {
@@ -224,15 +219,9 @@ class AcTsExtension {
             throw `ERROR: missing testfile="${this.testfile}", do init task`;
         }
 
-        // make tmppath
-        this.channel.appendLine(`[${this.timestamp()}] tmppath: ${this.tmppath}`);
-        if (!fs.existsSync(this.tmppath)) {
-            fs.mkdirSync(this.tmppath);
-        }
-
         // delete files in tmppath
         fs.readdirSync(this.tmppath).forEach(filename => {
-            const filepath = `${this.tmppath}\\${filename}`;
+            const filepath = path.normalize(`${this.tmppath}/${filename}`);
             fs.unlinkSync(filepath);
         });
 
@@ -273,7 +262,7 @@ class AcTsExtension {
                 that.channel.appendLine(`[${that.timestamp()}] test-${iosx}:`);
                 that.channel.appendLine(`[${that.timestamp()}] - input ="${io.in}"`);
                 that.channel.appendLine(`[${that.timestamp()}] - output="${io.out}"`);
-                fs.writeFileSync(that.tmpinfile, io.in);
+                fs.writeFileSync(that.tmpstdinfile, io.in);
 
                 // exec command
                 let child = null;
@@ -305,14 +294,14 @@ class AcTsExtension {
                     }
                     // wait output
                     (function waitoutput() {
-                        if (!fs.existsSync(that.tmpoutfile)) {
+                        if (!fs.existsSync(that.tmpstdoutfile)) {
                             setTimeout(waitoutput, 500);
                             return;
                         }
                         // wait command complete
                         (function waitunlock() {
                             try {
-                                fs.unlinkSync(that.tmpinfile);
+                                fs.unlinkSync(that.tmpstdinfile);
                             } catch (ex) {
                                 if (ex instanceof Error) {
                                     if (!ex.message.match(/EBUSY/)) {
@@ -328,11 +317,11 @@ class AcTsExtension {
                                 console.log(vscode.debug.activeDebugSession);
                                 that.channel.show(true);
                                 // read output
-                                const out = fs.readFileSync(that.tmpoutfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
-                                fs.unlinkSync(that.tmpoutfile);
+                                const out = fs.readFileSync(that.tmpstdoutfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
+                                fs.unlinkSync(that.tmpstdoutfile);
                                 // check error
-                                const err = fs.readFileSync(that.tmperrfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
-                                fs.unlinkSync(that.tmperrfile);
+                                const err = fs.readFileSync(that.tmpstderrfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
+                                fs.unlinkSync(that.tmpstderrfile);
                                 that.channel.appendLine(`[${that.timestamp()}] - stdout="${out}"`);
                                 that.channel.appendLine(`[${that.timestamp()}] - stderr=${err}`);
                                 that.channel.appendLine(`[${that.timestamp()}] - exit  =${child?.exitCode}`);
@@ -349,8 +338,8 @@ class AcTsExtension {
                                 if (out === "") {
                                     that.channel.appendLine(`---- CANCELED OR NO OUTPUT ----`);
                                     // delete executable if canceled
-                                    if (fs.existsSync(that.tmpexecfile)) {
-                                        fs.unlinkSync(that.tmpexecfile);
+                                    if (fs.existsSync(that.execfile)) {
+                                        fs.unlinkSync(that.execfile);
                                     }
                                     resolve();
                                     return;
@@ -369,11 +358,6 @@ class AcTsExtension {
                                     setTimeout(runtest, 500);
                                     return;
                                 }
-                                // delete files in tmppath
-                                fs.readdirSync(that.tmppath).forEach(filename => {
-                                    const filepath = `${that.tmppath}\\${filename}`;
-                                    fs.unlinkSync(filepath);
-                                });
                                 // test set done
                                 let msg = `${that.task} OK=${ok}, NG=${ng}`;
                                 if (ng === 0) {
@@ -428,7 +412,7 @@ class AcTsExtension {
         // init command
         await this.initPropAsync(true);
 
-        // Remove Taskfile
+        // remove Taskfile
         if (!fs.existsSync(this.taskfile)) {
             this.channel.appendLine(`[${this.timestamp()}] taskfile: ${this.taskfile} missing`);
         } else {
@@ -463,10 +447,31 @@ class AcTsExtension {
         this.channel.appendLine(`---- SUCCESS: browse ${this.task} ----`);
     }
 
-    // config
-    public loadConfig() {
-        const json = fs.existsSync(this.configfile)
-            ? JSON.parse(fs.readFileSync(this.configfile).toString())
+    public async clearStateAsync() {
+        // delete tmppath
+        if (fs.existsSync(this.tmppath)) {
+            // delete files
+            fs.readdirSync(this.tmppath).forEach(filename => {
+                const filepath = path.normalize(`${this.tmppath}/${filename}`);
+                fs.unlinkSync(filepath);
+            });
+
+            // delete tmppath
+            fs.rmdirSync(this.tmppath);
+        }
+
+        // delete statefile
+        if (fs.existsSync(this.statefile)) {
+            fs.unlinkSync(this.statefile);
+        }
+
+        this.channel.appendLine(`---- SUCCESS: state cleard ----`);
+    }
+
+    // state
+    public loadState() {
+        const json = fs.existsSync(this.statefile)
+            ? JSON.parse(fs.readFileSync(this.statefile).toString())
             : {
                   site: "",
                   contest: "",
@@ -479,9 +484,9 @@ class AcTsExtension {
         this.task = json.task || "";
         this.extension = json.extension;
         this.language = json.language;
-        this.xsites.forEach(val => val.loadConfig(json));
+        this.xsites.forEach(val => val.loadState(json));
     }
-    public saveConfig() {
+    public saveState() {
         const json = {
             site: this.site,
             contest: this.contest,
@@ -489,16 +494,21 @@ class AcTsExtension {
             extension: this.extension,
             language: this.language,
         };
-        this.xsites.forEach(val => val.saveConfig(json));
-        fs.writeFileSync(this.configfile, JSON.stringify(json));
+        this.xsites.forEach(val => val.saveState(json));
+        fs.writeFileSync(this.statefile, JSON.stringify(json));
     }
 
     // expand command
     public expandString(str: string): string {
         return str
             .replace(/\$taskfile/g, this.taskfile)
-            .replace(/\$execfile/g, this.tmpexecfile)
-            .replace(/\$tmppath/g, this.tmppath);
+            .replace(/\$execfile/g, this.execfile)
+            .replace(/\$tmppath/g, this.tmppath)
+            .replace(/\$taskpath/g, this.taskpath)
+            .replace(/\$site/g, this.site)
+            .replace(/\$contest/g, this.contest)
+            .replace(/\$task/g, this.task)
+            .replace(/\$extension/g, this.extension);
     }
 
     // message

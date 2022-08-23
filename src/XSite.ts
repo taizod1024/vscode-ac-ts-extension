@@ -3,6 +3,7 @@ import { XLanguage } from "./XLanguage";
 export interface XSite {
     // prop
     site: string;
+    siteurl: string;
     contestregexp: RegExp;
     contestmessage: string;
     taskregexp: RegExp;
@@ -21,6 +22,6 @@ export interface XSite {
     submitTaskAsync(): void;
     browseTask(): void;
     getLanguageId(): any;
-    loadConfig(json: any): void;
-    saveConfig(json: any): void;
+    loadState(json: any): void;
+    saveState(json: any): void;
 }

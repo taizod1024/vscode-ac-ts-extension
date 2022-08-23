@@ -2,7 +2,7 @@
   "version": "0.0.84",
   "name": "ac-ts-extension",
   "displayName": "AtCoder Extension",
-  "description": "atcoder/yukicoder vscode extension for python/typescript/javascript",
+  "description": "atcoder/yukicoder vscode extension for c/cpp/java/python/javascript/typescript",
   "engines": {
     "vscode": "^1.60.0"
   },
@@ -19,6 +19,7 @@
   ],
   "publisher": "taizod1024",
   "main": "./build/main.js",
+  "browser": "./build/main.js",
   "activationEvents": [
     "onCommand:ac-ts-extension.loginSite",
     "onCommand:ac-ts-extension.initTask",
@@ -27,7 +28,8 @@
     "onCommand:ac-ts-extension.debugTask",
     "onCommand:ac-ts-extension.submitTask",
     "onCommand:ac-ts-extension.removeTask",
-    "onCommand:ac-ts-extension.browseTask"
+    "onCommand:ac-ts-extension.browseTask",
+    "onCommand:ac-ts-extension.clearState"
   ],
   "contributes": {
     "commands": [
@@ -53,7 +55,7 @@
       },
       {
         "command": "ac-ts-extension.submitTask",
-        "title": "AtCoder Extension: Submit Task"
+        "title": "AtCoder Extension: Submit Task..."
       },
       {
         "command": "ac-ts-extension.removeTask",
@@ -62,70 +64,155 @@
       {
         "command": "ac-ts-extension.browseTask",
         "title": "AtCoder Extension: Browse Task"
+      },
+      {
+        "command": "ac-ts-extension.clearState",
+        "title": "AtCoder Extension: Clear State..."
       }
     ],
-    "configuration": {
-      "title": "AtCoder Extension",
-      "properties": {
-        "atcoderExtension.cChecker": {
-          "type": "string",
-          "description": "command line checker for C, you can use $taskfile, $execfile, $tmppath.",
-          "default": "gcc --version"
-        },
-        "atcoderExtension.cCompiler": {
-          "type": "string",
-          "description": "command line compiler for C, you can use $taskfile, $execfile, $tmppath.",
-          "default": "gcc $taskfile -o $execfile -lm"
-        },
-        "atcoderExtension.cExecutor": {
-          "type": "string",
-          "description": "command line executor for C, you can use $taskfile, $execfile, $tmppath.",
-          "default": "$execfile"
-        },
-        "atcoderExtension.c++Checker": {
-          "type": "string",
-          "description": "command line checker for C++, you can use $taskfile, $execfile, $tmppath.",
-          "default": "g++ --version"
-        },
-        "atcoderExtension.c++Compiler": {
-          "type": "string",
-          "description": "command line compiler for C++, you can use $taskfile, $execfile, $tmppath.",
-          "default": "g++ $taskfile -o $execfile"
-        },
-        "atcoderExtension.c++Executor": {
-          "type": "string",
-          "description": "command line executor for C++, you can use $taskfile, $execfile, $tmppath.",
-          "default": "$execfile"
-        },
-        "atcoderExtension.javaChecker": {
-          "type": "string",
-          "description": "command line checker for Java, you can use $taskfile, $execfile, $tmppath.",
-          "default": "javac --version"
-        },
-        "atcoderExtension.javaCompiler": {
-          "type": "string",
-          "description": "command line compiler for Java, you can use $taskfile, $execfile, $tmppath.",
-          "default": "javac -J-Duser.language=en $taskfile"
-        },
-        "atcoderExtension.javaExecutor": {
-          "type": "string",
-          "description": "command line executor for Java, you can use $taskfile, $execfile, $tmppath.",
-          "default": "cd $tmppath && java Main"
+    "configuration": [
+      {
+        "title": "C",
+        "properties": {
+          "atcoderExtension.c.checker": {
+            "type": "string",
+            "markdownDescription": "command line checker for C, you can use $taskfile, $execfile, $tmppath, $taskpath, $site, $contest, $task, $extension.",
+            "default": "gcc --version"
+          },
+          "atcoderExtension.c.compiler": {
+            "type": "string",
+            "markdownDescription": "command line compiler for C, see `#atcoderExtension.c.checker#`",
+            "default": "gcc $taskfile -o $execfile -lm"
+          },
+          "atcoderExtension.c.executor": {
+            "type": "string",
+            "markdownDescription": "command line executor for C, see `#atcoderExtension.c.checker#`",
+            "default": "$execfile"
+          }
+        }
+      },
+      {
+        "title": "C++",
+        "properties": {
+          "atcoderExtension.c++.checker": {
+            "type": "string",
+            "markdownDescription": "command line checker for C++, see `#atcoderExtension.c.checker#`",
+            "default": "g++ --version"
+          },
+          "atcoderExtension.c++.compiler": {
+            "type": "string",
+            "markdownDescription": "command line compiler for C++, see `#atcoderExtension.c.checker#`",
+            "default": "g++ $taskfile -o $execfile"
+          },
+          "atcoderExtension.c++.executor": {
+            "type": "string",
+            "markdownDescription": "command line executor for C++, see `#atcoderExtension.c.checker#`",
+            "default": "$execfile"
+          }
+        }
+      },
+      {
+        "title": "Java",
+        "properties": {
+          "atcoderExtension.java.checker": {
+            "type": "string",
+            "markdownDescription": "command line checker for Java, see `#atcoderExtension.c.checker#`",
+            "default": "javac -version"
+          },
+          "atcoderExtension.java.compiler": {
+            "type": "string",
+            "markdownDescription": "command line compiler for Java, see `#atcoderExtension.c.checker#`",
+            "default": "javac -J-Duser.language=en $taskfile"
+          },
+          "atcoderExtension.java.executor": {
+            "type": "string",
+            "markdownDescription": "command line executor for Java, see `#atcoderExtension.c.checker#`",
+            "default": "cd $taskpath && java $task"
+          }
+        }
+      },
+      {
+        "title": "Python",
+        "properties": {
+          "atcoderExtension.python.checker": {
+            "type": "string",
+            "markdownDescription": "command line checker for Python, see `#atcoderExtension.c.checker#`",
+            "default": "python3 --version"
+          },
+          "atcoderExtension.python.executor": {
+            "type": "string",
+            "markdownDescription": "command line executor for Python, see `#atcoderExtension.c.checker#`",
+            "default": "python3 -u $taskfile"
+          }
+        }
+      },
+      {
+        "title": "JavaScript",
+        "properties": {
+          "atcoderExtension.javascript.checker": {
+            "type": "string",
+            "markdownDescription": "command line checker for JavaScript, see `#atcoderExtension.c.checker#`",
+            "default": "node --version"
+          },
+          "atcoderExtension.javascript.executor": {
+            "type": "string",
+            "markdownDescription": "command line executor for JavaScript, see `#atcoderExtension.c.checker#`",
+            "default": "node $taskfile"
+          }
+        }
+      },
+      {
+        "title": "TypeScript",
+        "properties": {
+          "atcoderExtension.typescript.checker": {
+            "type": "string",
+            "markdownDescription": "command line checker for TypeScript, see `#atcoderExtension.c.checker#`",
+            "default": "node --version"
+          },
+          "atcoderExtension.typescript.executor": {
+            "type": "string",
+            "markdownDescription": "command line executor for TypeScript, see `#atcoderExtension.c.checker#`",
+            "default": "node --require ts-node/register $taskfile"
+          }
+        }
+      },
+      {
+        "title": "User1",
+        "properties": {
+          "atcoderExtension.user1.extension": {
+            "type": "string",
+            "markdownDescription": "extension for user1, create a template file with this extension in the template folder.",
+            "default": ".bat"
+          },
+          "atcoderExtension.user1.checker": {
+            "type": "string",
+            "markdownDescription": "command line checker for user1, see `#atcoderExtension.c.checker#`",
+            "default": "cmd /c"
+          },
+          "atcoderExtension.user1.compiler": {
+            "type": "string",
+            "markdownDescription": "command line compiler for user1, see `#atcoderExtension.c.checker#`",
+            "default": ""
+          },
+          "atcoderExtension.user1.executor": {
+            "type": "string",
+            "markdownDescription": "command line executor for user1, see `#atcoderExtension.c.checker#`",
+            "default": "$taskfile"
+          }
         }
       }
-    }
+    ]
   },
   "scripts": {
-    "nodecheck": "node --version | findstr \"v16.13.0\"",
     "vscode:prepublish": "npm run esbuild-base -- --minify",
     "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=build/main.js --format=cjs --platform=node --external:vscode --external:vm2",
     "esbuild": "npm run esbuild-base -- --sourcemap",
     "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
     "test": "node ./build/test/runTest.js",
     "release": "npm run release-premerge && npx standard-version && vsce publish && npm run release-postmerge",
-    "release-premerge": "npm run nodecheck && git switch main && git merge --no-ff develop",
+    "release-premerge": "git switch main && git merge --no-ff develop",
     "release-postmerge": "git push --follow-tags origin main && git push origin develop && git switch develop",
-    "package": "npm run nodecheck && vsce package",
+    "package": "vsce package",
     "clean": "rmdir /q /s .\\build || exit /b 0"
   },
   "author": "yamamoto.taizo <taizod1024@gmail.com>",

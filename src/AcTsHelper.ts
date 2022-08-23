@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+const path = require("path");
 import { acts } from "./AcTsExtension";
 
 // extension helper
@@ -15,11 +16,12 @@ class AcTsHelper {
 
     public checkActiveFile(): boolean {
         if (acts.projectpath) {
-            const filenames = vscode.window.activeTextEditor?.document?.fileName?.split("\\");
+            const filenames = vscode.window.activeTextEditor?.document?.fileName?.split(path.sep);
             if (filenames) {
                 // disassemble
+                // TODO pathの使用
                 let filename = filenames.pop();
-                let basename = filenames.join("\\");
+                let basename = filenames.join(path.sep);
                 let basenames = filename.split(".");
                 let filenamewithoutextension = basenames[0];
                 let task = filenamewithoutextension;
@@ -27,7 +29,7 @@ class AcTsHelper {
                 let contest = filenames.pop();
                 let site = filenames.pop();
                 // check path
-                if (`${acts.projectpath}\\src\\${site}\\${contest}` === basename) {
+                if (path.normalize(`${acts.projectpath}/src/${site}/${contest}`) === basename) {
                     // check valid extension
                     if (acts.extensions.includes(extension)) {
                         vscode.window.activeTextEditor.document.save();

@@ -1,10 +1,12 @@
-# TODO edit this code
+# TODO edit this code, this code is for https://atcoder.jp/contests/practice/tasks/practice_1
 
 # param
-n = int(input())
+a = int(input())
+b, c = map(int, input().split())
+s = input()
 
 # solve
-ans = n
+ans = a + b + c
 
 # answer
-print(ans)
+print("{} {}".format(ans, s))

@@ -1,13 +1,21 @@
+import * as vscode from "vscode";
 import { acts } from "../AcTsExtension";
 import { XExtension } from "../XExtension";
 import { xexthelper } from "../XExtensionHelper";
 
-class Cpp implements XExtension {
+class User1 implements XExtension {
     // implements
 
     // prop
-    extension = ".cpp";
-    language = "c++";
+    get extension() {
+        if (!acts) {
+            return ".user1";
+        }
+        const config = vscode.workspace.getConfiguration(`${acts.appcfgkey}.${this.language}`);
+        const extension = config.extension;
+        return extension;
+    }
+    language = "user1";
 
     // method
     checkLang(): void {
@@ -30,4 +38,4 @@ class Cpp implements XExtension {
 
     submitTask(): void {}
 }
-export const cpp = new Cpp();
+export const user1 = new User1();

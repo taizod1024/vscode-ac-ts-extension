@@ -3,22 +3,25 @@ import * as fs from "fs";
 import child_process, { ExecFileSyncOptions } from "child_process";
 import { acts } from "../AcTsExtension";
 import { XExtension } from "../XExtension";
+import { xexthelper } from "../XExtensionHelper";
 
 class JavaScript implements XExtension {
     // implemente
 
     // prop
     extension = ".js";
+    language = "javascript";
 
     // method
     checkLang(): void {
-        if (!fs.existsSync(acts.packagejsonfile) || !fs.existsSync(acts.packagelockjsonfile)) {
-            throw `ERROR: missing package.json or package-lock.json, install node.js, run "npm init"`;
-        }
+        xexthelper.checkLang(this.language);
     }
 
     initTask(): void {}
-    compileTask(): void {}
+
+    compileTask(): void {
+        xexthelper.compileTask(this.language);
+    }
 
     debugTask(): any {
         const debugconfig = {
@@ -26,7 +29,7 @@ class JavaScript implements XExtension {
             type: "pwa-node",
             request: "launch",
             program: acts.taskfile,
-            args: ["<", acts.tmpinfile, "1>", acts.tmpoutfile, "2>", acts.tmperrfile],
+            args: ["<", acts.tmpstdinfile, "1>", acts.tmpstdoutfile, "2>", acts.tmpstderrfile],
             console: "integratedTerminal",
             skipFiles: ["node_modules/**"],
         };
@@ -34,10 +37,7 @@ class JavaScript implements XExtension {
     }
 
     testTask(): any {
-        const command = `node ${acts.taskfile} < ${acts.tmpinfile} 1> ${acts.tmpoutfile} 2> ${acts.tmperrfile}`;
-        const options = { cwd: acts.projectpath };
-        const child = child_process.exec(command, options);
-        return child;
+        return xexthelper.testTask(this.language);
     }
 
     submitTask(): void {}

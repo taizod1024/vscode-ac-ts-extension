@@ -3,18 +3,20 @@
 
 int main()
 {
-  /* TODO edit this code */
+    // TODO edit this code, this code is for https://atcoder.jp/contests/practice/tasks/practice_1
 
-  /* param */
-  int n;
-  std::cin >> n;
+    // param
+    int a;
+    int b;
+    int c;
+    char s[101];
+    std::cin >> a >> b >> c >> s;
 
-  /* solve */
-  int ans;
-  ans = n;
+    // solve
+    int ans = a + b + c;
 
-  /* answer */
-  std::cout << ans;
+    // answer
+    std::cout << ans << " " << s;
 
-  return 0;
-}
+    return 0;
+  }

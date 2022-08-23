@@ -10,16 +10,16 @@ const read = () => String((wordit.next()).value);
 
 // main
 const main = function () {
-    // TODO edit this code
+    // TODO edit this code, this code is for https://atcoder.jp/contests/practice/tasks/practice_1
 
     // param
-    let n: number;
-
-    // init
-    n = Number(read());
+    let a: number = Number(read());
+    let b: number = Number(read());
+    let c: number = Number(read());
+    let s: string = read();
 
     // solve
-    let ans;
+    let ans = `${a + b + c} ${s}`;
 
     // answer
     console.log(ans);

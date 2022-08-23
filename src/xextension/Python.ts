@@ -3,27 +3,25 @@ import * as fs from "fs";
 import child_process, { ExecFileSyncOptions } from "child_process";
 import { acts } from "../AcTsExtension";
 import { XExtension } from "../XExtension";
+import { xexthelper } from "../XExtensionHelper";
 
 class Python implements XExtension {
     // implements
 
     // prop
     extension = ".py";
+    language = "python";
 
     // method
     checkLang(): void {
-        const command = `python --version`;
-        const options = { cwd: acts.projectpath };
-        try {
-            child_process.execSync(command, options);
-        } catch (ex) {
-            throw `ERROR: check failed, command="${command}"`;
-        }
+        xexthelper.checkLang(this.language);
     }
 
     initTask(): void {}
 
-    compileTask(): void {}
+    compileTask(): void {
+        xexthelper.compileTask(this.language);
+    }
 
     debugTask(): any {
         const debugconfig = {
@@ -31,17 +29,14 @@ class Python implements XExtension {
             type: "python",
             request: "launch",
             program: acts.taskfile,
-            args: ["<", acts.tmpinfile, "1>", acts.tmpoutfile, "2>", acts.tmperrfile],
+            args: ["<", acts.tmpstdinfile, "1>", acts.tmpstdoutfile, "2>", acts.tmpstderrfile],
             console: "integratedTerminal",
         };
         vscode.debug.startDebugging(acts.projectfolder, debugconfig);
     }
 
     testTask(): any {
-        const command = `python -u ${acts.taskfile} < ${acts.tmpinfile} 1> ${acts.tmpoutfile} 2> ${acts.tmperrfile}`;
-        const options = { cwd: acts.projectpath };
-        const child = child_process.exec(command, options);
-        return child;
+        return xexthelper.testTask(this.language);
     }
 
     submitTask(): void {}
