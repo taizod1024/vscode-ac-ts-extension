@@ -37,8 +37,12 @@ class AcTsExtension {
     public language: string;
 
     // prop
-    public xsite: XSite;
-    public xextension: XExtension;
+    public get xsite() {
+        return this.xsites.find(val => val.site === this.site);
+    }
+    public get xextension() {
+        return this.xextensions.find(val => val.extension === this.extension);
+    }
     public tasktmplfile: string;
     public usertasktmplfile: string;
     public taskpath: string;
@@ -105,10 +109,6 @@ class AcTsExtension {
         this.separator = "\r\n--------\r\n";
         this.proxy = "";
         this.timeout = 5000;
-
-        // site specific
-        this.xsite = this.xsites.find(val => val.site === this.site);
-        this.xextension = this.xextensions.find(val => val.extension === this.extension);
 
         // create taskpath
         if (!fs.existsSync(this.taskpath)) {

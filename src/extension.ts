@@ -21,13 +21,14 @@ export function activate(context: vscode.ExtensionContext) {
                     return;
                 }
                 // select site
-                let idx = acts.sites.indexOf(acts.site);
+                const sites = Array.from(acts.sites);
+                const idx = sites.indexOf(acts.site);
                 if (1 <= idx) {
-                    acts.sites.splice(idx, 1);
-                    acts.sites.unshift(acts.site);
+                    sites.splice(idx, 1);
+                    sites.unshift(acts.site);
                 }
                 vscode.window
-                    .showQuickPick(acts.sites, {
+                    .showQuickPick(sites, {
                         placeHolder: "SELECT SITE",
                     })
                     .then(site => {
@@ -112,13 +113,14 @@ export function activate(context: vscode.ExtensionContext) {
                     return;
                 }
                 // select site
-                let idx = acts.sites.indexOf(acts.site);
+                let sites = Array.from(acts.sites);
+                let idx = sites.indexOf(acts.site);
                 if (1 <= idx) {
-                    acts.sites.splice(idx, 1);
-                    acts.sites.unshift(acts.site);
+                    sites.splice(idx, 1);
+                    sites.unshift(acts.site);
                 }
                 vscode.window
-                    .showQuickPick(acts.sites, {
+                    .showQuickPick(sites, {
                         placeHolder: "SELECT SITE",
                     })
                     .then(site => {
@@ -192,13 +194,14 @@ export function activate(context: vscode.ExtensionContext) {
                                             return;
                                         }
                                         // select extension
-                                        let idx = acts.extensions.indexOf(extension);
+                                        const extensions = Array.from(acts.extensions);
+                                        const idx = extensions.indexOf(extension);
                                         if (1 <= idx) {
-                                            acts.extensions.splice(idx, 1);
-                                            acts.extensions.unshift(extension);
+                                            extensions.splice(idx, 1);
+                                            extensions.unshift(extension);
                                         }
                                         vscode.window
-                                            .showQuickPick(acts.extensions, {
+                                            .showQuickPick(extensions, {
                                                 placeHolder: "SELECT EXTENSION",
                                             })
                                             .then(extension => {
@@ -249,14 +252,15 @@ export function activate(context: vscode.ExtensionContext) {
                 if (!actshelper.checkActiveFile()) {
                     return;
                 }
-                // input select extension
-                let idx = acts.extensions.indexOf(acts.extension);
+                // select extension
+                const extensions = Array.from(acts.extensions);
+                const idx = extensions.indexOf(acts.extension);
                 if (1 <= idx) {
-                    acts.extensions.splice(idx, 1);
-                    acts.extensions.unshift(acts.extension);
+                    extensions.splice(idx, 1);
+                    extensions.unshift(acts.extension);
                 }
                 vscode.window
-                    .showQuickPick(acts.extensions, {
+                    .showQuickPick(extensions, {
                         placeHolder: "SELECT EXTENSION",
                     })
                     .then(extension => {
@@ -355,7 +359,7 @@ export function activate(context: vscode.ExtensionContext) {
                 if (acts.site === "yukicoder") {
                     languages = yukicoder.xlanguages.filter(val => val.xextension.extension === acts.extension).map(val => val.language);
                 }
-                let idx = acts.extensions.indexOf(acts.language);
+                const idx = languages.indexOf(acts.language);
                 if (1 <= idx) {
                     languages.splice(idx, 1);
                     languages.unshift(acts.language);
@@ -375,8 +379,7 @@ export function activate(context: vscode.ExtensionContext) {
                             atcoder.task = acts.task;
                             atcoder.extension = acts.extension;
                             atcoder.language = acts.language;
-                        }
-                        if (acts.site === "yukicoder") {
+                        } else {
                             yukicoder.contest = acts.contest;
                             yukicoder.task = acts.task;
                             yukicoder.extension = acts.extension;
