@@ -10,6 +10,7 @@ import { java } from "../xextension/Java";
 import { javascript } from "../xextension/JavaScript";
 import { python } from "../xextension/Python";
 import { typescript } from "../xextension/TypeScript";
+import { user1 } from "../xextension/User1";
 
 class Yukicoder implements XSite {
     // param
@@ -51,61 +52,108 @@ class Yukicoder implements XSite {
         this.extension = "";
         this.language = "";
         this.xlanguages = [
-            {
-                language: "C++14 (gcc 11.2.0 + boost 1.78.0)",
-                xextension: cpp,
-                id: "cpp14",
-            },
-            {
-                language: "C++17 (gcc 11.2.0 + boost 1.78.0",
-                xextension: cpp,
-                id: "cpp17",
-            },
-            {
-                language: "C++17(clang  Beta) (gcc 10.0.0 + boost 1.78.0)",
-                xextension: cpp,
-                id: "cpp-clang",
-            },
-            {
-                language: "C++23(draft) (gcc 11.2.0 + boost 1.78.0)",
-                xextension: cpp,
-                id: "cpp23",
-            },
-            {
-                language: "C++11 (gcc 8.5.0)",
-                xextension: cpp,
-                id: "cpp",
-            },
-            {
-                language: "C (gcc 11.2.0)",
-                xextension: cc,
-                id: "c11",
-            },
-            {
-                language: "C90 (gcc 8.5.0)",
-                xextension: cc,
-                id: "c",
-            },
-            {
-                language: "Java17 (openjdk 17.0.1)",
-                xextension: java,
-                id: "java8",
-            },
-            {
-                language: "Python3 (3.10.1 + numpy 1.22.3 + scipy 1.8.0)",
-                xextension: python,
-                id: "python3",
-            },
-            {
-                language: "JavaScript (node v17.7.1)",
-                xextension: javascript,
-                id: "node",
-            },
-            {
-                language: "TypeScript (4.6.2)",
-                xextension: typescript,
-                id: "typescript",
-            },
+            // {
+            //     language: "C++14 (gcc 11.2.0 + boost 1.78.0)",
+            //     xextension: cpp,
+            //     id: "cpp14",
+            // },
+            // {
+            //     language: "C++17 (gcc 11.2.0 + boost 1.78.0",
+            //     xextension: cpp,
+            //     id: "cpp17",
+            // },
+            // {
+            //     language: "C++17(clang  Beta) (gcc 10.0.0 + boost 1.78.0)",
+            //     xextension: cpp,
+            //     id: "cpp-clang",
+            // },
+            // {
+            //     language: "C++23(draft) (gcc 11.2.0 + boost 1.78.0)",
+            //     xextension: cpp,
+            //     id: "cpp23",
+            // },
+            // {
+            //     language: "C++11 (gcc 8.5.0)",
+            //     xextension: cpp,
+            //     id: "cpp",
+            // },
+            // {
+            //     language: "C (gcc 11.2.0)",
+            //     xextension: cc,
+            //     id: "c11",
+            // },
+            // {
+            //     language: "C90 (gcc 8.5.0)",
+            //     xextension: cc,
+            //     id: "c",
+            // },
+            // {
+            //     language: "Java17 (openjdk 17.0.1)",
+            //     xextension: java,
+            //     id: "java8",
+            // },
+            // {
+            //     language: "Python3 (3.10.1 + numpy 1.22.3 + scipy 1.8.0)",
+            //     xextension: python,
+            //     id: "python3",
+            // },
+            // {
+            //     language: "JavaScript (node v17.7.1)",
+            //     xextension: javascript,
+            //     id: "node",
+            // },
+            // {
+            //     language: "TypeScript (4.6.2)",
+            //     xextension: typescript,
+            //     id: "typescript",
+            // },
+            { id: "cpp14", language: "C++14 (gcc 11.2.0 + boost 1.78.0)", xextension: cpp },
+            { id: "cpp17", language: "C++17 (gcc 11.2.0 + boost 1.78.0)", xextension: cpp },
+            { id: "cpp-clang", language: "C++17(clang Beta) (clang 10.0.0 + boost 1.78.0)", xextension: cpp },
+            { id: "cpp23", language: "C++23(draft) (gcc 11.2.0 + boost 1.78.0)", xextension: cpp },
+            { id: "cpp", language: "C++11 (gcc 8.5.0)", xextension: cpp },
+            { id: "c11", language: "C (gcc 11.2.0)", xextension: cc },
+            { id: "c", language: "C90 (gcc 8.5.0)", xextension: cc },
+            { id: "java8", language: "Java17 (openjdk 17.0.1)", xextension: java },
+            { id: "csharp", language: "C# (csc 3.9.0)", xextension: user1 },
+            { id: "csharp_mono", language: "C#(mono) (mono 6.12.0.158)", xextension: user1 },
+            { id: "csharp_dotnet", language: "C#(.NET 6 Beta) (.NET 6.12.0)", xextension: user1 },
+            { id: "perl", language: "Perl (5.26.3)", xextension: user1 },
+            { id: "raku", language: "Raku (rakudo v2021.12-89-g196969167)", xextension: user1 },
+            { id: "php", language: "PHP (7.2.24)", xextension: user1 },
+            { id: "php7", language: "PHP8 (8.1.3)", xextension: user1 },
+            { id: "python3", language: "Python3 (3.10.1 + numpy 1.22.3 + scipy 1.8.0)", xextension: python },
+            { id: "pypy2", language: "PyPy2 (7.3.8)", xextension: python },
+            { id: "pypy3", language: "PyPy3 (7.3.8)", xextension: python },
+            { id: "ruby", language: "Ruby (3.1.1p18 )", xextension: user1 },
+            { id: "d", language: "D (dmd 2.099.1)", xextension: user1 },
+            { id: "go", language: "Go (1.18)", xextension: user1 },
+            { id: "haskell", language: "Haskell (9.2.2)", xextension: user1 },
+            { id: "scala", language: "Scala(Beta) (3.1.1)", xextension: user1 },
+            { id: "nim", language: "Nim (1.6.4)", xextension: user1 },
+            { id: "rust", language: "Rust (1.59.0)", xextension: user1 },
+            { id: "kotlin", language: "Kotlin (1.6.10)", xextension: user1 },
+            { id: "scheme", language: "Scheme (Gauche-0.9.11-p1)", xextension: user1 },
+            { id: "crystal", language: "Crystal (1.3.2)", xextension: user1 },
+            { id: "swift", language: "Swift (5.4.2)", xextension: user1 },
+            { id: "ocaml", language: "OCaml (4.13.1)", xextension: user1 },
+            { id: "clojure", language: "Clojure(Beta) (1.10.2.790)", xextension: user1 },
+            { id: "fsharp", language: "F# (5.0)", xextension: user1 },
+            { id: "elixir", language: "Elixir (1.7.4)", xextension: user1 },
+            { id: "lua", language: "Lua (LuaJit 2.0.5)", xextension: user1 },
+            { id: "fortran", language: "Fortran (gFortran 8.4.1)", xextension: user1 },
+            { id: "node", language: "JavaScript (node v17.7.1)", xextension: javascript },
+            { id: "typescript", language: "TypeScript (4.6.2)", xextension: typescript },
+            { id: "lisp", language: "Common Lisp (sbcl 2.1.6)", xextension: user1 },
+            { id: "sml", language: "Standard ML (MLton 20180207-6)", xextension: user1 },
+            { id: "kuin", language: "Kuin (KuinC++ v.2021.9.17)", xextension: user1 },
+            { id: "vim", language: "Vim script (v8.2)", xextension: user1 },
+            { id: "sh", language: "Bash (Bash 4.4.19)", xextension: user1 },
+            { id: "nasm", language: "Assembler (nasm 2.15.03)", xextension: user1 },
+            { id: "clay", language: "cLay (20220312-1)", xextension: user1 },
+            { id: "bf", language: "Brainfuck (BFI 1.1)", xextension: user1 },
+            { id: "Whitespace", language: "Whitespace (0.3)", xextension: user1 },
+            { id: "text", language: "Text (cat 8.3)", xextension: user1 },
         ];
     }
 
