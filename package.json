@@ -19,7 +19,6 @@
   ],
   "publisher": "taizod1024",
   "main": "./build/main.js",
-  "browser": "./build/main.js",
   "activationEvents": [
     "onCommand:ac-ts-extension.loginSite",
     "onCommand:ac-ts-extension.initTask",
