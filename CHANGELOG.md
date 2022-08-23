@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.85](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.84...v0.0.85) (2022-08-23)
+
+
+### Features
+
+* linux対応 ([2379c17](https://github.com/taizod1024/ac-ts-extension/commit/2379c1775211372e4a1bfbda5029c5623871a31f))
+* web版対応 ([79284c3](https://github.com/taizod1024/ac-ts-extension/commit/79284c347a08162262e091aefecc2e340fd8eb46))
+* 言語選択対応 ([a42d40c](https://github.com/taizod1024/ac-ts-extension/commit/a42d40c4847182f6a5e7668fb4879a4e69571962))
+* 設定クリア処理 ([4475de7](https://github.com/taizod1024/ac-ts-extension/commit/4475de777765f4f31fabffba8207e022da15ee30))
+* 任意言語対応 ([8aed8b9](https://github.com/taizod1024/ac-ts-extension/commit/8aed8b96372e2b02fcf94b9bd5d930421a9a0d72))
+
+
+### Bug Fixes
+
+* typescriptの実行に失敗するため元に戻す ([d7d5b9b](https://github.com/taizod1024/ac-ts-extension/commit/d7d5b9b7dd3fcde0706f830c6d1f8f377ecd93cd))
+* クラス名誤記 ([bc0c5a2](https://github.com/taizod1024/ac-ts-extension/commit/bc0c5a2963dc10b9f3af13ae77c44ed9495101b2))
+* 一時フォルダ作成タイミング修正 ([d41a38a](https://github.com/taizod1024/ac-ts-extension/commit/d41a38ab8644331fde015629ba51ddb6693ab26d))
+
 ### [0.0.84](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.83...v0.0.84) (2022-08-19)
 
 
