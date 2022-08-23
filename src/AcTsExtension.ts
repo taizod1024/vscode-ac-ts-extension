@@ -110,6 +110,11 @@ class AcTsExtension {
         this.xsite = this.xsites.find(val => val.site === this.site);
         this.xextension = this.xextensions.find(val => val.extension === this.extension);
 
+        // create taskpath
+        if (!fs.existsSync(this.taskpath)) {
+            fs.mkdirSync(this.taskpath, { recursive: true });
+        }
+
         // check and init coder
         this.xsite.checkLogin();
         await this.xsite.initPropAsync(withtask);
@@ -155,9 +160,6 @@ class AcTsExtension {
         }
 
         // create taskfile
-        if (!fs.existsSync(this.taskpath)) {
-            fs.mkdirSync(this.taskpath, { recursive: true });
-        }
         if (fs.existsSync(this.taskfile)) {
             this.channel.appendLine(`[${this.timestamp()}] taskfile: ${this.taskfile} exist`);
         } else {
