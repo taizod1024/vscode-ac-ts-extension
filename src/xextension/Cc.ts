@@ -7,16 +7,17 @@ class Cc implements XExtension {
 
     // prop
     extension = ".c";
+    language = "c";
 
     // method
     checkLang(): void {
-        xexthelper.checkLang("c");
+        xexthelper.checkLang(this.language);
     }
 
     initTask(): void {}
 
     compileTask(): void {
-        xexthelper.compileTask("c");
+        xexthelper.compileTask(this.language);
     }
 
     debugTask(): any {
@@ -24,7 +25,7 @@ class Cc implements XExtension {
     }
 
     testTask(): any {
-        return xexthelper.testTask("c");
+        return xexthelper.testTask(this.language);
     }
 
     submitTask(): void {}

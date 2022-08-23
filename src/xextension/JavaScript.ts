@@ -10,10 +10,11 @@ class JavaScript implements XExtension {
 
     // prop
     extension = ".js";
+    language = "javascript";
 
     // method
     checkLang(): void {
-        xexthelper.checkLang("javascript");
+        xexthelper.checkLang(this.language);
     }
 
     initTask(): void {}
@@ -33,7 +34,7 @@ class JavaScript implements XExtension {
     }
 
     testTask(): any {
-        return xexthelper.testTask("javascript");
+        return xexthelper.testTask(this.language);
     }
 
     submitTask(): void {}

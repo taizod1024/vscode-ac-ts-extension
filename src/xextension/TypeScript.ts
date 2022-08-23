@@ -10,10 +10,11 @@ class TypeScript implements XExtension {
 
     // prop
     extension = ".ts";
+    language = "typescript";
 
     // method
     checkLang(): void {
-        xexthelper.checkLang("typescript");
+        xexthelper.checkLang(this.language);
     }
 
     initTask(): void {}
@@ -35,7 +36,7 @@ class TypeScript implements XExtension {
     }
 
     testTask(): any {
-        return xexthelper.testTask("typescript", { env: { TS_NODE_TRANSPILE_ONLY: "1" } });
+        return xexthelper.testTask(this.language, { env: { TS_NODE_TRANSPILE_ONLY: "1" } });
     }
 
     submitTask(): void {}

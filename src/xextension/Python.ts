@@ -10,13 +10,11 @@ class Python implements XExtension {
 
     // prop
     extension = ".py";
-
-    // TODO helperにコマンド設定を集約
-    // TODO 言語別に設定を分ける
+    language = "python";
 
     // method
     checkLang(): void {
-        xexthelper.checkLang("python");
+        xexthelper.checkLang(this.language);
     }
 
     initTask(): void {}
@@ -36,7 +34,7 @@ class Python implements XExtension {
     }
 
     testTask(): any {
-        return xexthelper.testTask("python");
+        return xexthelper.testTask(this.language);
     }
 
     submitTask(): void {}

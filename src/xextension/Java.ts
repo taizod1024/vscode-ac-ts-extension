@@ -10,10 +10,11 @@ class Java implements XExtension {
 
     // prop
     extension = ".java";
+    language = "java";
 
     // method
     checkLang(): void {
-        xexthelper.checkLang("java");
+        xexthelper.checkLang(this.language);
     }
 
     initTask(): void {
@@ -25,7 +26,7 @@ class Java implements XExtension {
 
     compileTask(): void {
         acts.execfile = acts.taskfile.replace(".java", ".class");
-        xexthelper.compileTask("java");
+        xexthelper.compileTask(this.language);
     }
 
     debugTask(): any {
@@ -33,7 +34,7 @@ class Java implements XExtension {
     }
 
     testTask(): any {
-        return xexthelper.testTask("java");
+        return xexthelper.testTask(this.language);
     }
 
     submitTask(): void {

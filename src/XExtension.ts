@@ -1,6 +1,7 @@
 export interface XExtension {
     // prop
     extension: string;
+    language: string;
 
     // method
     checkLang(): void;

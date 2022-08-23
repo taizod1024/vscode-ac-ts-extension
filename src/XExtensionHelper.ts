@@ -7,9 +7,12 @@ class XExtensionHelper {
     checkLang(lang: string, opt: object = {}): void {
         // check
         const config = vscode.workspace.getConfiguration(acts.appcfgkey + "." + lang);
-        const cmdchk = String(config.get("chcker"));
-        acts.channel.appendLine(`[${acts.timestamp()}] checker: ${cmdchk}`);
-        const cmdexp = acts.expandString(cmdchk);
+        const cmd = config.get<string>("chcker") || "";
+        acts.channel.appendLine(`[${acts.timestamp()}] checker: ${cmd}`);
+        if (!cmd) {
+            throw "ERROR: no checker";
+        }
+        const cmdexp = acts.expandString(cmd);
         const command = `(${cmdexp}) 1> ${acts.tmpstdoutfile} 2> ${acts.tmpstderrfile}`;
         const options = { cwd: acts.projectpath };
         Object.assign(options, opt);
@@ -28,34 +31,39 @@ class XExtensionHelper {
     compileTask(lang: string, opt: object = {}): void {
         // compile
         const config = vscode.workspace.getConfiguration(acts.appcfgkey + "." + lang);
-        const cmdcmp = String(config.get("compiler"));
-        acts.channel.appendLine(`[${acts.timestamp()}] compiler: ${cmdcmp}`);
-        acts.channel.appendLine(`[${acts.timestamp()}] - execfile: ${acts.execfile}`);
-        const cmdexp = acts.expandString(cmdcmp);
-        const command = `(${cmdexp}) 1> ${acts.tmpstdoutfile} 2> ${acts.tmpstderrfile}`;
-        const options = { cwd: acts.projectpath };
-        Object.assign(options, opt);
-        try {
-            child_process.execSync(command, options);
-        } catch (ex) {
+        const cmd = config.get<string>("compiler") || "";
+        acts.channel.appendLine(`[${acts.timestamp()}] compiler: ${cmd}`);
+        if (cmd) {
+            acts.channel.appendLine(`[${acts.timestamp()}] - execfile: ${acts.execfile}`);
+            const cmdexp = acts.expandString(cmd);
+            const command = `(${cmdexp}) 1> ${acts.tmpstdoutfile} 2> ${acts.tmpstderrfile}`;
+            const options = { cwd: acts.projectpath };
+            Object.assign(options, opt);
+            try {
+                child_process.execSync(command, options);
+            } catch (ex) {
+                const err = fs.readFileSync(acts.tmpstderrfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
+                throw `ERROR: compile failed\r\n${err}\r\n`;
+            }
+            const out = fs.readFileSync(acts.tmpstdoutfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
+            acts.channel.appendLine(`[${acts.timestamp()}] - stdout: ${out}`);
             const err = fs.readFileSync(acts.tmpstderrfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
-            throw `ERROR: compile failed\r\n${err}\r\n`;
+            acts.channel.appendLine(`[${acts.timestamp()}] - stderr: ${err}`);
         }
-        const out = fs.readFileSync(acts.tmpstdoutfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
-        acts.channel.appendLine(`[${acts.timestamp()}] - stdout: ${out}`);
-        const err = fs.readFileSync(acts.tmpstderrfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
-        acts.channel.appendLine(`[${acts.timestamp()}] - stderr: ${err}`);
 
         // show executor
-        const cmdexe = String(config.get("executor"));
+        const cmdexe = config.get<string>("executor") || "";
         acts.channel.appendLine(`[${acts.timestamp()}] executor: ${cmdexe}`);
+        if (!cmdexe) {
+            throw "ERROR: no executor";
+        }
     }
 
     testTask(lang: string, opt: object = {}): any {
         // test
         const config = vscode.workspace.getConfiguration(acts.appcfgkey + "." + lang);
-        const cmdexe = String(config.get("executor"));
-        const cmdexp = acts.expandString(cmdexe);
+        const cmd = config.get<string>("executor") || "";
+        const cmdexp = acts.expandString(cmd);
         const command = `(${cmdexp}) < ${acts.tmpstdinfile} 1> ${acts.tmpstdoutfile} 2> ${acts.tmpstderrfile}`;
         const options = { cwd: acts.projectpath };
         Object.assign(options, opt);

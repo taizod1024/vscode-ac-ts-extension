@@ -7,16 +7,17 @@ class Cpp implements XExtension {
 
     // prop
     extension = ".cpp";
+    language = "c++";
 
     // method
     checkLang(): void {
-        xexthelper.checkLang("c++");
+        xexthelper.checkLang(this.language);
     }
 
     initTask(): void {}
 
     compileTask(): void {
-        xexthelper.compileTask("c++");
+        xexthelper.compileTask(this.language);
     }
 
     debugTask(): any {
@@ -24,7 +25,7 @@ class Cpp implements XExtension {
     }
 
     testTask(): any {
-        return xexthelper.testTask("c++");
+        return xexthelper.testTask(this.language);
     }
 
     submitTask(): void {}
