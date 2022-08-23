@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.87](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.86...v0.0.87) (2022-08-23)
+
+
+### Bug Fixes
+
+* 入力内容が次回候補で先頭に表示されないのを修正 ([717c9e9](https://github.com/taizod1024/ac-ts-extension/commit/717c9e99f932ba056c5682e8574f189f3a63d0f1))
+
 ### [0.0.86](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.85...v0.0.86) (2022-08-23)
 
 
