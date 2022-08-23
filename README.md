@@ -4,6 +4,16 @@ C / C++ / Java / Python / JavaScript / TypeScript での [AtCoder](https://atcod
 
 ## 変更
 
+- 2022/08/24
+  - 機能強化
+    - 任意の言語への対応をしました。
+      - 設定の"User1"に対して以下を参考に設定します。
+        - 拡張子、例：`.bat`
+        - チェックコマンド、例：`cmd /c`
+        - コンパイルコマンド、例：空文字列
+        - 実行コマンド、例：`$taskfile`
+      - パラメタを拡張しました。
+        - `$site`, `$contest`, `$task`, `$extension`
 - 2022/08/19
   - 環境対応
     - 入力例のHTMLが変更したことによりテストデータが空になっていたのを修正しました。
@@ -329,11 +339,15 @@ Takahashi
 
 パラメタを使用できます。
 
-| パラメタ名 | 記法 | 内容 |
+| パラメタ名 | 記法 | 展開例 |
 | --- | --- | --- |
-| 一時フォルダ   | `$tmppath` | `C:\Users\...\AppData\Local\Temp\ac-ts-extension` |
-| タスクファイル | `$taskfile` | `C:\Users\...\src\atcoder\practice\practice_1.c` |
-| 実行ファイル   | `$execfile` | `C:\Users\...\AppData\Local\Temp\ac-ts-extension\practice_1.exe` |
+| 一時フォルダ   | `$tmppath`   | `C:\Users\...\AppData\Local\Temp\ac-ts-extension` |
+| タスクファイル | `$taskfile`  | `C:\Users\...\src\atcoder\practice\practice_1.c` |
+| 実行ファイル   | `$execfile`  | `C:\Users\....\src\atcoder\practice\practice_1.exe` |
+| サイト         | `$site`      | `atcoder` |
+| コンテスト     | `$contest`   | `practice` |
+| タスク         | `$task`      | `practice_1` |
+| 拡張子         | `$extension` | `.c` |
 
 ### Python 設定
 
