@@ -66,7 +66,7 @@ export function activate(context: vscode.ExtensionContext) {
                                             atcoder.username = username;
                                             atcoder.password = password;
                                             acts.loginSiteAsync().catch(ex => {
-                                                acts.channel.appendLine("**** " + ex + " ****");
+                                                acts.channel.appendLine(`**** ${ex} ****`);
                                             });
                                         });
                                 });
@@ -90,7 +90,7 @@ export function activate(context: vscode.ExtensionContext) {
                                     acts.site = site;
                                     yukicoder.apikey = apikey;
                                     acts.loginSiteAsync().catch(ex => {
-                                        acts.channel.appendLine("**** " + ex + " ****");
+                                        acts.channel.appendLine(`**** ${ex} ****`);
                                     });
                                 });
                         }
@@ -160,7 +160,7 @@ export function activate(context: vscode.ExtensionContext) {
                                 language = yukicoder.language;
                             }
                         } catch (ex) {
-                            acts.channel.appendLine("**** " + ex + " ****");
+                            acts.channel.appendLine(`**** ${ex} ****`);
                             return;
                         }
                         // input contest
@@ -279,7 +279,7 @@ export function activate(context: vscode.ExtensionContext) {
                         }
                         // exec command
                         acts.initTaskAsync().catch(ex => {
-                            acts.channel.appendLine("**** " + ex + " ****");
+                            acts.channel.appendLine(`**** ${ex} ****`);
                         });
                     });
             })
@@ -303,7 +303,7 @@ export function activate(context: vscode.ExtensionContext) {
                 }
                 // exec command
                 acts.testTaskAsync(false).catch(ex => {
-                    acts.channel.appendLine("**** " + ex + " ****");
+                    acts.channel.appendLine(`**** ${ex} ****`);
                 });
             })
         );
@@ -326,7 +326,7 @@ export function activate(context: vscode.ExtensionContext) {
                 }
                 // exec command
                 acts.testTaskAsync(true).catch(ex => {
-                    acts.channel.appendLine("**** " + ex + " ****");
+                    acts.channel.appendLine(`**** ${ex} ****`);
                 });
             })
         );
@@ -417,7 +417,7 @@ export function activate(context: vscode.ExtensionContext) {
                         }
                         // exec command
                         acts.removeTaskAsync().catch(ex => {
-                            acts.channel.appendLine("**** " + ex + " ****");
+                            acts.channel.appendLine(`**** ${ex} ****`);
                         });
                     });
             })
@@ -441,7 +441,7 @@ export function activate(context: vscode.ExtensionContext) {
                 }
                 // exec command
                 acts.browseTaskAsync().catch(ex => {
-                    acts.channel.appendLine("**** " + ex + " ****");
+                    acts.channel.appendLine(`**** ${ex} ****`);
                 });
             })
         );
@@ -473,7 +473,7 @@ export function activate(context: vscode.ExtensionContext) {
                         }
                         // exec command
                         acts.clearStateAsync().catch(ex => {
-                            acts.channel.appendLine("**** " + ex + " ****");
+                            acts.channel.appendLine(`**** ${ex} ****`);
                         });
                     });
             })

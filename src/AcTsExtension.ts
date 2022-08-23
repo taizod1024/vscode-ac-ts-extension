@@ -12,13 +12,14 @@ import { python } from "./xextension/Python";
 import { cc } from "./xextension/Cc";
 import { cpp } from "./xextension/Cpp";
 import { java } from "./xextension/Java";
+import { user1 } from "./xextension/User1";
 
 // extension core
 class AcTsExtension {
     // constant
-    public appname: string;
-    public appid: string;
-    public appcfgkey: string;
+    public appname = "AtCoder Extension";
+    public appid = "ac-ts-extension";
+    public appcfgkey = "atcoderExtension";
     public statefile: string;
     public tmppath: string;
 
@@ -52,17 +53,18 @@ class AcTsExtension {
     public timeout: number;
 
     // const
-    public sites: string[];
-    public extensions: string[];
+    public get sites() {
+        return this.xsites.map(val => val.site);
+    }
+    public get extensions() {
+        return this.xextensions.map(val => val.extension);
+    }
     public xsites: XSite[];
     public xextensions: XExtension[];
 
     // setup function
     constructor() {
         // init constant
-        this.appname = "AtCoder Extension";
-        this.appid = "ac-ts-extension";
-        this.appcfgkey = "atcoderExtension";
         if (process.env.WINDIR) {
             this.statefile = path.normalize(`${process.env.USERPROFILE}/.${this.appid}.json`);
             this.tmppath = path.normalize(`${process.env.TEMP}/${this.appid}`);
@@ -78,11 +80,7 @@ class AcTsExtension {
 
         // coders and langs
         this.xsites = [atcoder, yukicoder];
-        this.xextensions = [cpp, python, java, cc, javascript, typescript];
-
-        // sites and extensions
-        this.sites = this.xsites.map(val => val.site);
-        this.extensions = this.xextensions.map(val => val.extension);
+        this.xextensions = [cpp, python, java, cc, javascript, typescript, user1];
 
         // init context
         this.channel = vscode.window.createOutputChannel(this.appname);

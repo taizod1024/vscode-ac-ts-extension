@@ -175,6 +175,31 @@
             "default": "node --require ts-node/register $taskfile"
           }
         }
+      },
+      {
+        "title": "User1",
+        "properties": {
+          "atcoderExtension.user1.extension": {
+            "type": "string",
+            "description": "extension for user1",
+            "default": ".py"
+          },
+          "atcoderExtension.user1.checker": {
+            "type": "string",
+            "description": "command line checker for user1",
+            "default": "python3 --version"
+          },
+          "atcoderExtension.user1.compiler": {
+            "type": "string",
+            "description": "command line compiler for user1",
+            "default": ""
+          },
+          "atcoderExtension.user1.executor": {
+            "type": "string",
+            "description": "command line executor for user1",
+            "default": "python3 -u $taskfile"
+          }
+        }
       }
     ]
   },

@@ -7,14 +7,14 @@ class XExtensionHelper {
     checkLang(lang: string, opt: object = {}): void {
         // check
         const config = vscode.workspace.getConfiguration(acts.appcfgkey + "." + lang);
-        const cmd = config.get<string>("chcker") || "";
+        const cmd = config.checker;
         acts.channel.appendLine(`[${acts.timestamp()}] checker: ${cmd}`);
         if (!cmd) {
             throw "ERROR: no checker";
         }
-        const cmdexp = acts.expandString(cmd);
+        const cmdexp = acts.expandString(String(cmd));
         const command = `(${cmdexp}) 1> ${acts.tmpstdoutfile} 2> ${acts.tmpstderrfile}`;
-        const options = { cwd: acts.projectpath };
+        const options = { cwd: acts.taskpath };
         Object.assign(options, opt);
         try {
             child_process.execSync(command, options);
@@ -31,13 +31,13 @@ class XExtensionHelper {
     compileTask(lang: string, opt: object = {}): void {
         // compile
         const config = vscode.workspace.getConfiguration(acts.appcfgkey + "." + lang);
-        const cmd = config.get<string>("compiler") || "";
+        const cmd = config.compiler;
         acts.channel.appendLine(`[${acts.timestamp()}] compiler: ${cmd}`);
         if (cmd) {
             acts.channel.appendLine(`[${acts.timestamp()}] - execfile: ${acts.execfile}`);
             const cmdexp = acts.expandString(cmd);
             const command = `(${cmdexp}) 1> ${acts.tmpstdoutfile} 2> ${acts.tmpstderrfile}`;
-            const options = { cwd: acts.projectpath };
+            const options = { cwd: acts.taskpath };
             Object.assign(options, opt);
             try {
                 child_process.execSync(command, options);
@@ -52,7 +52,7 @@ class XExtensionHelper {
         }
 
         // show executor
-        const cmdexe = config.get<string>("executor") || "";
+        const cmdexe = config.executor;
         acts.channel.appendLine(`[${acts.timestamp()}] executor: ${cmdexe}`);
         if (!cmdexe) {
             throw "ERROR: no executor";
@@ -62,10 +62,10 @@ class XExtensionHelper {
     testTask(lang: string, opt: object = {}): any {
         // test
         const config = vscode.workspace.getConfiguration(acts.appcfgkey + "." + lang);
-        const cmd = config.get<string>("executor") || "";
+        const cmd = config.executor;
         const cmdexp = acts.expandString(cmd);
         const command = `(${cmdexp}) < ${acts.tmpstdinfile} 1> ${acts.tmpstdoutfile} 2> ${acts.tmpstderrfile}`;
-        const options = { cwd: acts.projectpath };
+        const options = { cwd: acts.taskpath };
         Object.assign(options, opt);
         const child = child_process.exec(command, options);
         return child;
