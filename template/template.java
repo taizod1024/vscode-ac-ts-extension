@@ -1,10 +1,11 @@
 import java.util.Scanner;
 
-public class practice_1 {
+public class template {
 
   public static void main(String[] args) {
 
-    // TODO edit this code, this code is for https://atcoder.jp/contests/practice/tasks/practice_1
+    // TODO edit this code, this code is for
+    // https://atcoder.jp/contests/practice/tasks/practice_1
 
     // param
     Scanner sc = new Scanner(System.in);
