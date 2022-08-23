@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import superagent from "superagent";
 require("superagent-proxy")(superagent);
-import { actshelper } from "./AcTsHelper";
+import { extensionhelper } from "./extensionHelper";
 import { acts } from "./AcTsExtension";
 import { atcoder } from "./xsite/AtCoder";
 import { yukicoder } from "./xsite/Yukicoder";
@@ -17,18 +17,12 @@ export function activate(context: vscode.ExtensionContext) {
                 acts.channel.appendLine(`${acts.appid}.${cmdid}:`);
                 acts.vscodeextensionpath = context.extensionPath;
                 // check condition
-                if (!actshelper.checkProjectPath()) {
+                if (!extensionhelper.checkProjectPath()) {
                     return;
                 }
                 // select site
-                const sites = Array.from(acts.sites);
-                const idx = sites.indexOf(acts.site);
-                if (1 <= idx) {
-                    sites.splice(idx, 1);
-                    sites.unshift(acts.site);
-                }
                 vscode.window
-                    .showQuickPick(sites, {
+                    .showQuickPick(extensionhelper.moveToHead(acts.sites, acts.site), {
                         placeHolder: "SELECT SITE",
                     })
                     .then(site => {
@@ -109,18 +103,12 @@ export function activate(context: vscode.ExtensionContext) {
                 acts.channel.appendLine(`${acts.appid}.${cmdid}:`);
                 acts.vscodeextensionpath = context.extensionPath;
                 // check condition
-                if (!actshelper.checkProjectPath()) {
+                if (!extensionhelper.checkProjectPath()) {
                     return;
                 }
                 // select site
-                let sites = Array.from(acts.sites);
-                let idx = sites.indexOf(acts.site);
-                if (1 <= idx) {
-                    sites.splice(idx, 1);
-                    sites.unshift(acts.site);
-                }
                 vscode.window
-                    .showQuickPick(sites, {
+                    .showQuickPick(extensionhelper.moveToHead(acts.sites, acts.site), {
                         placeHolder: "SELECT SITE",
                     })
                     .then(site => {
@@ -194,14 +182,8 @@ export function activate(context: vscode.ExtensionContext) {
                                             return;
                                         }
                                         // select extension
-                                        const extensions = Array.from(acts.extensions);
-                                        const idx = extensions.indexOf(extension);
-                                        if (1 <= idx) {
-                                            extensions.splice(idx, 1);
-                                            extensions.unshift(extension);
-                                        }
                                         vscode.window
-                                            .showQuickPick(extensions, {
+                                            .showQuickPick(extensionhelper.moveToHead(acts.extensions, extension), {
                                                 placeHolder: "SELECT EXTENSION",
                                             })
                                             .then(extension => {
@@ -246,21 +228,15 @@ export function activate(context: vscode.ExtensionContext) {
                 acts.channel.appendLine(`${acts.appid}.${cmdid}:`);
                 acts.vscodeextensionpath = context.extensionPath;
                 // check condition
-                if (!actshelper.checkProjectPath()) {
+                if (!extensionhelper.checkProjectPath()) {
                     return;
                 }
-                if (!actshelper.checkActiveFile()) {
+                if (!extensionhelper.checkActiveFile()) {
                     return;
                 }
                 // select extension
-                const extensions = Array.from(acts.extensions);
-                const idx = extensions.indexOf(acts.extension);
-                if (1 <= idx) {
-                    extensions.splice(idx, 1);
-                    extensions.unshift(acts.extension);
-                }
                 vscode.window
-                    .showQuickPick(extensions, {
+                    .showQuickPick(extensionhelper.moveToHead(acts.extensions, acts.extension), {
                         placeHolder: "SELECT EXTENSION",
                     })
                     .then(extension => {
@@ -299,10 +275,10 @@ export function activate(context: vscode.ExtensionContext) {
                 acts.channel.appendLine(`${acts.appid}.${cmdid}:`);
                 acts.vscodeextensionpath = context.extensionPath;
                 // check condition
-                if (!actshelper.checkProjectPath()) {
+                if (!extensionhelper.checkProjectPath()) {
                     return;
                 }
-                if (!actshelper.checkActiveFile()) {
+                if (!extensionhelper.checkActiveFile()) {
                     return;
                 }
                 // exec command
@@ -322,10 +298,10 @@ export function activate(context: vscode.ExtensionContext) {
                 acts.channel.appendLine(`${acts.appid}.${cmdid}:`);
                 acts.vscodeextensionpath = context.extensionPath;
                 // check condition
-                if (!actshelper.checkProjectPath()) {
+                if (!extensionhelper.checkProjectPath()) {
                     return;
                 }
-                if (!actshelper.checkActiveFile()) {
+                if (!extensionhelper.checkActiveFile()) {
                     return;
                 }
                 // exec command
@@ -345,10 +321,10 @@ export function activate(context: vscode.ExtensionContext) {
                 acts.channel.appendLine(`${acts.appid}.${cmdid}:`);
                 acts.vscodeextensionpath = context.extensionPath;
                 // check condition
-                if (!actshelper.checkProjectPath()) {
+                if (!extensionhelper.checkProjectPath()) {
                     return;
                 }
-                if (!actshelper.checkActiveFile()) {
+                if (!extensionhelper.checkActiveFile()) {
                     return;
                 }
                 // select language
@@ -359,13 +335,8 @@ export function activate(context: vscode.ExtensionContext) {
                 if (acts.site === "yukicoder") {
                     languages = yukicoder.xlanguages.filter(val => val.xextension.extension === acts.extension).map(val => val.language);
                 }
-                const idx = languages.indexOf(acts.language);
-                if (1 <= idx) {
-                    languages.splice(idx, 1);
-                    languages.unshift(acts.language);
-                }
                 vscode.window
-                    .showQuickPick(languages, {
+                    .showQuickPick(extensionhelper.moveToHead(languages, acts.language), {
                         placeHolder: "SELECT LANGUAGE",
                     })
                     .then(language => {
@@ -403,10 +374,10 @@ export function activate(context: vscode.ExtensionContext) {
                 acts.channel.appendLine(`${acts.appid}.${cmdid}:`);
                 acts.vscodeextensionpath = context.extensionPath;
                 // check condition
-                if (!actshelper.checkProjectPath()) {
+                if (!extensionhelper.checkProjectPath()) {
                     return;
                 }
-                if (!actshelper.checkActiveFile()) {
+                if (!extensionhelper.checkActiveFile()) {
                     return;
                 }
                 // input confirm
@@ -436,10 +407,10 @@ export function activate(context: vscode.ExtensionContext) {
                 acts.channel.appendLine(`${acts.appid}.${cmdid}:`);
                 acts.vscodeextensionpath = context.extensionPath;
                 // check condition
-                if (!actshelper.checkProjectPath()) {
+                if (!extensionhelper.checkProjectPath()) {
                     return;
                 }
-                if (!actshelper.checkActiveFile()) {
+                if (!extensionhelper.checkActiveFile()) {
                     return;
                 }
                 // exec command
@@ -459,10 +430,10 @@ export function activate(context: vscode.ExtensionContext) {
                 acts.channel.appendLine(`${acts.appid}.${cmdid}:`);
                 acts.vscodeextensionpath = context.extensionPath;
                 // check condition
-                if (!actshelper.checkProjectPath()) {
+                if (!extensionhelper.checkProjectPath()) {
                     return;
                 }
-                if (!actshelper.checkActiveFile()) {
+                if (!extensionhelper.checkActiveFile()) {
                     return;
                 }
                 // input confirm
