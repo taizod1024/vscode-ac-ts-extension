@@ -76,17 +76,17 @@
         "properties": {
           "atcoderExtension.c.checker": {
             "type": "string",
-            "description": "command line checker for C",
+            "markdownDescription": "command line checker for C, you can use $taskfile, $execfile, $tmppath, $taskpath, $site, $contest, $task, $extension.",
             "default": "gcc --version"
           },
           "atcoderExtension.c.compiler": {
             "type": "string",
-            "description": "command line compiler for C",
+            "markdownDescription": "command line compiler for C, see `#atcoderExtension.c.checker#`",
             "default": "gcc $taskfile -o $execfile -lm"
           },
           "atcoderExtension.c.executor": {
             "type": "string",
-            "description": "command line executor for C",
+            "markdownDescription": "command line executor for C, see `#atcoderExtension.c.checker#`",
             "default": "$execfile"
           }
         }
@@ -96,17 +96,17 @@
         "properties": {
           "atcoderExtension.c++.checker": {
             "type": "string",
-            "description": "command line checker for C++",
+            "markdownDescription": "command line checker for C++, see `#atcoderExtension.c.checker#`",
             "default": "g++ --version"
           },
           "atcoderExtension.c++.compiler": {
             "type": "string",
-            "description": "command line compiler for C++",
+            "markdownDescription": "command line compiler for C++, see `#atcoderExtension.c.checker#`",
             "default": "g++ $taskfile -o $execfile"
           },
           "atcoderExtension.c++.executor": {
             "type": "string",
-            "description": "command line executor for C++",
+            "markdownDescription": "command line executor for C++, see `#atcoderExtension.c.checker#`",
             "default": "$execfile"
           }
         }
@@ -116,17 +116,17 @@
         "properties": {
           "atcoderExtension.java.checker": {
             "type": "string",
-            "description": "command line checker for Java",
+            "markdownDescription": "command line checker for Java, see `#atcoderExtension.c.checker#`",
             "default": "javac -version"
           },
           "atcoderExtension.java.compiler": {
             "type": "string",
-            "description": "command line compiler for Java",
+            "markdownDescription": "command line compiler for Java, see `#atcoderExtension.c.checker#`",
             "default": "javac -J-Duser.language=en $taskfile"
           },
           "atcoderExtension.java.executor": {
             "type": "string",
-            "description": "command line executor for Java",
+            "markdownDescription": "command line executor for Java, see `#atcoderExtension.c.checker#`",
             "default": "cd $taskpath && java $task"
           }
         }
@@ -136,12 +136,12 @@
         "properties": {
           "atcoderExtension.python.checker": {
             "type": "string",
-            "description": "command line checker for Python",
+            "markdownDescription": "command line checker for Python, see `#atcoderExtension.c.checker#`",
             "default": "python3 --version"
           },
           "atcoderExtension.python.executor": {
             "type": "string",
-            "description": "command line executor for Python",
+            "markdownDescription": "command line executor for Python, see `#atcoderExtension.c.checker#`",
             "default": "python3 -u $taskfile"
           }
         }
@@ -151,12 +151,12 @@
         "properties": {
           "atcoderExtension.javascript.checker": {
             "type": "string",
-            "description": "command line checker for JavaScript",
+            "markdownDescription": "command line checker for JavaScript, see `#atcoderExtension.c.checker#`",
             "default": "node --version"
           },
           "atcoderExtension.javascript.executor": {
             "type": "string",
-            "description": "command line executor for JavaScript",
+            "markdownDescription": "command line executor for JavaScript, see `#atcoderExtension.c.checker#`",
             "default": "node $taskfile"
           }
         }
@@ -166,12 +166,12 @@
         "properties": {
           "atcoderExtension.typescript.checker": {
             "type": "string",
-            "description": "command line checker for TypeScript",
+            "markdownDescription": "command line checker for TypeScript, see `#atcoderExtension.c.checker#`",
             "default": "node --version"
           },
           "atcoderExtension.typescript.executor": {
             "type": "string",
-            "description": "command line executor for TypeScript",
+            "markdownDescription": "command line executor for TypeScript, see `#atcoderExtension.c.checker#`",
             "default": "node --require ts-node/register $taskfile"
           }
         }
@@ -181,23 +181,23 @@
         "properties": {
           "atcoderExtension.user1.extension": {
             "type": "string",
-            "description": "extension for user1",
-            "default": ".py"
+            "markdownDescription": "extension for user1, create a template file with this extension in the template folder.",
+            "default": ".bat"
           },
           "atcoderExtension.user1.checker": {
             "type": "string",
-            "description": "command line checker for user1",
-            "default": "python3 --version"
+            "markdownDescription": "command line checker for user1, see `#atcoderExtension.c.checker#`",
+            "default": "cmd /c"
           },
           "atcoderExtension.user1.compiler": {
             "type": "string",
-            "description": "command line compiler for user1",
+            "markdownDescription": "command line compiler for user1, see `#atcoderExtension.c.checker#`",
             "default": ""
           },
           "atcoderExtension.user1.executor": {
             "type": "string",
-            "description": "command line executor for user1",
-            "default": "python3 -u $taskfile"
+            "markdownDescription": "command line executor for user1, see `#atcoderExtension.c.checker#`",
+            "default": "$taskfile"
           }
         }
       }

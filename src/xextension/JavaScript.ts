@@ -18,7 +18,10 @@ class JavaScript implements XExtension {
     }
 
     initTask(): void {}
-    compileTask(): void {}
+
+    compileTask(): void {
+        xexthelper.compileTask(this.language);
+    }
 
     debugTask(): any {
         const debugconfig = {

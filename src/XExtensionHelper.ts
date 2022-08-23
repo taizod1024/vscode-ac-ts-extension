@@ -7,7 +7,7 @@ class XExtensionHelper {
     checkLang(lang: string, opt: object = {}): void {
         // check
         const config = vscode.workspace.getConfiguration(acts.appcfgkey + "." + lang);
-        const cmd = config.checker;
+        const cmd = config.checker || "";
         acts.channel.appendLine(`[${acts.timestamp()}] checker: ${cmd}`);
         if (!cmd) {
             throw "ERROR: no checker";
@@ -31,7 +31,7 @@ class XExtensionHelper {
     compileTask(lang: string, opt: object = {}): void {
         // compile
         const config = vscode.workspace.getConfiguration(acts.appcfgkey + "." + lang);
-        const cmd = config.compiler;
+        const cmd = config.compiler || "";
         acts.channel.appendLine(`[${acts.timestamp()}] compiler: ${cmd}`);
         if (cmd) {
             acts.channel.appendLine(`[${acts.timestamp()}] - execfile: ${acts.execfile}`);
@@ -52,7 +52,7 @@ class XExtensionHelper {
         }
 
         // show executor
-        const cmdexe = config.executor;
+        const cmdexe = config.executor || "";
         acts.channel.appendLine(`[${acts.timestamp()}] executor: ${cmdexe}`);
         if (!cmdexe) {
             throw "ERROR: no executor";
@@ -62,7 +62,7 @@ class XExtensionHelper {
     testTask(lang: string, opt: object = {}): any {
         // test
         const config = vscode.workspace.getConfiguration(acts.appcfgkey + "." + lang);
-        const cmd = config.executor;
+        const cmd = config.executor || "";
         const cmdexp = acts.expandString(cmd);
         const command = `(${cmdexp}) < ${acts.tmpstdinfile} 1> ${acts.tmpstdoutfile} 2> ${acts.tmpstderrfile}`;
         const options = { cwd: acts.taskpath };
