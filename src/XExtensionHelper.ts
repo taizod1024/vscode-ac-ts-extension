@@ -23,18 +23,20 @@ class XExtensionHelper {
             throw `ERROR: check failed\r\n${err}\r\n`;
         }
         const out = fs.readFileSync(acts.tmpstdoutfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
-        acts.channel.appendLine(`[${acts.timestamp()}] - stdout: ${out}`);
+        acts.channel.appendLine(`[${acts.timestamp()}] - stdout="${out}"`);
         const err = fs.readFileSync(acts.tmpstderrfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
-        acts.channel.appendLine(`[${acts.timestamp()}] - stderr: ${err}`);
+        acts.channel.appendLine(`[${acts.timestamp()}] - stderr="${err}"`);
     }
 
     compileTask(lang: string, opt: object = {}): void {
         // compile
         const config = vscode.workspace.getConfiguration(acts.appcfgkey + "." + lang);
         const cmd = config.compiler || "";
-        acts.channel.appendLine(`[${acts.timestamp()}] compiler: ${cmd}`);
-        if (cmd) {
-            acts.channel.appendLine(`[${acts.timestamp()}] - execfile: ${acts.execfile}`);
+        if (!cmd) {
+            acts.channel.appendLine(`[${acts.timestamp()}] compiler: ${cmd}`);
+        } else {
+            acts.channel.appendLine(`[${acts.timestamp()}] execfile: ${acts.execfile}`);
+            acts.channel.appendLine(`[${acts.timestamp()}] compiler: ${cmd}`);
             const cmdexp = acts.expandString(cmd);
             const command = `(${cmdexp}) 1> ${acts.tmpstdoutfile} 2> ${acts.tmpstderrfile}`;
             const options = { cwd: acts.taskpath };
@@ -46,9 +48,9 @@ class XExtensionHelper {
                 throw `ERROR: compile failed\r\n${err}\r\n`;
             }
             const out = fs.readFileSync(acts.tmpstdoutfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
-            acts.channel.appendLine(`[${acts.timestamp()}] - stdout: ${out}`);
+            acts.channel.appendLine(`[${acts.timestamp()}] - stdout="${out}"`);
             const err = fs.readFileSync(acts.tmpstderrfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
-            acts.channel.appendLine(`[${acts.timestamp()}] - stderr: ${err}`);
+            acts.channel.appendLine(`[${acts.timestamp()}] - stderr="${err}"`);
         }
 
         // show executor

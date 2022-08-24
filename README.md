@@ -6,7 +6,7 @@ C / C++ / Java / Python / JavaScript / TypeScript での [AtCoder](https://atcod
 
 - 2022/08/24
   - 機能強化
-    - 任意の言語への対応をしました。
+    - <span style="color:red">任意の言語への対応をしました。</span>
       - 設定の"User1"に対して以下を参考に設定します。
         - 拡張子、例：`.bat`
         - チェックコマンド、例：`cmd /c`
