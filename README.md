@@ -6,7 +6,8 @@ C / C++ / Java / Python / JavaScript / TypeScript での [AtCoder](https://atcod
 
 - 2022/08/24
   - 機能強化
-    - <span style="color:red">任意の言語への対応をしました。</span>
+    - <span style="font-weight:bold">Linux環境に対応をしました。</span>
+    - <span style="font-weight:bold">任意の言語に対応をしました。</span>
       - 設定の"User1"に対して以下を参考に設定します。
         - 拡張子、例：`.bat`
         - チェックコマンド、例：`cmd /c`
@@ -21,13 +22,13 @@ C / C++ / Java / Python / JavaScript / TypeScript での [AtCoder](https://atcod
   - 障害修正
     - reinitTaskが条件によっては失敗していたのを修正しました。
   - 機能強化
-    - <span style="color:red">C/C++/Javaに対応しました。</span>
+    - <span style="font-weight:bold">C/C++/Javaに対応しました。</span>
         - vscodeの設定からC/C++/Javaのコマンドを変更できます。
         - 提出時の言語はsubmitTask時に選択します。例：C(GCC)、C(Clang)
         - Javaはファイル名とクラス名の間に関係性があるので適宜書き換えます。
         - デバッグ実行はサポートしていません。
   - 仕様変更
-    - <span style="color:red">テンプレートファイル名を`default.xx`から`template.xx`に変更しました。</span>
+    - <span style="color:red;font-weight:bold">テンプレートファイル名を`default.xx`から`template.xx`に変更しました。</span>
     - AtCoderの仕様に合わせて戻り値が0以外の場合にエラーになるようにしました。
     - vscode拡張機能名から"Yukicoder"を外しました。表示名が長すぎるための対処です。Yukicoder向けの機能はそのまま残っています。
 
@@ -51,16 +52,19 @@ C/C++/Java/Python/JavaScript/TypeScript での Visual Studio Code から AtCoder
   - 戻り値が0以外によるNG判定
   - 例外が発生したことによるNG判定
 
-## 環境
+## 動作確認環境
 
-- Windows 10 (21H2)
-- Visual Studio Code (1.70.2)
-- C (mingw 11.2.0.07112021)
-- C++ (mingw 11.2.0.07112021)
-- Java (AdoptOpenJDKjre 16.0.1.901)
-- Python (3.10.6)
-- TypeScript (Node.js 16.13.0)
-- JavaScript (Node.js 16.13.0)
+- Windows
+  - Windows 10 (21H2)
+  - Visual Studio Code (1.70.2)
+  - C (mingw 11.2.0.07112021)
+  - C++ (mingw 11.2.0.07112021)
+  - Java (AdoptOpenJDKjre 16.0.1.901)
+  - Python (3.10.6)
+  - TypeScript (Node.js 16.13.0)
+  - JavaScript (Node.js 16.13.0)
+- Linux
+  - Ubuntu (WSL2)
 
 ## 準備
 
