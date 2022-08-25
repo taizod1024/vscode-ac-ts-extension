@@ -24,12 +24,15 @@ class Python implements XExtension {
     }
 
     debugTask(): any {
+        if (acts.islinux) {
+            throw "ERROR: debug is not supported in linux";
+        }
         const debugconfig = {
             name: acts.appid,
             type: "python",
             request: "launch",
             program: acts.taskfile,
-            args: ["<", acts.tmpstdinfile, "1>", acts.tmpstdoutfile, "2>", acts.tmpstderrfile],
+            args: ["<", acts.tmpstdinfile, ">", acts.tmpstdoutfile, "2>", acts.tmpstderrfile],
             console: "integratedTerminal",
         };
         vscode.debug.startDebugging(acts.projectfolder, debugconfig);

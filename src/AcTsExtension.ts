@@ -22,6 +22,8 @@ class AcTsExtension {
     public appcfgkey = "atcoderExtension";
     public statefile: string;
     public tmppath: string;
+    public iswindows: boolean = !!process.env.WINDIR;
+    public islinux: boolean = !process.env.WINDIR;
 
     // context
     public vscodeextensionpath: string;
@@ -69,7 +71,7 @@ class AcTsExtension {
     // setup function
     constructor() {
         // init constant
-        if (process.env.WINDIR) {
+        if (this.iswindows) {
             this.statefile = path.normalize(`${process.env.USERPROFILE}/.${this.appid}.json`);
             this.tmppath = path.normalize(`${process.env.TEMP}/${this.appid}`);
         } else {
@@ -102,7 +104,7 @@ class AcTsExtension {
         this.taskpath = path.normalize(`${this.projectpath}/src/${this.site}/${this.contest}`);
         this.taskfile = path.normalize(`${this.taskpath}/${this.task}${this.extension}`);
         this.testfile = path.normalize(`${this.taskpath}/${this.task}.txt`);
-        this.execfile = path.normalize(`${this.taskpath}/${this.task}${process.env.WINDIR ? ".exe" : ".out"}`);
+        this.execfile = path.normalize(`${this.taskpath}/${this.task}${this.iswindows ? ".exe" : ".out"}`);
         this.tmpstdinfile = path.normalize(`${this.tmppath}/test_stdin.txt`);
         this.tmpstdoutfile = path.normalize(`${this.tmppath}/test_stdout.txt`);
         this.tmpstderrfile = path.normalize(`${this.tmppath}/test_stderr.txt`);
