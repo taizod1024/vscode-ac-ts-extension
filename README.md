@@ -6,8 +6,8 @@ C / C++ / Java / Python / JavaScript / TypeScript での [AtCoder](https://atcod
 
 - 2022/08/24
   - 機能強化
-    - <span style="font-weight:bold">Linux環境に対応をしました。</span>
-    - <span style="font-weight:bold">任意の言語に対応をしました。</span>
+    - <span style="font-weight:bold">Linux環境に対応しました。</span>
+    - <span style="font-weight:bold">任意の言語に対応しました。</span>
       - 設定の"User1"に対して以下を参考に設定します。
         - 拡張子、例：`.bat`
         - チェックコマンド、例：`cmd /c`
