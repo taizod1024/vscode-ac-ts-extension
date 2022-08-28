@@ -9,21 +9,21 @@ class Python implements XExtension {
     // implements
 
     // prop
-    extension = ".py";
-    language = "python";
+    public readonly extension = ".py";
+    public readonly language = "python";
 
     // method
-    checkLang(): void {
+    public checkLang(): void {
         xexthelper.checkLang(this.language);
     }
 
-    initTask(): void {}
+    public initTask(): void {}
 
-    compileTask(): void {
+    public compileTask(): void {
         xexthelper.compileTask(this.language);
     }
 
-    debugTask(): any {
+    public debugTask(): any {
         if (acts.islinux) {
             throw "ERROR: debug is not supported in linux";
         }
@@ -38,10 +38,10 @@ class Python implements XExtension {
         vscode.debug.startDebugging(acts.projectfolder, debugconfig);
     }
 
-    testTask(): any {
+    public testTask(): any {
         return xexthelper.testTask(this.language);
     }
 
-    submitTask(): void {}
+    public submitTask(): void {}
 }
 export const python = new Python();

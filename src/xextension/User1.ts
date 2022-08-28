@@ -7,7 +7,7 @@ class User1 implements XExtension {
     // implements
 
     // prop
-    get extension() {
+    public get extension() {
         if (!acts) {
             return ".user1";
         }
@@ -15,27 +15,27 @@ class User1 implements XExtension {
         const extension = config.extension;
         return extension;
     }
-    language = "user1";
+    public readonly language = "user1";
 
     // method
-    checkLang(): void {
+    public checkLang(): void {
         xexthelper.checkLang(this.language);
     }
 
-    initTask(): void {}
+    public initTask(): void {}
 
-    compileTask(): void {
+    public compileTask(): void {
         xexthelper.compileTask(this.language);
     }
 
-    debugTask(): any {
+    public debugTask(): any {
         throw "ERROR: debug is not supported";
     }
 
-    testTask(): any {
+    public testTask(): any {
         return xexthelper.testTask(this.language);
     }
 
-    submitTask(): void {}
+    public submitTask(): void {}
 }
 export const user1 = new User1();

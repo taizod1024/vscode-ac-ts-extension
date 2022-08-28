@@ -15,115 +15,102 @@ import { user1 } from "../xextension/User1";
 
 class AtCoder implements XSite {
     // param
-    username: string;
-    password: string;
+    public username: string;
+    public password: string;
 
     // prop
-    siteurl: string;
-    loginurl: string;
-    taskurl: string;
-    submiturl: string;
-    submissionsurl: string;
+    public loginurl: string;
+    public taskurl: string;
+    public submiturl: string;
+    public submissionsurl: string;
 
     // implements
 
     // prop
-    site: string;
-    contestregexp: RegExp;
-    contestmessage: string;
-    taskregexp: RegExp;
-    taskmessage: string;
-    contest: string;
-    task: string;
-    extension: string;
-    language: string;
-    xlanguages: XLanguage[];
+    public readonly site = "atcoder";
+    public readonly siteurl = "https://atcoder.jp/";
+    public readonly contestregexp = /^(.+)$/;
+    public readonly contestmessage = "input contest [e.g.: abc190, abc191]";
+    public readonly taskregexp = /^(.+)_(.+)$/;
+    public readonly taskmessage = "input task [e.g.: abc190_a, abc190_b]";
+    public contest = "";
+    public task = "";
+    public extension = "";
+    public language = "";
+    public readonly xlanguages = [
+        { id: 4001, language: "C (GCC 9.2.1)", xextension: cc },
+        { id: 4002, language: "C (Clang 10.0.0)", xextension: cc },
+        { id: 4003, language: "C++ (GCC 9.2.1)", xextension: cpp },
+        { id: 4004, language: "C++ (Clang 10.0.0)", xextension: cpp },
+        { id: 4005, language: "Java (OpenJDK 11.0.6)", xextension: java },
+        { id: 4006, language: "Python (3.8.2)", xextension: python },
+        { id: 4007, language: "Bash (5.0.11)", xextension: user1 },
+        { id: 4008, language: "bc (1.07.1)", xextension: user1 },
+        { id: 4009, language: "Awk (GNU Awk 4.1.4)", xextension: user1 },
+        { id: 4010, language: "C# (.NET Core 3.1.201)", xextension: user1 },
+        { id: 4011, language: "C# (Mono-mcs 6.8.0.105)", xextension: user1 },
+        { id: 4012, language: "C# (Mono-csc 3.5.0)", xextension: user1 },
+        { id: 4013, language: "Clojure (1.10.1.536)", xextension: user1 },
+        { id: 4014, language: "Crystal (0.33.0)", xextension: user1 },
+        { id: 4015, language: "D (DMD 2.091.0)", xextension: user1 },
+        { id: 4016, language: "D (GDC 9.2.1)", xextension: user1 },
+        { id: 4017, language: "D (LDC 1.20.1)", xextension: user1 },
+        { id: 4018, language: "Dart (2.7.2)", xextension: user1 },
+        { id: 4019, language: "dc (1.4.1)", xextension: user1 },
+        { id: 4020, language: "Erlang (22.3)", xextension: user1 },
+        { id: 4021, language: "Elixir (1.10.2)", xextension: user1 },
+        { id: 4022, language: "F# (.NET Core 3.1.201)", xextension: user1 },
+        { id: 4023, language: "F# (Mono 10.2.3)", xextension: user1 },
+        { id: 4024, language: "Forth (gforth 0.7.3)", xextension: user1 },
+        { id: 4025, language: "Fortran (GNU Fortran 9.2.1)", xextension: user1 },
+        { id: 4026, language: "Go (1.14.1)", xextension: user1 },
+        { id: 4027, language: "Haskell (GHC 8.8.3)", xextension: user1 },
+        { id: 4028, language: "Haxe (4.0.3); js", xextension: javascript },
+        { id: 4029, language: "Haxe (4.0.3); Java", xextension: java },
+        { id: 4030, language: "JavaScript (Node.js 12.16.1)", xextension: javascript },
+        { id: 4031, language: "Julia (1.4.0)", xextension: user1 },
+        { id: 4032, language: "Kotlin (1.3.71)", xextension: user1 },
+        { id: 4033, language: "Lua (Lua 5.3.5)", xextension: user1 },
+        { id: 4034, language: "Lua (LuaJIT 2.1.0)", xextension: user1 },
+        { id: 4035, language: "Dash (0.5.8)", xextension: user1 },
+        { id: 4036, language: "Nim (1.0.6)", xextension: user1 },
+        { id: 4037, language: "Objective-C (Clang 10.0.0)", xextension: user1 },
+        { id: 4038, language: "Common Lisp (SBCL 2.0.3)", xextension: user1 },
+        { id: 4039, language: "OCaml (4.10.0)", xextension: user1 },
+        { id: 4040, language: "Octave (5.2.0)", xextension: user1 },
+        { id: 4041, language: "Pascal (FPC 3.0.4)", xextension: user1 },
+        { id: 4042, language: "Perl (5.26.1)", xextension: user1 },
+        { id: 4043, language: "Raku (Rakudo 2020.02.1)", xextension: user1 },
+        { id: 4044, language: "PHP (7.4.4)", xextension: user1 },
+        { id: 4045, language: "Prolog (SWI-Prolog 8.0.3)", xextension: user1 },
+        { id: 4046, language: "PyPy2 (7.3.0)", xextension: python },
+        { id: 4047, language: "PyPy3 (7.3.0)", xextension: python },
+        { id: 4048, language: "Racket (7.6)", xextension: user1 },
+        { id: 4049, language: "Ruby (2.7.1)", xextension: user1 },
+        { id: 4050, language: "Rust (1.42.0)", xextension: user1 },
+        { id: 4051, language: "Scala (2.13.1)", xextension: user1 },
+        { id: 4052, language: "Java (OpenJDK 1.8.0)", xextension: java },
+        { id: 4053, language: "Scheme (Gauche 0.9.9)", xextension: user1 },
+        { id: 4054, language: "Standard ML (MLton 20130715)", xextension: user1 },
+        { id: 4055, language: "Swift (5.2.1)", xextension: user1 },
+        { id: 4056, language: "Text (cat 8.28)", xextension: user1 },
+        { id: 4057, language: "TypeScript (3.8)", xextension: typescript },
+        { id: 4058, language: "Visual Basic (.NET Core 3.1.101)", xextension: user1 },
+        { id: 4059, language: "Zsh (5.4.2)", xextension: user1 },
+        { id: 4060, language: "COBOL - Fixed (OpenCOBOL 1.1.0)", xextension: user1 },
+        { id: 4061, language: "COBOL - Free (OpenCOBOL 1.1.0)", xextension: user1 },
+        { id: 4062, language: "Brainfuck (bf 20041219)", xextension: user1 },
+        { id: 4063, language: "Ada2012 (GNAT 9.2.1)", xextension: user1 },
+        { id: 4064, language: "Unlambda (2.0.0)", xextension: user1 },
+        { id: 4065, language: "Cython (0.29.16)", xextension: user1 },
+        { id: 4066, language: "Sed (4.4)", xextension: user1 },
+        { id: 4067, language: "Vim (8.2.0460)", xextension: user1 },
+    ];
 
     // method
-    constructor() {
-        this.site = "atcoder";
-        this.siteurl = "https://atcoder.jp/";
-        this.contestregexp = /^(.+)$/;
-        this.contestmessage = "input contest [e.g.: abc190, abc191]";
-        this.taskregexp = /^(.+)_(.+)$/;
-        this.taskmessage = "input task [e.g.: abc190_a, abc190_b]";
-        this.loginurl = "https://atcoder.jp/login?continue=https%3A%2F%2Fatcoder.jp%2F&lang=ja";
-        this.contest = "";
-        this.task = "";
-        this.extension = "";
-        this.language = "";
-        this.xlanguages = [
-            { id: 4001, language: "C (GCC 9.2.1)", xextension: cc },
-            { id: 4002, language: "C (Clang 10.0.0)", xextension: cc },
-            { id: 4003, language: "C++ (GCC 9.2.1)", xextension: cpp },
-            { id: 4004, language: "C++ (Clang 10.0.0)", xextension: cpp },
-            { id: 4005, language: "Java (OpenJDK 11.0.6)", xextension: java },
-            { id: 4006, language: "Python (3.8.2)", xextension: python },
-            { id: 4007, language: "Bash (5.0.11)", xextension: user1 },
-            { id: 4008, language: "bc (1.07.1)", xextension: user1 },
-            { id: 4009, language: "Awk (GNU Awk 4.1.4)", xextension: user1 },
-            { id: 4010, language: "C# (.NET Core 3.1.201)", xextension: user1 },
-            { id: 4011, language: "C# (Mono-mcs 6.8.0.105)", xextension: user1 },
-            { id: 4012, language: "C# (Mono-csc 3.5.0)", xextension: user1 },
-            { id: 4013, language: "Clojure (1.10.1.536)", xextension: user1 },
-            { id: 4014, language: "Crystal (0.33.0)", xextension: user1 },
-            { id: 4015, language: "D (DMD 2.091.0)", xextension: user1 },
-            { id: 4016, language: "D (GDC 9.2.1)", xextension: user1 },
-            { id: 4017, language: "D (LDC 1.20.1)", xextension: user1 },
-            { id: 4018, language: "Dart (2.7.2)", xextension: user1 },
-            { id: 4019, language: "dc (1.4.1)", xextension: user1 },
-            { id: 4020, language: "Erlang (22.3)", xextension: user1 },
-            { id: 4021, language: "Elixir (1.10.2)", xextension: user1 },
-            { id: 4022, language: "F# (.NET Core 3.1.201)", xextension: user1 },
-            { id: 4023, language: "F# (Mono 10.2.3)", xextension: user1 },
-            { id: 4024, language: "Forth (gforth 0.7.3)", xextension: user1 },
-            { id: 4025, language: "Fortran (GNU Fortran 9.2.1)", xextension: user1 },
-            { id: 4026, language: "Go (1.14.1)", xextension: user1 },
-            { id: 4027, language: "Haskell (GHC 8.8.3)", xextension: user1 },
-            { id: 4028, language: "Haxe (4.0.3); js", xextension: javascript },
-            { id: 4029, language: "Haxe (4.0.3); Java", xextension: java },
-            { id: 4030, language: "JavaScript (Node.js 12.16.1)", xextension: javascript },
-            { id: 4031, language: "Julia (1.4.0)", xextension: user1 },
-            { id: 4032, language: "Kotlin (1.3.71)", xextension: user1 },
-            { id: 4033, language: "Lua (Lua 5.3.5)", xextension: user1 },
-            { id: 4034, language: "Lua (LuaJIT 2.1.0)", xextension: user1 },
-            { id: 4035, language: "Dash (0.5.8)", xextension: user1 },
-            { id: 4036, language: "Nim (1.0.6)", xextension: user1 },
-            { id: 4037, language: "Objective-C (Clang 10.0.0)", xextension: user1 },
-            { id: 4038, language: "Common Lisp (SBCL 2.0.3)", xextension: user1 },
-            { id: 4039, language: "OCaml (4.10.0)", xextension: user1 },
-            { id: 4040, language: "Octave (5.2.0)", xextension: user1 },
-            { id: 4041, language: "Pascal (FPC 3.0.4)", xextension: user1 },
-            { id: 4042, language: "Perl (5.26.1)", xextension: user1 },
-            { id: 4043, language: "Raku (Rakudo 2020.02.1)", xextension: user1 },
-            { id: 4044, language: "PHP (7.4.4)", xextension: user1 },
-            { id: 4045, language: "Prolog (SWI-Prolog 8.0.3)", xextension: user1 },
-            { id: 4046, language: "PyPy2 (7.3.0)", xextension: python },
-            { id: 4047, language: "PyPy3 (7.3.0)", xextension: python },
-            { id: 4048, language: "Racket (7.6)", xextension: user1 },
-            { id: 4049, language: "Ruby (2.7.1)", xextension: user1 },
-            { id: 4050, language: "Rust (1.42.0)", xextension: user1 },
-            { id: 4051, language: "Scala (2.13.1)", xextension: user1 },
-            { id: 4052, language: "Java (OpenJDK 1.8.0)", xextension: java },
-            { id: 4053, language: "Scheme (Gauche 0.9.9)", xextension: user1 },
-            { id: 4054, language: "Standard ML (MLton 20130715)", xextension: user1 },
-            { id: 4055, language: "Swift (5.2.1)", xextension: user1 },
-            { id: 4056, language: "Text (cat 8.28)", xextension: user1 },
-            { id: 4057, language: "TypeScript (3.8)", xextension: typescript },
-            { id: 4058, language: "Visual Basic (.NET Core 3.1.101)", xextension: user1 },
-            { id: 4059, language: "Zsh (5.4.2)", xextension: user1 },
-            { id: 4060, language: "COBOL - Fixed (OpenCOBOL 1.1.0)", xextension: user1 },
-            { id: 4061, language: "COBOL - Free (OpenCOBOL 1.1.0)", xextension: user1 },
-            { id: 4062, language: "Brainfuck (bf 20041219)", xextension: user1 },
-            { id: 4063, language: "Ada2012 (GNAT 9.2.1)", xextension: user1 },
-            { id: 4064, language: "Unlambda (2.0.0)", xextension: user1 },
-            { id: 4065, language: "Cython (0.29.16)", xextension: user1 },
-            { id: 4066, language: "Sed (4.4)", xextension: user1 },
-            { id: 4067, language: "Vim (8.2.0460)", xextension: user1 },
-        ];
-    }
 
-    initPropAsync(withtask: boolean) {
+    public initPropAsync(withtask: boolean) {
+        this.loginurl = "https://atcoder.jp/login?continue=https%3A%2F%2Fatcoder.jp%2F&lang=ja";
         if (withtask) {
             this.taskurl = `https://atcoder.jp/contests/${this.contest}/tasks/${this.task}`;
             this.submiturl = `https://atcoder.jp/contests/${this.contest}/submit`;
@@ -131,13 +118,13 @@ class AtCoder implements XSite {
         }
     }
 
-    checkLogin() {
+    public checkLogin() {
         if (!this.username || !this.password) {
             throw "ERROR: do login site";
         }
     }
 
-    async loginSiteAsync() {
+    public async loginSiteAsync() {
         // show channel
         acts.channel.appendLine(`[${acts.timestamp()}] atcoder.loginurl: ${this.loginurl}`);
         acts.channel.appendLine(`[${acts.timestamp()}] atcoder.username: ${this.username}`);
@@ -180,7 +167,7 @@ class AtCoder implements XSite {
         }
     }
 
-    async getTestAsync() {
+    public async getTestAsync() {
         // show channel
         acts.channel.appendLine(`[${acts.timestamp()}] atcoder.taskurl: ${this.taskurl}`);
         acts.channel.appendLine(`[${acts.timestamp()}] atcoder.username: ${this.username}`);
@@ -254,7 +241,7 @@ class AtCoder implements XSite {
         return text;
     }
 
-    async submitTaskAsync() {
+    public async submitTaskAsync() {
         // show channel
         acts.channel.appendLine(`[${acts.timestamp()}] atcoder.taskurl: ${this.taskurl}`);
         acts.channel.appendLine(`[${acts.timestamp()}] atcoder.username: ${this.username}`);
@@ -317,12 +304,12 @@ class AtCoder implements XSite {
         acts.channel.appendLine(`[${acts.timestamp()}] submissionsurl: ${this.submissionsurl}`);
     }
 
-    browseTask() {
+    public browseTask() {
         acts.channel.appendLine(`[${acts.timestamp()}] taskurl: ${this.taskurl}`);
         vscode.env.openExternal(vscode.Uri.parse(this.taskurl));
     }
 
-    getLanguageId(): number {
+    public getLanguageId(): number {
         const xlanguage = this.xlanguages.find(val => val.language === this.language);
         if (!xlanguage) {
             throw `ERROR: unsupported language, language=${this.language}`;
@@ -330,7 +317,7 @@ class AtCoder implements XSite {
         return Number(xlanguage.id);
     }
 
-    loadState(json: any) {
+    public loadState(json: any) {
         atcoder.username = json.atcoder?.username || "";
         atcoder.password = json.atcoder?.encpassword ? Buffer.from(json.atcoder?.encpassword, "base64").toString() : "";
         atcoder.contest = json.atcoder?.contest;

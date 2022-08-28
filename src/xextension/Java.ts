@@ -9,35 +9,35 @@ class Java implements XExtension {
     // implements
 
     // prop
-    extension = ".java";
-    language = "java";
+    public readonly extension = ".java";
+    public readonly language = "java";
 
     // method
-    checkLang(): void {
+    public checkLang(): void {
         xexthelper.checkLang(this.language);
     }
 
-    initTask(): void {
+    public initTask(): void {
         // rewrite class name to task name
         let text = fs.readFileSync(acts.taskfile).toString();
         text = text.replace(new RegExp("class template", "g"), `class ${acts.xsite.task}`);
         fs.writeFileSync(acts.taskfile, text);
     }
 
-    compileTask(): void {
+    public compileTask(): void {
         acts.execfile = acts.taskfile.replace(".java", ".class");
         xexthelper.compileTask(this.language);
     }
 
-    debugTask(): any {
+    public debugTask(): any {
         throw "ERROR: debug is not supported";
     }
 
-    testTask(): any {
+    public testTask(): any {
         return xexthelper.testTask(this.language);
     }
 
-    submitTask(): void {
+    public submitTask(): void {
         // replace and rewrite taskfile
         const tmptaskfile = path.normalize(`${acts.tmppath}/Main.java`);
         let text = fs.readFileSync(acts.taskfile).toString();

@@ -6,28 +6,28 @@ class Cpp implements XExtension {
     // implements
 
     // prop
-    extension = ".cpp";
-    language = "c++";
+    public readonly extension = ".cpp";
+    public readonly language = "c++";
 
     // method
-    checkLang(): void {
+    public checkLang(): void {
         xexthelper.checkLang(this.language);
     }
 
-    initTask(): void {}
+    public initTask(): void {}
 
-    compileTask(): void {
+    public compileTask(): void {
         xexthelper.compileTask(this.language);
     }
 
-    debugTask(): any {
+    public debugTask(): any {
         throw "ERROR: debug is not supported";
     }
 
-    testTask(): any {
+    public testTask(): any {
         return xexthelper.testTask(this.language);
     }
 
-    submitTask(): void {}
+    public submitTask(): void {}
 }
 export const cpp = new Cpp();

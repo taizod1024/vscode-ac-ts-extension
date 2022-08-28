@@ -9,21 +9,21 @@ class JavaScript implements XExtension {
     // implemente
 
     // prop
-    extension = ".js";
-    language = "javascript";
+    public readonly extension = ".js";
+    public readonly language = "javascript";
 
     // method
-    checkLang(): void {
+    public checkLang(): void {
         xexthelper.checkLang(this.language);
     }
 
-    initTask(): void {}
+    public initTask(): void {}
 
-    compileTask(): void {
+    public compileTask(): void {
         xexthelper.compileTask(this.language);
     }
 
-    debugTask(): any {
+    public debugTask(): any {
         if (acts.islinux) {
             throw "ERROR: debug is not supported in linux";
         }
@@ -39,10 +39,10 @@ class JavaScript implements XExtension {
         vscode.debug.startDebugging(acts.projectfolder, debugconfig);
     }
 
-    testTask(): any {
+    public testTask(): any {
         return xexthelper.testTask(this.language);
     }
 
-    submitTask(): void {}
+    public submitTask(): void {}
 }
 export const javascript = new JavaScript();
