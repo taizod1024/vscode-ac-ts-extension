@@ -18,7 +18,6 @@ class Yukicoder implements XSite {
     problemid: string;
 
     // prop
-    siteurl: string;
     problemnourl: string;
     api_problemnourl: string;
     api_problemidurl: string;
@@ -29,6 +28,7 @@ class Yukicoder implements XSite {
 
     // prop
     site: string;
+    siteurl: string;
     contestregexp: RegExp;
     contestmessage: string;
     taskregexp: RegExp;
@@ -42,6 +42,7 @@ class Yukicoder implements XSite {
     // method
     constructor() {
         this.site = "yukicoder";
+        this.siteurl = "https://yukicoder.me/";
         this.contestregexp = /^[0-9]+$/;
         this.contestmessage = "input contestid from url [e.g.: 314, 315]";
         this.taskregexp = /^[0-9]+$/;
@@ -102,7 +103,6 @@ class Yukicoder implements XSite {
     }
 
     async initPropAsync(withtask: boolean) {
-        this.siteurl = "https://yukicoder.me/";
         if (withtask) {
             this.problemnourl = `https://yukicoder.me/problems/no/${this.task}`;
             this.api_problemnourl = `https://yukicoder.me/api/v1/problems/no/${this.task}`;

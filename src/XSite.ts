@@ -3,6 +3,7 @@ import { XLanguage } from "./XLanguage";
 export interface XSite {
     // prop
     site: string;
+    siteurl: string;
     contestregexp: RegExp;
     contestmessage: string;
     taskregexp: RegExp;

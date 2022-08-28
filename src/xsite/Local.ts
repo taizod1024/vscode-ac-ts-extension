@@ -17,6 +17,7 @@ class Local implements XSite {
 
     // prop
     site: string;
+    siteurl: string;
     contestregexp: RegExp;
     contestmessage: string;
     taskregexp: RegExp;
@@ -30,6 +31,7 @@ class Local implements XSite {
     // method
     constructor() {
         this.site = "local";
+        this.siteurl = "";
         this.contestregexp = /^(.+)$/;
         this.contestmessage = "input contest [e.g.: local01, local02]";
         this.taskregexp = /^(.+)_(.+)$/;

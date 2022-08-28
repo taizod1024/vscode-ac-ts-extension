@@ -42,6 +42,7 @@ class AtCoder implements XSite {
     // method
     constructor() {
         this.site = "atcoder";
+        this.siteurl = "https://atcoder.jp/";
         this.contestregexp = /^(.+)$/;
         this.contestmessage = "input contest [e.g.: abc190, abc191]";
         this.taskregexp = /^(.+)_(.+)$/;
@@ -123,7 +124,6 @@ class AtCoder implements XSite {
     }
 
     initPropAsync(withtask: boolean) {
-        this.siteurl = "https://atcoder.jp/";
         if (withtask) {
             this.taskurl = `https://atcoder.jp/contests/${this.contest}/tasks/${this.task}`;
             this.submiturl = `https://atcoder.jp/contests/${this.contest}/submit`;

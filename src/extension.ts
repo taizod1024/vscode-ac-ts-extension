@@ -123,11 +123,7 @@ export function activate(context: vscode.ExtensionContext) {
                         if (site === undefined) {
                             return;
                         }
-                        // 本来はsiteをインデックスでアクセスしたいが"string cannot be used to index"のエラーあり
-                        let contestregexp: RegExp;
-                        let contestmessage: string;
-                        let taskregexp: RegExp;
-                        let taskmessage: string;
+                        acts.site = site;
                         let contest: string;
                         let task: string;
                         let extension: string;
@@ -135,39 +131,11 @@ export function activate(context: vscode.ExtensionContext) {
                         // TODO site依存データの読込・保存タイミングが整理できていない
                         // load site depending data
                         try {
-                            if (site === "atcoder") {
-                                atcoder.checkLogin();
-                                contestregexp = atcoder.contestregexp;
-                                contestmessage = atcoder.contestmessage;
-                                taskregexp = atcoder.taskregexp;
-                                taskmessage = atcoder.taskmessage;
-                                contest = atcoder.contest;
-                                task = atcoder.task;
-                                extension = atcoder.extension;
-                                language = atcoder.language;
-                            }
-                            if (site === "yukicoder") {
-                                yukicoder.checkLogin();
-                                contestregexp = yukicoder.contestregexp;
-                                contestmessage = yukicoder.contestmessage;
-                                taskregexp = yukicoder.taskregexp;
-                                taskmessage = yukicoder.taskmessage;
-                                contest = yukicoder.contest;
-                                task = yukicoder.task;
-                                extension = yukicoder.extension;
-                                language = yukicoder.language;
-                            }
-                            if (site === "local") {
-                                local.checkLogin();
-                                contestregexp = local.contestregexp;
-                                contestmessage = local.contestmessage;
-                                taskregexp = local.taskregexp;
-                                taskmessage = local.taskmessage;
-                                contest = local.contest;
-                                task = local.task;
-                                extension = local.extension;
-                                language = local.language;
-                            }
+                            acts.xsite.checkLogin();
+                            contest = acts.xsite.contest;
+                            task = acts.xsite.task;
+                            extension = acts.xsite.extension;
+                            language = acts.xsite.language;
                         } catch (ex) {
                             acts.channel.appendLine(`**** ${ex} ****`);
                             return;
@@ -175,11 +143,11 @@ export function activate(context: vscode.ExtensionContext) {
                         // input contest
                         vscode.window
                             .showInputBox({
-                                prompt: contestmessage,
+                                prompt: acts.xsite.contestmessage,
                                 ignoreFocusOut: true,
                                 value: contest,
                                 validateInput: param => {
-                                    return contestregexp.test(param) ? "" : contestmessage;
+                                    return acts.xsite.contestregexp.test(param) ? "" : acts.xsite.contestmessage;
                                 },
                             })
                             .then(contest => {
@@ -189,11 +157,11 @@ export function activate(context: vscode.ExtensionContext) {
                                 // input task
                                 vscode.window
                                     .showInputBox({
-                                        prompt: taskmessage,
+                                        prompt: acts.xsite.taskmessage,
                                         ignoreFocusOut: true,
                                         value: task,
                                         validateInput: param => {
-                                            return taskregexp.test(param) ? "" : taskmessage;
+                                            return acts.xsite.taskregexp.test(param) ? "" : acts.xsite.taskmessage;
                                         },
                                     })
                                     .then(task => {
@@ -210,28 +178,9 @@ export function activate(context: vscode.ExtensionContext) {
                                                     return;
                                                 }
                                                 // save site depending data
-                                                acts.site = site;
-                                                acts.contest = contest;
-                                                acts.task = task;
-                                                acts.extension = extension;
-                                                if (site === "atcoder") {
-                                                    atcoder.contest = contest;
-                                                    atcoder.task = task;
-                                                    atcoder.extension = extension;
-                                                    atcoder.language = language;
-                                                }
-                                                if (site === "yukicoder") {
-                                                    yukicoder.contest = contest;
-                                                    yukicoder.task = task;
-                                                    yukicoder.extension = extension;
-                                                    yukicoder.language = language;
-                                                }
-                                                if (site === "local") {
-                                                    local.contest = contest;
-                                                    local.task = task;
-                                                    local.extension = extension;
-                                                    local.language = language;
-                                                }
+                                                acts.xsite.contest = contest;
+                                                acts.xsite.task = task;
+                                                acts.xsite.extension = extension;
                                                 // exec command
                                                 acts.initTaskAsync().catch(ex => {
                                                     acts.channel.appendLine("**** " + ex + " ****");
@@ -261,7 +210,7 @@ export function activate(context: vscode.ExtensionContext) {
                 }
                 // select extension
                 vscode.window
-                    .showQuickPick(extensionhelper.moveToHead(acts.extensions, acts.extension), {
+                    .showQuickPick(extensionhelper.moveToHead(acts.extensions, acts.xsite.extension), {
                         placeHolder: "SELECT EXTENSION",
                     })
                     .then(extension => {
@@ -269,25 +218,7 @@ export function activate(context: vscode.ExtensionContext) {
                             return;
                         }
                         // save site depending data
-                        acts.extension = extension;
-                        if (acts.site === "atcoder") {
-                            atcoder.contest = acts.contest;
-                            atcoder.task = acts.task;
-                            atcoder.extension = acts.extension;
-                            atcoder.language = acts.language;
-                        }
-                        if (acts.site === "yukicoder") {
-                            yukicoder.contest = acts.contest;
-                            yukicoder.task = acts.task;
-                            yukicoder.extension = acts.extension;
-                            yukicoder.language = acts.language;
-                        }
-                        if (acts.site === "local") {
-                            local.contest = acts.contest;
-                            local.task = acts.task;
-                            local.extension = acts.extension;
-                            local.language = acts.language;
-                        }
+                        acts.xsite.extension = extension;
                         // exec command
                         acts.initTaskAsync().catch(ex => {
                             acts.channel.appendLine(`**** ${ex} ****`);
@@ -361,16 +292,16 @@ export function activate(context: vscode.ExtensionContext) {
                 // select language
                 let languages: string[];
                 if (acts.site === "atcoder") {
-                    languages = atcoder.xlanguages.filter(val => val.xextension.extension === acts.extension).map(val => val.language);
+                    languages = atcoder.xlanguages.filter(val => val.xextension.extension === acts.xsite.extension).map(val => val.language);
                 }
                 if (acts.site === "yukicoder") {
-                    languages = yukicoder.xlanguages.filter(val => val.xextension.extension === acts.extension).map(val => val.language);
+                    languages = yukicoder.xlanguages.filter(val => val.xextension.extension === acts.xsite.extension).map(val => val.language);
                 }
                 if (acts.site === "local") {
-                    languages = local.xlanguages.filter(val => val.xextension.extension === acts.extension).map(val => val.language);
+                    languages = local.xlanguages.filter(val => val.xextension.extension === acts.xsite.extension).map(val => val.language);
                 }
                 vscode.window
-                    .showQuickPick(extensionhelper.moveToHead(languages, acts.language), {
+                    .showQuickPick(extensionhelper.moveToHead(languages, acts.xsite.language), {
                         placeHolder: "SELECT LANGUAGE",
                     })
                     .then(language => {
@@ -378,25 +309,7 @@ export function activate(context: vscode.ExtensionContext) {
                             return;
                         }
                         // save site depending data
-                        acts.language = language;
-                        if (acts.site === "atcoder") {
-                            atcoder.contest = acts.contest;
-                            atcoder.task = acts.task;
-                            atcoder.extension = acts.extension;
-                            atcoder.language = acts.language;
-                        }
-                        if (acts.site === "yukicoder") {
-                            yukicoder.contest = acts.contest;
-                            yukicoder.task = acts.task;
-                            yukicoder.extension = acts.extension;
-                            yukicoder.language = acts.language;
-                        }
-                        if (acts.site === "local") {
-                            local.contest = acts.contest;
-                            local.task = acts.task;
-                            local.extension = acts.extension;
-                            local.language = acts.language;
-                        }
+                        acts.xsite.language = language;
                         // exec command
                         acts.submitTaskAsync().catch(ex => {
                             acts.channel.appendLine("**** " + ex + " ****");
@@ -470,13 +383,6 @@ export function activate(context: vscode.ExtensionContext) {
                 acts.channel.clear();
                 acts.channel.appendLine(`${acts.appid}.${cmdid}:`);
                 acts.vscodeextensionpath = context.extensionPath;
-                // check condition
-                if (!extensionhelper.checkProjectPath()) {
-                    return;
-                }
-                if (!extensionhelper.checkActiveFile()) {
-                    return;
-                }
                 // input confirm
                 vscode.window
                     .showQuickPick(["CLEAR STATE"], {
