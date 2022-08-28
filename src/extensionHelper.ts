@@ -1,5 +1,6 @@
+import { fstat } from "fs";
 import * as vscode from "vscode";
-const path = require("path");
+import * as path from "path";
 import { acts } from "./AcTsExtension";
 
 // extension helper
@@ -19,7 +20,7 @@ class AcTsHelper {
             const filenames = vscode.window.activeTextEditor?.document?.fileName?.split(path.sep);
             if (filenames) {
                 // disassemble
-                // TODO pathの使用
+                // 複数階層の解析を自前でやるほうが効率的なのでpathは使用しない
                 let filename = filenames.pop();
                 let basename = filenames.join(path.sep);
                 let basenames = filename.split(".");

@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import child_process, { ExecFileSyncOptions } from "child_process";
-const path = require("path");
+import * as path from "path";
 import { acts } from "../AcTsExtension";
 import { XExtension } from "../XExtension";
 import { xexthelper } from "../XExtensionHelper";

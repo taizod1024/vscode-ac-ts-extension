@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
-const path = require("path");
+import * as path from "path";
 import child_process, { ExecFileSyncOptions } from "child_process";
 import { XSite } from "./XSite";
 import { XExtension } from "./XExtension";
