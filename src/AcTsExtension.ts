@@ -85,11 +85,6 @@ class AcTsExtension {
             this.tmppath = path.normalize(`/tmp/${this.appid}/${process.env.USER}`);
         }
 
-        // make tmppath
-        if (!fs.existsSync(this.tmppath)) {
-            fs.mkdirSync(this.tmppath, { recursive: true });
-        }
-
         // coders and langs
         this.xsites = [atcoder, yukicoder, local];
         this.xextensions = [cpp, python, java, cc, javascript, typescript, user1];
@@ -118,23 +113,23 @@ class AcTsExtension {
         this.proxy = "";
         this.timeout = 5000;
 
-        // make tmppath for clear state
+        // make tmppath
         if (!fs.existsSync(this.tmppath)) {
             fs.mkdirSync(this.tmppath, { recursive: true });
         }
 
-        // create taskpath
+        // make taskpath if task exist
         if (this.xsite.task) {
             if (!fs.existsSync(this.taskpath)) {
                 fs.mkdirSync(this.taskpath, { recursive: true });
             }
         }
 
-        // check and init coder
+        // check and init site
         this.xsite.checkLogin();
         await this.xsite.initPropAsync(withtask);
 
-        // check lang if exists
+        // check lang if extension exist
         if (this.xsite.extension) {
             // this.xextension is null when loginSite
             this.xextension.checkLang();
