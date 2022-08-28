@@ -18,6 +18,7 @@ class Yukicoder implements XSite {
     problemid: string;
 
     // prop
+    siteurl: string;
     problemnourl: string;
     api_problemnourl: string;
     api_problemidurl: string;
@@ -28,7 +29,6 @@ class Yukicoder implements XSite {
 
     // prop
     site: string;
-    siteurl: string;
     contestregexp: RegExp;
     contestmessage: string;
     taskregexp: RegExp;
@@ -42,7 +42,6 @@ class Yukicoder implements XSite {
     // method
     constructor() {
         this.site = "yukicoder";
-        this.siteurl = "https://yukicoder.me/";
         this.contestregexp = /^[0-9]+$/;
         this.contestmessage = "input contestid from url [e.g.: 314, 315]";
         this.taskregexp = /^[0-9]+$/;
@@ -52,61 +51,6 @@ class Yukicoder implements XSite {
         this.extension = "";
         this.language = "";
         this.xlanguages = [
-            // {
-            //     language: "C++14 (gcc 11.2.0 + boost 1.78.0)",
-            //     xextension: cpp,
-            //     id: "cpp14",
-            // },
-            // {
-            //     language: "C++17 (gcc 11.2.0 + boost 1.78.0",
-            //     xextension: cpp,
-            //     id: "cpp17",
-            // },
-            // {
-            //     language: "C++17(clang  Beta) (gcc 10.0.0 + boost 1.78.0)",
-            //     xextension: cpp,
-            //     id: "cpp-clang",
-            // },
-            // {
-            //     language: "C++23(draft) (gcc 11.2.0 + boost 1.78.0)",
-            //     xextension: cpp,
-            //     id: "cpp23",
-            // },
-            // {
-            //     language: "C++11 (gcc 8.5.0)",
-            //     xextension: cpp,
-            //     id: "cpp",
-            // },
-            // {
-            //     language: "C (gcc 11.2.0)",
-            //     xextension: cc,
-            //     id: "c11",
-            // },
-            // {
-            //     language: "C90 (gcc 8.5.0)",
-            //     xextension: cc,
-            //     id: "c",
-            // },
-            // {
-            //     language: "Java17 (openjdk 17.0.1)",
-            //     xextension: java,
-            //     id: "java8",
-            // },
-            // {
-            //     language: "Python3 (3.10.1 + numpy 1.22.3 + scipy 1.8.0)",
-            //     xextension: python,
-            //     id: "python3",
-            // },
-            // {
-            //     language: "JavaScript (node v17.7.1)",
-            //     xextension: javascript,
-            //     id: "node",
-            // },
-            // {
-            //     language: "TypeScript (4.6.2)",
-            //     xextension: typescript,
-            //     id: "typescript",
-            // },
             { id: "cpp14", language: "C++14 (gcc 11.2.0 + boost 1.78.0)", xextension: cpp },
             { id: "cpp17", language: "C++17 (gcc 11.2.0 + boost 1.78.0)", xextension: cpp },
             { id: "cpp-clang", language: "C++17(clang Beta) (clang 10.0.0 + boost 1.78.0)", xextension: cpp },
@@ -158,6 +102,7 @@ class Yukicoder implements XSite {
     }
 
     async initPropAsync(withtask: boolean) {
+        this.siteurl = "https://yukicoder.me/";
         if (withtask) {
             this.problemnourl = `https://yukicoder.me/problems/no/${this.task}`;
             this.api_problemnourl = `https://yukicoder.me/api/v1/problems/no/${this.task}`;

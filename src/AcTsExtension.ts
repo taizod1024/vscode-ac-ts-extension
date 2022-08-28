@@ -6,6 +6,7 @@ import { XSite } from "./XSite";
 import { XExtension } from "./XExtension";
 import { atcoder } from "./xsite/AtCoder";
 import { yukicoder } from "./xsite/Yukicoder";
+import { local } from "./xsite/Local";
 import { typescript } from "./xextension/TypeScript";
 import { javascript } from "./xextension/JavaScript";
 import { python } from "./xextension/Python";
@@ -85,7 +86,7 @@ class AcTsExtension {
         }
 
         // coders and langs
-        this.xsites = [atcoder, yukicoder];
+        this.xsites = [atcoder, yukicoder, local];
         this.xextensions = [cpp, python, java, cc, javascript, typescript, user1];
 
         // init context

@@ -19,6 +19,7 @@ class AtCoder implements XSite {
     password: string;
 
     // prop
+    siteurl: string;
     loginurl: string;
     taskurl: string;
     submiturl: string;
@@ -28,7 +29,6 @@ class AtCoder implements XSite {
 
     // prop
     site: string;
-    siteurl: string;
     contestregexp: RegExp;
     contestmessage: string;
     taskregexp: RegExp;
@@ -42,7 +42,6 @@ class AtCoder implements XSite {
     // method
     constructor() {
         this.site = "atcoder";
-        this.siteurl = "https://atcoder.jp/";
         this.contestregexp = /^(.+)$/;
         this.contestmessage = "input contest [e.g.: abc190, abc191]";
         this.taskregexp = /^(.+)_(.+)$/;
@@ -53,51 +52,6 @@ class AtCoder implements XSite {
         this.extension = "";
         this.language = "";
         this.xlanguages = [
-            // {
-            //     language: "C (GCC 9.2.1)",
-            //     xextension: cc,
-            //     id: 4001,
-            // },
-            // {
-            //     language: "C (Clang 10.0.0)",
-            //     xextension: cc,
-            //     id: 4002,
-            // },
-            // {
-            //     language: "C++ (GCC 9.2.1)",
-            //     xextension: cpp,
-            //     id: 4003,
-            // },
-            // {
-            //     language: "C++ (Clang 10.0.0)",
-            //     xextension: cpp,
-            //     id: 4004,
-            // },
-            // {
-            //     language: "Java (OpenJDK 11.0.6)",
-            //     xextension: java,
-            //     id: 4005,
-            // },
-            // {
-            //     language: "Java (OpenJDK 1.8.0)",
-            //     xextension: java,
-            //     id: 4052,
-            // },
-            // {
-            //     language: "JavaScript (Node.js 12.16.1)",
-            //     xextension: javascript,
-            //     id: 4030,
-            // },
-            // {
-            //     language: "Python (3.8.2)",
-            //     xextension: python,
-            //     id: 4006,
-            // },
-            // {
-            //     language: "TypeScript (3.8)",
-            //     xextension: typescript,
-            //     id: 4057,
-            // },
             { id: 4001, language: "C (GCC 9.2.1)", xextension: cc },
             { id: 4002, language: "C (Clang 10.0.0)", xextension: cc },
             { id: 4003, language: "C++ (GCC 9.2.1)", xextension: cpp },
@@ -169,6 +123,7 @@ class AtCoder implements XSite {
     }
 
     initPropAsync(withtask: boolean) {
+        this.siteurl = "https://atcoder.jp/";
         if (withtask) {
             this.taskurl = `https://atcoder.jp/contests/${this.contest}/tasks/${this.task}`;
             this.submiturl = `https://atcoder.jp/contests/${this.contest}/submit`;

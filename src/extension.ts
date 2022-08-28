@@ -5,6 +5,7 @@ import { extensionhelper } from "./extensionHelper";
 import { acts } from "./AcTsExtension";
 import { atcoder } from "./xsite/AtCoder";
 import { yukicoder } from "./xsite/Yukicoder";
+import { local } from "./xsite/Local";
 
 // extension entrypoint
 export function activate(context: vscode.ExtensionContext) {
@@ -29,7 +30,7 @@ export function activate(context: vscode.ExtensionContext) {
                         if (site === undefined) {
                             return;
                         }
-                        if (site === "atcoder") {
+                        if (site === atcoder.site) {
                             acts.channel.appendLine(`[${acts.timestamp()}] atcoder.siteurl: ${atcoder.siteurl}`);
                             // input username
                             vscode.window
@@ -88,6 +89,13 @@ export function activate(context: vscode.ExtensionContext) {
                                         acts.channel.appendLine(`**** ${ex} ****`);
                                     });
                                 });
+                        }
+                        if (site === "local") {
+                            // exec command
+                            acts.site = site;
+                            acts.loginSiteAsync().catch(ex => {
+                                acts.channel.appendLine(`**** ${ex} ****`);
+                            });
                         }
                     });
             })
@@ -149,6 +157,17 @@ export function activate(context: vscode.ExtensionContext) {
                                 extension = yukicoder.extension;
                                 language = yukicoder.language;
                             }
+                            if (site === "local") {
+                                local.checkLogin();
+                                contestregexp = local.contestregexp;
+                                contestmessage = local.contestmessage;
+                                taskregexp = local.taskregexp;
+                                taskmessage = local.taskmessage;
+                                contest = local.contest;
+                                task = local.task;
+                                extension = local.extension;
+                                language = local.language;
+                            }
                         } catch (ex) {
                             acts.channel.appendLine(`**** ${ex} ****`);
                             return;
@@ -207,6 +226,12 @@ export function activate(context: vscode.ExtensionContext) {
                                                     yukicoder.extension = extension;
                                                     yukicoder.language = language;
                                                 }
+                                                if (site === "local") {
+                                                    local.contest = contest;
+                                                    local.task = task;
+                                                    local.extension = extension;
+                                                    local.language = language;
+                                                }
                                                 // exec command
                                                 acts.initTaskAsync().catch(ex => {
                                                     acts.channel.appendLine("**** " + ex + " ****");
@@ -256,6 +281,12 @@ export function activate(context: vscode.ExtensionContext) {
                             yukicoder.task = acts.task;
                             yukicoder.extension = acts.extension;
                             yukicoder.language = acts.language;
+                        }
+                        if (acts.site === "local") {
+                            local.contest = acts.contest;
+                            local.task = acts.task;
+                            local.extension = acts.extension;
+                            local.language = acts.language;
                         }
                         // exec command
                         acts.initTaskAsync().catch(ex => {
@@ -335,6 +366,9 @@ export function activate(context: vscode.ExtensionContext) {
                 if (acts.site === "yukicoder") {
                     languages = yukicoder.xlanguages.filter(val => val.xextension.extension === acts.extension).map(val => val.language);
                 }
+                if (acts.site === "local") {
+                    languages = local.xlanguages.filter(val => val.xextension.extension === acts.extension).map(val => val.language);
+                }
                 vscode.window
                     .showQuickPick(extensionhelper.moveToHead(languages, acts.language), {
                         placeHolder: "SELECT LANGUAGE",
@@ -350,11 +384,18 @@ export function activate(context: vscode.ExtensionContext) {
                             atcoder.task = acts.task;
                             atcoder.extension = acts.extension;
                             atcoder.language = acts.language;
-                        } else {
+                        }
+                        if (acts.site === "yukicoder") {
                             yukicoder.contest = acts.contest;
                             yukicoder.task = acts.task;
                             yukicoder.extension = acts.extension;
                             yukicoder.language = acts.language;
+                        }
+                        if (acts.site === "local") {
+                            local.contest = acts.contest;
+                            local.task = acts.task;
+                            local.extension = acts.extension;
+                            local.language = acts.language;
                         }
                         // exec command
                         acts.submitTaskAsync().catch(ex => {
