@@ -1,12 +1,12 @@
 import { XExtension } from "../XExtension";
 import { xexthelper } from "../XExtensionHelper";
 
-class Cc implements XExtension {
+class Rust implements XExtension {
     // implements
 
     // prop
-    public readonly extension = ".c";
-    public readonly language = "c";
+    public readonly extension = ".rs";
+    public readonly language = "rust";
 
     // method
     public checkLang(): void {
@@ -29,4 +29,4 @@ class Cc implements XExtension {
 
     public submitTask(): void {}
 }
-export const cc = new Cc();
+export const rust = new Rust();

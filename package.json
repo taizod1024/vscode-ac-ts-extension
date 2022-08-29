@@ -130,7 +130,47 @@
           "atcoderExtension.java.executor": {
             "type": "string",
             "markdownDescription": "command line executor for Java, see `#atcoderExtension.c.checker#`",
-            "default": "cd $taskpath && java $task"
+            "default": "java $task"
+          }
+        }
+      },
+      {
+        "title": "Rust",
+        "properties": {
+          "atcoderExtension.rust.checker": {
+            "type": "string",
+            "markdownDescription": "command line checker for Rust, see `#atcoderExtension.c.checker#`",
+            "default": "rustc --version"
+          },
+          "atcoderExtension.rust.compiler": {
+            "type": "string",
+            "markdownDescription": "command line compiler for Rust, see `#atcoderExtension.c.checker#`",
+            "default": "rustc $taskfile"
+          },
+          "atcoderExtension.rust.executor": {
+            "type": "string",
+            "markdownDescription": "command line executor for Rust, see `#atcoderExtension.c.checker#`",
+            "default": "$execfile"
+          }
+        }
+      },
+      {
+        "title": "Go",
+        "properties": {
+          "atcoderExtension.go.checker": {
+            "type": "string",
+            "markdownDescription": "command line checker for Go, see `#atcoderExtension.c.checker#`",
+            "default": "go version"
+          },
+          "atcoderExtension.go.compiler": {
+            "type": "string",
+            "markdownDescription": "command line compiler for Go, see `#atcoderExtension.c.checker#`",
+            "default": "go build $taskfile"
+          },
+          "atcoderExtension.go.executor": {
+            "type": "string",
+            "markdownDescription": "command line executor for Go, see `#atcoderExtension.c.checker#`",
+            "default": "$execfile"
           }
         }
       },

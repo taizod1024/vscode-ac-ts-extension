@@ -1,19 +1,11 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
 import * as path from "path";
-import child_process, { ExecFileSyncOptions } from "child_process";
+import child_process from "child_process";
 import { XSite } from "./XSite";
-import { XExtension } from "./XExtension";
 import { atcoder } from "./xsite/AtCoder";
 import { yukicoder } from "./xsite/Yukicoder";
 import { local } from "./xsite/Local";
-import { typescript } from "./xextension/TypeScript";
-import { javascript } from "./xextension/JavaScript";
-import { python } from "./xextension/Python";
-import { cc } from "./xextension/Cc";
-import { cpp } from "./xextension/Cpp";
-import { java } from "./xextension/Java";
-import { user1 } from "./xextension/User1";
 
 // extension core
 class AcTsExtension {

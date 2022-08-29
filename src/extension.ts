@@ -68,7 +68,7 @@ export function activate(context: vscode.ExtensionContext) {
                                         });
                                 });
                         }
-                        if (site === "yukicoder") {
+                        if (site === yukicoder.site) {
                             acts.channel.appendLine(`[${acts.timestamp()}] yukicoder.siteurl: ${yukicoder.siteurl}`);
                             // input apikey
                             vscode.window
@@ -91,7 +91,7 @@ export function activate(context: vscode.ExtensionContext) {
                                     });
                                 });
                         }
-                        if (site === "local") {
+                        if (site === local.site) {
                             // exec command
                             acts.site = site;
                             acts.loginSiteAsync().catch(ex => {

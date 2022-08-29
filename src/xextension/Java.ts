@@ -1,5 +1,4 @@
 import * as fs from "fs";
-import child_process, { ExecFileSyncOptions } from "child_process";
 import * as path from "path";
 import { acts } from "../AcTsExtension";
 import { XExtension } from "../XExtension";
