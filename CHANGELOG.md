@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.5](https://github.com/taizod1024/ac-ts-extension/compare/v0.1.4...v0.1.5) (2022-08-29)
+
+
+### Features
+
+* go, rust対応、rustはテンプレートなし ([a21f7cd](https://github.com/taizod1024/ac-ts-extension/commit/a21f7cdc10e6341533c5b3bbb2aeb8349f4d61b4))
+* rust対応取消 ([c7f9a2e](https://github.com/taizod1024/ac-ts-extension/commit/c7f9a2e6e738ab054842f1b327dc83728e605fce))
+* siteに限定されずに実行可能なlocalを追加 ([16b391f](https://github.com/taizod1024/ac-ts-extension/commit/16b391f6e0956e7bbaa843fe9299bd613c3cf395))
+
+
+### Bug Fixes
+
+* linuxでのデバッグ実行を無効化 ([1af1a08](https://github.com/taizod1024/ac-ts-extension/commit/1af1a08f99fc782c1ce66ff8438b447c905f2f08))
+* コマンド名修正 ([16e4806](https://github.com/taizod1024/ac-ts-extension/commit/16e4806b1498a40bc732eaa300a078068493f629))
+* リダイレクト記法修正 ([b4b603b](https://github.com/taizod1024/ac-ts-extension/commit/b4b603b1f5531bd7f44db81adef98e90c8a281c9))
+
 ### [0.1.4](https://github.com/taizod1024/ac-ts-extension/compare/v0.1.3...v0.1.4) (2022-08-24)
 
 
