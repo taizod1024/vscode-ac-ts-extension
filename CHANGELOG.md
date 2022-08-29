@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.6](https://github.com/taizod1024/ac-ts-extension/compare/v0.1.5...v0.1.6) (2022-08-29)
+
+
+### Bug Fixes
+
+* linuxでgoが実行されないのを修正 ([ccd3090](https://github.com/taizod1024/ac-ts-extension/commit/ccd30900d18ccbf83ba3fada6af738694aaf3d9a))
+
 ### [0.1.5](https://github.com/taizod1024/ac-ts-extension/compare/v0.1.4...v0.1.5) (2022-08-29)
 
 
