@@ -145,7 +145,7 @@
           "atcoderExtension.go.compiler": {
             "type": "string",
             "markdownDescription": "command line compiler for Go, see `#atcoderExtension.c.checker#`",
-            "default": "go build $taskfile"
+            "default": "go build -o $execfile $taskfile"
           },
           "atcoderExtension.go.executor": {
             "type": "string",
@@ -205,12 +205,12 @@
           "atcoderExtension.user1.extension": {
             "type": "string",
             "markdownDescription": "extension for user1, create a template file with this extension in the template folder.",
-            "default": ".bat"
+            "default": ".user1"
           },
           "atcoderExtension.user1.checker": {
             "type": "string",
             "markdownDescription": "command line checker for user1, see `#atcoderExtension.c.checker#`",
-            "default": "cmd /c"
+            "default": ""
           },
           "atcoderExtension.user1.compiler": {
             "type": "string",
@@ -220,7 +220,7 @@
           "atcoderExtension.user1.executor": {
             "type": "string",
             "markdownDescription": "command line executor for user1, see `#atcoderExtension.c.checker#`",
-            "default": "$taskfile"
+            "default": ""
           }
         }
       }
