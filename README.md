@@ -37,7 +37,7 @@ C/C++/Java/Python/Go/JavaScript/TypeScript での Visual Studio Code から AtCo
 ## 制限
 
 - マルチルートワークスペースには対応していません。
-- Linuxではデバッグ実行をサポートしていません。
+- Linuxでのデバッグ実行はサポートしていません。
 - Python/JavaScript/TypeScriptのデバッグ実行時は以下の場合のNG判定ができません。
   - 戻り値が0以外によるNG判定
   - 例外が発生したことによるNG判定
