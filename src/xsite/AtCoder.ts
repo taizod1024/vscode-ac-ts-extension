@@ -10,7 +10,6 @@ import { cpp } from "../xextension/Cpp";
 import { java } from "../xextension/Java";
 import { python } from "../xextension/Python";
 import { javascript } from "../xextension/JavaScript";
-import { rust } from "../xextension/Rust";
 import { go } from "../xextension/Go";
 import { typescript } from "../xextension/TypeScript";
 import { user1 } from "../xextension/User1";
@@ -85,7 +84,7 @@ class AtCoder implements XSite {
         { id: 4047, language: "PyPy3 (7.3.0)", xextension: python },
         { id: 4048, language: "Racket (7.6)", xextension: user1 },
         { id: 4049, language: "Ruby (2.7.1)", xextension: user1 },
-        { id: 4050, language: "Rust (1.42.0)", xextension: rust },
+        { id: 4050, language: "Rust (1.42.0)", xextension: user1 },
         { id: 4051, language: "Scala (2.13.1)", xextension: user1 },
         { id: 4052, language: "Java (OpenJDK 1.8.0)", xextension: java },
         { id: 4053, language: "Scheme (Gauche 0.9.9)", xextension: user1 },

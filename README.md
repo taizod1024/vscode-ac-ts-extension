@@ -6,7 +6,7 @@ C / C++ / Java / Python / JavaScript / TypeScript での [AtCoder](https://atcod
 
 - 2022/08/29
   - 機能強化
-    - <span style="font-weight:bold">Go, Rustに対応しました。</span>
+    - <span style="font-weight:bold">Goに対応しました。</span>
     - <span style="font-weight:bold">ローカルでタスクを登録できるようになりました。</span>
       - 競技プログラミングサイトに関係なく問題を登録することができます。
 - 2022/08/24
@@ -23,10 +23,10 @@ C / C++ / Java / Python / JavaScript / TypeScript での [AtCoder](https://atcod
 
 ## 機能
 
-C/C++/Java/Python/JavaScript/TypeScript での Visual Studio Code から AtCoder/Yukicoder への参加をサポートします。
+C/C++/Java/Python/JavaScript/Go/TypeScript での Visual Studio Code から AtCoder/Yukicoder への参加をサポートします。
 
 - AtCoder/Yukicoder へのログイン
-- C/C++/Java/Python/JavaScript/TypeScript のソースコードの生成
+- C/C++/Java/Python/JavaScript/Go/TypeScript のソースコードの生成
 - テストデータのダウンロード
 - 解答のテスト実行、デバッグ実行
 - 解答の提出

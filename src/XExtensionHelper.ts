@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
-import child_process, { ExecFileSyncOptions } from "child_process";
+import child_process from "child_process";
 import { acts } from "./AcTsExtension";
 
 class XExtensionHelper {

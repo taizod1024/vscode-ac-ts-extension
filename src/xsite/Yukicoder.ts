@@ -7,8 +7,9 @@ import { XLanguage } from "../XLanguage";
 import { cc } from "../xextension/Cc";
 import { cpp } from "../xextension/Cpp";
 import { java } from "../xextension/Java";
-import { javascript } from "../xextension/JavaScript";
 import { python } from "../xextension/Python";
+import { javascript } from "../xextension/JavaScript";
+import { go } from "../xextension/Go";
 import { typescript } from "../xextension/TypeScript";
 import { user1 } from "../xextension/User1";
 
@@ -54,7 +55,7 @@ class Yukicoder implements XSite {
         { id: "pypy3", language: "PyPy3 (7.3.8)", xextension: python },
         { id: "ruby", language: "Ruby (3.1.1p18 )", xextension: user1 },
         { id: "d", language: "D (dmd 2.099.1)", xextension: user1 },
-        { id: "go", language: "Go (1.18)", xextension: user1 },
+        { id: "go", language: "Go (1.18)", xextension: go },
         { id: "haskell", language: "Haskell (9.2.2)", xextension: user1 },
         { id: "scala", language: "Scala(Beta) (3.1.1)", xextension: user1 },
         { id: "nim", language: "Nim (1.6.4)", xextension: user1 },

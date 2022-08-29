@@ -1,4 +1,3 @@
-import { fstat } from "fs";
 import * as vscode from "vscode";
 import * as path from "path";
 import { acts } from "./AcTsExtension";

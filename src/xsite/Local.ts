@@ -3,12 +3,11 @@ import { XSite } from "../XSite";
 import { cc } from "../xextension/Cc";
 import { cpp } from "../xextension/Cpp";
 import { java } from "../xextension/Java";
-import { javascript } from "../xextension/JavaScript";
 import { python } from "../xextension/Python";
+import { javascript } from "../xextension/JavaScript";
+import { go } from "../xextension/Go";
 import { typescript } from "../xextension/TypeScript";
 import { user1 } from "../xextension/User1";
-import { rust } from "../xextension/Rust";
-import { go } from "../xextension/Go";
 
 class Local implements XSite {
     // implements
@@ -27,7 +26,6 @@ class Local implements XSite {
         { id: 4, language: "Python", xextension: python },
         { id: 5, language: "JavaScript", xextension: javascript },
         { id: 6, language: "TypeScript", xextension: typescript },
-        { id: 7, language: "Rust", xextension: rust },
         { id: 8, language: "Go", xextension: go },
         { id: 9, language: "User1", xextension: user1 },
     ];
