@@ -10,7 +10,7 @@ class Cpp implements XExtension {
     public readonly language = "c++";
 
     // method
-    public checkLang(): void {
+    public initProp(): void {
         xexthelper.checkLang(this.language);
     }
 

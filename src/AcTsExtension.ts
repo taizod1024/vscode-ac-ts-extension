@@ -111,7 +111,7 @@ class AcTsExtension {
         // check lang if extension exist
         if (this.xsite.extension) {
             // this.xextension is null when loginSite
-            this.xsite.xextension.checkLang();
+            this.xsite.xextension.initProp();
         }
 
         // save state

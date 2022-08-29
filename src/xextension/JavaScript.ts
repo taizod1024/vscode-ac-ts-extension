@@ -11,7 +11,7 @@ class JavaScript implements XExtension {
     public readonly language = "javascript";
 
     // method
-    public checkLang(): void {
+    public initProp(): void {
         xexthelper.checkLang(this.language);
     }
 

@@ -11,7 +11,7 @@ class Python implements XExtension {
     public readonly language = "python";
 
     // method
-    public checkLang(): void {
+    public initProp(): void {
         xexthelper.checkLang(this.language);
     }
 

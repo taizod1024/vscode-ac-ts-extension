@@ -18,7 +18,7 @@ class User1 implements XExtension {
     public readonly language = "user1";
 
     // method
-    public checkLang(): void {
+    public initProp(): void {
         xexthelper.checkLang(this.language);
     }
 

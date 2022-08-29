@@ -9,7 +9,7 @@ class Go implements XExtension {
     public readonly language = "go";
 
     // method
-    public checkLang(): void {
+    public initProp(): void {
         xexthelper.checkLang(this.language);
     }
 

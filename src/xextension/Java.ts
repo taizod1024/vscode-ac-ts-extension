@@ -12,7 +12,8 @@ class Java implements XExtension {
     public readonly language = "java";
 
     // method
-    public checkLang(): void {
+    public initProp(): void {
+        acts.execfile = acts.taskfile.replace(".java", ".class");
         xexthelper.checkLang(this.language);
     }
 
@@ -24,7 +25,6 @@ class Java implements XExtension {
     }
 
     public compileTask(): void {
-        acts.execfile = acts.taskfile.replace(".java", ".class");
         xexthelper.compileTask(this.language);
     }
 

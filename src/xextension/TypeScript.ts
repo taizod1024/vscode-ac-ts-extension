@@ -11,7 +11,7 @@ class TypeScript implements XExtension {
     public readonly language = "typescript";
 
     // method
-    public checkLang(): void {
+    public initProp(): void {
         xexthelper.checkLang(this.language);
     }
 

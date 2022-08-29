@@ -35,7 +35,12 @@ class XExtensionHelper {
         if (!cmd) {
             acts.channel.appendLine(`[${acts.timestamp()}] compiler: ${cmd}`);
         } else {
-            acts.channel.appendLine(`[${acts.timestamp()}] execfile: ${acts.execfile}`);
+            let deleted = false;
+            if (fs.existsSync(acts.execfile)) {
+                fs.unlinkSync(acts.execfile);
+                deleted = true;
+            }
+            acts.channel.appendLine(`[${acts.timestamp()}] execfile: ${acts.execfile}${deleted ? " deleted" : ""}`);
             acts.channel.appendLine(`[${acts.timestamp()}] compiler: ${cmd}`);
             const cmdexp = acts.expandString(cmd);
             const command = `(${cmdexp}) > ${acts.tmpstdoutfile} 2> ${acts.tmpstderrfile}`;
