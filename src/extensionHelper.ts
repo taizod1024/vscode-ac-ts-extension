@@ -32,7 +32,8 @@ class ExtensionHelper {
                 // check path
                 if (path.normalize(`${acts.projectpath}/src/${site}/${contest}`) === basename) {
                     // check valid extension
-                    if (acts.extensions.includes(extension)) {
+                    const extensions = Array.from(new Set(acts.xsite.xlanguages.map(val => val.xextension.extension))).sort();
+                    if (extensions.includes(extension)) {
                         vscode.window.activeTextEditor.document.save();
                         acts.site = site;
                         acts.xsite.contest = contest;

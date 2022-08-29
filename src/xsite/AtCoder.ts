@@ -12,6 +12,7 @@ import { javascript } from "../xextension/JavaScript";
 import { python } from "../xextension/Python";
 import { typescript } from "../xextension/TypeScript";
 import { user1 } from "../xextension/User1";
+import { XExtension } from "../XExtension";
 
 class AtCoder implements XSite {
     // param
@@ -33,11 +34,7 @@ class AtCoder implements XSite {
     public readonly contestmessage = "input contest [e.g.: abc190, abc191]";
     public readonly taskregexp = /^(.+)_(.+)$/;
     public readonly taskmessage = "input task [e.g.: abc190_a, abc190_b]";
-    public contest = "";
-    public task = "";
-    public extension = "";
-    public language = "";
-    public readonly xlanguages = [
+    public readonly xlanguages: XLanguage[] = [
         { id: 4001, language: "C (GCC 9.2.1)", xextension: cc },
         { id: 4002, language: "C (Clang 10.0.0)", xextension: cc },
         { id: 4003, language: "C++ (GCC 9.2.1)", xextension: cpp },
@@ -106,9 +103,19 @@ class AtCoder implements XSite {
         { id: 4066, language: "Sed (4.4)", xextension: user1 },
         { id: 4067, language: "Vim (8.2.0460)", xextension: user1 },
     ];
+    public get xextension() {
+        const xlanguage = this.xlanguages.find(val => val.xextension.extension === this.extension);
+        if (!xlanguage) {
+            throw `ERROR: no such extension, extension=${this.extension}`;
+        }
+        return xlanguage.xextension;
+    }
+    public contest = "";
+    public task = "";
+    public extension = "";
+    public language = "";
 
     // method
-
     public initPropAsync(withtask: boolean) {
         this.loginurl = "https://atcoder.jp/login?continue=https%3A%2F%2Fatcoder.jp%2F&lang=ja";
         if (withtask) {

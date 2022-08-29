@@ -22,10 +22,6 @@ class Local implements XSite {
     public readonly contestmessage = "input contest [e.g.: local01, local02]";
     public readonly taskregexp = /^(.+)_(.+)$/;
     public readonly taskmessage = "input task [e.g.: local01_a, local01_b]";
-    public contest = "";
-    public task = "";
-    public extension = "";
-    public language = "";
     public readonly xlanguages = [
         { id: 1, language: "C", xextension: cc },
         { id: 2, language: "C++", xextension: cpp },
@@ -35,6 +31,17 @@ class Local implements XSite {
         { id: 6, language: "TypeScript", xextension: typescript },
         { id: 7, language: "User1", xextension: user1 },
     ];
+    public get xextension() {
+        const xlanguage = this.xlanguages.find(val => val.xextension.extension === this.extension);
+        if (!xlanguage) {
+            throw `ERROR: no such extension, extension=${this.extension}`;
+        }
+        return xlanguage.xextension;
+    }
+    public contest = "";
+    public task = "";
+    public extension = "";
+    public language = "";
 
     // method
     public async initPropAsync(_withtask: boolean) {}

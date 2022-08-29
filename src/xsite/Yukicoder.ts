@@ -33,10 +33,6 @@ class Yukicoder implements XSite {
     public readonly contestmessage = "input contestid from url [e.g.: 314, 315]";
     public readonly taskregexp = /^[0-9]+$/;
     public readonly taskmessage = "input problemno from url [e.g.: 1680, 1681]";
-    public contest = "";
-    public task = "";
-    public extension = "";
-    public language = "";
     public readonly xlanguages = [
         { id: "cpp14", language: "C++14 (gcc 11.2.0 + boost 1.78.0)", xextension: cpp },
         { id: "cpp17", language: "C++17 (gcc 11.2.0 + boost 1.78.0)", xextension: cpp },
@@ -86,6 +82,17 @@ class Yukicoder implements XSite {
         { id: "Whitespace", language: "Whitespace (0.3)", xextension: user1 },
         { id: "text", language: "Text (cat 8.3)", xextension: user1 },
     ];
+    public get xextension() {
+        const xlanguage = this.xlanguages.find(val => val.xextension.extension === this.extension);
+        if (!xlanguage) {
+            throw `ERROR: no such extension, extension=${this.extension}`;
+        }
+        return xlanguage.xextension;
+    }
+    public contest = "";
+    public task = "";
+    public extension = "";
+    public language = "";
 
     // method
     async initPropAsync(withtask: boolean) {

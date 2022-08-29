@@ -43,13 +43,6 @@ class AcTsExtension {
         }
         return xsite;
     }
-    public get xextension() {
-        const xextension = this.xextensions.find(val => val.extension === this.xsite.extension);
-        if (!xextension) {
-            throw `ERROR: no such extension, extension=${this.xsite.extension}`;
-        }
-        return xextension;
-    }
     public tasktmplfile: string;
     public usertasktmplfile: string;
     public taskpath: string;
@@ -67,12 +60,7 @@ class AcTsExtension {
     public get sites() {
         return this.xsites.map(val => val.site);
     }
-    // TODO refactor: extensionsおよびxextensionsをXSite配下に移動
-    public get extensions() {
-        return this.xextensions.map(val => val.extension);
-    }
     public xsites: XSite[];
-    public xextensions: XExtension[];
 
     // setup function
     constructor() {
@@ -87,7 +75,6 @@ class AcTsExtension {
 
         // coders and langs
         this.xsites = [atcoder, yukicoder, local];
-        this.xextensions = [cpp, python, java, cc, javascript, typescript, user1];
 
         // init context
         this.channel = vscode.window.createOutputChannel(this.appname);
@@ -132,7 +119,7 @@ class AcTsExtension {
         // check lang if extension exist
         if (this.xsite.extension) {
             // this.xextension is null when loginSite
-            this.xextension.checkLang();
+            this.xsite.xextension.checkLang();
         }
 
         // save state
@@ -194,7 +181,7 @@ class AcTsExtension {
         }
 
         // init task with extension
-        this.xextension.initTask();
+        this.xsite.xextension.initTask();
 
         // open file
         vscode.workspace.openTextDocument(this.taskfile).then(
@@ -257,7 +244,7 @@ class AcTsExtension {
         }
 
         // compile task
-        this.xextension.compileTask();
+        this.xsite.xextension.compileTask();
 
         // run test set
         let ok = 0;
@@ -283,9 +270,9 @@ class AcTsExtension {
 
                 // test or debug task
                 if (debug) {
-                    that.xextension.debugTask();
+                    that.xsite.xextension.debugTask();
                 } else {
-                    child = that.xextension.testTask();
+                    child = that.xsite.xextension.testTask();
                 }
 
                 // wait child process
@@ -406,7 +393,7 @@ class AcTsExtension {
         }
 
         // submit task with extension
-        this.xextension.submitTask();
+        this.xsite.xextension.submitTask();
 
         // submit task
         await this.xsite.submitTaskAsync();

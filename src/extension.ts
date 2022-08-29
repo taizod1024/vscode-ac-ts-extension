@@ -22,8 +22,9 @@ export function activate(context: vscode.ExtensionContext) {
                     return;
                 }
                 // select site
+                const sites = extensionhelper.moveToHead(acts.sites, acts.site);
                 vscode.window
-                    .showQuickPick(extensionhelper.moveToHead(acts.sites, acts.site), {
+                    .showQuickPick(sites, {
                         placeHolder: "SELECT SITE",
                     })
                     .then(site => {
@@ -115,8 +116,9 @@ export function activate(context: vscode.ExtensionContext) {
                     return;
                 }
                 // select site
+                const sites = extensionhelper.moveToHead(acts.sites, acts.site);
                 vscode.window
-                    .showQuickPick(extensionhelper.moveToHead(acts.sites, acts.site), {
+                    .showQuickPick(sites, {
                         placeHolder: "SELECT SITE",
                     })
                     .then(site => {
@@ -169,8 +171,10 @@ export function activate(context: vscode.ExtensionContext) {
                                             return;
                                         }
                                         // select extension
+                                        let extensions = Array.from(new Set(acts.xsite.xlanguages.map(val => val.xextension.extension))).sort();
+                                        extensions = extensionhelper.moveToHead(extensions, extension);
                                         vscode.window
-                                            .showQuickPick(extensionhelper.moveToHead(acts.extensions, extension), {
+                                            .showQuickPick(extensions, {
                                                 placeHolder: "SELECT EXTENSION",
                                             })
                                             .then(extension => {
@@ -209,8 +213,10 @@ export function activate(context: vscode.ExtensionContext) {
                     return;
                 }
                 // select extension
+                let extensions = Array.from(new Set(acts.xsite.xlanguages.map(val => val.xextension.extension))).sort();
+                extensions = extensionhelper.moveToHead(extensions, acts.xsite.extension);
                 vscode.window
-                    .showQuickPick(extensionhelper.moveToHead(acts.extensions, acts.xsite.extension), {
+                    .showQuickPick(extensions, {
                         placeHolder: "SELECT EXTENSION",
                     })
                     .then(extension => {
@@ -290,18 +296,10 @@ export function activate(context: vscode.ExtensionContext) {
                     return;
                 }
                 // select language
-                let languages: string[];
-                if (acts.site === "atcoder") {
-                    languages = atcoder.xlanguages.filter(val => val.xextension.extension === acts.xsite.extension).map(val => val.language);
-                }
-                if (acts.site === "yukicoder") {
-                    languages = yukicoder.xlanguages.filter(val => val.xextension.extension === acts.xsite.extension).map(val => val.language);
-                }
-                if (acts.site === "local") {
-                    languages = local.xlanguages.filter(val => val.xextension.extension === acts.xsite.extension).map(val => val.language);
-                }
+                let languages = acts.xsite.xlanguages.filter(val => val.xextension.extension === acts.xsite.extension).map(val => val.language);
+                languages = extensionhelper.moveToHead(languages, acts.xsite.language);
                 vscode.window
-                    .showQuickPick(extensionhelper.moveToHead(languages, acts.xsite.language), {
+                    .showQuickPick(languages, {
                         placeHolder: "SELECT LANGUAGE",
                     })
                     .then(language => {
