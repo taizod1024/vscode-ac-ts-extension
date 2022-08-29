@@ -35,7 +35,7 @@
     "commands": [
       {
         "command": "ac-ts-extension.loginSite",
-        "title": "AtCoder Extension: login Site..."
+        "title": "AtCoder Extension: Login Site..."
       },
       {
         "command": "ac-ts-extension.initTask",
