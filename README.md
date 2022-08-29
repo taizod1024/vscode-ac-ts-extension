@@ -6,8 +6,9 @@ C / C++ / Java / Python / JavaScript / TypeScript での [AtCoder](https://atcod
 
 - 2022/08/29
   - 機能強化
+    - <span style="font-weight:bold">Go, Rustに対応しました。</span>
     - <span style="font-weight:bold">ローカルでタスクを登録できるようになりました。</span>
-      - 競技プログラミングサイトに依存せず登録することができます。
+      - 競技プログラミングサイトに関係なく問題を登録することができます。
 - 2022/08/24
   - 機能強化
     - <span style="font-weight:bold">Linux環境に対応しました。</span>
