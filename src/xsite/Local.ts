@@ -4,8 +4,8 @@ import { cc } from "../xextension/Cc";
 import { cpp } from "../xextension/Cpp";
 import { java } from "../xextension/Java";
 import { python } from "../xextension/Python";
-import { javascript } from "../xextension/JavaScript";
 import { go } from "../xextension/Go";
+import { javascript } from "../xextension/JavaScript";
 import { typescript } from "../xextension/TypeScript";
 import { user1 } from "../xextension/User1";
 

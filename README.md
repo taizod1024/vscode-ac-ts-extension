@@ -1,6 +1,6 @@
 # AtCoder Extension
 
-C / C++ / Java / Python / JavaScript / TypeScript での [AtCoder](https://atcoder.jp/?lang=ja) / [Yukicoder](https://yukicoder.me/) への参加をサポートする Visual Studio Code の拡張機能です。
+C / C++ / Java / Python / Go / JavaScript / TypeScript での [AtCoder](https://atcoder.jp/?lang=ja) / [Yukicoder](https://yukicoder.me/) への参加をサポートする Visual Studio Code の拡張機能です。
 
 ## 変更
 
@@ -23,10 +23,10 @@ C / C++ / Java / Python / JavaScript / TypeScript での [AtCoder](https://atcod
 
 ## 機能
 
-C/C++/Java/Python/JavaScript/Go/TypeScript での Visual Studio Code から AtCoder/Yukicoder への参加をサポートします。
+C/C++/Java/Python/Go/JavaScript/TypeScript での Visual Studio Code から AtCoder/Yukicoder への参加をサポートします。
 
 - AtCoder/Yukicoder へのログイン
-- C/C++/Java/Python/JavaScript/Go/TypeScript のソースコードの生成
+- C/C++/Java/Python/Go/JavaScript/TypeScript のソースコードの生成
 - テストデータのダウンロード
 - 解答のテスト実行、デバッグ実行
 - 解答の提出
@@ -37,6 +37,7 @@ C/C++/Java/Python/JavaScript/Go/TypeScript での Visual Studio Code から AtCo
 ## 制限
 
 - マルチルートワークスペースには対応していません。
+- Linuxではデバッグ実行をサポートしていません。
 - Python/JavaScript/TypeScriptのデバッグ実行時は以下の場合のNG判定ができません。
   - 戻り値が0以外によるNG判定
   - 例外が発生したことによるNG判定
@@ -50,8 +51,9 @@ C/C++/Java/Python/JavaScript/Go/TypeScript での Visual Studio Code から AtCo
   - C++ (mingw 11.2.0.07112021)
   - Java (AdoptOpenJDKjre 16.0.1.901)
   - Python (3.10.6)
-  - TypeScript (Node.js 16.13.0)
+  - Go (1.19)
   - JavaScript (Node.js 16.13.0)
+  - TypeScript (Node.js 16.13.0)
 - Linux
   - Ubuntu (WSL2)
 
@@ -72,6 +74,20 @@ gcc/g++/clang/jdk等をインストールします。
 
 [Python](https://www.python.org/) をインストールします。
 
+### Go
+
+[Go](https://go.dev/) をインストールします。
+
+### JavaScript
+
+[Node.js](https://nodejs.org/ja/) をインストールしてから TypeScript の初期設定をします。
+
+1. vscode の [ファイル] > [フォルダを開く] からフォルダを選択します。
+2. [ターミナル] > [新しいターミナル] から以下のコマンドを実行します。入力を求められたらすべて Enter キーを押して進めてください。
+   ```shell
+   npm init
+   ```
+
 ### TypeScript
 
 [Node.js](https://nodejs.org/ja/) をインストールしてから TypeScript の初期設定をします。
@@ -84,16 +100,6 @@ gcc/g++/clang/jdk等をインストールします。
    ```
 
 ![npminit](https://github.com/taizod1024/ac-ts-extension/blob/main/images/npminit.gif?raw=true)
-
-### JavaScript
-
-[Node.js](https://nodejs.org/ja/) をインストールしてから TypeScript の初期設定をします。
-
-1. vscode の [ファイル] > [フォルダを開く] からフォルダを選択します。
-2. [ターミナル] > [新しいターミナル] から以下のコマンドを実行します。入力を求められたらすべて Enter キーを押して進めてください。
-   ```shell
-   npm init
-   ```
 
 ## 使い方
 
@@ -216,6 +222,36 @@ ans = n
 print(ans)
 ```
 
+#### Goひな型
+
+```Go
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+
+	// TODO edit this code, this code is for https://atcoder.jp/contests/practice/tasks/practice_1
+
+	// param
+	var a int
+	var b, c int
+	var s string
+	fmt.Scanf("%d\n", &a)
+	fmt.Scanf("%d %d\n", &b, &c)
+	fmt.Scanf("%s\n", &s)
+
+	// answer
+	fmt.Printf("%d %s\n", a+b+c, s)
+}
+```
+
+#### JavaScript ひな型
+
+TypeScript と同様です。
+
 #### TypeScript ひな型
 
 ```TypeScript
@@ -251,10 +287,6 @@ const main = function () {
 };
 main();
 ```
-
-#### JavaScript ひな型
-
-TypeScript と同様です。
 
 ### 問題の解答をテストする
 
@@ -343,6 +375,10 @@ Takahashi
 | 拡張子         | `$extension` | `.c` |
 
 ### Python 設定
+
+特にありません。
+
+### Go 設定
 
 特にありません。
 
