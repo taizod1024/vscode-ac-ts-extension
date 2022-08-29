@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
-import child_process, { ExecFileSyncOptions } from "child_process";
+import child_process from "child_process";
 import { acts } from "./AcTsExtension";
 
 class XExtensionHelper {
@@ -13,7 +13,7 @@ class XExtensionHelper {
             throw "ERROR: no checker";
         }
         const cmdexp = acts.expandString(String(cmd));
-        const command = `(${cmdexp}) 1> ${acts.tmpstdoutfile} 2> ${acts.tmpstderrfile}`;
+        const command = `(${cmdexp}) > ${acts.tmpstdoutfile} 2> ${acts.tmpstderrfile}`;
         const options = { cwd: acts.taskpath };
         Object.assign(options, opt);
         try {
@@ -35,10 +35,15 @@ class XExtensionHelper {
         if (!cmd) {
             acts.channel.appendLine(`[${acts.timestamp()}] compiler: ${cmd}`);
         } else {
-            acts.channel.appendLine(`[${acts.timestamp()}] execfile: ${acts.execfile}`);
+            let deleted = false;
+            if (fs.existsSync(acts.execfile)) {
+                fs.unlinkSync(acts.execfile);
+                deleted = true;
+            }
+            acts.channel.appendLine(`[${acts.timestamp()}] execfile: ${acts.execfile}${deleted ? " deleted" : ""}`);
             acts.channel.appendLine(`[${acts.timestamp()}] compiler: ${cmd}`);
             const cmdexp = acts.expandString(cmd);
-            const command = `(${cmdexp}) 1> ${acts.tmpstdoutfile} 2> ${acts.tmpstderrfile}`;
+            const command = `(${cmdexp}) > ${acts.tmpstdoutfile} 2> ${acts.tmpstderrfile}`;
             const options = { cwd: acts.taskpath };
             Object.assign(options, opt);
             try {
@@ -66,7 +71,7 @@ class XExtensionHelper {
         const config = vscode.workspace.getConfiguration(acts.appcfgkey + "." + lang);
         const cmd = config.executor || "";
         const cmdexp = acts.expandString(cmd);
-        const command = `(${cmdexp}) < ${acts.tmpstdinfile} 1> ${acts.tmpstdoutfile} 2> ${acts.tmpstderrfile}`;
+        const command = `(${cmdexp}) < ${acts.tmpstdinfile} > ${acts.tmpstdoutfile} 2> ${acts.tmpstderrfile}`;
         const options = { cwd: acts.taskpath };
         Object.assign(options, opt);
         const child = child_process.exec(command, options);

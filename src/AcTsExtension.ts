@@ -1,47 +1,39 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
-const path = require("path");
-import child_process, { ExecFileSyncOptions } from "child_process";
+import * as path from "path";
+import child_process from "child_process";
 import { XSite } from "./XSite";
-import { XExtension } from "./XExtension";
 import { atcoder } from "./xsite/AtCoder";
 import { yukicoder } from "./xsite/Yukicoder";
-import { typescript } from "./xextension/TypeScript";
-import { javascript } from "./xextension/JavaScript";
-import { python } from "./xextension/Python";
-import { cc } from "./xextension/Cc";
-import { cpp } from "./xextension/Cpp";
-import { java } from "./xextension/Java";
-import { user1 } from "./xextension/User1";
+import { local } from "./xsite/Local";
 
 // extension core
 class AcTsExtension {
     // constant
-    public appname = "AtCoder Extension";
-    public appid = "ac-ts-extension";
-    public appcfgkey = "atcoderExtension";
-    public statefile: string;
-    public tmppath: string;
+    public readonly appname = "AtCoder Extension";
+    public readonly appid = "ac-ts-extension";
+    public readonly appcfgkey = "atcoderExtension";
+    public readonly statefile: string;
+    public readonly tmppath: string;
+    public readonly iswindows: boolean = !!process.env.WINDIR;
+    public readonly islinux: boolean = !process.env.WINDIR;
+    public readonly projectfolder: vscode.WorkspaceFolder;
+    public readonly channel: vscode.OutputChannel;
 
     // context
     public vscodeextensionpath: string;
-    public projectfolder: vscode.WorkspaceFolder;
     public projectpath: string;
-    public channel: vscode.OutputChannel;
 
     // param
     public site: string;
-    public contest: string;
-    public task: string;
-    public extension: string;
-    public language: string;
 
     // prop
     public get xsite() {
-        return this.xsites.find(val => val.site === this.site);
-    }
-    public get xextension() {
-        return this.xextensions.find(val => val.extension === this.extension);
+        const xsite = this.xsites.find(val => val.site === this.site);
+        if (!xsite) {
+            throw `ERROR: no such site, site=${this.site}`;
+        }
+        return xsite;
     }
     public tasktmplfile: string;
     public usertasktmplfile: string;
@@ -60,16 +52,12 @@ class AcTsExtension {
     public get sites() {
         return this.xsites.map(val => val.site);
     }
-    public get extensions() {
-        return this.xextensions.map(val => val.extension);
-    }
     public xsites: XSite[];
-    public xextensions: XExtension[];
 
     // setup function
     constructor() {
         // init constant
-        if (process.env.WINDIR) {
+        if (this.iswindows) {
             this.statefile = path.normalize(`${process.env.USERPROFILE}/.${this.appid}.json`);
             this.tmppath = path.normalize(`${process.env.TEMP}/${this.appid}`);
         } else {
@@ -77,14 +65,8 @@ class AcTsExtension {
             this.tmppath = path.normalize(`/tmp/${this.appid}/${process.env.USER}`);
         }
 
-        // make tmppath
-        if (!fs.existsSync(this.tmppath)) {
-            fs.mkdirSync(this.tmppath, { recursive: true });
-        }
-
         // coders and langs
-        this.xsites = [atcoder, yukicoder];
-        this.xextensions = [cpp, python, java, cc, javascript, typescript, user1];
+        this.xsites = [atcoder, yukicoder, local];
 
         // init context
         this.channel = vscode.window.createOutputChannel(this.appname);
@@ -97,12 +79,12 @@ class AcTsExtension {
 
     public async initPropAsync(withtask: boolean) {
         // init prop
-        this.tasktmplfile = path.normalize(`${this.vscodeextensionpath}/template/template${this.extension}`);
-        this.usertasktmplfile = path.normalize(`${this.projectpath}/template/template${this.extension}`);
-        this.taskpath = path.normalize(`${this.projectpath}/src/${this.site}/${this.contest}`);
-        this.taskfile = path.normalize(`${this.taskpath}/${this.task}${this.extension}`);
-        this.testfile = path.normalize(`${this.taskpath}/${this.task}.txt`);
-        this.execfile = path.normalize(`${this.taskpath}/${this.task}${process.env.WINDIR ? ".exe" : ".out"}`);
+        this.tasktmplfile = path.normalize(`${this.vscodeextensionpath}/template/template${this.xsite.extension}`);
+        this.usertasktmplfile = path.normalize(`${this.projectpath}/template/template${this.xsite.extension}`);
+        this.taskpath = path.normalize(`${this.projectpath}/src/${this.site}/${this.xsite.contest}`);
+        this.taskfile = path.normalize(`${this.taskpath}/${this.xsite.task}${this.xsite.extension}`);
+        this.testfile = path.normalize(`${this.taskpath}/${this.xsite.task}.txt`);
+        this.execfile = path.normalize(`${this.taskpath}/${this.xsite.task}${this.iswindows ? ".exe" : ".out"}`);
         this.tmpstdinfile = path.normalize(`${this.tmppath}/test_stdin.txt`);
         this.tmpstdoutfile = path.normalize(`${this.tmppath}/test_stdout.txt`);
         this.tmpstderrfile = path.normalize(`${this.tmppath}/test_stderr.txt`);
@@ -110,19 +92,26 @@ class AcTsExtension {
         this.proxy = "";
         this.timeout = 5000;
 
-        // create taskpath
-        if (!fs.existsSync(this.taskpath)) {
-            fs.mkdirSync(this.taskpath, { recursive: true });
+        // make tmppath
+        if (!fs.existsSync(this.tmppath)) {
+            fs.mkdirSync(this.tmppath, { recursive: true });
         }
 
-        // check and init coder
+        // make taskpath if task exist
+        if (this.xsite.task) {
+            if (!fs.existsSync(this.taskpath)) {
+                fs.mkdirSync(this.taskpath, { recursive: true });
+            }
+        }
+
+        // check and init site
         this.xsite.checkLogin();
         await this.xsite.initPropAsync(withtask);
 
-        // check lang if exists
-        if (this.xextension) {
+        // check lang if extension exist
+        if (this.xsite.extension) {
             // this.xextension is null when loginSite
-            this.xextension.checkLang();
+            this.xsite.xextension.initProp();
         }
 
         // save state
@@ -145,9 +134,9 @@ class AcTsExtension {
     public async initTaskAsync() {
         // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
-        this.channel.appendLine(`[${this.timestamp()}] contest: ${this.contest}`);
-        this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
-        this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
+        this.channel.appendLine(`[${this.timestamp()}] contest: ${this.xsite.contest}`);
+        this.channel.appendLine(`[${this.timestamp()}] task: ${this.xsite.task}`);
+        this.channel.appendLine(`[${this.timestamp()}] extension: ${this.xsite.extension}`);
 
         // init command
         await this.initPropAsync(true);
@@ -184,7 +173,7 @@ class AcTsExtension {
         }
 
         // init task with extension
-        this.xextension.initTask();
+        this.xsite.xextension.initTask();
 
         // open file
         vscode.workspace.openTextDocument(this.taskfile).then(
@@ -195,15 +184,15 @@ class AcTsExtension {
                 throw err;
             }
         );
-        this.channel.appendLine(`---- SUCCESS: ${this.task} initialized ----`);
+        this.channel.appendLine(`---- SUCCESS: ${this.xsite.task} initialized ----`);
     }
 
     public async testTaskAsync(debug: boolean): Promise<void> {
         // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
-        this.channel.appendLine(`[${this.timestamp()}] contest: ${this.contest}`);
-        this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
-        this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
+        this.channel.appendLine(`[${this.timestamp()}] contest: ${this.xsite.contest}`);
+        this.channel.appendLine(`[${this.timestamp()}] task: ${this.xsite.task}`);
+        this.channel.appendLine(`[${this.timestamp()}] extension: ${this.xsite.extension}`);
         this.channel.appendLine(`[${this.timestamp()}] debug: ${debug}`);
 
         // init command
@@ -247,7 +236,7 @@ class AcTsExtension {
         }
 
         // compile task
-        this.xextension.compileTask();
+        this.xsite.xextension.compileTask();
 
         // run test set
         let ok = 0;
@@ -273,9 +262,9 @@ class AcTsExtension {
 
                 // test or debug task
                 if (debug) {
-                    that.xextension.debugTask();
+                    that.xsite.xextension.debugTask();
                 } else {
-                    child = that.xextension.testTask();
+                    child = that.xsite.xextension.testTask();
                 }
 
                 // wait child process
@@ -361,7 +350,7 @@ class AcTsExtension {
                                     return;
                                 }
                                 // test set done
-                                let msg = `${that.task} OK=${ok}, NG=${ng}`;
+                                let msg = `${that.xsite.task} OK=${ok}, NG=${ng}`;
                                 if (ng === 0) {
                                     that.channel.appendLine(`---- SUCCESS: ${msg} ----`);
                                     resolve();
@@ -381,10 +370,10 @@ class AcTsExtension {
     public async submitTaskAsync() {
         // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
-        this.channel.appendLine(`[${this.timestamp()}] contest: ${this.contest}`);
-        this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
-        this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
-        this.channel.appendLine(`[${this.timestamp()}] language: ${this.language}`);
+        this.channel.appendLine(`[${this.timestamp()}] contest: ${this.xsite.contest}`);
+        this.channel.appendLine(`[${this.timestamp()}] task: ${this.xsite.task}`);
+        this.channel.appendLine(`[${this.timestamp()}] extension: ${this.xsite.extension}`);
+        this.channel.appendLine(`[${this.timestamp()}] language: ${this.xsite.language}`);
 
         //  init command
         await this.initPropAsync(true);
@@ -396,20 +385,20 @@ class AcTsExtension {
         }
 
         // submit task with extension
-        this.xextension.submitTask();
+        this.xsite.xextension.submitTask();
 
         // submit task
         await this.xsite.submitTaskAsync();
 
-        acts.channel.appendLine(`---- SUCCESS: ${acts.task} submitted ----`);
+        acts.channel.appendLine(`---- SUCCESS: ${acts.xsite.task} submitted ----`);
     }
 
     public async removeTaskAsync() {
         // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
-        this.channel.appendLine(`[${this.timestamp()}] contest: ${this.contest}`);
-        this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
-        this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
+        this.channel.appendLine(`[${this.timestamp()}] contest: ${this.xsite.contest}`);
+        this.channel.appendLine(`[${this.timestamp()}] task: ${this.xsite.task}`);
+        this.channel.appendLine(`[${this.timestamp()}] extension: ${this.xsite.extension}`);
 
         // init command
         await this.initPropAsync(true);
@@ -430,15 +419,15 @@ class AcTsExtension {
             this.channel.appendLine(`[${this.timestamp()}] testfile: ${this.testfile} removed`);
         }
 
-        this.channel.appendLine(`---- SUCCESS: ${this.task} removed ----`);
+        this.channel.appendLine(`---- SUCCESS: ${this.xsite.task} removed ----`);
     }
 
     public async browseTaskAsync() {
         // show channel
         this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
-        this.channel.appendLine(`[${this.timestamp()}] contest: ${this.contest}`);
-        this.channel.appendLine(`[${this.timestamp()}] task: ${this.task}`);
-        this.channel.appendLine(`[${this.timestamp()}] extension: ${this.extension}`);
+        this.channel.appendLine(`[${this.timestamp()}] contest: ${this.xsite.contest}`);
+        this.channel.appendLine(`[${this.timestamp()}] task: ${this.xsite.task}`);
+        this.channel.appendLine(`[${this.timestamp()}] extension: ${this.xsite.extension}`);
 
         // init command
         await this.initPropAsync(true);
@@ -446,7 +435,7 @@ class AcTsExtension {
         // open task
         this.xsite.browseTask();
 
-        this.channel.appendLine(`---- SUCCESS: browse ${this.task} ----`);
+        this.channel.appendLine(`---- SUCCESS: browse ${this.xsite.task} ----`);
     }
 
     public async clearStateAsync() {
@@ -482,19 +471,11 @@ class AcTsExtension {
                   language: "",
               };
         this.site = json.site || "";
-        this.contest = json.contest || "";
-        this.task = json.task || "";
-        this.extension = json.extension;
-        this.language = json.language;
         this.xsites.forEach(val => val.loadState(json));
     }
     public saveState() {
         const json = {
             site: this.site,
-            contest: this.contest,
-            task: this.task,
-            extension: this.extension,
-            language: this.language,
         };
         this.xsites.forEach(val => val.saveState(json));
         fs.writeFileSync(this.statefile, JSON.stringify(json));
@@ -508,9 +489,9 @@ class AcTsExtension {
             .replace(/\$tmppath/g, this.tmppath)
             .replace(/\$taskpath/g, this.taskpath)
             .replace(/\$site/g, this.site)
-            .replace(/\$contest/g, this.contest)
-            .replace(/\$task/g, this.task)
-            .replace(/\$extension/g, this.extension);
+            .replace(/\$contest/g, this.xsite.contest)
+            .replace(/\$task/g, this.xsite.task)
+            .replace(/\$extension/g, this.xsite.extension);
     }
 
     // message

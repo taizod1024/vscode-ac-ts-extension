@@ -1,6 +1,5 @@
 import * as fs from "fs";
-import child_process, { ExecFileSyncOptions } from "child_process";
-const path = require("path");
+import * as path from "path";
 import { acts } from "../AcTsExtension";
 import { XExtension } from "../XExtension";
 import { xexthelper } from "../XExtensionHelper";
@@ -9,39 +8,39 @@ class Java implements XExtension {
     // implements
 
     // prop
-    extension = ".java";
-    language = "java";
+    public readonly extension = ".java";
+    public readonly language = "java";
 
     // method
-    checkLang(): void {
+    public initProp(): void {
+        acts.execfile = acts.taskfile.replace(".java", ".class");
         xexthelper.checkLang(this.language);
     }
 
-    initTask(): void {
+    public initTask(): void {
         // rewrite class name to task name
         let text = fs.readFileSync(acts.taskfile).toString();
-        text = text.replace(new RegExp("class template", "g"), `class ${acts.task}`);
+        text = text.replace(new RegExp("class template", "g"), `class ${acts.xsite.task}`);
         fs.writeFileSync(acts.taskfile, text);
     }
 
-    compileTask(): void {
-        acts.execfile = acts.taskfile.replace(".java", ".class");
+    public compileTask(): void {
         xexthelper.compileTask(this.language);
     }
 
-    debugTask(): any {
+    public debugTask(): any {
         throw "ERROR: debug is not supported";
     }
 
-    testTask(): any {
+    public testTask(): any {
         return xexthelper.testTask(this.language);
     }
 
-    submitTask(): void {
+    public submitTask(): void {
         // replace and rewrite taskfile
         const tmptaskfile = path.normalize(`${acts.tmppath}/Main.java`);
         let text = fs.readFileSync(acts.taskfile).toString();
-        text = text.replace(new RegExp(`class ${acts.task}`, "g"), "class Main");
+        text = text.replace(new RegExp(`class ${acts.xsite.task}`, "g"), "class Main");
         fs.writeFileSync(tmptaskfile, text);
         acts.taskfile = tmptaskfile;
     }

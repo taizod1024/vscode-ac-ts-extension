@@ -1,3 +1,4 @@
+import { XExtension } from "./XExtension";
 import { XLanguage } from "./XLanguage";
 
 export interface XSite {
@@ -8,11 +9,12 @@ export interface XSite {
     contestmessage: string;
     taskregexp: RegExp;
     taskmessage: string;
+    xlanguages: XLanguage[];
+    xextension: XExtension;
     contest: string;
     task: string;
     extension: string;
     language: string;
-    xlanguages: XLanguage[];
 
     // method
     checkLogin(): void;

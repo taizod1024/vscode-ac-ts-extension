@@ -2,7 +2,7 @@
   "version": "0.1.4",
   "name": "ac-ts-extension",
   "displayName": "AtCoder Extension",
-  "description": "atcoder/yukicoder vscode extension for c/cpp/java/python/javascript/typescript",
+  "description": "atcoder/yukicoder vscode extension for c/c++/java/python/javascript/typescript",
   "engines": {
     "vscode": "^1.60.0"
   },
@@ -12,9 +12,12 @@
   "keywords": [
     "atcoder",
     "yukicoder",
+    "c",
+    "c++",
+    "java",
     "python",
-    "typescript",
     "javascript",
+    "typescript",
     "windows",
     "linux"
   ],
@@ -35,7 +38,7 @@
     "commands": [
       {
         "command": "ac-ts-extension.loginSite",
-        "title": "AtCoder Extension: login Site..."
+        "title": "AtCoder Extension: Login Site..."
       },
       {
         "command": "ac-ts-extension.initTask",
@@ -127,7 +130,27 @@
           "atcoderExtension.java.executor": {
             "type": "string",
             "markdownDescription": "command line executor for Java, see `#atcoderExtension.c.checker#`",
-            "default": "cd $taskpath && java $task"
+            "default": "java $task"
+          }
+        }
+      },
+      {
+        "title": "Go",
+        "properties": {
+          "atcoderExtension.go.checker": {
+            "type": "string",
+            "markdownDescription": "command line checker for Go, see `#atcoderExtension.c.checker#`",
+            "default": "go version"
+          },
+          "atcoderExtension.go.compiler": {
+            "type": "string",
+            "markdownDescription": "command line compiler for Go, see `#atcoderExtension.c.checker#`",
+            "default": "go build $taskfile"
+          },
+          "atcoderExtension.go.executor": {
+            "type": "string",
+            "markdownDescription": "command line executor for Go, see `#atcoderExtension.c.checker#`",
+            "default": "$execfile"
           }
         }
       },

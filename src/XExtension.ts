@@ -4,7 +4,7 @@ export interface XExtension {
     language: string;
 
     // method
-    checkLang(): void;
+    initProp(): void;
     initTask(): void;
     compileTask(): void;
     testTask(): any;

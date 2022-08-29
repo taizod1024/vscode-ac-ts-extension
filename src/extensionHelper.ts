@@ -1,9 +1,9 @@
 import * as vscode from "vscode";
-const path = require("path");
+import * as path from "path";
 import { acts } from "./AcTsExtension";
 
 // extension helper
-class AcTsHelper {
+class ExtensionHelper {
     public checkProjectPath(): boolean {
         if (vscode.workspace.workspaceFolders?.length === 1) {
             acts.projectpath = vscode.workspace.workspaceFolders[0].uri.fsPath;
@@ -19,7 +19,7 @@ class AcTsHelper {
             const filenames = vscode.window.activeTextEditor?.document?.fileName?.split(path.sep);
             if (filenames) {
                 // disassemble
-                // TODO pathの使用
+                // 複数階層の解析を自前でやるほうが効率的なのでpathは使用しない
                 let filename = filenames.pop();
                 let basename = filenames.join(path.sep);
                 let basenames = filename.split(".");
@@ -31,20 +31,21 @@ class AcTsHelper {
                 // check path
                 if (path.normalize(`${acts.projectpath}/src/${site}/${contest}`) === basename) {
                     // check valid extension
-                    if (acts.extensions.includes(extension)) {
+                    const extensions = Array.from(new Set(acts.xsite.xlanguages.map(val => val.xextension.extension))).sort();
+                    if (extensions.includes(extension)) {
                         vscode.window.activeTextEditor.document.save();
                         acts.site = site;
-                        acts.contest = contest;
-                        acts.task = task;
-                        acts.extension = extension;
+                        acts.xsite.contest = contest;
+                        acts.xsite.task = task;
+                        acts.xsite.extension = extension;
                         return true;
                     }
                     // check test file and extension already selected
-                    if (extension === ".txt" && acts.extension) {
+                    if (extension === ".txt" && acts.xsite.extension) {
                         vscode.window.activeTextEditor.document.save();
                         acts.site = site;
-                        acts.contest = contest;
-                        acts.task = task;
+                        acts.xsite.contest = contest;
+                        acts.xsite.task = task;
                         return true;
                     }
                 }
@@ -65,4 +66,4 @@ class AcTsHelper {
         return dstarr;
     }
 }
-export const extensionhelper = new AcTsHelper();
+export const extensionhelper = new ExtensionHelper();
