@@ -1,6 +1,6 @@
 # AtCoder Extension
 
-C / C++ / Java / Python / Go / JavaScript / TypeScript での [AtCoder](https://atcoder.jp/?lang=ja) / [Yukicoder](https://yukicoder.me/) への参加をサポートする Visual Studio Code の拡張機能です。
+C/C++/Java/Python/Go/JavaScript/TypeScript での [AtCoder](https://atcoder.jp/?lang=ja)/[Yukicoder](https://yukicoder.me/) への参加をサポートする Visual Studio Code の拡張機能です。
 
 ## 変更
 
