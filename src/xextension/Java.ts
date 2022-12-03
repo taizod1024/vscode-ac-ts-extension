@@ -31,11 +31,11 @@ class Java implements XExtension {
 
   public debugTask(): any {
     if (acts.islinux) {
-      throw "ERROR: debug is not supported in linux";
+      throw "ERROR: debug is not supported on linux";
     }
     const debugconfig = {
-      type: "java",
       name: acts.appid,
+      type: "java",
       request: "launch",
       mainClass: acts.taskfile,
       args: ["<", acts.tmpstdinfile, ">", acts.tmpstdoutfile, "2>", acts.tmpstderrfile],
