@@ -269,19 +269,21 @@ class AcTsExtension {
 
         // wait child process
         (function wait_child() {
-          // - 通常実行時：
-          //   - コマンド実行中はchild.exitCodeがnullになるのでタイムアウトまで待つ
-          // - デバッグ実行時：
-          //   - vscode.debug.activeDebugSessionがあてにならないのでリダイレクトのファイルの有無で判断する
-          //   - 戻り値は取得できないので制限とする
-          if (child?.exitCode === null) {
-            timecount += 500;
-            if (timecount < that.timeout) {
-              setTimeout(wait_child, 500);
-              return;
+          if (debug) {
+            // デバッグ実行時はvscode.debug.activeDebugSession()で戻り値が取れない。
+            // 戻り値を待たず標準出力のダイレクトのファイルの有無で判断する
+          } else {
+            // 通常実行時はコマンド実行中は戻り値がnullになるので戻り値が確定するまで待つ。
+            // もしくは戻り値が確定しないままタイムアウトまで待つ
+            if (child.exitCode === null) {
+              timecount += 500;
+              if (timecount < that.timeout) {
+                setTimeout(wait_child, 500);
+                return;
+              }
+              child_process.execSync(`taskkill /pid ${child.pid} /t /f`);
+              istimeout = true;
             }
-            child_process.execSync(`taskkill /pid ${child.pid} /t /f`);
-            istimeout = true;
           }
           // wait output
           (function wait_output() {

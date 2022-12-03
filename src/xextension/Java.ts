@@ -42,23 +42,6 @@ class Java implements XExtension {
       console: "integratedTerminal",
     };
     vscode.debug.startDebugging(acts.projectfolder, debugconfig);
-
-    /*
-        "configurations": [
-            {
-                "type": "java",
-                "name": "Launch Current File",
-@                "request": "launch",
-                "mainClass": "${file}"
-            },
-            {
-                "type": "java",
-                "name": "Launch Main",
-                "request": "launch",
-                "mainClass": "Main",
-                "projectName": "java_debug_9cf4b6fb"
-            }
-    */
   }
 
   public testTask(): any {
