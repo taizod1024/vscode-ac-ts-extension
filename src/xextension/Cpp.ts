@@ -23,7 +23,7 @@ class Cpp implements XExtension {
 
   public debugTask(): any {
     if (acts.islinux) {
-      throw "ERROR: debug is not supported in linux";
+      throw "ERROR: debug is not supported on linux";
     }
     const debugconfig = {
       name: acts.appid,
