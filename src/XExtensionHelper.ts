@@ -28,6 +28,7 @@ class XExtensionHelper {
         acts.channel.appendLine(`[${acts.timestamp()}] - stderr="${err}"`);
     }
 
+    
     compileTask(lang: string, opt: object = {}): void {
         // compile
         const config = vscode.workspace.getConfiguration(acts.appcfgkey + "." + lang);
