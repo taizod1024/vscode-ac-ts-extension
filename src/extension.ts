@@ -129,7 +129,6 @@ export function activate(context: vscode.ExtensionContext) {
                         let contest: string;
                         let task: string;
                         let extension: string;
-                        let language: string;
                         // TODO site依存データの読込・保存タイミングが整理できていない
                         // load site depending data
                         try {
@@ -137,7 +136,6 @@ export function activate(context: vscode.ExtensionContext) {
                             contest = acts.xsite.contest;
                             task = acts.xsite.task;
                             extension = acts.xsite.extension;
-                            language = acts.xsite.language;
                         } catch (ex) {
                             acts.channel.appendLine(`**** ${ex} ****`);
                             return;

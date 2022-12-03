@@ -4,14 +4,23 @@ C/C++/Java/Python/Go/JavaScript/TypeScript での [AtCoder](https://atcoder.jp/?
 
 ## 変更
 
+- 2022/12/04
+
+  - 機能強化
+    - <span style="font-weight:bold">Windows での Java/C/C++のデバッグ実行に対応しました。</span>
+      - <span style="color:red">検証が十分ではないので問題あれば連絡願います。</span>
+      - C/C++はデバッグ実行のためコンパイルオプションに"-g"を追加しています。
+      - 現時点では Go のみデバッグ実行に対応していません。
+      - Linux は未検証のためエラーにしています。
+
 - 2022/08/29
   - 機能強化
-    - <span style="font-weight:bold">Goに対応しました。</span>
+    - <span style="font-weight:bold">Go に対応しました。</span>
     - <span style="font-weight:bold">ローカルでタスクを登録できるようにしました。</span>
       - 競技プログラミングサイトに関係なく問題を登録することができます。
 - 2022/08/24
   - 機能強化
-    - <span style="font-weight:bold">Linux環境に対応しました。</span>
+    - <span style="font-weight:bold">Linux 環境に対応しました。</span>
     - <span style="font-weight:bold">任意の言語に対応しました。</span>
       - 設定の"User1"に対して以下を参考に設定します。
         - 拡張子、例：`.bat`
@@ -37,10 +46,10 @@ C/C++/Java/Python/Go/JavaScript/TypeScript での Visual Studio Code から AtCo
 ## 制限
 
 - マルチルートワークスペースには対応していません。
-- Linuxでのデバッグ実行はサポートしていません。
-- Python/JavaScript/TypeScriptのデバッグ実行時は以下の場合のNG判定ができません。
-  - 戻り値が0以外によるNG判定
-  - 例外が発生したことによるNG判定
+- Linux でのデバッグ実行はサポートしていません。
+- Python/JavaScript/TypeScript のデバッグ実行時は以下の場合の NG 判定ができません。
+  - 戻り値が 0 以外による NG 判定
+  - 例外が発生したことによる NG 判定
 
 ## 動作確認環境
 
@@ -67,7 +76,7 @@ vscode の [拡張機能] から `AtCoder Extension` を検索してインスト
 
 ### C/C++/Java
 
-gcc/g++/clang/jdk等をインストールします。  
+gcc/g++/clang/jdk 等をインストールします。  
 環境に合わせて設定からコマンドを変更します。
 
 ### Python
@@ -222,7 +231,7 @@ ans = n
 print(ans)
 ```
 
-#### Goひな型
+#### Go ひな型
 
 ```Go
 package main
@@ -348,31 +357,31 @@ Takahashi
 
 ### C/C++/Java 設定
 
-自身の環境に合わせてvscodeの設定を変更します。
+自身の環境に合わせて vscode の設定を変更します。
 
-| 設定名 | 内容 | 補足 |
-| --- | --- | --- |
-| C Checker | `gcc --version` | Cコンパイラ存在チェック |
-| C Compiler | `gcc $taskfile -o $execfile -lm` | Cコンパイラ |
-| C Executor | `$execfile` | C実行ファイル |
-| C++ Checker | `g++ --version` | C++コンパイラ存在チェック |
-| C++ Compiler | `g++ $taskfile -o $execfile` | C++コンパイラ |
-| C++ Executor | `$execfile` | C++実行ファイル |
-| Java Checker | `javac --version` | Javaコンパイラ存在チェック |
-| Java Compiler | `javac -J-Duser.language=en $taskfile` | Javaコンパイラ |
-| Java Executor | `cd $tmppath && java Main` | Java実行ファイル |
+| 設定名        | 内容                                   | 補足                        |
+| ------------- | -------------------------------------- | --------------------------- |
+| C Checker     | `gcc --version`                        | C コンパイラ存在チェック    |
+| C Compiler    | `gcc $taskfile -o $execfile -lm`       | C コンパイラ                |
+| C Executor    | `$execfile`                            | C 実行ファイル              |
+| C++ Checker   | `g++ --version`                        | C++コンパイラ存在チェック   |
+| C++ Compiler  | `g++ $taskfile -o $execfile`           | C++コンパイラ               |
+| C++ Executor  | `$execfile`                            | C++実行ファイル             |
+| Java Checker  | `javac --version`                      | Java コンパイラ存在チェック |
+| Java Compiler | `javac -J-Duser.language=en $taskfile` | Java コンパイラ             |
+| Java Executor | `cd $tmppath && java Main`             | Java 実行ファイル           |
 
 パラメタを使用できます。
 
-| パラメタ名 | 記法 | 展開例 |
-| --- | --- | --- |
-| 一時フォルダ   | `$tmppath`   | `C:\Users\...\AppData\Local\Temp\ac-ts-extension` |
-| タスクファイル | `$taskfile`  | `C:\Users\...\src\atcoder\practice\practice_1.c` |
+| パラメタ名     | 記法         | 展開例                                              |
+| -------------- | ------------ | --------------------------------------------------- |
+| 一時フォルダ   | `$tmppath`   | `C:\Users\...\AppData\Local\Temp\ac-ts-extension`   |
+| タスクファイル | `$taskfile`  | `C:\Users\...\src\atcoder\practice\practice_1.c`    |
 | 実行ファイル   | `$execfile`  | `C:\Users\....\src\atcoder\practice\practice_1.exe` |
-| サイト         | `$site`      | `atcoder` |
-| コンテスト     | `$contest`   | `practice` |
-| タスク         | `$task`      | `practice_1` |
-| 拡張子         | `$extension` | `.c` |
+| サイト         | `$site`      | `atcoder`                                           |
+| コンテスト     | `$contest`   | `practice`                                          |
+| タスク         | `$task`      | `practice_1`                                        |
+| 拡張子         | `$extension` | `.c`                                                |
 
 ### Python 設定
 

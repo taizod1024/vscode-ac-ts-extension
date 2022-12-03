@@ -86,7 +86,7 @@
           "atcoderExtension.c.compiler": {
             "type": "string",
             "markdownDescription": "command line compiler for C, see `#atcoderExtension.c.checker#`",
-            "default": "gcc $taskfile -o $execfile -lm"
+            "default": "gcc -g $taskfile -o $execfile -lm"
           },
           "atcoderExtension.c.executor": {
             "type": "string",
@@ -106,7 +106,7 @@
           "atcoderExtension.c++.compiler": {
             "type": "string",
             "markdownDescription": "command line compiler for C++, see `#atcoderExtension.c.checker#`",
-            "default": "g++ $taskfile -o $execfile"
+            "default": "g++ -g $taskfile -o $execfile"
           },
           "atcoderExtension.c++.executor": {
             "type": "string",
