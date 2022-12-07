@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.11](https://github.com/taizod1024/ac-ts-extension/compare/v0.1.10...v0.1.11) (2022-12-07)
+
+
+### Features
+
+* linuxデバッグ対応、標準エラー出力リダイレクトせず ([9c3f2d6](https://github.com/taizod1024/ac-ts-extension/commit/9c3f2d661899463103c1153122d881eebd16644c))
+
 ### [0.1.10](https://github.com/taizod1024/ac-ts-extension/compare/v0.1.9...v0.1.10) (2022-12-03)
 
 
