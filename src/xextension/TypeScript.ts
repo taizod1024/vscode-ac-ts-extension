@@ -22,16 +22,13 @@ class TypeScript implements XExtension {
   }
 
   public debugTask(): any {
-    if (acts.islinux) {
-      throw "ERROR: debug is not supported on linux";
-    }
     const debugconfig = {
       name: acts.appid,
       type: "pwa-node",
       request: "launch",
       runtimeArgs: ["--require", "ts-node/register"],
       program: acts.taskfile,
-      args: ["<", acts.tmpstdinfile, ">", acts.tmpstdoutfile, "2>", acts.tmpstderrfile],
+      args: ["<", acts.tmpstdinfile, ">", acts.tmpstdoutfile],
       console: "integratedTerminal",
       skipFiles: ["node_modules/**"],
       argsCanBeInterpretedByShell: true,

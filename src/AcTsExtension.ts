@@ -43,7 +43,6 @@ class AcTsExtension {
   public execfile: string;
   public tmpstdinfile: string;
   public tmpstdoutfile: string;
-  public tmpstderrfile: string;
   public separator: string;
   public proxy: any;
   public timeout: number;
@@ -87,7 +86,6 @@ class AcTsExtension {
     this.execfile = path.normalize(`${this.taskpath}/${this.xsite.task}${this.iswindows ? ".exe" : ".out"}`);
     this.tmpstdinfile = path.normalize(`${this.tmppath}/test_stdin.txt`);
     this.tmpstdoutfile = path.normalize(`${this.tmppath}/test_stdout.txt`);
-    this.tmpstderrfile = path.normalize(`${this.tmppath}/test_stderr.txt`);
     this.separator = "\r\n--------\r\n";
     this.proxy = "";
     this.timeout = 5000;
@@ -313,10 +311,7 @@ class AcTsExtension {
                 const out = fs.readFileSync(that.tmpstdoutfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
                 fs.unlinkSync(that.tmpstdoutfile);
                 // check error
-                const err = fs.readFileSync(that.tmpstderrfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
-                fs.unlinkSync(that.tmpstderrfile);
                 that.channel.appendLine(`[${that.timestamp()}] - stdout="${out}"`);
-                that.channel.appendLine(`[${that.timestamp()}] - stderr=${err}`);
                 that.channel.appendLine(`[${that.timestamp()}] - exit  =${child?.exitCode}`);
                 if (child?.exitCode !== 0 && child?.exitCode !== undefined) {
                   reject(`ERROR: error occurred`);
