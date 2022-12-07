@@ -30,15 +30,12 @@ class Java implements XExtension {
   }
 
   public debugTask(): any {
-    if (acts.islinux) {
-      throw "ERROR: debug is not supported on linux";
-    }
     const debugconfig = {
       name: acts.appid,
       type: "java",
       request: "launch",
       mainClass: acts.taskfile,
-      args: ["<", acts.tmpstdinfile, ">", acts.tmpstdoutfile, "2>", acts.tmpstderrfile],
+      args: ["<", acts.tmpstdinfile, ">", acts.tmpstdoutfile],
       console: "integratedTerminal",
     };
     vscode.debug.startDebugging(acts.projectfolder, debugconfig);

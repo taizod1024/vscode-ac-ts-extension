@@ -13,22 +13,17 @@ class XExtensionHelper {
       throw "ERROR: no checker";
     }
     const cmdexp = acts.expandString(String(cmd));
-    const command = `(${cmdexp}) > ${acts.tmpstdoutfile} 2> ${acts.tmpstderrfile}`;
+    const command = `(${cmdexp}) > ${acts.tmpstdoutfile}`;
     const options = { cwd: acts.taskpath };
     Object.assign(options, opt);
     try {
       child_process.execSync(command, options);
     } catch (ex) {
-      const err = fs.readFileSync(acts.tmpstderrfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
-      fs.unlinkSync(acts.tmpstderrfile);
-      throw `ERROR: check failed\r\n${err}\r\n`;
+      throw `ERROR: check failed\r\n`;
     }
     const out = fs.readFileSync(acts.tmpstdoutfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
     fs.unlinkSync(acts.tmpstdoutfile);
     acts.channel.appendLine(`[${acts.timestamp()}] - stdout="${out}"`);
-    const err = fs.readFileSync(acts.tmpstderrfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
-    fs.unlinkSync(acts.tmpstderrfile);
-    acts.channel.appendLine(`[${acts.timestamp()}] - stderr="${err}"`);
   }
 
   compileTask(lang: string, opt: object = {}): void {
@@ -46,22 +41,17 @@ class XExtensionHelper {
       acts.channel.appendLine(`[${acts.timestamp()}] execfile: ${acts.execfile}${deleted ? " deleted" : ""}`);
       acts.channel.appendLine(`[${acts.timestamp()}] compiler: ${cmd}`);
       const cmdexp = acts.expandString(cmd);
-      const command = `(${cmdexp}) > ${acts.tmpstdoutfile} 2> ${acts.tmpstderrfile}`;
+      const command = `(${cmdexp}) > ${acts.tmpstdoutfile}`;
       const options = { cwd: acts.taskpath };
       Object.assign(options, opt);
       try {
         child_process.execSync(command, options);
       } catch (ex) {
-        const err = fs.readFileSync(acts.tmpstderrfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
-        fs.unlinkSync(acts.tmpstderrfile);
-        throw `ERROR: compile failed\r\n${err}\r\n`;
+        throw `ERROR: compile failed\r\n`;
       }
       const out = fs.readFileSync(acts.tmpstdoutfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
       fs.unlinkSync(acts.tmpstdoutfile);
       acts.channel.appendLine(`[${acts.timestamp()}] - stdout="${out}"`);
-      const err = fs.readFileSync(acts.tmpstderrfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
-      fs.unlinkSync(acts.tmpstderrfile);
-      acts.channel.appendLine(`[${acts.timestamp()}] - stderr="${err}"`);
     }
 
     // show executor
@@ -77,7 +67,7 @@ class XExtensionHelper {
     const config = vscode.workspace.getConfiguration(acts.appcfgkey + "." + lang);
     const cmd = config.executor || "";
     const cmdexp = acts.expandString(cmd);
-    const command = `(${cmdexp}) < ${acts.tmpstdinfile} > ${acts.tmpstdoutfile} 2> ${acts.tmpstderrfile}`;
+    const command = `(${cmdexp}) < ${acts.tmpstdinfile} > ${acts.tmpstdoutfile}`;
     const options = { cwd: acts.taskpath };
     Object.assign(options, opt);
     const child = child_process.exec(command, options);
