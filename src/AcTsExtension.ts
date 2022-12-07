@@ -268,29 +268,34 @@ class AcTsExtension {
         // wait child process
         (function wait_child() {
           if (debug) {
-            // デバッグ実行時はvscode.debug.activeDebugSession()で戻り値が取れない。
-            // 戻り値を待たず標準出力のダイレクトのファイルの有無で判断する
+            // デバッグ実行時はvscode.debug.activeDebugSessionでデバッグセッションの有無を判断する。無条件でデバッグセッションの終了を待つ。
+            if (vscode.debug.activeDebugSession !== undefined) {
+              setTimeout(wait_child, 500);
+              return;
+            }
           } else {
-            // 通常実行時はコマンド実行中は戻り値がnullになるので戻り値が確定するまで待つ。
-            // もしくは戻り値が確定しないままタイムアウトまで待つ
+            // 通常実行時はコマンド実行中は戻り値が確定するまで待つ。もしくはタイムアウトまで待つ
             if (child.exitCode === null) {
               timecount += 500;
               if (timecount < that.timeout) {
                 setTimeout(wait_child, 500);
                 return;
               }
+              // タイムアウトした場合はプロセスを殺してフラグを設定
               child_process.execSync(`taskkill /pid ${child.pid} /t /f`);
               istimeout = true;
             }
           }
           // wait output
           (function wait_output() {
+            // 念のため標準出力のリダイレクト先が存在するのを待つ
             if (!fs.existsSync(that.tmpstdoutfile)) {
               setTimeout(wait_output, 500);
               return;
             }
             // wait command complete
             (function wait_unlock() {
+              // 念のため標準入力のリダイレクト元が削除できるのを待つ
               try {
                 fs.unlinkSync(that.tmpstdinfile);
               } catch (ex) {
@@ -305,7 +310,6 @@ class AcTsExtension {
               }
               // test done
               (function command_done() {
-                console.log(vscode.debug.activeDebugSession);
                 that.channel.show(true);
                 // read output
                 const out = fs.readFileSync(that.tmpstdoutfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
@@ -313,24 +317,27 @@ class AcTsExtension {
                 // check error
                 that.channel.appendLine(`[${that.timestamp()}] - stdout="${out}"`);
                 that.channel.appendLine(`[${that.timestamp()}] - exit  =${child?.exitCode}`);
-                if (child?.exitCode !== 0 && child?.exitCode !== undefined) {
-                  reject(`ERROR: error occurred`);
-                  return;
-                }
-                // check timeout
-                if (istimeout) {
-                  reject(`ERROR: timeout over ${that.timeout} ms`);
-                  return;
-                }
-                // chceck canceled
-                if (out === "") {
-                  that.channel.appendLine(`---- CANCELED OR NO OUTPUT ----`);
-                  // delete executable if canceled
-                  if (fs.existsSync(that.execfile)) {
-                    fs.unlinkSync(that.execfile);
+                if (debug) {
+                  // デバッグ実行時は出力がない場合はキャンセルとして成功扱い、ただし中断
+                  if (out === "") {
+                    that.channel.appendLine(`---- CANCELED OR NO OUTPUT ----`);
+                    if (fs.existsSync(that.execfile)) {
+                      fs.unlinkSync(that.execfile);
+                    }
+                    resolve();
+                    return;
                   }
-                  resolve();
-                  return;
+                } else {
+                  // 通常実行時はタイムアウトフラグを確認して失敗扱い
+                  if (istimeout) {
+                    reject(`ERROR: timeout over ${that.timeout} ms`);
+                    return;
+                  }
+                  // 通常実行時は0以外の戻り値は失敗扱い
+                  if (child.exitCode !== 0) {
+                    reject(`ERROR: error occurred`);
+                    return;
+                  }
                 }
                 // check output
                 if (out === io.out) {
