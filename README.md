@@ -4,15 +4,17 @@ C/C++/Java/Python/Go/JavaScript/TypeScript での [AtCoder](https://atcoder.jp/?
 
 ## 変更
 
+- 2022/12/08
+  - 機能強化
+    - <span style="font-weight:bold">Linux でのデバッグ実行に対応しました。</span>
+      - <span style="color:red">検証が十分ではないので問題あれば連絡願います。</span>
+      - 現時点では Go のみデバッグ実行に対応していません。
 - 2022/12/04
-
   - 機能強化
     - <span style="font-weight:bold">Windows での Java/C/C++のデバッグ実行に対応しました。</span>
-      - <span style="color:red">検証が十分ではないので問題あれば連絡願います。</span>
       - C/C++はデバッグ実行のためコンパイルオプションに"-g"を追加しています。
       - 現時点では Go のみデバッグ実行に対応していません。
       - Linux は未検証のためエラーにしています。
-
 - 2022/08/29
   - 機能強化
     - <span style="font-weight:bold">Go に対応しました。</span>
@@ -56,15 +58,22 @@ C/C++/Java/Python/Go/JavaScript/TypeScript での Visual Studio Code から AtCo
 - Windows
   - Windows 10 (21H2)
   - Visual Studio Code (1.70.2)
-  - C (mingw 11.2.0.07112021)
-  - C++ (mingw 11.2.0.07112021)
-  - Java (AdoptOpenJDKjre 16.0.1.901)
-  - Python (3.10.6)
-  - Go (1.19)
-  - JavaScript (Node.js 16.13.0)
-  - TypeScript (Node.js 16.13.0)
+  - [x] C (mingw 11.2.0.07112021) 実行＋デバッグ
+  - [x] C++ (mingw 11.2.0.07112021) 実行＋デバッグ
+  - [x] Java (AdoptOpenJDKjre 16.0.1.901) 実行＋デバッグ
+  - [x] Python (3.10.6) 実行＋デバッグ
+  - [x] Go (1.19) 実行のみ
+  - [x] JavaScript (Node.js 16.13.0) 実行＋デバッグ
+  - [x] TypeScript (Node.js 16.13.0) 実行＋デバッグ
 - Linux
   - Ubuntu (WSL2)
+  - [x] C (gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0) 実行＋デバッグ
+  - [x] C++ (g++ (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0) 実行＋デバッグ
+  - [x] Java (openjdk version "1.8.0_342") 実行＋デバッグ
+  - [x] Python (Python 3.8.5) 実行＋デバッグ
+  - [x] Go (go version go1.13.8 linux/amd64) 実行のみ
+  - [x] JavaScript (Node.js 12.22.12) 実行＋デバッグ
+  - [x] TypeScript (Node.js 12.22.12) 実行＋デバッグ
 
 ## 準備
 

@@ -268,7 +268,7 @@ class AcTsExtension {
           timecount += 500;
           await this.sleep(500);
         }
-        this.channel.appendLine(`[${this.timestamp()}] - debug session: ${vscode.debug.activeDebugSession?.id}`);
+        this.channel.appendLine(`[${this.timestamp()}] - debug session=${vscode.debug.activeDebugSession?.id}`);
       } else {
         // 通常実行時
         child = this.xsite.xextension.testTask();
@@ -280,7 +280,7 @@ class AcTsExtension {
         while (vscode.debug.activeDebugSession !== undefined) {
           await this.sleep(500);
         }
-        this.channel.appendLine(`[${this.timestamp()}] - debug session: ${vscode.debug.activeDebugSession?.id}`);
+        this.channel.appendLine(`[${this.timestamp()}] - debug session=${vscode.debug.activeDebugSession?.id}`);
       } else {
         // 通常実行時はコマンド実行中は戻り値が確定するまで待つ。もしくはタイムアウトまで待機
         let timecount = 0;
@@ -349,10 +349,10 @@ class AcTsExtension {
 
       // テスト実行の結果チェック
       if (out === io.out) {
-        this.channel.appendLine(`[${this.timestamp()}] -> OK`);
+        this.channel.appendLine(`[${this.timestamp()}]   -> OK`);
         ok++;
       } else {
-        this.channel.appendLine(`[${this.timestamp()}] -> NG`);
+        this.channel.appendLine(`[${this.timestamp()}]   -> NG`);
         ng++;
       }
     }

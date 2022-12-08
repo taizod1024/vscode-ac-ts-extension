@@ -30,6 +30,10 @@ class Cc implements XExtension {
       cwd: acts.taskpath,
       args: ["<", acts.tmpstdinfile, ">", acts.tmpstdoutfile],
       console: "integratedTerminal",
+      linux: {
+        MIMode: "gdb",
+        miDebuggerPath: "/usr/bin/gdb",
+      },
     };
     vscode.debug.startDebugging(acts.projectfolder, debugconfig);
   }
