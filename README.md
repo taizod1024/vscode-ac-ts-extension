@@ -7,8 +7,8 @@ C/C++/Java/Python/Go/JavaScript/TypeScript での [AtCoder](https://atcoder.jp/?
 - 2022/12/08
   - 機能強化
     - <span style="font-weight:bold">Linux でのデバッグ実行に対応しました。</span>
-      - <span style="color:red">検証が十分ではないので問題あれば連絡願います。</span>
-      - 現時点では Go のみデバッグ実行に対応していません。
+      - <span style="color:red;font-weight:bold">問題があれば連絡願います。</span>
+      - 現時点でデバッグ実行に対応していないのは Windows/Linux ともに Go だけです。
 - 2022/12/04
   - 機能強化
     - <span style="font-weight:bold">Windows での Java/C/C++のデバッグ実行に対応しました。</span>
