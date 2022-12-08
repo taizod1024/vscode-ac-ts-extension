@@ -45,7 +45,8 @@ class AcTsExtension {
   public tmpstdoutfile: string;
   public separator: string;
   public proxy: any;
-  public timeout: number;
+  public testtimeout: number;
+  public debugstarttimeout: number;
 
   // const
   public get sites() {
@@ -88,7 +89,8 @@ class AcTsExtension {
     this.tmpstdoutfile = path.normalize(`${this.tmppath}/test_stdout.txt`);
     this.separator = "\r\n--------\r\n";
     this.proxy = "";
-    this.timeout = 5000;
+    this.testtimeout = 5000;
+    this.debugstarttimeout = 20000;
 
     // make tmppath
     if (!fs.existsSync(this.tmppath)) {
@@ -126,7 +128,7 @@ class AcTsExtension {
     // login site
     await this.xsite.loginSiteAsync();
 
-    acts.channel.appendLine(`---- SUCCESS: ${this.site} done ----`);
+    this.channel.appendLine(`---- SUCCESS: ${this.site} done ----`);
   }
 
   public async initTaskAsync() {
@@ -239,136 +241,128 @@ class AcTsExtension {
     // run test set
     let ok = 0;
     let ng = 0;
-    const that = this;
-    let iosx = 0;
-    return new Promise((resolve, reject) => {
-      // run test
-      (function run_test() {
-        that.channel.show(true);
+    for (let iosx = 0; iosx < ios.length; iosx++) {
+      this.channel.show(true);
 
-        // create test input file
-        const io = ios[iosx];
-        that.channel.appendLine(`[${that.timestamp()}] test-${iosx}:`);
-        that.channel.appendLine(`[${that.timestamp()}] - input ="${io.in}"`);
-        that.channel.appendLine(`[${that.timestamp()}] - output="${io.out}"`);
-        fs.writeFileSync(that.tmpstdinfile, io.in);
+      // create test input file
+      const io = ios[iosx];
+      this.channel.appendLine(`[${this.timestamp()}] test-${iosx}:`);
+      this.channel.appendLine(`[${this.timestamp()}] - input ="${io.in}"`);
+      this.channel.appendLine(`[${this.timestamp()}] - output="${io.out}"`);
+      fs.writeFileSync(this.tmpstdinfile, io.in);
 
-        // exec command
-        let child = null;
+      // exec command
+      let child = null;
+      let istimeout = false;
+
+      // テスト実行
+      if (debug) {
+        // デバッグ実行時の開始
+        this.xsite.xextension.debugTask();
+        // デバッグセッションが開始するのを5秒間待機
         let timecount = 0;
-        let istimeout = false;
-
-        // test or debug task
-        if (debug) {
-          that.xsite.xextension.debugTask();
-        } else {
-          child = that.xsite.xextension.testTask();
+        while (vscode.debug.activeDebugSession === undefined) {
+          if (this.debugstarttimeout <= timecount) {
+            throw `ERROR: debug session not started in ${this.debugstarttimeout} ms`;
+          }
+          timecount += 500;
+          await this.sleep(500);
         }
+        this.channel.appendLine(`[${this.timestamp()}] - debug session: ${vscode.debug.activeDebugSession?.id}`);
+      } else {
+        // 通常実行時
+        child = this.xsite.xextension.testTask();
+      }
 
-        // wait child process
-        (function wait_child() {
-          if (debug) {
-            // デバッグ実行時はvscode.debug.activeDebugSessionでデバッグセッションの有無を判断する。無条件でデバッグセッションの終了を待つ。
-            if (vscode.debug.activeDebugSession !== undefined) {
-              setTimeout(wait_child, 500);
-              return;
-            }
-          } else {
-            // 通常実行時はコマンド実行中は戻り値が確定するまで待つ。もしくはタイムアウトまで待つ
-            if (child.exitCode === null) {
-              timecount += 500;
-              if (timecount < that.timeout) {
-                setTimeout(wait_child, 500);
-                return;
-              }
-              // タイムアウトした場合はプロセスを殺してフラグを設定
+      // テスト実行の終了待機
+      if (debug) {
+        // デバッグ実行時はvscode.debug.activeDebugSessionでデバッグセッションの有無を判断する。無条件でデバッグセッションの終了を待機
+        while (vscode.debug.activeDebugSession !== undefined) {
+          await this.sleep(500);
+        }
+        this.channel.appendLine(`[${this.timestamp()}] - debug session: ${vscode.debug.activeDebugSession?.id}`);
+      } else {
+        // 通常実行時はコマンド実行中は戻り値が確定するまで待つ。もしくはタイムアウトまで待機
+        let timecount = 0;
+        while (child.exitCode === null) {
+          // タイムアウトした場合はプロセスを殺してフラグを設定
+          if (this.testtimeout <= timecount) {
+            if (this.iswindows) {
               child_process.execSync(`taskkill /pid ${child.pid} /t /f`);
-              istimeout = true;
+            }
+            if (this.islinux) {
+              child_process.execSync(`kill ${child.pid}`);
+            }
+            istimeout = true;
+            break;
+          }
+          timecount += 500;
+          await this.sleep(500);
+        }
+      }
+
+      // 念のため標準出力のリダイレクト先が存在するのを待機
+      while (!fs.existsSync(this.tmpstdoutfile)) {
+        await this.sleep(500);
+      }
+
+      // 念のため標準入力のリダイレクト元が削除できるのを待機
+      while (true) {
+        try {
+          fs.unlinkSync(this.tmpstdinfile);
+          break;
+        } catch (ex) {
+          if (ex instanceof Error) {
+            if (!ex.message.match(/EBUSY/)) {
+              throw ex;
             }
           }
-          // wait output
-          (function wait_output() {
-            // 念のため標準出力のリダイレクト先が存在するのを待つ
-            if (!fs.existsSync(that.tmpstdoutfile)) {
-              setTimeout(wait_output, 500);
-              return;
-            }
-            // wait command complete
-            (function wait_unlock() {
-              // 念のため標準入力のリダイレクト元が削除できるのを待つ
-              try {
-                fs.unlinkSync(that.tmpstdinfile);
-              } catch (ex) {
-                if (ex instanceof Error) {
-                  if (!ex.message.match(/EBUSY/)) {
-                    reject(ex);
-                    return;
-                  }
-                }
-                setTimeout(wait_unlock, 500);
-                return;
-              }
-              // test done
-              (function command_done() {
-                that.channel.show(true);
-                // read output
-                const out = fs.readFileSync(that.tmpstdoutfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
-                fs.unlinkSync(that.tmpstdoutfile);
-                // check error
-                that.channel.appendLine(`[${that.timestamp()}] - stdout="${out}"`);
-                that.channel.appendLine(`[${that.timestamp()}] - exit  =${child?.exitCode}`);
-                if (debug) {
-                  // デバッグ実行時は出力がない場合はキャンセルとして成功扱い、ただし中断
-                  if (out === "") {
-                    that.channel.appendLine(`---- CANCELED OR NO OUTPUT ----`);
-                    if (fs.existsSync(that.execfile)) {
-                      fs.unlinkSync(that.execfile);
-                    }
-                    resolve();
-                    return;
-                  }
-                } else {
-                  // 通常実行時はタイムアウトフラグを確認して失敗扱い
-                  if (istimeout) {
-                    reject(`ERROR: timeout over ${that.timeout} ms`);
-                    return;
-                  }
-                  // 通常実行時は0以外の戻り値は失敗扱い
-                  if (child.exitCode !== 0) {
-                    reject(`ERROR: error occurred`);
-                    return;
-                  }
-                }
-                // check output
-                if (out === io.out) {
-                  that.channel.appendLine(`[${that.timestamp()}] -> OK`);
-                  ok++;
-                } else {
-                  that.channel.appendLine(`[${that.timestamp()}] -> NG`);
-                  ng++;
-                }
-                // next test
-                iosx++;
-                if (iosx < ios.length) {
-                  setTimeout(run_test, 500);
-                  return;
-                }
-                // test set done
-                let msg = `${that.xsite.task} OK=${ok}, NG=${ng}`;
-                if (ng === 0) {
-                  that.channel.appendLine(`---- SUCCESS: ${msg} ----`);
-                  resolve();
-                  return;
-                } else {
-                  reject("ERROR: " + msg);
-                  return;
-                }
-              })();
-            })();
-          })();
-        })();
-      })();
-    });
+          await this.sleep(500);
+        }
+      }
+
+      // テスト実行完了
+      this.channel.show(true);
+
+      // 標準出力のリダイレクト先の読み込み
+      const out = fs.readFileSync(this.tmpstdoutfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
+      fs.unlinkSync(this.tmpstdoutfile);
+
+      // テスト実行のキャンセル・タイムアウト・例外チェック
+      this.channel.appendLine(`[${this.timestamp()}] - stdout="${out}"`);
+      this.channel.appendLine(`[${this.timestamp()}] - exit  =${child?.exitCode}`);
+      if (debug) {
+        // デバッグ実行時は出力がない場合はキャンセルとして成功扱い、ただし中断
+        if (out === "") {
+          throw `---- CANCELED OR NO OUTPUT ----`;
+        }
+      } else {
+        // 通常実行時はタイムアウトフラグを確認して失敗扱い
+        if (istimeout) {
+          throw `ERROR: timeout over ${this.testtimeout} ms`;
+        }
+        // 通常実行時は0以外の戻り値は失敗扱い
+        if (child.exitCode !== 0) {
+          throw `ERROR: error occurred`;
+        }
+      }
+
+      // テスト実行の結果チェック
+      if (out === io.out) {
+        this.channel.appendLine(`[${this.timestamp()}] -> OK`);
+        ok++;
+      } else {
+        this.channel.appendLine(`[${this.timestamp()}] -> NG`);
+        ng++;
+      }
+    }
+
+    // テスト完了
+    let msg = `${this.xsite.task} OK=${ok}, NG=${ng}`;
+    if (ng !== 0) {
+      throw `ERROR: ${msg}`;
+    }
+    this.channel.appendLine(`---- SUCCESS: ${msg} ----`);
   }
 
   public async submitTaskAsync() {
@@ -394,7 +388,7 @@ class AcTsExtension {
     // submit task
     await this.xsite.submitTaskAsync();
 
-    acts.channel.appendLine(`---- SUCCESS: ${acts.xsite.task} submitted ----`);
+    this.channel.appendLine(`---- SUCCESS: ${this.xsite.task} submitted ----`);
   }
 
   public async removeTaskAsync() {
@@ -515,6 +509,11 @@ class AcTsExtension {
   }
   public timestamp(): string {
     return new Date().toLocaleString("ja-JP").split(" ")[1];
+  }
+
+  // sleep
+  public async sleep(wait: number): Promise<void> {
+    return await new Promise(resolve => setTimeout(resolve, wait));
   }
 }
 export const acts = new AcTsExtension();

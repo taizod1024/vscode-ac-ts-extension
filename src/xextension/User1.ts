@@ -4,38 +4,38 @@ import { XExtension } from "../XExtension";
 import { xexthelper } from "../XExtensionHelper";
 
 class User1 implements XExtension {
-    // implements
+  // implements
 
-    // prop
-    public get extension() {
-        if (!acts) {
-            return ".user1";
-        }
-        const config = vscode.workspace.getConfiguration(`${acts.appcfgkey}.${this.language}`);
-        const extension = config.extension;
-        return extension;
+  // prop
+  public get extension() {
+    if (!acts) {
+      return ".user1";
     }
-    public readonly language = "user1";
+    const config = vscode.workspace.getConfiguration(`${acts.appcfgkey}.${this.language}`);
+    const extension = config.extension;
+    return extension;
+  }
+  public readonly language = "user1";
 
-    // method
-    public initProp(): void {
-        xexthelper.checkLang(this.language);
-    }
+  // method
+  public initProp(): void {
+    xexthelper.checkLang(this.language);
+  }
 
-    public initTask(): void {}
+  public initTask(): void {}
 
-    public compileTask(): void {
-        xexthelper.compileTask(this.language);
-    }
+  public compileTask(): void {
+    xexthelper.compileTask(this.language);
+  }
 
-    public debugTask(): any {
-        throw "ERROR: debug is not supported";
-    }
+  public debugTask(): any {
+    throw `ERROR: debug is not supported in ${this.language}`;
+  }
 
-    public testTask(): any {
-        return xexthelper.testTask(this.language);
-    }
+  public testTask(): any {
+    return xexthelper.testTask(this.language);
+  }
 
-    public submitTask(): void {}
+  public submitTask(): void {}
 }
 export const user1 = new User1();
