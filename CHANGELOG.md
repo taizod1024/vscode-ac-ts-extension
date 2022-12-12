@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.14](https://github.com/taizod1024/ac-ts-extension/compare/v0.1.13...v0.1.14) (2022-12-12)
+
+
+### Bug Fixes
+
+* 実行時に不要なモジュールを包含しない ([468955a](https://github.com/taizod1024/ac-ts-extension/commit/468955ad8d6cdeed32126114c7d41d43fa942255))
+* 不要モジュール削除 ([da55146](https://github.com/taizod1024/ac-ts-extension/commit/da551464536a1e9652489f18b3e547ff1173e55a))
+
 ### [0.1.13](https://github.com/taizod1024/ac-ts-extension/compare/v0.1.12...v0.1.13) (2022-12-08)
 
 
