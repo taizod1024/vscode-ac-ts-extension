@@ -1,7 +1,7 @@
 ### exclude
 **/**
 ### include
-!build/**
+!build/**/*.js
 !images/**
 !node_modules/**
 !template/**
