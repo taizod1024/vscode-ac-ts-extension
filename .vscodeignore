@@ -1,9 +1,11 @@
 ### exclude
 **/**
 ### include
-!build/**
+!build/**/*.js
+!node_modules/vm2/**
+!node_modules/acorn-walk/**
+!node_modules/acorn/**
 !images/**
-!node_modules/**
 !template/**
 !CHANGELOG.md
 !LICENSE

@@ -250,26 +250,18 @@
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
     "@commitlint/config-conventional": "^13.1.0",
-    "@types/glob": "^7.1.4",
-    "@types/mocha": "^9.0.0",
     "@types/node": "^16.11.4",
     "@types/superagent": "^4.1.13",
     "@types/superagent-proxy": "^2.0.1",
     "@types/vscode": "^1.60.0",
     "@typescript-eslint/eslint-plugin": "^4.31.2",
     "@typescript-eslint/parser": "^4.31.2",
-    "bufferutil": "^4.0.3",
     "esbuild": "^0.13.6",
     "eslint": "^7.32.0",
-    "generator-code": "^1.6.1",
-    "glob": "^7.2.0",
     "husky": "^4.3.8",
-    "mocha": "^9.1.1",
     "standard-version": "^9.3.1",
     "ts-node": "^10.2.1",
-    "typescript": "^4.4.3",
-    "utf-8-validate": "^5.0.5",
-    "vscode-test": "^1.6.1"
+    "typescript": "^4.4.3"
   },
   "repository": {
     "type": "git",
