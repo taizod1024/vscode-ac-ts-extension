@@ -489,7 +489,8 @@ class AcTsExtension {
       .replace(/\$site/g, this.site)
       .replace(/\$contest/g, this.xsite.contest)
       .replace(/\$task/g, this.xsite.task)
-      .replace(/\$extension/g, this.xsite.extension);
+      .replace(/\$extension/g, this.xsite.extension)
+      .replace(/\$projectpath/g, this.projectpath);
   }
 
   // message

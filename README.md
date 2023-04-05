@@ -4,6 +4,10 @@ C/C++/Java/Python/Go/JavaScript/TypeScript での [AtCoder](https://atcoder.jp/?
 
 ## 変更
 
+- 2023/04/05
+  - 機能強化
+    - パラメタを拡張しました。
+      - `$projectpath`
 - 2022/12/08
   - 機能強化
     - <span style="font-weight:bold">Linux でのデバッグ実行に対応しました。</span>
@@ -382,15 +386,16 @@ Takahashi
 
 パラメタを使用できます。
 
-| パラメタ名     | 記法         | 展開例                                              |
-| -------------- | ------------ | --------------------------------------------------- |
-| 一時フォルダ   | `$tmppath`   | `C:\Users\...\AppData\Local\Temp\ac-ts-extension`   |
-| タスクファイル | `$taskfile`  | `C:\Users\...\src\atcoder\practice\practice_1.c`    |
-| 実行ファイル   | `$execfile`  | `C:\Users\....\src\atcoder\practice\practice_1.exe` |
-| サイト         | `$site`      | `atcoder`                                           |
-| コンテスト     | `$contest`   | `practice`                                          |
-| タスク         | `$task`      | `practice_1`                                        |
-| 拡張子         | `$extension` | `.c`                                                |
+| パラメタ名           | 記法           | 展開例                                                     |
+| -------------------- | -------------- | ---------------------------------------------------------- |
+| 一時フォルダ         | `$tmppath`     | `C:\Users\...\AppData\Local\Temp\ac-ts-extension`          |
+| プロジェクトフォルダ | `$projectpath` | `C:\Users\...\project`                                     |
+| タスクファイル       | `$taskfile`    | `C:\Users\...\project\src\atcoder\practice\practice_1.c`   |
+| 実行ファイル         | `$execfile`    | `C:\Users\...\project\src\atcoder\practice\practice_1.exe` |
+| サイト               | `$site`        | `atcoder`                                                  |
+| コンテスト           | `$contest`     | `practice`                                                 |
+| タスク               | `$task`        | `practice_1`                                               |
+| 拡張子               | `$extension`   | `.c`                                                       |
 
 ### Python 設定
 
