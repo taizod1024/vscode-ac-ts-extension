@@ -388,10 +388,11 @@ Takahashi
 
 | パラメタ名           | 記法           | 展開例                                                     |
 | -------------------- | -------------- | ---------------------------------------------------------- |
-| 一時フォルダ         | `$tmppath`     | `C:\Users\...\AppData\Local\Temp\ac-ts-extension`          |
-| プロジェクトフォルダ | `$projectpath` | `C:\Users\...\project`                                     |
 | タスクファイル       | `$taskfile`    | `C:\Users\...\project\src\atcoder\practice\practice_1.c`   |
 | 実行ファイル         | `$execfile`    | `C:\Users\...\project\src\atcoder\practice\practice_1.exe` |
+| タスクフォルダ       | `$taskpath`    | `C:\Users\...\project\src\atcoder\practice`                |
+| プロジェクトフォルダ | `$projectpath` | `C:\Users\...\project`                                     |
+| 一時フォルダ         | `$tmppath`     | `C:\Users\...\AppData\Local\Temp\ac-ts-extension`          |
 | サイト               | `$site`        | `atcoder`                                                  |
 | コンテスト           | `$contest`     | `practice`                                                 |
 | タスク               | `$task`        | `practice_1`                                               |
