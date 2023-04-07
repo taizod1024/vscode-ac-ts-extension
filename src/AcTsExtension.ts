@@ -213,7 +213,7 @@ class AcTsExtension {
     // delete files in tmppath
     fs.readdirSync(this.tmppath).forEach(filename => {
       const filepath = path.normalize(`${this.tmppath}/${filename}`);
-      fs.unlinkSync(filepath);
+      fs.rmSync(filepath, { recursive: true, force: true });
     });
 
     // read testfile
@@ -442,7 +442,7 @@ class AcTsExtension {
       // delete files
       fs.readdirSync(this.tmppath).forEach(filename => {
         const filepath = path.normalize(`${this.tmppath}/${filename}`);
-        fs.unlinkSync(filepath);
+        fs.rmSync(filepath, { recursive: true, force: true });
       });
 
       // delete tmppath
@@ -484,13 +484,13 @@ class AcTsExtension {
     return str
       .replace(/\$taskfile/g, this.taskfile)
       .replace(/\$execfile/g, this.execfile)
-      .replace(/\$tmppath/g, this.tmppath)
       .replace(/\$taskpath/g, this.taskpath)
+      .replace(/\$projectpath/g, this.projectpath)
+      .replace(/\$tmppath/g, this.tmppath)
       .replace(/\$site/g, this.site)
       .replace(/\$contest/g, this.xsite.contest)
       .replace(/\$task/g, this.xsite.task)
-      .replace(/\$extension/g, this.xsite.extension)
-      .replace(/\$projectpath/g, this.projectpath);
+      .replace(/\$extension/g, this.xsite.extension);
   }
 
   // message
