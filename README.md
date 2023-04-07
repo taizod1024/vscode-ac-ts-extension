@@ -8,6 +8,12 @@ C/C++/Java/Python/Go/JavaScript/TypeScript での [AtCoder](https://atcoder.jp/?
   - 機能強化
     - パラメタを拡張しました。
       - `$projectpath`
+    - <span style="font-weight:bold">C++の場合に InitTask/TestTask/DebugTask で[AtCoder Library](https://atcoder.jp/posts/517)を自動ダウンロードするようにしました。</span>
+      - AtCoder Library は`$projectpath/lib/atcoder`に格納します。
+      - 何らかの理由でダウンロードが失敗しても処理を継続します。
+      - AtCoder Library のドキュメントに従い C++コンパイルコマンドを以下のとおり変更しました。
+        - 変更前：`g++ -g $taskfile -o $execfile`
+        - 変更後：`g++ -g $taskfile -o $execfile -std=c++17 -I $projectpath/lib`
 - 2022/12/08
   - 機能強化
     - <span style="font-weight:bold">Linux でのデバッグ実行に対応しました。</span>
