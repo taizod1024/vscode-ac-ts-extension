@@ -6,12 +6,13 @@ C/C++/Java/Python/Go/JavaScript/TypeScript での [AtCoder](https://atcoder.jp/?
 
 - 2023/04/05
   - 機能強化
-    - <span style="font-weight:bold">C++の場合に InitTask/TestTask/DebugTask で[AtCoder Library](https://atcoder.jp/posts/517)を自動ダウンロードするようにしました。</span>
+    - <span style="font-weight:bold">C++の場合に Init Task/Test Task/Debug Task で[AtCoder Library](https://atcoder.jp/posts/517)を自動ダウンロードするようにしました。</span>
       - AtCoder Library は`$projectpath/lib/atcoder`に格納します。
-      - 何らかの理由でダウンロードが失敗しても処理を継続します。
       - AtCoder Library のドキュメントに従い C++コンパイルコマンドを以下のとおり変更しました。
         - 変更前：`g++ -g $taskfile -o $execfile`
         - 変更後：`g++ -g $taskfile -o $execfile -std=c++17 -I $projectpath/lib`
+    - C++のテンプレートファイルを修正しました。Init Task してから AtCoder の場合はコメントアウトを元に戻します。Yukicoder の場合は行を削除します。
+      - 追加行：`// #include <atcoder/all>`
     - パラメタを拡張しました。
       - `$projectpath`
     - 作業フォルダを変更しました。
