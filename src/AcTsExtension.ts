@@ -59,10 +59,10 @@ class AcTsExtension {
     // init constant
     if (this.iswindows) {
       this.statefile = path.normalize(`${process.env.USERPROFILE}/.${this.appid}.json`);
-      this.tmppath = path.normalize(`${process.env.TEMP}/${this.appid}`);
+      this.tmppath = path.normalize(`${process.env.TEMP}/.${this.appid}`);
     } else {
       this.statefile = path.normalize(`${process.env.HOME}/.${this.appid}.json`);
-      this.tmppath = path.normalize(`/tmp/${this.appid}/${process.env.USER}`);
+      this.tmppath = path.normalize(`/tmp/${this.appid}/.${process.env.USER}`);
     }
 
     // coders and langs
