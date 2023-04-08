@@ -41,6 +41,7 @@ class XExtensionHelper {
       acts.channel.appendLine(`[${acts.timestamp()}] execfile: ${acts.execfile}${deleted ? " deleted" : ""}`);
       acts.channel.appendLine(`[${acts.timestamp()}] compiler: ${cmd}`);
       const cmdexp = acts.expandString(cmd);
+      // 標準エラー出力のリダイレクトをwindowsとwsl2で同じように扱えないため標準出力のみを扱う
       const command = `(${cmdexp}) > ${acts.tmpstdoutfile}`;
       const options = { cwd: acts.taskpath };
       Object.assign(options, opt);
@@ -48,10 +49,11 @@ class XExtensionHelper {
         child_process.execSync(command, options);
       } catch (ex) {
         throw `ERROR: compile failed\r\n`;
+      } finally {
+        const out = fs.readFileSync(acts.tmpstdoutfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
+        fs.unlinkSync(acts.tmpstdoutfile);
+        acts.channel.appendLine(`[${acts.timestamp()}] - stdout="${out}"`);
       }
-      const out = fs.readFileSync(acts.tmpstdoutfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
-      fs.unlinkSync(acts.tmpstdoutfile);
-      acts.channel.appendLine(`[${acts.timestamp()}] - stdout="${out}"`);
     }
 
     // show executor

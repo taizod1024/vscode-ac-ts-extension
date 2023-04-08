@@ -24,17 +24,7 @@
   ],
   "publisher": "taizod1024",
   "main": "./build/main.js",
-  "activationEvents": [
-    "onCommand:ac-ts-extension.loginSite",
-    "onCommand:ac-ts-extension.initTask",
-    "onCommand:ac-ts-extension.reinitTask",
-    "onCommand:ac-ts-extension.testTask",
-    "onCommand:ac-ts-extension.debugTask",
-    "onCommand:ac-ts-extension.submitTask",
-    "onCommand:ac-ts-extension.removeTask",
-    "onCommand:ac-ts-extension.browseTask",
-    "onCommand:ac-ts-extension.clearState"
-  ],
+  "activationEvents": [],
   "contributes": {
     "commands": [
       {
@@ -80,7 +70,7 @@
         "properties": {
           "atcoderExtension.c.checker": {
             "type": "string",
-            "markdownDescription": "command line checker for C, you can use $taskfile, $execfile, $tmppath, $taskpath, $site, $contest, $task, $extension.",
+            "markdownDescription": "command line checker for C, you can use $taskfile, $execfile, $taskpath, $projectpath, $tmppath, $site, $contest, $task, $extension.",
             "default": "gcc --version"
           },
           "atcoderExtension.c.compiler": {
@@ -106,7 +96,7 @@
           "atcoderExtension.c++.compiler": {
             "type": "string",
             "markdownDescription": "command line compiler for C++, see `#atcoderExtension.c.checker#`",
-            "default": "g++ -g $taskfile -o $execfile"
+            "default": "g++ -g $taskfile -o $execfile -std=c++17 -I $projectpath/lib"
           },
           "atcoderExtension.c++.executor": {
             "type": "string",
@@ -243,6 +233,7 @@
   "license": "MIT",
   "dependencies": {
     "cheerio": "^1.0.0-rc.10",
+    "decompress": "^4.2.1",
     "superagent": "^6.1.0",
     "superagent-proxy": "^3.0.0",
     "vm2": "^3.9.4"
@@ -250,6 +241,7 @@
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
     "@commitlint/config-conventional": "^13.1.0",
+    "@types/decompress": "^4.2.4",
     "@types/node": "^16.11.4",
     "@types/superagent": "^4.1.13",
     "@types/superagent-proxy": "^2.0.1",

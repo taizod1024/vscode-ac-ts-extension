@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <iostream>
+// #include <atcoder/all>
 
 int main()
 {
@@ -19,4 +20,4 @@ int main()
     std::cout << ans << " " << s;
 
     return 0;
-  }
+}

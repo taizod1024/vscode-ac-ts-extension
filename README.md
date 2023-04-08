@@ -4,6 +4,20 @@ C/C++/Java/Python/Go/JavaScript/TypeScript での [AtCoder](https://atcoder.jp/?
 
 ## 変更
 
+- 2023/04/05
+  - 機能強化
+    - <span style="font-weight:bold">C++の場合に Init Task/Test Task/Debug Task で[AtCoder Library](https://atcoder.jp/posts/517)を自動ダウンロードするようにしました。</span>
+      - AtCoder Library は`$projectpath/lib/atcoder`に格納します。
+      - AtCoder Library のドキュメントに従い C++コンパイルコマンドを以下のとおり変更しました。
+        - 変更前：`g++ -g $taskfile -o $execfile`
+        - 変更後：`g++ -g $taskfile -o $execfile -std=c++17 -I $projectpath/lib`
+    - C++のテンプレートファイルを修正しました。Init Task してから AtCoder の場合はコメントアウトを元に戻します。Yukicoder の場合は行を削除します。
+      - 追加行：`// #include <atcoder/all>`
+    - パラメタを拡張しました。
+      - `$projectpath`
+    - 作業フォルダを変更しました。
+      - 変更前：`C:\Users\...\AppData\Local\Temp\ac-ts-extension`
+      - 変更後：`C:\Users\...\AppData\Local\Temp\.ac-ts-extension`
 - 2022/12/08
   - 機能強化
     - <span style="font-weight:bold">Linux でのデバッグ実行に対応しました。</span>
@@ -382,15 +396,17 @@ Takahashi
 
 パラメタを使用できます。
 
-| パラメタ名     | 記法         | 展開例                                              |
-| -------------- | ------------ | --------------------------------------------------- |
-| 一時フォルダ   | `$tmppath`   | `C:\Users\...\AppData\Local\Temp\ac-ts-extension`   |
-| タスクファイル | `$taskfile`  | `C:\Users\...\src\atcoder\practice\practice_1.c`    |
-| 実行ファイル   | `$execfile`  | `C:\Users\....\src\atcoder\practice\practice_1.exe` |
-| サイト         | `$site`      | `atcoder`                                           |
-| コンテスト     | `$contest`   | `practice`                                          |
-| タスク         | `$task`      | `practice_1`                                        |
-| 拡張子         | `$extension` | `.c`                                                |
+| パラメタ名           | 記法           | 展開例                                                     |
+| -------------------- | -------------- | ---------------------------------------------------------- |
+| タスクファイル       | `$taskfile`    | `C:\Users\...\project\src\atcoder\practice\practice_1.c`   |
+| 実行ファイル         | `$execfile`    | `C:\Users\...\project\src\atcoder\practice\practice_1.exe` |
+| タスクフォルダ       | `$taskpath`    | `C:\Users\...\project\src\atcoder\practice`                |
+| プロジェクトフォルダ | `$projectpath` | `C:\Users\...\project`                                     |
+| 一時フォルダ         | `$tmppath`     | `C:\Users\...\AppData\Local\Temp\.ac-ts-extension`         |
+| サイト               | `$site`        | `atcoder`                                                  |
+| コンテスト           | `$contest`     | `practice`                                                 |
+| タスク               | `$task`        | `practice_1`                                               |
+| 拡張子               | `$extension`   | `.c`                                                       |
 
 ### Python 設定
 

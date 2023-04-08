@@ -59,10 +59,10 @@ class AcTsExtension {
     // init constant
     if (this.iswindows) {
       this.statefile = path.normalize(`${process.env.USERPROFILE}/.${this.appid}.json`);
-      this.tmppath = path.normalize(`${process.env.TEMP}/${this.appid}`);
+      this.tmppath = path.normalize(`${process.env.TEMP}/.${this.appid}`);
     } else {
       this.statefile = path.normalize(`${process.env.HOME}/.${this.appid}.json`);
-      this.tmppath = path.normalize(`/tmp/${this.appid}/${process.env.USER}`);
+      this.tmppath = path.normalize(`/tmp/${this.appid}/.${process.env.USER}`);
     }
 
     // coders and langs
@@ -213,7 +213,7 @@ class AcTsExtension {
     // delete files in tmppath
     fs.readdirSync(this.tmppath).forEach(filename => {
       const filepath = path.normalize(`${this.tmppath}/${filename}`);
-      fs.unlinkSync(filepath);
+      fs.rmSync(filepath, { recursive: true, force: true });
     });
 
     // read testfile
@@ -334,7 +334,7 @@ class AcTsExtension {
       if (debug) {
         // デバッグ実行時は出力がない場合はキャンセルとして成功扱い、ただし中断
         if (out === "") {
-          throw `---- CANCELED OR NO OUTPUT ----`;
+          throw `WARN: CANCELED OR NO OUTPUT`;
         }
       } else {
         // 通常実行時はタイムアウトフラグを確認して失敗扱い
@@ -442,7 +442,7 @@ class AcTsExtension {
       // delete files
       fs.readdirSync(this.tmppath).forEach(filename => {
         const filepath = path.normalize(`${this.tmppath}/${filename}`);
-        fs.unlinkSync(filepath);
+        fs.rmSync(filepath, { recursive: true, force: true });
       });
 
       // delete tmppath
@@ -484,8 +484,9 @@ class AcTsExtension {
     return str
       .replace(/\$taskfile/g, this.taskfile)
       .replace(/\$execfile/g, this.execfile)
-      .replace(/\$tmppath/g, this.tmppath)
       .replace(/\$taskpath/g, this.taskpath)
+      .replace(/\$projectpath/g, this.projectpath)
+      .replace(/\$tmppath/g, this.tmppath)
       .replace(/\$site/g, this.site)
       .replace(/\$contest/g, this.xsite.contest)
       .replace(/\$task/g, this.xsite.task)
