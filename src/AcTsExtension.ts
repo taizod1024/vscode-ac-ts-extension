@@ -334,7 +334,7 @@ class AcTsExtension {
       if (debug) {
         // デバッグ実行時は出力がない場合はキャンセルとして成功扱い、ただし中断
         if (out === "") {
-          throw `---- CANCELED OR NO OUTPUT ----`;
+          throw `WARN: CANCELED OR NO OUTPUT`;
         }
       } else {
         // 通常実行時はタイムアウトフラグを確認して失敗扱い
