@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import { acts } from "./AcTsExtension";
+import { XLanguage } from "./XLanguage";
 
 // extension helper
 class ExtensionHelper {
@@ -64,6 +65,25 @@ class ExtensionHelper {
             dstarr.unshift(val);
         }
         return dstarr;
+    }
+
+    public async selectLanguageSubmitTaskAsync(xlanguages: XLanguage[]) {
+        let languages = this.moveToHead(xlanguages.map(val => val.language), acts.xsite.language);
+        vscode.window
+            .showQuickPick(languages, {
+                placeHolder: "SELECT LANGUAGE",
+            })
+            .then(language => {
+                if (language === undefined) {
+                    return;
+                }
+                // save site depending data
+                acts.xsite.language = language;
+                // exec command
+                acts.submitTaskAsync().catch(ex => {
+                    acts.channel.appendLine("**** " + ex + " ****");
+                });
+            });
     }
 }
 export const extensionhelper = new ExtensionHelper();
