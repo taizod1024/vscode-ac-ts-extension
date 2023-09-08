@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.16](https://github.com/taizod1024/ac-ts-extension/compare/v0.1.15...v0.1.16) (2023-09-08)
+
+
+### Features
+
+* AtCoderのジャッジアップデートの対応 ([06b74b6](https://github.com/taizod1024/ac-ts-extension/commit/06b74b61ce1e2250b056d86c537e53495cd00e04))
+
 ### [0.1.15](https://github.com/taizod1024/ac-ts-extension/compare/v0.1.14...v0.1.15) (2023-04-08)
 
 
