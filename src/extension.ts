@@ -294,23 +294,17 @@ export function activate(context: vscode.ExtensionContext) {
                     return;
                 }
                 // select language
-                let languages = acts.xsite.xlanguages.filter(val => val.xextension.extension === acts.xsite.extension).map(val => val.language);
-                languages = extensionhelper.moveToHead(languages, acts.xsite.language);
-                vscode.window
-                    .showQuickPick(languages, {
-                        placeHolder: "SELECT LANGUAGE",
-                    })
-                    .then(language => {
-                        if (language === undefined) {
-                            return;
-                        }
-                        // save site depending data
-                        acts.xsite.language = language;
-                        // exec command
-                        acts.submitTaskAsync().catch(ex => {
-                            acts.channel.appendLine("**** " + ex + " ****");
-                        });
-                    });
+                let xlanguages = acts.xsite.xlanguages.filter(val => val.xextension.extension === acts.xsite.extension);
+                if (acts.site === atcoder.site) {
+                    // check valid language ids
+                    atcoder.filterXLanguagesAsync(xlanguages)
+                        .then(filterxlanguages => {
+                            extensionhelper.selectLanguageSubmitTaskAsync(filterxlanguages);
+                        })
+                        .catch(ex => {acts.channel.appendLine("**** " + ex + " ****");});
+                } else {
+                    extensionhelper.selectLanguageSubmitTaskAsync(xlanguages);
+                }
             })
         );
     })();

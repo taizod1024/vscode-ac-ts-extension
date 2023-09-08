@@ -2,6 +2,276 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.15](https://github.com/taizod1024/ac-ts-extension/compare/v0.1.14...v0.1.15) (2023-04-08)
+
+
+### Features
+
+* c++の場合にatcoder libraryを自動ダウンロード ([95fb4e6](https://github.com/taizod1024/ac-ts-extension/commit/95fb4e6f0a3420932cb09aa61c286589d5ed2a4d))
+* パラメタに$projectpathを追加 ([e861b09](https://github.com/taizod1024/ac-ts-extension/commit/e861b09db7e494f61524c78715b45c8cfe5f7a20))
+
+
+### Bug Fixes
+
+* タイムアウト時のメッセージの修正 ([10ad425](https://github.com/taizod1024/ac-ts-extension/commit/10ad425d66bc3212d51f3a7e058324d789172522))
+
+### [0.1.14](https://github.com/taizod1024/ac-ts-extension/compare/v0.1.13...v0.1.14) (2022-12-12)
+
+
+### Bug Fixes
+
+* 実行時に不要なモジュールを包含しない ([468955a](https://github.com/taizod1024/ac-ts-extension/commit/468955ad8d6cdeed32126114c7d41d43fa942255))
+* 不要モジュール削除 ([da55146](https://github.com/taizod1024/ac-ts-extension/commit/da551464536a1e9652489f18b3e547ff1173e55a))
+
+### [0.1.13](https://github.com/taizod1024/ac-ts-extension/compare/v0.1.12...v0.1.13) (2022-12-08)
+
+
+### Bug Fixes
+
+* linux対応再修正(WSLテスト完) ([915cc35](https://github.com/taizod1024/ac-ts-extension/commit/915cc35e46fdb5428eb1996025bc7bd1d572c9a2))
+
+### [0.1.12](https://github.com/taizod1024/ac-ts-extension/compare/v0.1.11...v0.1.12) (2022-12-07)
+
+
+### Bug Fixes
+
+* linux対応修正 ([dc99b25](https://github.com/taizod1024/ac-ts-extension/commit/dc99b2593ad5515f27e17558e3c9a735608b59fe))
+
+### [0.1.11](https://github.com/taizod1024/ac-ts-extension/compare/v0.1.10...v0.1.11) (2022-12-07)
+
+
+### Features
+
+* linuxデバッグ対応、標準エラー出力リダイレクトせず ([9c3f2d6](https://github.com/taizod1024/ac-ts-extension/commit/9c3f2d661899463103c1153122d881eebd16644c))
+
+### [0.1.10](https://github.com/taizod1024/ac-ts-extension/compare/v0.1.9...v0.1.10) (2022-12-03)
+
+
+### Features
+
+* c/c++デバッグ対応 ([1b3d14e](https://github.com/taizod1024/ac-ts-extension/commit/1b3d14eb828277ed769e3d048a2c0e4f6818d390))
+* javaデバッグ対応 ([d0f39d5](https://github.com/taizod1024/ac-ts-extension/commit/d0f39d51d26a05ee40072b22af9b8b224070cb61))
+
+### [0.1.9](https://github.com/taizod1024/ac-ts-extension/compare/v0.1.8...v0.1.9) (2022-08-31)
+
+### [0.1.8](https://github.com/taizod1024/ac-ts-extension/compare/v0.1.7...v0.1.8) (2022-08-29)
+
+### [0.1.7](https://github.com/taizod1024/ac-ts-extension/compare/v0.1.6...v0.1.7) (2022-08-29)
+
+### [0.1.6](https://github.com/taizod1024/ac-ts-extension/compare/v0.1.5...v0.1.6) (2022-08-29)
+
+
+### Bug Fixes
+
+* linuxでgoが実行されないのを修正 ([ccd3090](https://github.com/taizod1024/ac-ts-extension/commit/ccd30900d18ccbf83ba3fada6af738694aaf3d9a))
+
+### [0.1.5](https://github.com/taizod1024/ac-ts-extension/compare/v0.1.4...v0.1.5) (2022-08-29)
+
+
+### Features
+
+* go, rust対応、rustはテンプレートなし ([a21f7cd](https://github.com/taizod1024/ac-ts-extension/commit/a21f7cdc10e6341533c5b3bbb2aeb8349f4d61b4))
+* rust対応取消 ([c7f9a2e](https://github.com/taizod1024/ac-ts-extension/commit/c7f9a2e6e738ab054842f1b327dc83728e605fce))
+* siteに限定されずに実行可能なlocalを追加 ([16b391f](https://github.com/taizod1024/ac-ts-extension/commit/16b391f6e0956e7bbaa843fe9299bd613c3cf395))
+
+
+### Bug Fixes
+
+* linuxでのデバッグ実行を無効化 ([1af1a08](https://github.com/taizod1024/ac-ts-extension/commit/1af1a08f99fc782c1ce66ff8438b447c905f2f08))
+* コマンド名修正 ([16e4806](https://github.com/taizod1024/ac-ts-extension/commit/16e4806b1498a40bc732eaa300a078068493f629))
+* リダイレクト記法修正 ([b4b603b](https://github.com/taizod1024/ac-ts-extension/commit/b4b603b1f5531bd7f44db81adef98e90c8a281c9))
+
+### [0.1.4](https://github.com/taizod1024/ac-ts-extension/compare/v0.1.3...v0.1.4) (2022-08-24)
+
+
+### Bug Fixes
+
+* esbuild-base変更による起動不能を修正 ([fef1bbb](https://github.com/taizod1024/ac-ts-extension/commit/fef1bbbcfd35272c8bd88e79286fa728d5f01958))
+
+### [0.1.3](https://github.com/taizod1024/ac-ts-extension/compare/v0.1.2...v0.1.3) (2022-08-24)
+
+### [0.1.2](https://github.com/taizod1024/ac-ts-extension/compare/v0.1.1...v0.1.2) (2022-08-24)
+
+### [0.1.1](https://github.com/taizod1024/ac-ts-extension/compare/v0.1.0...v0.1.1) (2022-08-24)
+
+## [0.1.0](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.88...v0.1.0) (2022-08-23)
+
+
+### ⚠ BREAKING CHANGES
+
+* c/c++/java/任意言語への対応
+
+### Features
+
+* c/c++/java/任意言語への対応 ([c94a9de](https://github.com/taizod1024/ac-ts-extension/commit/c94a9deaf6a2903c6697702811e5872a5c200250))
+
+### [0.0.88](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.87...v0.0.88) (2022-08-23)
+
+### [0.0.87](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.86...v0.0.87) (2022-08-23)
+
+
+### Bug Fixes
+
+* 入力内容が次回候補で先頭に表示されないのを修正 ([717c9e9](https://github.com/taizod1024/ac-ts-extension/commit/717c9e99f932ba056c5682e8574f189f3a63d0f1))
+
+### [0.0.86](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.85...v0.0.86) (2022-08-23)
+
+
+### Features
+
+* web版非対応 ([5af34a8](https://github.com/taizod1024/ac-ts-extension/commit/5af34a8d6c6e3db8b77056c61deca5b107a01cbb))
+
+
+### Bug Fixes
+
+* 実行ディレクトリ変更時のミスを修正 ([6af8868](https://github.com/taizod1024/ac-ts-extension/commit/6af8868e02076160c5742c309882ed79f1d43aa8))
+
+### [0.0.85](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.84...v0.0.85) (2022-08-23)
+
+
+### Features
+
+* linux対応 ([2379c17](https://github.com/taizod1024/ac-ts-extension/commit/2379c1775211372e4a1bfbda5029c5623871a31f))
+* web版対応 ([79284c3](https://github.com/taizod1024/ac-ts-extension/commit/79284c347a08162262e091aefecc2e340fd8eb46))
+* 言語選択対応 ([a42d40c](https://github.com/taizod1024/ac-ts-extension/commit/a42d40c4847182f6a5e7668fb4879a4e69571962))
+* 設定クリア処理 ([4475de7](https://github.com/taizod1024/ac-ts-extension/commit/4475de777765f4f31fabffba8207e022da15ee30))
+* 任意言語対応 ([8aed8b9](https://github.com/taizod1024/ac-ts-extension/commit/8aed8b96372e2b02fcf94b9bd5d930421a9a0d72))
+
+
+### Bug Fixes
+
+* typescriptの実行に失敗するため元に戻す ([d7d5b9b](https://github.com/taizod1024/ac-ts-extension/commit/d7d5b9b7dd3fcde0706f830c6d1f8f377ecd93cd))
+* クラス名誤記 ([bc0c5a2](https://github.com/taizod1024/ac-ts-extension/commit/bc0c5a2963dc10b9f3af13ae77c44ed9495101b2))
+* 一時フォルダ作成タイミング修正 ([d41a38a](https://github.com/taizod1024/ac-ts-extension/commit/d41a38ab8644331fde015629ba51ddb6693ab26d))
+
+### [0.0.84](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.83...v0.0.84) (2022-08-19)
+
+
+### Features
+
+* 設定追加 ([99138f7](https://github.com/taizod1024/ac-ts-extension/commit/99138f7dad16f7f69f38843302f7ee97c6d982f2))
+
+
+### Bug Fixes
+
+* reinitTaskが正常に動作しない現象に対応 ([f29d391](https://github.com/taizod1024/ac-ts-extension/commit/f29d39158b6d86cb63a7fcd9ab0743d230254f43))
+* 入力例のHTMLの変更に対応 ([4dde40b](https://github.com/taizod1024/ac-ts-extension/commit/4dde40bb35290cd99595ff953844385dd973d9a6))
+
+### [0.0.83](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.82...v0.0.83) (2022-08-07)
+
+### [0.0.82](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.81...v0.0.82) (2022-08-07)
+
+
+### Features
+
+* site変更時はcontest, taskをクリア ([8e7fb5e](https://github.com/taizod1024/ac-ts-extension/commit/8e7fb5e684925aa9e6fdd86332f3710318678a62))
+* サイトごとのコンテストとタスクの分離 ([1e5847b](https://github.com/taizod1024/ac-ts-extension/commit/1e5847b18e03ba22266b120eff5af5e8c3ddfc79))
+
+
+### Bug Fixes
+
+* initTaskの前にloginSiteをすると言語が決まっていないためにエラー発生 ([9ed7e17](https://github.com/taizod1024/ac-ts-extension/commit/9ed7e17aa488b435c3708684c077e2e01bbb596c))
+
+### [0.0.81](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.80...v0.0.81) (2022-08-07)
+
+
+### Bug Fixes
+
+* 言語選択時にESCで抜ける際のエラーの修正 ([cba8e95](https://github.com/taizod1024/ac-ts-extension/commit/cba8e95ae2b31df06bb76a239708fb70e258ebf9))
+
+### [0.0.80](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.79...v0.0.80) (2022-08-02)
+
+### [0.0.79](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.78...v0.0.79) (2022-08-02)
+
+### [0.0.78](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.77...v0.0.78) (2021-12-24)
+
+### [0.0.77](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.76...v0.0.77) (2021-12-24)
+
+### [0.0.76](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.75...v0.0.76) (2021-12-24)
+
+### [0.0.75](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.74...v0.0.75) (2021-12-24)
+
+
+### Features
+
+* javascript対応 ([27922f8](https://github.com/taizod1024/ac-ts-extension/commit/27922f89bfe8037bb8fd3c1e2c5ad8e477c5e478))
+
+### [0.0.74](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.73...v0.0.74) (2021-11-10)
+
+
+### Features
+
+* テストファイルからtestTaskを実行可能に修正 ([07dd2a3](https://github.com/taizod1024/ac-ts-extension/commit/07dd2a3441a0a0038dba051bdbc26adc8fadddb0))
+
+### [0.0.73](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.72...v0.0.73) (2021-10-26)
+
+
+### Bug Fixes
+
+* web editor非対応 ([cfc18be](https://github.com/taizod1024/ac-ts-extension/commit/cfc18be8bf1d111eacb61e27d869c0013524b866))
+* 設定変更 ([d09475a](https://github.com/taizod1024/ac-ts-extension/commit/d09475af3f3d4cf7b9e7a39113eb5dde1a89e831))
+
+### [0.0.72](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.71...v0.0.72) (2021-10-25)
+
+
+### Bug Fixes
+
+* delete unused module ([1c05944](https://github.com/taizod1024/ac-ts-extension/commit/1c05944fd491a27f32040381f8ccc773cc019fec))
+* 設定変更 ([e92c3af](https://github.com/taizod1024/ac-ts-extension/commit/e92c3afa25db82f9145f5ff38615f599594adf34))
+
+### [0.0.71](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.70...v0.0.71) (2021-10-19)
+
+
+### Bug Fixes
+
+* change command title ([21403a3](https://github.com/taizod1024/ac-ts-extension/commit/21403a3c882ec7e3b3e2473e805774bf74582854))
+* typo ([2c665d3](https://github.com/taizod1024/ac-ts-extension/commit/2c665d3e5e05ad374207b1f78674777ba2811a27))
+
+### [0.0.70](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.69...v0.0.70) (2021-10-15)
+
+### [0.0.69](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.68...v0.0.69) (2021-10-14)
+
+
+### Bug Fixes
+
+* 無効な拡張子の場合にエラーを発生 ([2d593b2](https://github.com/taizod1024/ac-ts-extension/commit/2d593b2eafeaa236a8ce7ca73f64386df2cf93af))
+
+### [0.0.68](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.67...v0.0.68) (2021-10-14)
+
+
+### Bug Fixes
+
+* loginSiteでエラーが出る件を再修正 ([da7af9b](https://github.com/taizod1024/ac-ts-extension/commit/da7af9b1a8f02ffb348eb2cfa3fda1abb51f1098))
+
+### [0.0.67](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.66...v0.0.67) (2021-10-14)
+
+
+### Bug Fixes
+
+* cheerio対応時のDOMアクセスのミスを修正 ([447de82](https://github.com/taizod1024/ac-ts-extension/commit/447de82d671571c98bade7437669539ac3a9bdbb))
+* loginSite()が失敗するのを修正 ([112c798](https://github.com/taizod1024/ac-ts-extension/commit/112c798e99c4beb5656aa82b70b10695d809f133))
+
+### [0.0.66](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.65...v0.0.66) (2021-10-14)
+
+
+### Bug Fixes
+
+* 0.0.65起動不能対応 ([956f763](https://github.com/taizod1024/ac-ts-extension/commit/956f763185b8565e289c8d134447c12a66ffadc1))
+
+### [0.0.65](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.64...v0.0.65) (2021-10-14)
+
+
+### Bug Fixes
+
+* 配布ファイル削減 ([357905c](https://github.com/taizod1024/ac-ts-extension/commit/357905c0f988ca5ea9b14ccc94d5c8b1b6c30385))
+
+### [0.0.64](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.63...v0.0.64) (2021-10-14)
+
+
+### Bug Fixes
+
+* esbuild対応 ([dc74c0c](https://github.com/taizod1024/ac-ts-extension/commit/dc74c0c80172009a42dce8aeb2cce83a278d9481))
+
 ### [0.0.63](https://github.com/taizod1024/ac-ts-extension/compare/v0.0.62...v0.0.63) (2021-10-14)
 
 
