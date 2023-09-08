@@ -4,6 +4,11 @@ C/C++/Java/Python/Go/JavaScript/TypeScript での [AtCoder](https://atcoder.jp/?
 
 ## 変更
 
+- 2023/9/9
+  - 機能強化
+    - atcoder のジャッジアップデートに対応しました。
+      - atcoder の場合には submitTask 時に提出可能な言語を動的に取得するようになりました。
+      - [dakanat](https://github.com/dakanat) さんの[PR](https://github.com/taizod1024/vscode-ac-ts-extension/pull/58)を取り込みました。ありがとうございます。
 - 2023/04/05
   - 機能強化
     - <span style="font-weight:bold">C++の場合に Init Task/Test Task/Debug Task で[AtCoder Library](https://atcoder.jp/posts/517)を自動ダウンロードするようにしました。</span>
