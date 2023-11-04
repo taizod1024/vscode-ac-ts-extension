@@ -2,7 +2,6 @@
 
 branch="$(git symbolic-ref HEAD 2>/dev/null)" || \
        "$(git describe --contains --all HEAD)"
-this_comment=$1
 last_comment="$(git log -n 1 --pretty=%s)"
 
 # no main branch
@@ -12,15 +11,15 @@ if [ "${branch##refs/heads/}" != "main" ]; then
   exit 0
 fi
 
-# main branch with merge(develop) => chore(release)
+# main branch with merge
 echo "last_comment=${last_comment}"
-if [ $last_comment == "Merge branch 'develop'" ] && [ $this_comment =~ ^chore\(release\): ]; then
+if [ "${last_comment}" == "Merge branch 'develop'" ]; then
   echo "=> ok(merge)"
   exit 0
 fi
 
-# main branch with chore(release) => merge(develop)
-if [ $last_comment =~ ^chore\(release\): ] && [ $this_comment == "Merge branch 'develop'" ]; then
+# main branch with release
+if [[ "${last_comment}" =~ ^chore\(release\): ]]; then
   echo "=> ok(release)"
   exit 0
 fi
