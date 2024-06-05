@@ -8,7 +8,7 @@ class XExtensionHelper {
     // check
     const config = vscode.workspace.getConfiguration(acts.appcfgkey + "." + lang);
     const cmd = config.checker || "";
-    acts.channel.appendLine(`[${acts.timestamp()}] checker: ${cmd}`);
+    acts.channel.appendLine(`checker: ${cmd}`);
     if (!cmd) {
       throw "ERROR: no checker";
     }
@@ -23,7 +23,7 @@ class XExtensionHelper {
     }
     const out = fs.readFileSync(acts.tmpstdoutfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
     fs.unlinkSync(acts.tmpstdoutfile);
-    acts.channel.appendLine(`[${acts.timestamp()}] - stdout="${out}"`);
+    acts.channel.appendLine(`- stdout="${out}"`);
   }
 
   compileTask(lang: string, opt: object = {}): void {
@@ -31,15 +31,15 @@ class XExtensionHelper {
     const config = vscode.workspace.getConfiguration(acts.appcfgkey + "." + lang);
     const cmd = config.compiler || "";
     if (!cmd) {
-      acts.channel.appendLine(`[${acts.timestamp()}] compiler: ${cmd}`);
+      acts.channel.appendLine(`compiler: ${cmd}`);
     } else {
       let deleted = false;
       if (fs.existsSync(acts.execfile)) {
         fs.unlinkSync(acts.execfile);
         deleted = true;
       }
-      acts.channel.appendLine(`[${acts.timestamp()}] execfile: ${acts.execfile}${deleted ? " deleted" : ""}`);
-      acts.channel.appendLine(`[${acts.timestamp()}] compiler: ${cmd}`);
+      acts.channel.appendLine(`execfile: ${acts.execfile}${deleted ? " deleted" : ""}`);
+      acts.channel.appendLine(`compiler: ${cmd}`);
       const cmdexp = acts.expandString(cmd);
       // 標準エラー出力のリダイレクトをwindowsとwsl2で同じように扱えないため標準出力のみを扱う
       const command = `(${cmdexp}) > ${acts.tmpstdoutfile}`;
@@ -52,13 +52,13 @@ class XExtensionHelper {
       } finally {
         const out = fs.readFileSync(acts.tmpstdoutfile).toString().trim().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
         fs.unlinkSync(acts.tmpstdoutfile);
-        acts.channel.appendLine(`[${acts.timestamp()}] - stdout="${out}"`);
+        acts.channel.appendLine(`- stdout="${out}"`);
       }
     }
 
     // show executor
     const cmdexe = config.executor || "";
-    acts.channel.appendLine(`[${acts.timestamp()}] executor: ${cmdexe}`);
+    acts.channel.appendLine(`executor: ${cmdexe}`);
     if (!cmdexe) {
       throw "ERROR: no executor";
     }
