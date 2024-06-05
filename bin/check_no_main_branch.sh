@@ -19,7 +19,7 @@ if [ "${last_comment}" == "Merge branch 'develop'" ]; then
 fi
 
 # main branch with release
-if [ "${last_comment}" =~ ^chore\(release\): ]; then
+if [[ "${last_comment}" =~ ^chore\(release\): ]]; then
   echo "=> ok(release)"
   exit 0
 fi
