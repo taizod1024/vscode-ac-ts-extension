@@ -69,9 +69,9 @@ class AcTsExtension {
     this.xsites = [atcoder, yukicoder, local];
 
     // init context
-    this.channel = vscode.window.createOutputChannel(this.appname);
+    this.channel = vscode.window.createOutputChannel(this.appname, { log: true });
     this.channel.show(true);
-    this.channel.appendLine(`[${this.timestamp()}] ${this.appname}`);
+    this.channel.appendLine(`${this.appname}`);
 
     // load state
     this.loadState();
@@ -120,7 +120,7 @@ class AcTsExtension {
 
   public async loginSiteAsync() {
     // show channel
-    this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
+    this.channel.appendLine(`site: ${this.site}`);
 
     // init command
     await this.initPropAsync(false);
@@ -133,10 +133,10 @@ class AcTsExtension {
 
   public async initTaskAsync() {
     // show channel
-    this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
-    this.channel.appendLine(`[${this.timestamp()}] contest: ${this.xsite.contest}`);
-    this.channel.appendLine(`[${this.timestamp()}] task: ${this.xsite.task}`);
-    this.channel.appendLine(`[${this.timestamp()}] extension: ${this.xsite.extension}`);
+    this.channel.appendLine(`site: ${this.site}`);
+    this.channel.appendLine(`contest: ${this.xsite.contest}`);
+    this.channel.appendLine(`task: ${this.xsite.task}`);
+    this.channel.appendLine(`extension: ${this.xsite.extension}`);
 
     // init command
     await this.initPropAsync(true);
@@ -150,25 +150,25 @@ class AcTsExtension {
 
     // create taskfile
     if (fs.existsSync(this.taskfile)) {
-      this.channel.appendLine(`[${this.timestamp()}] taskfile: ${this.taskfile} exist`);
+      this.channel.appendLine(`taskfile: ${this.taskfile} exist`);
     } else {
       if (fs.existsSync(this.usertasktmplfile)) {
         fs.copyFileSync(this.usertasktmplfile, this.taskfile);
-        this.channel.appendLine(`[${this.timestamp()}] taskfile: ${this.taskfile} created from user template`);
+        this.channel.appendLine(`taskfile: ${this.taskfile} created from user template`);
       } else {
         fs.copyFileSync(this.tasktmplfile, this.taskfile);
-        this.channel.appendLine(`[${this.timestamp()}] taskfile: ${this.taskfile} created from system template`);
+        this.channel.appendLine(`taskfile: ${this.taskfile} created from system template`);
       }
     }
 
     // create testfile
     if (fs.existsSync(this.testfile)) {
-      this.channel.appendLine(`[${this.timestamp()}] testfile: ${this.testfile} exist`);
+      this.channel.appendLine(`testfile: ${this.testfile} exist`);
     } else {
       fs.writeFileSync(this.testfile, text);
-      this.channel.appendLine(`[${this.timestamp()}] testfile: ${this.testfile} created`);
+      this.channel.appendLine(`testfile: ${this.testfile} created`);
       if (text === "") {
-        this.channel.appendLine(`[${this.timestamp()}] WARN: there is no test set`);
+        this.channel.appendLine(`WARN: there is no test set`);
       }
     }
 
@@ -189,23 +189,23 @@ class AcTsExtension {
 
   public async testTaskAsync(debug: boolean): Promise<void> {
     // show channel
-    this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
-    this.channel.appendLine(`[${this.timestamp()}] contest: ${this.xsite.contest}`);
-    this.channel.appendLine(`[${this.timestamp()}] task: ${this.xsite.task}`);
-    this.channel.appendLine(`[${this.timestamp()}] extension: ${this.xsite.extension}`);
-    this.channel.appendLine(`[${this.timestamp()}] debug: ${debug}`);
+    this.channel.appendLine(`site: ${this.site}`);
+    this.channel.appendLine(`contest: ${this.xsite.contest}`);
+    this.channel.appendLine(`task: ${this.xsite.task}`);
+    this.channel.appendLine(`extension: ${this.xsite.extension}`);
+    this.channel.appendLine(`debug: ${debug}`);
 
     // init command
     await this.initPropAsync(true);
 
     // check taskfile
-    this.channel.appendLine(`[${this.timestamp()}] taskfile: ${this.taskfile}`);
+    this.channel.appendLine(`taskfile: ${this.taskfile}`);
     if (!fs.existsSync(this.taskfile)) {
       throw `ERROR: missing taskfile="${this.taskfile}", do init task`;
     }
 
     // check testfile
-    this.channel.appendLine(`[${this.timestamp()}] testfile: ${this.testfile}`);
+    this.channel.appendLine(`testfile: ${this.testfile}`);
     if (!fs.existsSync(this.testfile)) {
       throw `ERROR: missing testfile="${this.testfile}", do init task`;
     }
@@ -246,9 +246,9 @@ class AcTsExtension {
 
       // create test input file
       const io = ios[iosx];
-      this.channel.appendLine(`[${this.timestamp()}] test-${iosx}:`);
-      this.channel.appendLine(`[${this.timestamp()}] - input ="${io.in}"`);
-      this.channel.appendLine(`[${this.timestamp()}] - output="${io.out}"`);
+      this.channel.appendLine(`test-${iosx}:`);
+      this.channel.appendLine(`- input ="${io.in}"`);
+      this.channel.appendLine(`- output="${io.out}"`);
       fs.writeFileSync(this.tmpstdinfile, io.in);
 
       // exec command
@@ -268,7 +268,7 @@ class AcTsExtension {
           timecount += 500;
           await this.sleep(500);
         }
-        this.channel.appendLine(`[${this.timestamp()}] - debug session=${vscode.debug.activeDebugSession?.id}`);
+        this.channel.appendLine(`- debug session=${vscode.debug.activeDebugSession?.id}`);
       } else {
         // 通常実行時
         child = this.xsite.xextension.testTask();
@@ -280,7 +280,7 @@ class AcTsExtension {
         while (vscode.debug.activeDebugSession !== undefined) {
           await this.sleep(500);
         }
-        this.channel.appendLine(`[${this.timestamp()}] - debug session=${vscode.debug.activeDebugSession?.id}`);
+        this.channel.appendLine(`- debug session=${vscode.debug.activeDebugSession?.id}`);
       } else {
         // 通常実行時はコマンド実行中は戻り値が確定するまで待つ。もしくはタイムアウトまで待機
         let timecount = 0;
@@ -329,8 +329,8 @@ class AcTsExtension {
       fs.unlinkSync(this.tmpstdoutfile);
 
       // テスト実行のキャンセル・タイムアウト・例外チェック
-      this.channel.appendLine(`[${this.timestamp()}] - stdout="${out}"`);
-      this.channel.appendLine(`[${this.timestamp()}] - exit  =${child?.exitCode}`);
+      this.channel.appendLine(`- stdout="${out}"`);
+      this.channel.appendLine(`- exit  =${child?.exitCode}`);
       if (debug) {
         // デバッグ実行時は出力がない場合はキャンセルとして成功扱い、ただし中断
         if (out === "") {
@@ -349,10 +349,10 @@ class AcTsExtension {
 
       // テスト実行の結果チェック
       if (out === io.out) {
-        this.channel.appendLine(`[${this.timestamp()}]   -> OK`);
+        this.channel.appendLine(`  -> OK`);
         ok++;
       } else {
-        this.channel.appendLine(`[${this.timestamp()}]   -> NG`);
+        this.channel.appendLine(`  -> NG`);
         ng++;
       }
     }
@@ -367,17 +367,17 @@ class AcTsExtension {
 
   public async submitTaskAsync() {
     // show channel
-    this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
-    this.channel.appendLine(`[${this.timestamp()}] contest: ${this.xsite.contest}`);
-    this.channel.appendLine(`[${this.timestamp()}] task: ${this.xsite.task}`);
-    this.channel.appendLine(`[${this.timestamp()}] extension: ${this.xsite.extension}`);
-    this.channel.appendLine(`[${this.timestamp()}] language: ${this.xsite.language}`);
+    this.channel.appendLine(`site: ${this.site}`);
+    this.channel.appendLine(`contest: ${this.xsite.contest}`);
+    this.channel.appendLine(`task: ${this.xsite.task}`);
+    this.channel.appendLine(`extension: ${this.xsite.extension}`);
+    this.channel.appendLine(`language: ${this.xsite.language}`);
 
     //  init command
     await this.initPropAsync(true);
 
     // check taskfile
-    this.channel.appendLine(`[${this.timestamp()}] taskfile: ${this.taskfile}`);
+    this.channel.appendLine(`taskfile: ${this.taskfile}`);
     if (!fs.existsSync(this.taskfile)) {
       throw `ERROR: missing taskfile="${this.taskfile}", do init task`;
     }
@@ -393,28 +393,28 @@ class AcTsExtension {
 
   public async removeTaskAsync() {
     // show channel
-    this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
-    this.channel.appendLine(`[${this.timestamp()}] contest: ${this.xsite.contest}`);
-    this.channel.appendLine(`[${this.timestamp()}] task: ${this.xsite.task}`);
-    this.channel.appendLine(`[${this.timestamp()}] extension: ${this.xsite.extension}`);
+    this.channel.appendLine(`site: ${this.site}`);
+    this.channel.appendLine(`contest: ${this.xsite.contest}`);
+    this.channel.appendLine(`task: ${this.xsite.task}`);
+    this.channel.appendLine(`extension: ${this.xsite.extension}`);
 
     // init command
     await this.initPropAsync(true);
 
     // remove Taskfile
     if (!fs.existsSync(this.taskfile)) {
-      this.channel.appendLine(`[${this.timestamp()}] taskfile: ${this.taskfile} missing`);
+      this.channel.appendLine(`taskfile: ${this.taskfile} missing`);
     } else {
       fs.unlinkSync(this.taskfile);
-      this.channel.appendLine(`[${this.timestamp()}] taskfile: ${this.taskfile} removed`);
+      this.channel.appendLine(`taskfile: ${this.taskfile} removed`);
     }
 
     // remove testfile
     if (!fs.existsSync(this.testfile)) {
-      this.channel.appendLine(`[${this.timestamp()}] testfile: ${this.testfile} missing`);
+      this.channel.appendLine(`testfile: ${this.testfile} missing`);
     } else {
       fs.unlinkSync(this.testfile);
-      this.channel.appendLine(`[${this.timestamp()}] testfile: ${this.testfile} removed`);
+      this.channel.appendLine(`testfile: ${this.testfile} removed`);
     }
 
     this.channel.appendLine(`---- SUCCESS: ${this.xsite.task} removed ----`);
@@ -422,10 +422,10 @@ class AcTsExtension {
 
   public async browseTaskAsync() {
     // show channel
-    this.channel.appendLine(`[${this.timestamp()}] site: ${this.site}`);
-    this.channel.appendLine(`[${this.timestamp()}] contest: ${this.xsite.contest}`);
-    this.channel.appendLine(`[${this.timestamp()}] task: ${this.xsite.task}`);
-    this.channel.appendLine(`[${this.timestamp()}] extension: ${this.xsite.extension}`);
+    this.channel.appendLine(`site: ${this.site}`);
+    this.channel.appendLine(`contest: ${this.xsite.contest}`);
+    this.channel.appendLine(`task: ${this.xsite.task}`);
+    this.channel.appendLine(`extension: ${this.xsite.extension}`);
 
     // init command
     await this.initPropAsync(true);
@@ -507,9 +507,6 @@ class AcTsExtension {
     }
     let message = texts.join(" ");
     return message;
-  }
-  public timestamp(): string {
-    return new Date().toLocaleString("ja-JP").split(" ")[1];
   }
 
   // sleep

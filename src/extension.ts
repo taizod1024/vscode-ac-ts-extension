@@ -32,7 +32,7 @@ export function activate(context: vscode.ExtensionContext) {
               return;
             }
             if (site === atcoder.site) {
-              acts.channel.appendLine(`[${acts.timestamp()}] atcoder.siteurl: ${atcoder.siteurl}`);
+              acts.channel.appendLine(`atcoder.siteurl: ${atcoder.siteurl}`);
               // input username
               vscode.window
                 .showInputBox({
@@ -69,7 +69,7 @@ export function activate(context: vscode.ExtensionContext) {
                 });
             }
             if (site === yukicoder.site) {
-              acts.channel.appendLine(`[${acts.timestamp()}] yukicoder.siteurl: ${yukicoder.siteurl}`);
+              acts.channel.appendLine(`yukicoder.siteurl: ${yukicoder.siteurl}`);
               // input apikey
               vscode.window
                 .showInputBox({
