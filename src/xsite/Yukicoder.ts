@@ -125,27 +125,27 @@ class Yukicoder implements XSite {
 
   async loginSiteAsync() {
     // show channel
-    acts.channel.appendLine(`[${acts.timestamp()}] yukicoder.apikey: ********`);
+    acts.channel.appendLine(`yukicoder.apikey: ********`);
   }
 
   async getTestAsync() {
     // show channel
-    acts.channel.appendLine(`[${acts.timestamp()}] yukicoder.problemnourl: ${this.problemnourl}`);
-    acts.channel.appendLine(`[${acts.timestamp()}] yukicoder.apikey: ********`);
+    acts.channel.appendLine(`yukicoder.problemnourl: ${this.problemnourl}`);
+    acts.channel.appendLine(`yukicoder.apikey: ********`);
 
     // get agent
     const agent = superagent.agent().set("accept", "application/json").set("Authorization", `Bearer ${this.apikey}`);
 
     // get file list
     let fileiurl = `${this.api_problemidurl}/file/in`;
-    acts.channel.appendLine(`[${acts.timestamp()}] yukicoder.fileinurl: ${fileiurl}`);
+    acts.channel.appendLine(`yukicoder.fileinurl: ${fileiurl}`);
     const resfilei = await agent
       .get(fileiurl)
       .proxy(acts.proxy)
       .catch(res => {
         throw `ERROR: ${acts.responseToMessage(res)}`;
       });
-    acts.channel.appendLine(`[${acts.timestamp()}] -> ${resfilei.status}`);
+    acts.channel.appendLine(`-> ${resfilei.status}`);
 
     // get file
     let text = "";
@@ -156,7 +156,7 @@ class Yukicoder implements XSite {
 
       // get response
       let fileixurl = `${this.api_problemidurl}/file/in/${fileix}`;
-      acts.channel.appendLine(`[${acts.timestamp()}] yukicoder.fileiurl-${nx}: ${fileixurl}`);
+      acts.channel.appendLine(`yukicoder.fileiurl-${nx}: ${fileixurl}`);
       const resfileix = await agent
         .get(fileixurl)
         .proxy(acts.proxy)
@@ -165,7 +165,7 @@ class Yukicoder implements XSite {
         });
 
       let fileoxurl = `${this.api_problemidurl}/file/out/${fileix}`;
-      acts.channel.appendLine(`[${acts.timestamp()}] yukicoder.fileourl-${nx}: ${fileoxurl}`);
+      acts.channel.appendLine(`yukicoder.fileourl-${nx}: ${fileoxurl}`);
       const resfileox = await agent
         .get(fileoxurl)
         .proxy(acts.proxy)
@@ -183,14 +183,14 @@ class Yukicoder implements XSite {
 
   async submitTaskAsync() {
     // show channel
-    acts.channel.appendLine(`[${acts.timestamp()}] yukicoder.problemnourl: ${this.problemnourl}`);
-    acts.channel.appendLine(`[${acts.timestamp()}] yukicoder.apikey: ********`);
+    acts.channel.appendLine(`yukicoder.problemnourl: ${this.problemnourl}`);
+    acts.channel.appendLine(`yukicoder.apikey: ********`);
 
     // get agent
     const agent = superagent.agent().set("accept", "application/json").set("Authorization", `Bearer ${this.apikey}`);
 
     // submit task
-    acts.channel.appendLine(`[${acts.timestamp()}] yukicoder.api_submiturl: ${this.api_submiturl}`);
+    acts.channel.appendLine(`yukicoder.api_submiturl: ${this.api_submiturl}`);
     const code = fs.readFileSync(acts.taskfile).toString();
     const res3 = await agent
       .post(this.api_submiturl)
@@ -201,12 +201,12 @@ class Yukicoder implements XSite {
       .catch(res => {
         throw `ERROR: ${acts.responseToMessage(res)}`;
       });
-    acts.channel.appendLine(`[${acts.timestamp()}] -> ${res3.status}`);
-    acts.channel.appendLine(`[${acts.timestamp()}] submissionsurl: ${this.submissionsurl}`);
+    acts.channel.appendLine(`-> ${res3.status}`);
+    acts.channel.appendLine(`submissionsurl: ${this.submissionsurl}`);
   }
 
   browseTask() {
-    acts.channel.appendLine(`[${acts.timestamp()}] taskurl: ${this.api_problemidurl}`);
+    acts.channel.appendLine(`taskurl: ${this.api_problemidurl}`);
     vscode.env.openExternal(vscode.Uri.parse(this.problemnourl));
   }
 

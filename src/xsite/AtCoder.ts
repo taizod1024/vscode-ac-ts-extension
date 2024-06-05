@@ -226,7 +226,7 @@ class AtCoder implements XSite {
     }
     // atcoderでc/c++の場合
     if (this.extension === cpp.extension) {
-      acts.channel.appendLine(`[${acts.timestamp()}] aclibpath: ${this.aclibpath}`);
+      acts.channel.appendLine(`aclibpath: ${this.aclibpath}`);
       // .aclibpathがない場合
       if (!fs.existsSync(this.aclibpath)) {
         // ダウンロード済atcoder libraryがあれば削除
@@ -237,7 +237,7 @@ class AtCoder implements XSite {
           fs.rmSync(this.aclibzip_extractpath, { recursive: true, force: true });
         }
         // atcoder libraryをダウンロード
-        acts.channel.appendLine(`[${acts.timestamp()}] get_aclib: ${this.acliburl}`);
+        acts.channel.appendLine(`get_aclib: ${this.acliburl}`);
         const agent = superagent.agent();
         let response;
         try {
@@ -248,9 +248,9 @@ class AtCoder implements XSite {
             .catch(res => {
               throw acts.responseToMessage(res);
             });
-          acts.channel.appendLine(`[${acts.timestamp()}] -> ${response.status}`);
+          acts.channel.appendLine(`-> ${response.status}`);
         } catch (ex) {
-          acts.channel.appendLine(`[${acts.timestamp()}] -> ${ex}`);
+          acts.channel.appendLine(`-> ${ex}`);
         }
         // ダウンロードできた場合だけファイルに保存して展開
         if (response.status === 200) {
@@ -259,7 +259,7 @@ class AtCoder implements XSite {
           // atcoderフォルダだけプロジェクトフォルダにコピー
           fs.mkdirSync(this.aclibpath, { recursive: true });
           fs.readdirSync(this.aclibzip_aclibpath).forEach(filename => {
-            acts.channel.appendLine(`[${acts.timestamp()}] aclib: ${filename}`);
+            acts.channel.appendLine(`aclib: ${filename}`);
             const src = path.normalize(`${this.aclibzip_aclibpath}/${filename}`);
             const dst = path.normalize(`${this.aclibpath}/${filename}`);
             fs.copyFileSync(src, dst);
@@ -277,25 +277,25 @@ class AtCoder implements XSite {
 
   public async loginSiteAsync() {
     // show channel
-    acts.channel.appendLine(`[${acts.timestamp()}] atcoder.loginurl: ${this.loginurl}`);
-    acts.channel.appendLine(`[${acts.timestamp()}] atcoder.username: ${this.username}`);
-    acts.channel.appendLine(`[${acts.timestamp()}] atcoder.password: ********`);
+    acts.channel.appendLine(`atcoder.loginurl: ${this.loginurl}`);
+    acts.channel.appendLine(`atcoder.username: ${this.username}`);
+    acts.channel.appendLine(`atcoder.password: ********`);
 
     // get agent
     const agent = superagent.agent();
 
     // login get
-    acts.channel.appendLine(`[${acts.timestamp()}] login_get:`);
+    acts.channel.appendLine(`login_get:`);
     const res1 = await agent
       .get(this.loginurl)
       .proxy(acts.proxy)
       .catch(res => {
         throw `ERROR: ${acts.responseToMessage(res)}`;
       });
-    acts.channel.appendLine(`[${acts.timestamp()}] -> ${res1.status}`);
+    acts.channel.appendLine(`-> ${res1.status}`);
 
     // login post
-    acts.channel.appendLine(`[${acts.timestamp()}] login_post:`);
+    acts.channel.appendLine(`login_post:`);
     const $ = cheerio.load(res1.text);
     const csrf_token = $("input").val();
     const res2 = await agent
@@ -310,7 +310,7 @@ class AtCoder implements XSite {
       .catch(res => {
         throw `ERROR: ${acts.responseToMessage(res)}`;
       });
-    acts.channel.appendLine(`[${acts.timestamp()}] -> ${res2.status}`);
+    acts.channel.appendLine(`-> ${res2.status}`);
 
     // check login
     if (res2.text.indexOf(`ようこそ、${this.username} さん。`) < 0) {
@@ -320,25 +320,25 @@ class AtCoder implements XSite {
 
   public async getTestAsync() {
     // show channel
-    acts.channel.appendLine(`[${acts.timestamp()}] atcoder.taskurl: ${this.taskurl}`);
-    acts.channel.appendLine(`[${acts.timestamp()}] atcoder.username: ${this.username}`);
-    acts.channel.appendLine(`[${acts.timestamp()}] atcoder.password: ********`);
+    acts.channel.appendLine(`atcoder.taskurl: ${this.taskurl}`);
+    acts.channel.appendLine(`atcoder.username: ${this.username}`);
+    acts.channel.appendLine(`atcoder.password: ********`);
 
     // get agent
     const agent = superagent.agent();
 
     // login get
-    acts.channel.appendLine(`[${acts.timestamp()}] atcoder.login_get:`);
+    acts.channel.appendLine(`atcoder.login_get:`);
     const res1 = await agent
       .get(this.loginurl)
       .proxy(acts.proxy)
       .catch(res => {
         throw `ERROR: ${acts.responseToMessage(res)}`;
       });
-    acts.channel.appendLine(`[${acts.timestamp()}] -> ${res1.status}`);
+    acts.channel.appendLine(`-> ${res1.status}`);
 
     // login post
-    acts.channel.appendLine(`[${acts.timestamp()}] atcoder.login_post:`);
+    acts.channel.appendLine(`atcoder.login_post:`);
     const $ = cheerio.load(res1.text);
     const csrf_token = $("input").val();
     const res2 = await agent
@@ -353,7 +353,7 @@ class AtCoder implements XSite {
       .catch(res => {
         throw `ERROR: ${acts.responseToMessage(res)}`;
       });
-    acts.channel.appendLine(`[${acts.timestamp()}] -> ${res2.status}`);
+    acts.channel.appendLine(`-> ${res2.status}`);
 
     // check login
     if (res2.text.indexOf(`ようこそ、${this.username} さん。`) < 0) {
@@ -361,14 +361,14 @@ class AtCoder implements XSite {
     }
 
     // get task
-    acts.channel.appendLine(`[${acts.timestamp()}] atcoder.get_task:`);
+    acts.channel.appendLine(`atcoder.get_task:`);
     const response = await agent
       .get(this.taskurl)
       .proxy(acts.proxy)
       .catch(res => {
         throw `ERROR: ${acts.responseToMessage(res)}`;
       });
-    acts.channel.appendLine(`[${acts.timestamp()}] -> ${response.status}`);
+    acts.channel.appendLine(`-> ${response.status}`);
 
     // response to test text
     let text = "";
@@ -394,26 +394,26 @@ class AtCoder implements XSite {
 
   public async submitTaskAsync() {
     // show channel
-    acts.channel.appendLine(`[${acts.timestamp()}] atcoder.taskurl: ${this.taskurl}`);
-    acts.channel.appendLine(`[${acts.timestamp()}] atcoder.username: ${this.username}`);
-    acts.channel.appendLine(`[${acts.timestamp()}] atcoder.password: ********`);
-    acts.channel.appendLine(`[${acts.timestamp()}] atcoder.submiturl: ${this.submiturl}`);
+    acts.channel.appendLine(`atcoder.taskurl: ${this.taskurl}`);
+    acts.channel.appendLine(`atcoder.username: ${this.username}`);
+    acts.channel.appendLine(`atcoder.password: ********`);
+    acts.channel.appendLine(`atcoder.submiturl: ${this.submiturl}`);
 
     // get agent
     const agent = superagent.agent();
 
     // login get
-    acts.channel.appendLine(`[${acts.timestamp()}] login_get:`);
+    acts.channel.appendLine(`login_get:`);
     const res1 = await agent
       .get(this.loginurl)
       .proxy(acts.proxy)
       .catch(res => {
         throw `ERROR: ${acts.responseToMessage(res)}`;
       });
-    acts.channel.appendLine(`[${acts.timestamp()}] -> ${res1.status}`);
+    acts.channel.appendLine(`-> ${res1.status}`);
 
     // login post
-    acts.channel.appendLine(`[${acts.timestamp()}] login_post:`);
+    acts.channel.appendLine(`login_post:`);
     const $ = cheerio.load(res1.text);
     const csrf_token = $("input").val();
     const res2 = await agent
@@ -428,7 +428,7 @@ class AtCoder implements XSite {
       .catch(res => {
         throw `ERROR: ${acts.responseToMessage(res)}`;
       });
-    acts.channel.appendLine(`[${acts.timestamp()}] -> ${res2.status}`);
+    acts.channel.appendLine(`-> ${res2.status}`);
 
     // check login
     if (res2.text.indexOf(`ようこそ、${this.username} さん。`) < 0) {
@@ -436,7 +436,7 @@ class AtCoder implements XSite {
     }
 
     // submit task
-    acts.channel.appendLine(`[${acts.timestamp()}] submit_task:`);
+    acts.channel.appendLine(`submit_task:`);
     const code = fs.readFileSync(acts.taskfile).toString();
     const res3 = await agent
       .post(this.submiturl)
@@ -451,12 +451,12 @@ class AtCoder implements XSite {
       .catch(res => {
         throw `ERROR: ${acts.responseToMessage(res)}`;
       });
-    acts.channel.appendLine(`[${acts.timestamp()}] -> ${res3.status}`);
-    acts.channel.appendLine(`[${acts.timestamp()}] submissionsurl: ${this.submissionsurl}`);
+    acts.channel.appendLine(`-> ${res3.status}`);
+    acts.channel.appendLine(`submissionsurl: ${this.submissionsurl}`);
   }
 
   public browseTask() {
-    acts.channel.appendLine(`[${acts.timestamp()}] taskurl: ${this.taskurl}`);
+    acts.channel.appendLine(`taskurl: ${this.taskurl}`);
     vscode.env.openExternal(vscode.Uri.parse(this.taskurl));
   }
 
@@ -493,17 +493,17 @@ class AtCoder implements XSite {
 
     // login get
     this.loginurl = "https://atcoder.jp/login?continue=https%3A%2F%2Fatcoder.jp%2F&lang=ja";
-    acts.channel.appendLine(`[${acts.timestamp()}] atcoder.login_get:`);
+    acts.channel.appendLine(`atcoder.login_get:`);
     const res1 = await agent
       .get(this.loginurl)
       .proxy(acts.proxy)
       .catch(res => {
         throw `ERROR: ${acts.responseToMessage(res)}`;
       });
-    acts.channel.appendLine(`[${acts.timestamp()}] -> ${res1.status}`);
+    acts.channel.appendLine(`-> ${res1.status}`);
 
     // login post
-    acts.channel.appendLine(`[${acts.timestamp()}] atcoder.login_post:`);
+    acts.channel.appendLine(`atcoder.login_post:`);
     const $ = cheerio.load(res1.text);
     const csrf_token = $("input").val();
     const res2 = await agent
@@ -518,7 +518,7 @@ class AtCoder implements XSite {
       .catch(res => {
         throw `ERROR: ${acts.responseToMessage(res)}`;
       });
-    acts.channel.appendLine(`[${acts.timestamp()}] -> ${res2.status}`);
+    acts.channel.appendLine(`-> ${res2.status}`);
 
     // check login
     if (res2.text.indexOf(`ようこそ、${this.username} さん。`) < 0) {
@@ -527,14 +527,14 @@ class AtCoder implements XSite {
 
     // get language ids
     this.submiturl = `https://atcoder.jp/contests/${this.contest}/submit`;
-    acts.channel.appendLine(`[${acts.timestamp()}] atcoder.check_valid_language_ids:`);
+    acts.channel.appendLine(`atcoder.check_valid_language_ids:`);
     const response = await agent
       .get(this.submiturl)
       .proxy(acts.proxy)
       .catch(res => {
         throw `ERROR: ${acts.responseToMessage(res)}`;
       });
-    acts.channel.appendLine(`[${acts.timestamp()}] -> ${response.status}`);
+    acts.channel.appendLine(`-> ${response.status}`);
 
     const $submitpage = cheerio.load(response.text);
     const languageIds = $submitpage(`#select-lang-${this.task} select.form-control`)
