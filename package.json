@@ -4,7 +4,7 @@
   "displayName": "AtCoder Extension",
   "description": "atcoder/yukicoder vscode extension for c/c++/java/python/go/javascript/typescript",
   "engines": {
-    "vscode": "^1.60.0"
+    "vscode": "^1.90.0"
   },
   "categories": [
     "Other"
@@ -245,7 +245,7 @@
     "@types/node": "^16.11.4",
     "@types/superagent": "^4.1.13",
     "@types/superagent-proxy": "^2.0.1",
-    "@types/vscode": "^1.60.0",
+    "@types/vscode": "^1.90.0",
     "@typescript-eslint/eslint-plugin": "^4.31.2",
     "@typescript-eslint/parser": "^4.31.2",
     "esbuild": "^0.13.6",
@@ -253,7 +253,9 @@
     "husky": "^4.3.8",
     "standard-version": "^9.3.1",
     "ts-node": "^10.2.1",
-    "typescript": "^4.4.3"
+    "typescript": "^4.4.3",
+    "vscode": "^1.1.37",
+    "vscode-test": "^1.6.1"
   },
   "repository": {
     "type": "git",
