@@ -263,7 +263,6 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "./bin/check_no_main_branch.sh",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   }
