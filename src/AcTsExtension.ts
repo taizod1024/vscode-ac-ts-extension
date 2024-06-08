@@ -24,6 +24,10 @@ class AcTsExtension {
   public vscodeextensionpath: string;
   public projectpath: string;
 
+  // secrets
+  public enableSecrets = false;
+  public secrets: vscode.SecretStorage;
+
   // param
   public site: string;
 
@@ -436,27 +440,6 @@ class AcTsExtension {
     this.channel.appendLine(`---- SUCCESS: browse ${this.xsite.task} ----`);
   }
 
-  public async clearStateAsync() {
-    // delete tmppath
-    if (fs.existsSync(this.tmppath)) {
-      // delete files
-      fs.readdirSync(this.tmppath).forEach(filename => {
-        const filepath = path.normalize(`${this.tmppath}/${filename}`);
-        fs.rmSync(filepath, { recursive: true, force: true });
-      });
-
-      // delete tmppath
-      fs.rmdirSync(this.tmppath);
-    }
-
-    // delete statefile
-    if (fs.existsSync(this.statefile)) {
-      fs.unlinkSync(this.statefile);
-    }
-
-    this.channel.appendLine(`---- SUCCESS: state cleard ----`);
-  }
-
   // state
   public loadState() {
     const json = fs.existsSync(this.statefile)
@@ -471,12 +454,22 @@ class AcTsExtension {
     this.site = json.site || "";
     this.xsites.forEach(val => val.loadState(json));
   }
+
   public saveState() {
     const json = {
       site: this.site,
     };
     this.xsites.forEach(val => val.saveState(json));
     fs.writeFileSync(this.statefile, JSON.stringify(json));
+  }
+
+  public async loadStateAsync() {
+    this.site = await this.secrets.get("site");
+    this.xsites.forEach(async val => await val.loadStateAsync());
+  }
+  public async saveStateAsync() {
+    await this.secrets.store("site", this.site);
+    this.xsites.forEach(async val => await val.saveStateAsync());
   }
 
   // expand command

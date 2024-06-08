@@ -26,4 +26,6 @@ export interface XSite {
   getLanguageId(): any;
   loadState(json: any): void;
   saveState(json: any): void;
+  loadStateAsync(): void;
+  saveStateAsync(): void;
 }

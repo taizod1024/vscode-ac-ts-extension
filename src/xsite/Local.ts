@@ -82,5 +82,18 @@ class Local implements XSite {
     json.local.extension = local.extension;
     json.local.language = local.language;
   }
+  public async loadStateAsync() {
+    local.contest = await acts.secrets.get("local.contest");
+    local.task = await acts.secrets.get("local.task");
+    local.extension = await acts.secrets.get("local.extension");
+    local.language = await acts.secrets.get("local.language");
+  }
+
+  public async saveStateAsync() {
+    await acts.secrets.store("yukicoder.contest", local.contest);
+    await acts.secrets.store("yukicoder.task", local.task);
+    await acts.secrets.store("yukicoder.extension", local.extension);
+    await acts.secrets.store("yukicoder.language", local.language);
+  }
 }
 export const local = new Local();
