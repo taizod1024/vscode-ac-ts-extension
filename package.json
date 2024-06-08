@@ -4,7 +4,7 @@
   "displayName": "AtCoder Extension",
   "description": "atcoder/yukicoder vscode extension for c/c++/java/python/go/javascript/typescript",
   "engines": {
-    "vscode": "^1.60.0"
+    "vscode": "^1.90.0"
   },
   "categories": [
     "Other"
@@ -224,7 +224,7 @@
     "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
     "test": "node ./build/test/runTest.js",
     "release": "npm run release-premerge && npx standard-version && vsce publish && npm run release-postmerge",
-    "release-premerge": "git switch main && git merge --no-ff develop",
+    "release-premerge": "git switch main && git merge --no-ff develop --no-edit",
     "release-postmerge": "git push --follow-tags origin main && git push origin develop && git switch develop",
     "package": "vsce package",
     "clean": "rmdir /q /s .\\build || exit /b 0"
@@ -245,7 +245,7 @@
     "@types/node": "^16.11.4",
     "@types/superagent": "^4.1.13",
     "@types/superagent-proxy": "^2.0.1",
-    "@types/vscode": "^1.60.0",
+    "@types/vscode": "^1.90.0",
     "@typescript-eslint/eslint-plugin": "^4.31.2",
     "@typescript-eslint/parser": "^4.31.2",
     "esbuild": "^0.13.6",
@@ -253,7 +253,9 @@
     "husky": "^4.3.8",
     "standard-version": "^9.3.1",
     "ts-node": "^10.2.1",
-    "typescript": "^4.4.3"
+    "typescript": "^4.4.3",
+    "vscode": "^1.1.37",
+    "vscode-test": "^1.6.1"
   },
   "repository": {
     "type": "git",
@@ -261,7 +263,6 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "./bin/check_no_main_branch.sh",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   }
