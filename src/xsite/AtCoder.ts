@@ -487,6 +487,33 @@ class AtCoder implements XSite {
     json.atcoder.language = atcoder.language;
   }
 
+  public async loadStateAsync() {
+    atcoder.username = await acts.context.secrets.get("atcoder.username");
+    atcoder.password = await acts.context.secrets.get("atcoder.password");
+    atcoder.contest = await acts.context.secrets.get("atcoder.contest");
+    atcoder.task = await acts.context.secrets.get("atcoder.task");
+    atcoder.extension = await acts.context.secrets.get("atcoder.extension");
+    atcoder.language = await acts.context.secrets.get("atcoder.language");
+  }
+
+  public async saveStateAsync() {
+    await acts.context.secrets.store("atcoder.username", atcoder.username);
+    await acts.context.secrets.store("atcoder.password", atcoder.password);
+    await acts.context.secrets.store("atcoder.contest", atcoder.contest);
+    await acts.context.secrets.store("atcoder.task", atcoder.task);
+    await acts.context.secrets.store("atcoder.extension", atcoder.extension);
+    await acts.context.secrets.store("atcoder.language", atcoder.language);
+  }
+
+  public async deleteStateAsync() {
+    await acts.context.secrets.delete("atcoder.username");
+    await acts.context.secrets.delete("atcoder.password");
+    await acts.context.secrets.delete("atcoder.contest");
+    await acts.context.secrets.delete("atcoder.task");
+    await acts.context.secrets.delete("atcoder.extension");
+    await acts.context.secrets.delete("atcoder.language");
+  }
+
   public async filterXLanguagesAsync(xlanguages: XLanguage[]): Promise<XLanguage[]> {
     // get agent
     const agent = superagent.agent();
