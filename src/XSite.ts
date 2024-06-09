@@ -18,7 +18,7 @@ export interface XSite {
 
   // method
   checkLogin(): void;
-  initPropAsync(withtask: boolean): void;
+  initPropAsync(withtask: boolean): Promise<void>;
   loginSiteAsync(): void;
   getTestAsync(): any;
   submitTaskAsync(): void;
@@ -26,6 +26,7 @@ export interface XSite {
   getLanguageId(): any;
   loadState(json: any): void;
   saveState(json: any): void;
-  loadStateAsync(): void;
-  saveStateAsync(): void;
+  loadStateAsync(): Promise<void>;
+  saveStateAsync(): Promise<void>;
+  deleteStateAsync(): Promise<void>;
 }

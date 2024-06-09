@@ -58,6 +58,10 @@
       {
         "command": "ac-ts-extension.browseTask",
         "title": "AtCoder Extension: Browse Task"
+      },
+      {
+        "command": "ac-ts-extension.clearState",
+        "title": "AtCoder Extension: Clear State..."
       }
     ],
     "configuration": [

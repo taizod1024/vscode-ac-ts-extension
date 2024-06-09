@@ -236,19 +236,27 @@ class Yukicoder implements XSite {
   }
 
   async loadStateAsync() {
-    yukicoder.apikey = await acts.secrets.get("yukicoder.apikey");
-    yukicoder.contest = await acts.secrets.get("yukicoder.contest");
-    yukicoder.task = await acts.secrets.get("yukicoder.task");
-    yukicoder.extension = await acts.secrets.get("yukicoder.extension");
-    yukicoder.language = await acts.secrets.get("yukicoder.language");
+    yukicoder.apikey = await acts.context.secrets.get("yukicoder.apikey");
+    yukicoder.contest = await acts.context.secrets.get("yukicoder.contest");
+    yukicoder.task = await acts.context.secrets.get("yukicoder.task");
+    yukicoder.extension = await acts.context.secrets.get("yukicoder.extension");
+    yukicoder.language = await acts.context.secrets.get("yukicoder.language");
   }
 
   async saveStateAsync() {
-    await acts.secrets.store("yukicoder.apikey", yukicoder.apikey);
-    await acts.secrets.store("yukicoder.contest", yukicoder.contest);
-    await acts.secrets.store("yukicoder.task", yukicoder.task);
-    await acts.secrets.store("yukicoder.extension", yukicoder.extension);
-    await acts.secrets.store("yukicoder.language", yukicoder.language);
+    await acts.context.secrets.store("yukicoder.apikey", yukicoder.apikey);
+    await acts.context.secrets.store("yukicoder.contest", yukicoder.contest);
+    await acts.context.secrets.store("yukicoder.task", yukicoder.task);
+    await acts.context.secrets.store("yukicoder.extension", yukicoder.extension);
+    await acts.context.secrets.store("yukicoder.language", yukicoder.language);
+  }
+
+  async deleteStateAsync() {
+    await acts.context.secrets.delete("yukicoder.apikey");
+    await acts.context.secrets.delete("yukicoder.contest");
+    await acts.context.secrets.delete("yukicoder.task");
+    await acts.context.secrets.delete("yukicoder.extension");
+    await acts.context.secrets.delete("yukicoder.language");
   }
 }
 export const yukicoder = new Yukicoder();

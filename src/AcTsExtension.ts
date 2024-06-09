@@ -21,12 +21,11 @@ class AcTsExtension {
   public readonly channel: vscode.OutputChannel;
 
   // context
-  public vscodeextensionpath: string;
+  public context: vscode.ExtensionContext;
   public projectpath: string;
 
   // secrets
-  public enableSecrets = false;
-  public secrets: vscode.SecretStorage;
+  public enableSecrets: false | "convert" | true = "convert";
 
   // param
   public site: string;
@@ -58,7 +57,7 @@ class AcTsExtension {
   }
   public xsites: XSite[];
 
-  // setup function
+  // constructor
   constructor() {
     // init constant
     if (this.iswindows) {
@@ -76,14 +75,33 @@ class AcTsExtension {
     this.channel = vscode.window.createOutputChannel(this.appname, { log: true });
     this.channel.show(true);
     this.channel.appendLine(`${this.appname}`);
+  }
 
-    // load state
-    this.loadState();
+  public async updateStateAsync() {
+    // feature flag
+    if (this.enableSecrets === false) {
+      this.loadState();
+    } else if (this.enableSecrets === "convert") {
+      if (fs.existsSync(this.statefile)) {
+        this.channel.appendLine(`convert: statefile => secrets`);
+        this.channel.appendLine(`- found statefile`);
+        this.channel.appendLine(`- load statefile`);
+        this.loadState();
+        this.channel.appendLine(`- save secrets`);
+        await this.saveStateAsync();
+        this.channel.appendLine(`- delete statefile`);
+        this.deleteState();
+      } else {
+        await this.loadStateAsync();
+      }
+    } else {
+      await this.loadStateAsync();
+    }
   }
 
   public async initPropAsync(withtask: boolean) {
     // init prop
-    this.tasktmplfile = path.normalize(`${this.vscodeextensionpath}/template/template${this.xsite.extension}`);
+    this.tasktmplfile = path.normalize(`${this.context.extensionPath}/template/template${this.xsite.extension}`);
     this.usertasktmplfile = path.normalize(`${this.projectpath}/template/template${this.xsite.extension}`);
     this.taskpath = path.normalize(`${this.projectpath}/src/${this.site}/${this.xsite.contest}`);
     this.taskfile = path.normalize(`${this.taskpath}/${this.xsite.task}${this.xsite.extension}`);
@@ -119,7 +137,14 @@ class AcTsExtension {
     }
 
     // save state
-    this.saveState();
+    // feature flag
+    if (this.enableSecrets === false) {
+      this.saveState();
+    } else if (this.enableSecrets === "convert") {
+      await this.saveStateAsync();
+    } else {
+      await this.saveStateAsync();
+    }
   }
 
   public async loginSiteAsync() {
@@ -440,6 +465,20 @@ class AcTsExtension {
     this.channel.appendLine(`---- SUCCESS: browse ${this.xsite.task} ----`);
   }
 
+  public async clearStateAsync() {
+    // feature flag
+    if (this.enableSecrets === false) {
+      this.deleteState();
+    } else if (this.enableSecrets === "convert") {
+      this.deleteState();
+      await this.deleteStateAsync();
+    } else {
+      await this.deleteStateAsync();
+    }
+
+    this.channel.appendLine(`---- SUCCESS: state cleard ----`);
+  }
+
   // state
   public loadState() {
     const json = fs.existsSync(this.statefile)
@@ -463,13 +502,41 @@ class AcTsExtension {
     fs.writeFileSync(this.statefile, JSON.stringify(json));
   }
 
-  public async loadStateAsync() {
-    this.site = await this.secrets.get("site");
-    this.xsites.forEach(async val => await val.loadStateAsync());
+  public deleteState() {
+    // delete tmppath
+    if (fs.existsSync(this.tmppath)) {
+      // delete files
+      fs.readdirSync(this.tmppath).forEach(filename => {
+        const filepath = path.normalize(`${this.tmppath}/${filename}`);
+        fs.rmSync(filepath, { recursive: true, force: true });
+      });
+
+      // delete tmppath
+      fs.rmdirSync(this.tmppath);
+    }
+
+    // delete statefile
+    if (fs.existsSync(this.statefile)) {
+      fs.unlinkSync(this.statefile);
+    }
   }
+
+  // state async
+  public async loadStateAsync() {
+    this.site = await this.context.secrets.get("site");
+    this.xsites.forEach(async val => {
+      await val.loadStateAsync();
+    });
+  }
+
   public async saveStateAsync() {
-    await this.secrets.store("site", this.site);
+    await this.context.secrets.store("site", this.site);
     this.xsites.forEach(async val => await val.saveStateAsync());
+  }
+
+  public async deleteStateAsync() {
+    await this.context.secrets.delete("site");
+    this.xsites.forEach(async val => await val.deleteStateAsync());
   }
 
   // expand command
