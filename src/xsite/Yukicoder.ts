@@ -236,11 +236,11 @@ class Yukicoder implements XSite {
   }
 
   async loadStateAsync() {
-    yukicoder.apikey = await acts.context.secrets.get("yukicoder.apikey");
-    yukicoder.contest = await acts.context.secrets.get("yukicoder.contest");
-    yukicoder.task = await acts.context.secrets.get("yukicoder.task");
-    yukicoder.extension = await acts.context.secrets.get("yukicoder.extension");
-    yukicoder.language = await acts.context.secrets.get("yukicoder.language");
+    yukicoder.apikey = (await acts.context.secrets.get("yukicoder.apikey")) || "";
+    yukicoder.contest = (await acts.context.secrets.get("yukicoder.contest")) || "";
+    yukicoder.task = (await acts.context.secrets.get("yukicoder.task")) || "";
+    yukicoder.extension = (await acts.context.secrets.get("yukicoder.extension")) || "";
+    yukicoder.language = (await acts.context.secrets.get("yukicoder.language")) || "";
   }
 
   async saveStateAsync() {

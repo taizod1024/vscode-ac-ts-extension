@@ -84,10 +84,10 @@ class Local implements XSite {
   }
 
   public async loadStateAsync() {
-    local.contest = await acts.context.secrets.get("local.contest");
-    local.task = await acts.context.secrets.get("local.task");
-    local.extension = await acts.context.secrets.get("local.extension");
-    local.language = await acts.context.secrets.get("local.language");
+    local.contest = (await acts.context.secrets.get("local.contest")) || "";
+    local.task = (await acts.context.secrets.get("local.task")) || "";
+    local.extension = (await acts.context.secrets.get("local.extension")) || "";
+    local.language = (await acts.context.secrets.get("local.language")) || "";
   }
 
   public async saveStateAsync() {
