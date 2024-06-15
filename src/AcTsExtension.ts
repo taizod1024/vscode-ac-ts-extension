@@ -524,19 +524,23 @@ class AcTsExtension {
   // state async
   public async loadStateAsync() {
     this.site = await this.context.secrets.get("site");
-    this.xsites.forEach(async val => {
-      await val.loadStateAsync();
-    });
+    for (const xsite of this.xsites) {
+      await xsite.loadStateAsync();
+    }
   }
 
   public async saveStateAsync() {
     await this.context.secrets.store("site", this.site);
-    this.xsites.forEach(async val => await val.saveStateAsync());
+    for (const xsite of this.xsites) {
+      await xsite.saveStateAsync();
+    }
   }
 
   public async deleteStateAsync() {
     await this.context.secrets.delete("site");
-    this.xsites.forEach(async val => await val.deleteStateAsync());
+    for (const xsite of this.xsites) {
+      await xsite.deleteStateAsync();
+    }
   }
 
   // expand command
