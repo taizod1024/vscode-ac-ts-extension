@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.2.0](https://github.com/taizod1024/ac-ts-extension/compare/v0.1.21...v0.2.0) (2024-06-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* 認証情報をsecretsに保存するよう修正
+
+### Bug Fixes
+
+* forEachでの非同期処理のロジックミスを修正 ([5cacb2b](https://github.com/taizod1024/ac-ts-extension/commit/5cacb2b1e3f1bbec11c61d73d24275d8db1dc1d7))
+* シークレットから取得時にundefinedの場合への対処 ([b627042](https://github.com/taizod1024/ac-ts-extension/commit/b6270427f5dff52e8c0d101c19f47b53717a8167))
+* 認証情報をsecretsに保存するよう修正 ([2de7f85](https://github.com/taizod1024/ac-ts-extension/commit/2de7f856ada530d28ae6096460eba4c5eee66f73))
+
 ### [0.1.21](https://github.com/taizod1024/ac-ts-extension/compare/v0.1.20...v0.1.21) (2024-06-08)
 
 ### [0.1.20](https://github.com/taizod1024/ac-ts-extension/compare/v0.1.18...v0.1.20) (2024-06-05)
