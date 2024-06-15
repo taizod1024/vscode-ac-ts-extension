@@ -4,6 +4,10 @@ C/C++/Java/Python/Go/JavaScript/TypeScript での [AtCoder](https://atcoder.jp/?
 
 ## 変更
 
+- 2024/6/15
+  - リファクタ
+    - 認証情報の格納先を SecretStorage に変更しました。認証情報を格納したファイルがあれば SecretStorage に移動してから元のファイルを削除します。
+    - 認証情報の格納先を変更したことに起因して内部的に非同期処理が増加しました。<span style="color:red;font-weight:bold">問題があれば連絡願います。</span>
 - 2023/9/9
   - 機能強化
     - atcoder のジャッジアップデートに対応しました。

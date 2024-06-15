@@ -9,14 +9,15 @@ import { local } from "./xsite/Local";
 
 // extension entrypoint
 export function activate(context: vscode.ExtensionContext) {
+  acts.context = context;
   (function () {
     const cmdid = "loginSite";
     context.subscriptions.push(
-      vscode.commands.registerCommand(`${acts.appid}.${cmdid}`, () => {
+      vscode.commands.registerCommand(`${acts.appid}.${cmdid}`, async () => {
         acts.channel.show(true);
         acts.channel.clear();
         acts.channel.appendLine(`${acts.appid}.${cmdid}:`);
-        acts.vscodeextensionpath = context.extensionPath;
+        await acts.updateStateAsync();
         // check condition
         if (!extensionhelper.checkProjectPath()) {
           return;
@@ -106,11 +107,11 @@ export function activate(context: vscode.ExtensionContext) {
   (function () {
     const cmdid = "initTask";
     context.subscriptions.push(
-      vscode.commands.registerCommand(`${acts.appid}.${cmdid}`, () => {
+      vscode.commands.registerCommand(`${acts.appid}.${cmdid}`, async () => {
         acts.channel.show(true);
         acts.channel.clear();
         acts.channel.appendLine(`${acts.appid}.${cmdid}:`);
-        acts.vscodeextensionpath = context.extensionPath;
+        await acts.updateStateAsync();
         // check condition
         if (!extensionhelper.checkProjectPath()) {
           return;
@@ -198,11 +199,11 @@ export function activate(context: vscode.ExtensionContext) {
   (function () {
     const cmdid = "reinitTask";
     context.subscriptions.push(
-      vscode.commands.registerCommand(`${acts.appid}.${cmdid}`, () => {
+      vscode.commands.registerCommand(`${acts.appid}.${cmdid}`, async () => {
         acts.channel.show(true);
         acts.channel.clear();
         acts.channel.appendLine(`${acts.appid}.${cmdid}:`);
-        acts.vscodeextensionpath = context.extensionPath;
+        await acts.updateStateAsync();
         // check condition
         if (!extensionhelper.checkProjectPath()) {
           return;
@@ -235,11 +236,11 @@ export function activate(context: vscode.ExtensionContext) {
   (function () {
     const cmdid = "testTask";
     context.subscriptions.push(
-      vscode.commands.registerCommand(`${acts.appid}.${cmdid}`, () => {
+      vscode.commands.registerCommand(`${acts.appid}.${cmdid}`, async () => {
         acts.channel.show(true);
         acts.channel.clear();
         acts.channel.appendLine(`${acts.appid}.${cmdid}:`);
-        acts.vscodeextensionpath = context.extensionPath;
+        await acts.updateStateAsync();
         // check condition
         if (!extensionhelper.checkProjectPath()) {
           return;
@@ -258,11 +259,11 @@ export function activate(context: vscode.ExtensionContext) {
   (function () {
     const cmdid = "debugTask";
     context.subscriptions.push(
-      vscode.commands.registerCommand(`${acts.appid}.${cmdid}`, () => {
+      vscode.commands.registerCommand(`${acts.appid}.${cmdid}`, async () => {
         acts.channel.show(true);
         acts.channel.clear();
         acts.channel.appendLine(`${acts.appid}.${cmdid}:`);
-        acts.vscodeextensionpath = context.extensionPath;
+        await acts.updateStateAsync();
         // check condition
         if (!extensionhelper.checkProjectPath()) {
           return;
@@ -285,7 +286,7 @@ export function activate(context: vscode.ExtensionContext) {
         acts.channel.show(true);
         acts.channel.clear();
         acts.channel.appendLine(`${acts.appid}.${cmdid}:`);
-        acts.vscodeextensionpath = context.extensionPath;
+        await acts.updateStateAsync();
         // check condition
         if (!extensionhelper.checkProjectPath()) {
           return;
@@ -328,11 +329,11 @@ export function activate(context: vscode.ExtensionContext) {
   (function () {
     const cmdid = "removeTask";
     context.subscriptions.push(
-      vscode.commands.registerCommand(`${acts.appid}.${cmdid}`, () => {
+      vscode.commands.registerCommand(`${acts.appid}.${cmdid}`, async () => {
         acts.channel.show(true);
         acts.channel.clear();
         acts.channel.appendLine(`${acts.appid}.${cmdid}:`);
-        acts.vscodeextensionpath = context.extensionPath;
+        await acts.updateStateAsync();
         // check condition
         if (!extensionhelper.checkProjectPath()) {
           return;
@@ -361,11 +362,11 @@ export function activate(context: vscode.ExtensionContext) {
   (function () {
     const cmdid = "browseTask";
     context.subscriptions.push(
-      vscode.commands.registerCommand(`${acts.appid}.${cmdid}`, () => {
+      vscode.commands.registerCommand(`${acts.appid}.${cmdid}`, async () => {
         acts.channel.show(true);
         acts.channel.clear();
         acts.channel.appendLine(`${acts.appid}.${cmdid}:`);
-        acts.vscodeextensionpath = context.extensionPath;
+        await acts.updateStateAsync();
         // check condition
         if (!extensionhelper.checkProjectPath()) {
           return;
@@ -384,11 +385,11 @@ export function activate(context: vscode.ExtensionContext) {
   (function () {
     const cmdid = "clearState";
     context.subscriptions.push(
-      vscode.commands.registerCommand(`${acts.appid}.${cmdid}`, () => {
+      vscode.commands.registerCommand(`${acts.appid}.${cmdid}`, async () => {
         acts.channel.show(true);
         acts.channel.clear();
         acts.channel.appendLine(`${acts.appid}.${cmdid}:`);
-        acts.vscodeextensionpath = context.extensionPath;
+        await acts.updateStateAsync();
         // input confirm
         vscode.window
           .showQuickPick(["CLEAR STATE"], {
