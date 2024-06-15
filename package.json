@@ -1,5 +1,5 @@
 {
-  "version": "0.2.0",
+  "version": "0.2.1",
   "name": "ac-ts-extension",
   "displayName": "AtCoder Extension",
   "description": "atcoder/yukicoder vscode extension for c/c++/java/python/go/javascript/typescript",

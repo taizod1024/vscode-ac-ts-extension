@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.1](https://github.com/taizod1024/ac-ts-extension/compare/v0.2.0...v0.2.1) (2024-06-15)
+
+
+### Bug Fixes
+
+* 認証情報移行時の障害を修正 ([e47a4be](https://github.com/taizod1024/ac-ts-extension/commit/e47a4befb23e30029be6f53b99c5dd3fb1dcb795))
+
 ## [0.2.0](https://github.com/taizod1024/ac-ts-extension/compare/v0.1.21...v0.2.0) (2024-06-15)
 
 
