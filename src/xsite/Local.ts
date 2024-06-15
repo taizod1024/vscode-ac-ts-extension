@@ -91,10 +91,10 @@ class Local implements XSite {
   }
 
   public async saveStateAsync() {
-    await acts.context.secrets.store("yukicoder.contest", local.contest);
-    await acts.context.secrets.store("yukicoder.task", local.task);
-    await acts.context.secrets.store("yukicoder.extension", local.extension);
-    await acts.context.secrets.store("yukicoder.language", local.language);
+    await acts.context.secrets.store("yukicoder.contest", local.contest || "");
+    await acts.context.secrets.store("yukicoder.task", local.task || "");
+    await acts.context.secrets.store("yukicoder.extension", local.extension || "");
+    await acts.context.secrets.store("yukicoder.language", local.language || "");
   }
 
   public async deleteStateAsync() {
