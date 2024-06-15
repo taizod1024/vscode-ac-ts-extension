@@ -497,12 +497,12 @@ class AtCoder implements XSite {
   }
 
   public async saveStateAsync() {
-    await acts.context.secrets.store("atcoder.username", atcoder.username);
-    await acts.context.secrets.store("atcoder.password", atcoder.password);
-    await acts.context.secrets.store("atcoder.contest", atcoder.contest);
-    await acts.context.secrets.store("atcoder.task", atcoder.task);
-    await acts.context.secrets.store("atcoder.extension", atcoder.extension);
-    await acts.context.secrets.store("atcoder.language", atcoder.language);
+    await acts.context.secrets.store("atcoder.username", atcoder.username || "");
+    await acts.context.secrets.store("atcoder.password", atcoder.password || "");
+    await acts.context.secrets.store("atcoder.contest", atcoder.contest || "");
+    await acts.context.secrets.store("atcoder.task", atcoder.task || "");
+    await acts.context.secrets.store("atcoder.extension", atcoder.extension || "");
+    await acts.context.secrets.store("atcoder.language", atcoder.language || "");
   }
 
   public async deleteStateAsync() {
