@@ -2,8 +2,10 @@
 
 C/C++/Java/Python/Go/JavaScript/TypeScript での [AtCoder](https://atcoder.jp/?lang=ja)/[Yukicoder](https://yukicoder.me/) への参加をサポートする Visual Studio Code の拡張機能です。
 
-## 変更
+## 変更点・その他
 
+- 2025/06/08
+  - <span style="color:red;font-weight:bold">2025 年 6 月現在 AtCoder に[CAPTCHA](https://atcoder.jp/posts/1456)が導入されています。そのため AtCoder Extension の AtCoder 関連のすべての機能が動作しません。AtCoder Extension での CAPTCHA 対応が難しいため当面静観します。</span>
 - 2024/6/15
   - リファクタ
     - 認証情報の格納先を SecretStorage に変更しました。認証情報を格納したファイルがあれば SecretStorage に移動してから元のファイルを削除します。
